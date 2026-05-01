@@ -1,0 +1,271 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+
+// ────────────────────────────────────────────────────────────────
+// Live tier accuracy — pulled server-side from the FastAPI backend.
+// Pure HTML output, no client-side JS. The Next.js version of this
+// page (which this Astro page replaces) used a dynamic import +
+// motion + ~200 KB of React just to show the same numbers.
+// ────────────────────────────────────────────────────────────────
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+const APP_URL =
+  import.meta.env.PUBLIC_APP_URL ?? "https://app.betsplug.com";
+
+interface PricingTier {
+  pick_tier: "free" | "silver" | "gold" | "platinum";
+  pick_tier_label: string;
+  pick_tier_accuracy: string;
+  accuracy_pct: number;
+  wilson_ci_lower_pct: number;
+  sample_size: number;
+  confidence_threshold: number;
+  leagues_count: number;
+  picks_per_day_estimate: number;
+}
+
+let liveTiers: PricingTier[] = [];
+try {
+  const res = await fetch(`${API_BASE}/api/pricing/comparison`, {
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(4000),
+  });
+  if (res.ok) {
+    liveTiers = (await res.json()) as PricingTier[];
+  }
+} catch {
+  // API unreachable — fall back to static defaults below so the page
+  // still ships valid copy. Marketing pages must never crash on a
+  // backend hiccup.
+}
+
+// Lookup helper — tolerates an empty liveTiers array.
+function liveFor(slug: PricingTier["pick_tier"]): PricingTier | null {
+  return liveTiers.find((t) => t.pick_tier === slug) ?? null;
+}
+
+// Static plan definitions. Live values from the API override the
+// `accuracy_claim` and `picks_per_day` strings when available.
+type PlanId = "free" | "silver" | "gold" | "platinum";
+
+interface PlanDefinition {
+  id: PlanId;
+  name: string;
+  tagline: string;
+  price: string;
+  period: string;
+  accentClass: string;
+  ringClass: string;
+  ctaLabel: string;
+  ctaHref: string;
+  features: string[];
+  popular?: boolean;
+}
+
+const plans: PlanDefinition[] = [
+  {
+    id: "free",
+    name: "Free",
+    tagline: "Three picks a day, no card.",
+    price: "€0",
+    period: "/forever",
+    accentClass: "text-[#e8a864]",
+    ringClass: "border-[rgba(232,168,100,0.30)]",
+    ctaLabel: "Start free",
+    ctaHref: `${APP_URL}/register`,
+    features: [
+      "3 free picks every day",
+      "Public track record",
+      "All competitions on the engine",
+      "No card, no signup pressure",
+    ],
+  },
+  {
+    id: "silver",
+    name: "Silver",
+    tagline: "Pre-match odds + a wider feed.",
+    price: "€9",
+    period: "/month",
+    accentClass: "text-[#d7d9dc]",
+    ringClass: "border-[rgba(229,228,226,0.30)]",
+    ctaLabel: "Subscribe",
+    ctaHref: `${APP_URL}/checkout?plan=silver`,
+    features: [
+      "All Free picks +",
+      "Pre-match odds shown per row",
+      "Top-14 league filter",
+      "60% historical accuracy claim",
+    ],
+  },
+  {
+    id: "gold",
+    name: "Gold",
+    tagline: "Pick of the Day + simulator.",
+    price: "€19",
+    period: "/month",
+    accentClass: "text-[#f5d67a]",
+    ringClass: "border-[rgba(245,214,122,0.34)]",
+    ctaLabel: "Subscribe",
+    ctaHref: `${APP_URL}/checkout?plan=gold`,
+    features: [
+      "All Silver picks +",
+      "Daily Pick of the Day",
+      "Top-10 elite leagues only",
+      "70% historical accuracy claim",
+      "What-if ROI simulator",
+    ],
+    popular: true,
+  },
+  {
+    id: "platinum",
+    name: "Platinum",
+    tagline: "Top 5 elite calls + Telegram.",
+    price: "€39",
+    period: "/month",
+    accentClass: "text-[#d9f0ff]",
+    ringClass: "border-[rgba(217,240,255,0.34)]",
+    ctaLabel: "Subscribe",
+    ctaHref: `${APP_URL}/checkout?plan=platinum`,
+    features: [
+      "All Gold picks +",
+      "Top-5 elite leagues only",
+      "85% historical accuracy claim",
+      "Private Telegram channel",
+      "Priority support",
+    ],
+  },
+];
+---
+
+<Layout
+  title="Pricing — BetsPlug"
+  description="Free picks every day, paid plans starting at €9/month. Compare Free / Silver / Gold / Platinum tiers with live accuracy from our public track record."
+>
+  <SiteNav />
+
+  <main>
+    {/* Hero ─────────────────────────────────────────────────── */}
+    <section
+      class="relative mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8"
+    >
+      <div
+        aria-hidden
+        class="glow-blob"
+        style="top:60px;right:-60px;width:480px;height:480px;background:hsl(142 71% 45% / 0.20);"
+      >
+      </div>
+      <div class="relative max-w-3xl">
+        <p
+          class="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-accent-green-bright)]"
+        >
+          Pricing
+        </p>
+        <h1
+          class="mt-3 text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
+        >
+          Pick the tier that <span class="gradient-text-green">fits how you bet</span>.
+        </h1>
+        <p class="mt-4 text-base text-[var(--color-text-muted)] sm:text-lg">
+          Every plan reads from the same engine and the same public track
+          record. Higher tiers are stricter — fewer picks, sharper calls,
+          higher historical accuracy. Cancel anytime, two clicks.
+        </p>
+      </div>
+    </section>
+
+    {/* Tier cards ───────────────────────────────────────────── */}
+    <section class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {
+          plans.map((plan) => {
+            const live = liveFor(plan.id);
+            const accuracyLine = live
+              ? `${live.accuracy_pct.toFixed(1)}% across ${live.sample_size.toLocaleString()} graded picks`
+              : `${plan.id === "free" ? "45%+" : plan.id === "silver" ? "60%+" : plan.id === "gold" ? "70%+" : "85%+"} historical accuracy`;
+            const ppdLine = live
+              ? `~${live.picks_per_day_estimate.toFixed(1)} picks/day for you`
+              : null;
+
+            return (
+              <article
+                class={`card-neon relative flex flex-col p-6 ${plan.ringClass}`}
+                style={
+                  plan.popular
+                    ? "box-shadow: 0 0 0 1px rgba(74,222,128,0.45) inset, 0 12px 40px rgba(74,222,128,0.18);"
+                    : undefined
+                }
+              >
+                {plan.popular && (
+                  <span class="absolute -top-3 left-6 rounded-full bg-[hsl(142_76%_60%)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[hsl(234_25%_5%)] shadow-[0_4px_16px_rgba(74,222,128,0.35)]">
+                    Most popular
+                  </span>
+                )}
+
+                <header>
+                  <h2 class={`text-xl font-bold ${plan.accentClass}`}>
+                    {plan.name}
+                  </h2>
+                  <p class="mt-1 text-sm text-[var(--color-text-muted)]">
+                    {plan.tagline}
+                  </p>
+                </header>
+
+                <div class="mt-5 flex items-baseline gap-1">
+                  <span class="text-4xl font-extrabold tracking-tight text-white">
+                    {plan.price}
+                  </span>
+                  <span class="text-sm text-[var(--color-text-faint)]">
+                    {plan.period}
+                  </span>
+                </div>
+
+                <div class="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2.5">
+                  <p class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                    Live accuracy
+                  </p>
+                  <p class={`mt-1 text-sm font-semibold ${plan.accentClass}`}>
+                    {accuracyLine}
+                  </p>
+                  {ppdLine && (
+                    <p class="mt-0.5 text-[11px] text-[var(--color-text-muted)]">
+                      {ppdLine}
+                    </p>
+                  )}
+                </div>
+
+                <ul class="mt-5 flex-1 space-y-2 text-sm text-[var(--color-text-muted)]">
+                  {plan.features.map((feature) => (
+                    <li class="flex items-start gap-2">
+                      <span class={`mt-0.5 ${plan.accentClass}`}>✓</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={plan.ctaHref}
+                  class={
+                    plan.popular
+                      ? "btn-primary mt-6"
+                      : "btn-ghost mt-6"
+                  }
+                >
+                  {plan.ctaLabel}
+                </a>
+              </article>
+            );
+          })
+        }
+      </div>
+
+      <p class="mt-8 text-center text-xs text-[var(--color-text-faint)]">
+        Educational simulation only. 18+. Past model performance is not
+        indicative of future results. No financial or betting advice.
+      </p>
+    </section>
+
+    <Footer />
+  </main>
+</Layout>

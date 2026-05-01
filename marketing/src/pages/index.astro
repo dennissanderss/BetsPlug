@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import SiteNav from "../components/SiteNav.astro";
 import FreePicksGrid from "../components/FreePicksGrid.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <Layout
@@ -67,21 +68,6 @@ import FreePicksGrid from "../components/FreePicksGrid.astro";
     {/* Free picks — pulled live from the FastAPI backend ──────── */}
     <FreePicksGrid />
 
-    {/* Footer ─────────────────────────────────────────────────── */}
-    <footer class="mt-16 border-t border-white/[0.06]">
-      <div
-        class="mx-auto flex max-w-7xl flex-col items-start gap-3 px-4 py-8 text-xs text-[var(--color-text-faint)] sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"
-      >
-        <p>© {new Date().getFullYear()} BetsPlug. All rights reserved.</p>
-        <div class="flex flex-wrap gap-4">
-          <a href="/terms" class="hover:text-white">Terms</a>
-          <a href="/privacy" class="hover:text-white">Privacy</a>
-          <a href="/cookies" class="hover:text-white">Cookies</a>
-          <a href="/responsible-gambling" class="hover:text-white"
-            >Responsible play</a
-          >
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </main>
 </Layout>
