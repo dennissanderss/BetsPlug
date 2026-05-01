@@ -1,0 +1,71 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SiteNav from "../../components/SiteNav.astro";
+import Footer from "../../components/Footer.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import {
+  sanity,
+  allLearnPillarsQuery,
+  localised,
+  type LearnPillarSummary,
+} from "../../lib/sanity";
+
+let pillars: LearnPillarSummary[] = [];
+try {
+  pillars = await sanity.fetch<LearnPillarSummary[]>(allLearnPillarsQuery);
+} catch {
+  // Sanity unreachable — render an empty state. The page still
+  // ships valid HTML and helps SEO with the heading + intro.
+}
+---
+
+<Layout
+  title="Learn — football prediction guides + AI explainers"
+  description="Plain-English guides to football betting markets, AI prediction methodology, value-bet hunting, and how to read our model's output. No paywalls."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Learn"
+      title="Football prediction <span class='gradient-text-green'>made readable</span>."
+      subtitle="Pick a topic — every guide explains how to read the engine's output, the markets it covers, and the homework you can do yourself before you trust a number."
+    />
+
+    <section
+      class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
+    >
+      {pillars.length === 0 ? (
+        <div class="card-neon p-8 text-center text-sm text-[var(--color-text-muted)]">
+          Pillar guides are warming up. Check back in a moment, or
+          jump straight to{" "}
+          <a
+            href="/how-it-works"
+            class="text-[var(--color-accent-green-bright)] underline"
+            >how the engine works</a>.
+        </div>
+      ) : (
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {pillars.map((p) => (
+            <a
+              href={`/learn/${p.slug.current}`}
+              class="card-neon block p-5 transition-transform hover:-translate-y-0.5 hover:halo-green"
+            >
+              <h2 class="text-base font-bold text-white">
+                {localised(p.title)}
+              </h2>
+              <p class="mt-2 text-sm text-[var(--color-text-muted)]">
+                {localised(p.tagline)}
+              </p>
+              <span class="mt-4 inline-flex items-center gap-1 text-xs text-[var(--color-accent-green-bright)]">
+                Read guide →
+              </span>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <Footer />
+  </main>
+</Layout>
