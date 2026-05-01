@@ -1,0 +1,120 @@
+---
+/**
+ * Homepage PricingTeaser — Section 7.
+ * See docs/specs/02-homepage.md → "SECTIE 7: PRICING TEASER".
+ *
+ * 3 tier cards (Free / Silver / Gold) with Silver highlighted via
+ * "Most Popular" badge + 2px green border. Prices for Silver and
+ * Gold are placeholders ([€X]) — see TODOs.
+ *
+ * TODO: Replace [€X] with actual Silver pricing once confirmed.
+ * TODO: Replace [€X] with actual Gold pricing once confirmed.
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { HomepageContent } from "@/content/pages/homepage/types";
+
+interface Props {
+  locale: Locale;
+  content: HomepageContent["pricing"];
+}
+
+const { locale, content } = Astro.props;
+
+const compareHref = getLocalizedPath(content.compareLink.canonical, locale);
+---
+
+<Section surface="dark" spacing="lg" ariaLabelledby="pricing-teaser-h2" glow>
+  <Container size="xl">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2
+        id="pricing-teaser-h2"
+        class="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight tracking-tight text-white-pure"
+      >
+        {content.h2}
+      </h2>
+      <p class="mt-4 text-lg leading-relaxed text-white-soft">
+        {content.subhead}
+      </p>
+    </header>
+
+    <div class="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto items-stretch">
+      {content.tiers.map((tier) => (
+        <div
+          class={[
+            "relative rounded-2xl p-8 flex flex-col transition-all duration-200",
+            tier.highlighted
+              ? "border-2 border-pitch-green-500 bg-charcoal-700 lg:scale-[1.02] shadow-[var(--shadow-md)]"
+              : "border border-deep-navy-600 bg-charcoal-700",
+          ].join(" ")}
+        >
+          {tier.badge && (
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-pitch-green-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-deep-navy-950">
+              {tier.badge}
+            </span>
+          )}
+
+          <!-- Header -->
+          <header>
+            <h3 class="text-xl font-bold text-white-pure">{tier.name}</h3>
+            <p class="mt-2 text-sm text-white-muted">{tier.description}</p>
+            <div class="mt-6 flex items-baseline gap-1">
+              <span class="font-mono text-4xl lg:text-5xl font-bold text-white-pure">
+                {tier.price}
+              </span>
+              <span class="text-sm text-white-muted">{tier.period}</span>
+            </div>
+          </header>
+
+          <!-- Features -->
+          <ul class="mt-8 space-y-3 flex-1">
+            {tier.features.map((feature) => (
+              <li class="flex items-start gap-2 text-sm text-white-soft">
+                <svg class="h-4 w-4 text-pitch-green-400 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <!-- CTA -->
+          <div class="mt-8">
+            <Button
+              href={tier.cta.href}
+              variant={tier.highlighted ? "primary" : "secondary"}
+              size="md"
+              surface="dark"
+              external
+              class="w-full"
+            >
+              {tier.cta.label}
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-10 text-center space-y-3">
+      <p class="text-sm text-white-muted">{content.guaranteeMicro}</p>
+      <a
+        href={compareHref}
+        class="inline-flex items-center gap-2 text-sm font-semibold text-pitch-green-400
+               hover:text-pitch-green-300 transition-colors duration-150
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400
+               focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900 rounded-md"
+      >
+        {content.compareLink.label}
+        <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
+    </div>
+  </Container>
+</Section>

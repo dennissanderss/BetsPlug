@@ -1,0 +1,251 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for de. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
+  },
+  "meta": {
+    "title": "KI-Fußballvorhersagen auf Basis echter Daten | BetsPlug",
+    "description": "KI-Fußballvorhersagen für 30+ Ligen mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Jede Vorhersage vor dem Anpfiff gesperrt. Öffentlicher Track Record.",
+    "ogImage": "/og-images/homepage-de.jpg"
+  },
+  "hero": {
+    "kicker": "KI-Fußballintelligenz",
+    "h1": "KI-Fußballvorhersagen auf Basis echter Daten",
+    "subheadline": "Vorhersagen für 30+ Ligen mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Jede Vorhersage vor dem Anpfiff gesperrt. Vollständiger Track Record öffentlich.",
+    "trustStrip": [
+      "Vor dem Anpfiff gesperrt",
+      "Öffentlicher Track Record",
+      "Kein Buchmacher"
+    ],
+    "ctaPrimary": {
+      "label": "Kostenlose Picks Erhalten",
+      "href": "https://app.betsplug.com/register?source=homepage_hero"
+    },
+    "ctaSecondary": {
+      "label": "Wie es funktioniert",
+      "canonical": "how-it-works"
+    },
+    "visual": {
+      "league": "Premier League",
+      "homeTeam": "Manchester City",
+      "awayTeam": "Arsenal",
+      "kickoff": "Samstag, 17:30",
+      "prediction": "Über 2,5 Tore",
+      "confidence": 78,
+      "methodologyBadge": "Elo + Poisson + ML",
+      "lockLabel": "2h vor Anpfiff gesperrt"
+    }
+  },
+  "howItWorks": {
+    "h2": "Wie BetsPlug Funktioniert",
+    "subhead": "Von Daten zur Vorhersage in drei Schritten. Transparent. Reproduzierbar. Gesperrt.",
+    "steps": [
+      {
+        "number": "01",
+        "icon": "database",
+        "h3": "Datensammlung",
+        "body": "Wir sammeln Spielergebnisse, xG, Ballbesitz, Aufstellungen, Transfers und Wetterdaten von lizenzierten Anbietern aus 30+ Ligen.",
+        "microDetail": "Jede Minute aktualisiert"
+      },
+      {
+        "number": "02",
+        "icon": "cpu",
+        "h3": "KI-Engine-Analyse",
+        "body": "Unsere Engine kombiniert Elo-Bewertungen, Poisson-Tor-Modelle und Machine Learning, um jedes Spiel anhand von 40+ Variablen zu bewerten.",
+        "microDetail": "Keine menschliche Voreingenommenheit, keine redaktionelle Auswahl"
+      },
+      {
+        "number": "03",
+        "icon": "lock",
+        "h3": "Gesperrte Vorhersage",
+        "body": "Jede Vorhersage wird vor dem Anpfiff erstellt und gesperrt. Einmal veröffentlicht, kann sie nicht mehr geändert werden — überprüfbar in unserem öffentlichen Track Record.",
+        "microDetail": "Track Record öffentlich zugänglich"
+      }
+    ],
+    "cta": {
+      "label": "Vollständige Methodik anzeigen",
+      "canonical": "methodology"
+    }
+  },
+  "livePredictions": {
+    "h2": "Heutige Kostenlose KI-Vorhersagen",
+    "subhead": "Fünf kostenlose Vorhersagen, jede Minute aktualisiert. Vor dem Anpfiff gesperrt — genau wie unsere zahlenden Abonnenten sie erhalten.",
+    "liveLabel": "Aktualisiert",
+    "liveSecondsAgo": "vor {seconds}s",
+    "lockedLabel": "Gesperrt",
+    "loadingLabel": "Vorhersagen laden…",
+    "errorLabel": "Vorhersagen nicht verfügbar. Bitte aktualisieren.",
+    "ctaSection": {
+      "h3": "Unbegrenzte Vorhersagen?",
+      "body": "Erhalte alle täglichen Vorhersagen für 30+ Ligen, vollständige Statistiken und dieselbe KI, die unsere zahlenden Abonnenten nutzen.",
+      "ctaPrimary": { "label": "Preise anzeigen", "canonical": "pricing" },
+      "ctaSecondary": { "label": "Kostenloses Konto erstellen", "href": "https://app.betsplug.com/register?source=homepage_live" }
+    }
+  },
+  "methodology": {
+    "h2": "Auf Mathematik gebaut, nicht auf Bauchgefühl",
+    "paragraphs": [
+      "BetsPlug kombiniert drei statistische Disziplinen in einer Vorhersage-Engine. Elo-Bewertungen ranken die Teamstärke basierend auf jedem gespielten Spiel. Poisson-Tor-Modelle berechnen die Wahrscheinlichkeit spezifischer Ergebnisausgänge. Machine Learning identifiziert Muster in Tausenden historischen Spielen, die Menschen übersehen.",
+      "Die Engine verarbeitet 40+ Variablen pro Spiel: aktuelle Form, direkte Begegnungen, Aufstellungen, Verletzungen, Expected Goals, Ballbesitz-Trends, Wetterbedingungen und mehr. Keine redaktionelle Eingabe. Keine emotionale Voreingenommenheit. Nur Mathematik.",
+      "Jede Vorhersage wird vor dem Anpfiff erstellt und gesperrt. Wir veröffentlichen sowohl Gewinne als auch Verluste. Der vollständige Track Record ist öffentlich zugänglich — denn Transparenz ist der einzige Beweis, der zählt."
+    ],
+    "stats": [
+      { "value": "30+", "label": "Abgedeckte Ligen" },
+      { "value": "40+", "label": "Variablen pro Spiel" },
+      { "value": "3", "label": "Statistische Modelle" },
+      { "value": "100%", "label": "Vorhersagen gesperrt" }
+    ],
+    "diagram": {
+      "input": "Eingabeschicht",
+      "inputItems": ["Spielstatistiken", "Teamform", "Externe Daten"],
+      "models": ["Elo-Bewertungen", "Poisson-Tore", "Machine Learning"],
+      "output": "Gesperrte Vorhersage"
+    },
+    "cta": {
+      "label": "Vollständige Methodik lesen",
+      "canonical": "methodology"
+    }
+  },
+  "trackRecord": {
+    "h2": "Jede Vorhersage. Öffentlich. Für Immer.",
+    "body": "Die meisten Vorhersagesites zeigen nur ihre Gewinner. Wir veröffentlichen alles — Gewinne, Verluste, exakte Vorhersagen und Zeitstempel. Überprüfen Sie unseren Track Record selbst.",
+    "topLineLabel": "Letzte 30 Tage",
+    "topLineValue": "Alle Vorhersagen veröffentlicht — öffentliches Register",
+    "legend": {
+      "win": "Gewinn",
+      "loss": "Verlust",
+      "void": "Ungültig/Push",
+      "pending": "Ausstehend"
+    },
+    "cta": {
+      "label": "Live Track Record anzeigen",
+      "canonical": "track-record"
+    }
+  },
+  "comparison": {
+    "h2": "Warum KI Traditionelle Tipster Schlägt",
+    "headers": {
+      "criterion": "Kriterium",
+      "tipster": "Traditionelle Tipster",
+      "betsplug": "BetsPlug KI"
+    },
+    "rows": [
+      { "criterion": "Quelle der Vorhersagen", "tipster": "Persönliche Meinungen", "betsplug": "Statistische Modelle" },
+      { "criterion": "Anzahl analysierter Spiele", "tipster": "Wenige pro Tag ausgewählt", "betsplug": "Alle Spiele, 30+ Ligen" },
+      { "criterion": "Voreingenommenheit", "tipster": "Emotional, fan-loyal", "betsplug": "Keine (datengetrieben)" },
+      { "criterion": "Bearbeitbar nach Anpfiff", "tipster": "Häufig ja", "betsplug": "Nie (gesperrt)" },
+      { "criterion": "Verlustpublikation", "tipster": "Verbirgt Verluste", "betsplug": "Veröffentlicht alles" },
+      { "criterion": "Update-Geschwindigkeit", "tipster": "Manuell", "betsplug": "Echtzeit" },
+      { "criterion": "Methodik-Transparenz", "tipster": "\"Geheimes System\"", "betsplug": "Elo + Poisson + ML" },
+      { "criterion": "Verifikation", "tipster": "Vertrau mir", "betsplug": "Öffentlicher Track Record" }
+    ],
+    "footnote": "Es geht nicht darum, dass KI magisch ist. Es geht darum, zwei Dinge zu beseitigen, die der Vorhersagegenauigkeit schaden: menschliche Voreingenommenheit und Inkonsistenz.",
+    "cta": {
+      "label": "Pläne vergleichen",
+      "canonical": "pricing"
+    }
+  },
+  "pricing": {
+    "h2": "Kostenlos Starten. Upgraden, Wenn Du Bereit Bist.",
+    "subhead": "Drei Pläne. Keine versteckten Gebühren. Jederzeit kündbar.",
+    "tiers": [
+      {
+        "id": "free",
+        "name": "Kostenlos",
+        "price": "€0",
+        "period": "/Monat",
+        "description": "5 tägliche Vorhersagen, 3 Ligen",
+        "features": [
+          "5 kostenlose Vorhersagen pro Tag",
+          "Nur Top 3 Ligen",
+          "Basis-Zugriff auf Track Record"
+        ],
+        "cta": { "label": "Loslegen", "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing" },
+        "highlighted": false
+      },
+      {
+        "id": "silver",
+        "name": "Silver",
+        "price": "€[X]",
+        "period": "/Monat",
+        "description": "Unbegrenzte tägliche Vorhersagen, alle Ligen",
+        "badge": "Beliebteste",
+        "features": [
+          "Unbegrenzte tägliche Vorhersagen",
+          "Alle 30+ Ligen",
+          "Vollständige Statistiken pro Spiel",
+          "Telegram-Benachrichtigungen",
+          "Priorisierter Support"
+        ],
+        "cta": { "label": "Kostenlose Testphase starten", "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing" },
+        "highlighted": true
+      },
+      {
+        "id": "gold",
+        "name": "Gold",
+        "price": "€[X]",
+        "period": "/Monat",
+        "description": "Pro-Funktionen + früher Zugriff",
+        "features": [
+          "Alles aus Silver",
+          "Früher Zugriff (Vorhersagen 24h im Voraus)",
+          "Erweiterte Filter & Einblicke",
+          "API-Zugriff (bald verfügbar)",
+          "VIP-Support"
+        ],
+        "cta": { "label": "Kostenlose Testphase starten", "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing" },
+        "highlighted": false
+      }
+    ],
+    "guaranteeMicro": "Alle Pläne: 7 Tage Geld-zurück-Garantie auf bezahlte Tarife",
+    "compareLink": { "label": "Pläne im Detail vergleichen", "canonical": "pricing" }
+  },
+  "faq": {
+    "h2": "Häufige Fragen",
+    "questions": [
+      {
+        "q": "Ist BetsPlug ein Buchmacher?",
+        "a": "Nein. BetsPlug ist eine Datenanalyse-Plattform. Wir nehmen keine Wetten an, halten kein Geld und ermöglichen kein Glücksspiel. Wir veröffentlichen statistische Vorhersagen zu Bildungs- und Informationszwecken."
+      },
+      {
+        "q": "Wie genau sind KI-Fußballvorhersagen?",
+        "a": "Die Genauigkeit variiert je nach Liga, Markt und Spieltag. Wir veröffentlichen jede Vorhersage — Gewinne und Verluste — in unserem öffentlichen Track Record, damit Sie die Leistung selbst überprüfen können, statt sich auf unsere Behauptungen zu verlassen."
+      },
+      {
+        "q": "Können Vorhersagen nach der Veröffentlichung geändert werden?",
+        "a": "Nein. Jede Vorhersage wird vor dem Anpfiff mit einem öffentlichen Zeitstempel gesperrt. Einmal veröffentlicht, kann sie weder bearbeitet noch entfernt werden. Dies ist in unserem Track Record überprüfbar."
+      },
+      {
+        "q": "Was unterscheidet BetsPlug von anderen Tipster-Seiten?",
+        "a": "Drei Dinge: KI-gesteuerte Vorhersagen (keine menschliche Voreingenommenheit), volle Transparenz (wir veröffentlichen auch Verluste) und Methodik, die Sie überprüfen können (Elo + Poisson + ML — kein 'geheimer Algorithmus')."
+      },
+      {
+        "q": "Brauche ich ein Wettkonto, um BetsPlug zu nutzen?",
+        "a": "Nein. BetsPlug ist unabhängig von jedem Buchmacher. Wir bieten ausschließlich statistische Analysen. Was Sie mit diesen Informationen tun, liegt bei Ihnen."
+      },
+      {
+        "q": "Kann ich mein Abonnement kündigen?",
+        "a": "Ja, jederzeit. Alle bezahlten Pläne enthalten eine 7-tägige Geld-zurück-Garantie. Danach kündigen Sie mit einem Klick aus Ihrem Konto-Dashboard."
+      }
+    ],
+    "cta": {
+      "label": "Alle Fragen anzeigen",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2": "Bereit für KI-Fußballvorhersagen?",
+    "body": "Erhalte heute 5 kostenlose Vorhersagen. Keine Kreditkarte erforderlich.",
+    "ctaPrimary": {
+      "label": "Kostenlose Picks Erhalten",
+      "href": "https://app.betsplug.com/register?source=homepage_final"
+    },
+    "trustSignals": [
+      "Keine Kreditkarte",
+      "Jederzeit kündbar",
+      "7 Tage Geld-zurück auf bezahlten Plänen"
+    ]
+  }
+}

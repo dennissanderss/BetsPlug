@@ -1,0 +1,78 @@
+---
+/**
+ * Homepage FinalCTA — Section 9.
+ * See docs/specs/02-homepage.md → "SECTIE 9: FINAL CTA STRIP".
+ *
+ * Full-bleed conversion-gradient strip. Single large primary CTA
+ * with three trust signals below.
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import type { HomepageContent } from "@/content/pages/homepage/types";
+
+interface Props {
+  content: HomepageContent["finalCta"];
+}
+
+const { content } = Astro.props;
+---
+
+<Section surface="conversion" spacing="xl" ariaLabelledby="final-cta-h2">
+  <!-- Background pitch-green glow centered -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]"
+    style="background: radial-gradient(circle, rgba(0,210,106,0.45) 0%, rgba(0,210,106,0) 70%);"
+  ></div>
+
+  <Container size="md" class="relative">
+    <div class="text-center">
+      <h2
+        id="final-cta-h2"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white-pure"
+      >
+        {content.h2}
+      </h2>
+      <p class="mt-5 text-lg lg:text-xl leading-relaxed text-white-soft">
+        {content.body}
+      </p>
+
+      <div class="mt-10 flex justify-center">
+        <Button
+          href={content.ctaPrimary.href}
+          variant="primary"
+          size="lg"
+          surface="dark"
+          external
+        >
+          {content.ctaPrimary.label}
+          <svg
+            slot="trailing"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </Button>
+      </div>
+
+      <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white-soft">
+        {content.trustSignals.map((signal) => (
+          <li class="inline-flex items-center gap-2">
+            <svg class="h-4 w-4 text-pitch-green-400 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            {signal}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Section>

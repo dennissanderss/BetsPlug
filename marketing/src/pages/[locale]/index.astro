@@ -1,18 +1,19 @@
 ---
 /**
- * BetsPlug Homepage — English root.
- * URL: / (no locale prefix; per i18n config defaultLocale=en)
+ * BetsPlug Homepage — locale variants.
+ * URLs: /nl/, /de/, /fr/, /es/, /it/
  *
- * Spec: docs/specs/02-homepage.md
- *
- * Composition: 9 sections via dedicated homepage components.
- * Content sourced from src/content/pages/homepage/{locale}.json.
- *
- * The locale variant lives at src/pages/[locale]/index.astro and
- * delegates here through the same content-loader and components.
+ * Same composition as src/pages/index.astro (the EN root) but
+ * resolves the locale from the URL prefix and loads the matching
+ * content/{locale}.json.
  */
 import MarketingLayout from "@/layouts/MarketingLayout.astro";
-import { getContent, defaultLocale } from "@/lib/i18n";
+import {
+  getContent,
+  isLocale,
+  defaultLocale,
+} from "@/lib/i18n";
+import { locales } from "@/i18n/locales";
 import type { Locale } from "@/lib/i18n";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
@@ -26,43 +27,25 @@ import PricingTeaser           from "@/components/homepage/PricingTeaser.astro";
 import HomepageFAQ             from "@/components/homepage/HomepageFAQ.astro";
 import FinalCTA                from "@/components/homepage/FinalCTA.astro";
 
-const locale: Locale = defaultLocale;
+// Generate one route per non-default locale at build time.
+export function getStaticPaths() {
+  return locales
+    .filter((l) => l !== defaultLocale)
+    .map((locale) => ({ params: { locale } }));
+}
+
+const { locale: paramLocale } = Astro.params;
+const locale: Locale = isLocale(paramLocale) ? paramLocale : defaultLocale;
 const content = await getContent<HomepageContent>("homepage", locale);
 
 const SITE = "https://betsplug.com";
 
-// Schema.org JSON-LD: Organization (full) + WebSite + FAQPage + BreadcrumbList.
-// Verified valid against schema.org [2026-05-02]
-const orgSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": `${SITE}/#organization`,
-  name: "BetsPlug",
-  url: `${SITE}/`,
-  logo: {
-    "@type": "ImageObject",
-    url: `${SITE}/logo.webp`,
-    width: 512,
-    height: 512,
-  },
-  description:
-    "AI-driven football prediction platform with transparent track record. Statistical analysis only — not a bookmaker.",
-  sameAs: [
-    "https://t.me/betsplug_picks",
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    email: "support@betsplug.com",
-    contactType: "customer support",
-    availableLanguage: ["en", "nl", "de", "fr", "es", "it"],
-  },
-};
-
+// Schema.org markup — references the canonical Organization defined
+// on the EN homepage; FAQ + Breadcrumb are localized to current locale.
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "@id": `${SITE}/#website`,
-  url: `${SITE}/`,
+  url: locale === defaultLocale ? `${SITE}/` : `${SITE}/${locale}/`,
   name: "BetsPlug",
   inLanguage: locale,
   publisher: { "@id": `${SITE}/#organization` },
@@ -71,6 +54,7 @@ const websiteSchema = {
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  inLanguage: locale,
   mainEntity: content.faq.questions.map((q) => ({
     "@type": "Question",
     name: q.q,
@@ -86,7 +70,7 @@ const breadcrumbSchema = {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: `${SITE}/`,
+      item: locale === defaultLocale ? `${SITE}/` : `${SITE}/${locale}/`,
     },
   ],
 };
@@ -99,7 +83,6 @@ const breadcrumbSchema = {
   canonicalPath="/"
 >
   <Fragment slot="head">
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

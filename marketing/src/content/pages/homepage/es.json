@@ -1,0 +1,251 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for es. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
+  },
+  "meta": {
+    "title": "Pronósticos de Fútbol IA Basados en Datos Reales | BetsPlug",
+    "description": "Pronósticos de fútbol con IA para 30+ ligas usando puntuaciones Elo, modelos Poisson y machine learning. Cada pronóstico bloqueado antes del inicio. Historial público.",
+    "ogImage": "/og-images/homepage-es.jpg"
+  },
+  "hero": {
+    "kicker": "Inteligencia de fútbol IA",
+    "h1": "Pronósticos de Fútbol IA Basados en Datos Reales",
+    "subheadline": "Pronósticos para 30+ ligas usando puntuaciones Elo, modelos Poisson y machine learning. Cada pronóstico bloqueado antes del inicio. Historial completo público.",
+    "trustStrip": [
+      "Bloqueado antes del inicio",
+      "Historial público",
+      "No es una casa de apuestas"
+    ],
+    "ctaPrimary": {
+      "label": "Obtener Picks Gratis",
+      "href": "https://app.betsplug.com/register?source=homepage_hero"
+    },
+    "ctaSecondary": {
+      "label": "Cómo funciona",
+      "canonical": "how-it-works"
+    },
+    "visual": {
+      "league": "Premier League",
+      "homeTeam": "Manchester City",
+      "awayTeam": "Arsenal",
+      "kickoff": "Sábado, 17:30",
+      "prediction": "Más de 2,5 goles",
+      "confidence": 78,
+      "methodologyBadge": "Elo + Poisson + ML",
+      "lockLabel": "Bloqueado 2h antes del inicio"
+    }
+  },
+  "howItWorks": {
+    "h2": "Cómo Funciona BetsPlug",
+    "subhead": "De los datos al pronóstico en tres pasos. Transparente. Reproducible. Bloqueado.",
+    "steps": [
+      {
+        "number": "01",
+        "icon": "database",
+        "h3": "Recolección de datos",
+        "body": "Agregamos resultados de partidos, xG, posesión, alineaciones, traspasos y datos meteorológicos de proveedores con licencia en 30+ ligas.",
+        "microDetail": "Actualizado cada minuto"
+      },
+      {
+        "number": "02",
+        "icon": "cpu",
+        "h3": "Análisis del motor IA",
+        "body": "Nuestro motor combina puntuaciones Elo, modelos Poisson de goles y machine learning para evaluar cada partido en 40+ variables.",
+        "microDetail": "Sin sesgo humano, sin selecciones editoriales"
+      },
+      {
+        "number": "03",
+        "icon": "lock",
+        "h3": "Pronóstico bloqueado",
+        "body": "Cada pronóstico se genera y bloquea antes del inicio. Una vez publicado, no se puede modificar — verificable en nuestro historial público.",
+        "microDetail": "Historial accesible públicamente"
+      }
+    ],
+    "cta": {
+      "label": "Ver metodología completa",
+      "canonical": "methodology"
+    }
+  },
+  "livePredictions": {
+    "h2": "Pronósticos IA Gratuitos de Hoy",
+    "subhead": "Cinco pronósticos gratuitos, actualizados cada minuto. Bloqueados antes del inicio, exactamente como los reciben nuestros suscriptores de pago.",
+    "liveLabel": "Actualizado",
+    "liveSecondsAgo": "hace {seconds}s",
+    "lockedLabel": "Bloqueado",
+    "loadingLabel": "Cargando pronósticos…",
+    "errorLabel": "Pronósticos no disponibles. Por favor actualiza.",
+    "ctaSection": {
+      "h3": "¿Pronósticos ilimitados?",
+      "body": "Obtén todos los pronósticos diarios de 30+ ligas, estadísticas completas y la misma IA que usan nuestros suscriptores de pago.",
+      "ctaPrimary": { "label": "Ver Precios", "canonical": "pricing" },
+      "ctaSecondary": { "label": "Cuenta Gratuita", "href": "https://app.betsplug.com/register?source=homepage_live" }
+    }
+  },
+  "methodology": {
+    "h2": "Construido sobre Matemáticas, No sobre Corazonadas",
+    "paragraphs": [
+      "BetsPlug combina tres disciplinas estadísticas en un único motor de pronóstico. Las puntuaciones Elo clasifican la fuerza de los equipos según cada partido jugado. Los modelos Poisson de goles calculan la probabilidad de resultados específicos. El machine learning identifica patrones en miles de partidos históricos que los humanos pasan por alto.",
+      "El motor procesa 40+ variables por partido: forma reciente, historial de enfrentamientos, alineaciones, lesiones, expected goals, tendencias de posesión, condiciones meteorológicas y más. Sin aporte editorial. Sin sesgo emocional. Solo matemáticas.",
+      "Cada pronóstico se genera y bloquea antes del inicio. Publicamos tanto victorias como derrotas. El historial completo es accesible públicamente — porque la transparencia es la única prueba que importa."
+    ],
+    "stats": [
+      { "value": "30+", "label": "Ligas cubiertas" },
+      { "value": "40+", "label": "Variables por partido" },
+      { "value": "3", "label": "Modelos estadísticos" },
+      { "value": "100%", "label": "Pronósticos bloqueados" }
+    ],
+    "diagram": {
+      "input": "Capa de entrada",
+      "inputItems": ["Estadísticas de partido", "Forma del equipo", "Datos externos"],
+      "models": ["Puntuaciones Elo", "Goles Poisson", "Machine learning"],
+      "output": "Pronóstico bloqueado"
+    },
+    "cta": {
+      "label": "Leer metodología completa",
+      "canonical": "methodology"
+    }
+  },
+  "trackRecord": {
+    "h2": "Cada Pronóstico. Público. Para Siempre.",
+    "body": "La mayoría de los sitios de pronósticos solo muestran sus aciertos. Nosotros publicamos todo — aciertos, fallos, pronósticos exactos y marcas de tiempo. Verifica nuestro historial tú mismo.",
+    "topLineLabel": "Últimos 30 días",
+    "topLineValue": "Todos los pronósticos publicados — registro público",
+    "legend": {
+      "win": "Acierto",
+      "loss": "Fallo",
+      "void": "Anulado/Push",
+      "pending": "Pendiente"
+    },
+    "cta": {
+      "label": "Ver historial en vivo",
+      "canonical": "track-record"
+    }
+  },
+  "comparison": {
+    "h2": "Por Qué la IA Supera a los Tipsters Tradicionales",
+    "headers": {
+      "criterion": "Criterio",
+      "tipster": "Tipsters tradicionales",
+      "betsplug": "BetsPlug IA"
+    },
+    "rows": [
+      { "criterion": "Fuente de pronósticos", "tipster": "Opiniones personales", "betsplug": "Modelos estadísticos" },
+      { "criterion": "Número de partidos analizados", "tipster": "Pocos seleccionados al día", "betsplug": "Todos los partidos, 30+ ligas" },
+      { "criterion": "Sesgo", "tipster": "Emocional, fan-leal", "betsplug": "Ninguno (basado en datos)" },
+      { "criterion": "Editable tras el inicio", "tipster": "A menudo sí", "betsplug": "Nunca (bloqueado)" },
+      { "criterion": "Publicación de fallos", "tipster": "Oculta los fallos", "betsplug": "Publica todo" },
+      { "criterion": "Velocidad de actualización", "tipster": "Manual", "betsplug": "Tiempo real" },
+      { "criterion": "Transparencia metodológica", "tipster": "\"Sistema secreto\"", "betsplug": "Elo + Poisson + ML" },
+      { "criterion": "Verificación", "tipster": "Confía en mí", "betsplug": "Historial público" }
+    ],
+    "footnote": "Esto no se trata de que la IA sea magia. Se trata de eliminar dos cosas que dañan la precisión: el sesgo humano y la inconsistencia.",
+    "cta": {
+      "label": "Comparar planes",
+      "canonical": "pricing"
+    }
+  },
+  "pricing": {
+    "h2": "Empieza Gratis. Mejora Cuando Estés Listo.",
+    "subhead": "Tres planes. Sin tarifas ocultas. Cancela en cualquier momento.",
+    "tiers": [
+      {
+        "id": "free",
+        "name": "Gratis",
+        "price": "€0",
+        "period": "/mes",
+        "description": "5 pronósticos diarios, 3 ligas",
+        "features": [
+          "5 pronósticos gratuitos por día",
+          "Solo top 3 ligas",
+          "Acceso básico al historial"
+        ],
+        "cta": { "label": "Empezar", "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing" },
+        "highlighted": false
+      },
+      {
+        "id": "silver",
+        "name": "Silver",
+        "price": "€[X]",
+        "period": "/mes",
+        "description": "Pronósticos diarios ilimitados, todas las ligas",
+        "badge": "Más popular",
+        "features": [
+          "Pronósticos diarios ilimitados",
+          "Todas las 30+ ligas",
+          "Estadísticas completas por partido",
+          "Notificaciones por Telegram",
+          "Soporte prioritario"
+        ],
+        "cta": { "label": "Prueba gratuita 7 días", "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing" },
+        "highlighted": true
+      },
+      {
+        "id": "gold",
+        "name": "Gold",
+        "price": "€[X]",
+        "period": "/mes",
+        "description": "Funciones pro + acceso anticipado",
+        "features": [
+          "Todo lo de Silver",
+          "Acceso anticipado (pronósticos 24h antes)",
+          "Filtros e insights avanzados",
+          "Acceso API (próximamente)",
+          "Soporte VIP"
+        ],
+        "cta": { "label": "Prueba gratuita 7 días", "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing" },
+        "highlighted": false
+      }
+    ],
+    "guaranteeMicro": "Todos los planes: garantía de devolución de 7 días en niveles de pago",
+    "compareLink": { "label": "Comparar planes en detalle", "canonical": "pricing" }
+  },
+  "faq": {
+    "h2": "Preguntas Frecuentes",
+    "questions": [
+      {
+        "q": "¿Es BetsPlug una casa de apuestas?",
+        "a": "No. BetsPlug es una plataforma de análisis de datos. No aceptamos apuestas, no retenemos dinero ni facilitamos el juego. Publicamos pronósticos estadísticos para uso educativo e informativo."
+      },
+      {
+        "q": "¿Qué tan precisos son los pronósticos de fútbol con IA?",
+        "a": "La precisión varía según la liga, mercado y jornada. Publicamos cada pronóstico — aciertos y fallos — en nuestro historial público para que puedas verificar el rendimiento por ti mismo en lugar de fiarte de nuestras afirmaciones."
+      },
+      {
+        "q": "¿Pueden modificarse los pronósticos tras la publicación?",
+        "a": "No. Cada pronóstico se bloquea antes del inicio con una marca de tiempo pública. Una vez publicado, no se puede editar ni eliminar. Esto es verificable en nuestro historial."
+      },
+      {
+        "q": "¿Qué hace diferente a BetsPlug de otros sitios de tipsters?",
+        "a": "Tres cosas: pronósticos impulsados por IA (sin sesgo humano), transparencia total (publicamos también los fallos) y metodología que puedes inspeccionar (Elo + Poisson + ML — no un 'algoritmo secreto')."
+      },
+      {
+        "q": "¿Necesito una cuenta de apuestas para usar BetsPlug?",
+        "a": "No. BetsPlug es independiente de cualquier casa de apuestas. Solo proporcionamos análisis estadístico. Lo que hagas con esa información depende de ti."
+      },
+      {
+        "q": "¿Puedo cancelar mi suscripción?",
+        "a": "Sí, en cualquier momento. Todos los planes de pago incluyen una garantía de devolución de 7 días. Después, cancela desde tu panel con un solo clic."
+      }
+    ],
+    "cta": {
+      "label": "Ver todas las preguntas",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2": "¿Listo para Probar Pronósticos de Fútbol con IA?",
+    "body": "Obtén 5 pronósticos gratuitos hoy. No se requiere tarjeta de crédito.",
+    "ctaPrimary": {
+      "label": "Obtener Picks Gratis",
+      "href": "https://app.betsplug.com/register?source=homepage_final"
+    },
+    "trustSignals": [
+      "Sin tarjeta de crédito",
+      "Cancela en cualquier momento",
+      "Devolución de 7 días en planes de pago"
+    ]
+  }
+}
