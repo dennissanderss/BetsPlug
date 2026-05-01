@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowRight, ChevronRight, ChevronDown } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -29,7 +30,45 @@ import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
  * before this fix landed.
  */
 
+/**
+ * Routes where the marketing nav must be suppressed entirely.
+ *
+ * After the betsplug.com / app.betsplug.com split the Next.js app
+ * effectively only serves the authed surface and the auth funnel —
+ * the public marketing site lives in the separate Astro project.
+ * Showing the marketing nav here adds visual noise and competes
+ * with the user's only intended action on these pages (log in,
+ * register, reset password, or use the dashboard).
+ */
+const HIDDEN_NAV_PATTERNS: ReadonlyArray<RegExp> = [
+  /^\/(?:[a-z]{2}\/)?login(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?register(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?forgot-password(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?reset-password(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?dashboard(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?predictions(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?bet-of-the-day(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?combo-of-the-day(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?results(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?trackrecord(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?reports(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?strategy(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?subscription(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?myaccount(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?admin(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?live-score(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?favorites(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?deals(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?matches(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?teams(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?weekly-report(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?search(?:\/|$)/,
+];
+
 export function SiteNav() {
+  const pathname = usePathname() ?? "";
+  const isHiddenRoute = HIDDEN_NAV_PATTERNS.some((rx) => rx.test(pathname));
+
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const { user, ready: authReady } = useAuth();
@@ -106,6 +145,11 @@ export function SiteNav() {
     { href: loc("/pricing"), label: t("nav.pricing") },
     { href: loc("/contact"), label: t("nav.contact") },
   ];
+
+  // Suppress the marketing nav on auth + dashboard routes — those
+  // surfaces live on app.betsplug.com after the marketing/app split
+  // and shouldn't carry public-funnel chrome.
+  if (isHiddenRoute) return null;
 
   return (
     <>

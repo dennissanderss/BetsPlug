@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
+import Image from "next/image";
 import {
   Mail,
   Lock,
@@ -14,19 +15,12 @@ import {
   AlertTriangle,
   Loader2,
   CheckCircle2,
-  Crown,
-  Target,
-  Activity,
   RefreshCw,
 } from "lucide-react";
-import { SiteNav } from "@/components/ui/site-nav";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
 import { api, ApiError } from "@/lib/api";
-import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
-import { HeroMediaBg } from "@/components/ui/media-bg";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -139,118 +133,35 @@ export function LoginContent() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
-      <HeroMediaBg />
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[540px] w-[540px] rounded-full bg-[#4ade80]/[0.09] blur-[160px]" />
         <div className="absolute -right-40 bottom-40 h-[540px] w-[540px] rounded-full bg-[#a855f7]/[0.07] blur-[160px]" />
       </div>
 
-      <SiteNav />
+      {/* Slim auth header — just the logo, links back to the public
+          marketing site at betsplug.com so a user who landed here by
+          accident has a clear escape hatch. */}
+      <header className="relative z-20 flex items-center justify-center px-6 pt-8 pb-4">
+        <Link
+          href="https://betsplug.com"
+          className="inline-flex items-center"
+          aria-label="BetsPlug home"
+        >
+          <Image
+            src="/logo.webp"
+            alt="BetsPlug"
+            width={180}
+            height={72}
+            className="h-12 w-auto drop-shadow-[0_0_18px_rgba(74,222,128,0.35)]"
+            priority
+          />
+        </Link>
+      </header>
 
-      <main className="relative z-10 pt-40 pb-24 sm:pt-48">
-        <section className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
-            {/* Left: promo */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="hidden flex-col justify-center lg:flex"
-            >
-              <span className="section-label">
-                <LogIn className="h-3 w-3" />
-                {t("login.badge")}
-              </span>
-
-              <h1 className="text-display mt-3 max-w-xl text-balance break-words text-4xl text-[#ededed] xl:text-5xl">
-                {t("login.title")}{" "}
-                <span className="gradient-text-green">
-                  {t("login.titleHighlight")}
-                </span>
-              </h1>
-
-              {/* "Klaar voor je dashboard" preview — replaces the old
-                  subtitle + trust-chip trio. Those were visitor-funnel
-                  chips (256-bit SSL, AVG-proof, cancel-anytime) that
-                  belong on /checkout, not on a login screen where the
-                  user has already converted. What a returning subscriber
-                  actually wants to see is what's waiting on the other
-                  side of the login button — today's BotD, fresh picks,
-                  live ROI. Framed as a "dashboard preview" card so it
-                  feels like a glimpse rather than a sales pitch. */}
-              <div className="mt-8 max-w-md">
-                <div
-                  className="relative overflow-hidden rounded-2xl p-5"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, hsl(var(--accent-green) / 0.12) 0%, hsl(230 22% 9% / 0.85) 50%, hsl(var(--accent-purple) / 0.14) 100%)",
-                    border: "1px solid hsl(var(--accent-green) / 0.22)",
-                    boxShadow:
-                      "0 0 0 1px hsl(var(--accent-green) / 0.06) inset, 0 10px 40px rgba(0,0,0,0.35)",
-                  }}
-                >
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full"
-                    style={{
-                      background: "hsl(var(--accent-green) / 0.22)",
-                      filter: "blur(90px)",
-                    }}
-                  />
-                  <div className="relative">
-                    <div className="mb-4 flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#4ade80]">
-                        {t("login.readyLabel")}
-                      </span>
-                      <Pill className="pill-active">
-                        <span className="live-dot" />
-                        Live
-                      </Pill>
-                    </div>
-                    <ul className="flex flex-col gap-3">
-                      {[
-                        {
-                          icon: Crown,
-                          title: t("login.ready1Title"),
-                          desc: t("login.ready1Desc"),
-                          variant: "green" as const,
-                        },
-                        {
-                          icon: Target,
-                          title: t("login.ready2Title"),
-                          desc: t("login.ready2Desc"),
-                          variant: "purple" as const,
-                        },
-                        {
-                          icon: Activity,
-                          title: t("login.ready3Title"),
-                          desc: t("login.ready3Desc"),
-                          variant: "blue" as const,
-                        },
-                      ].map((item) => (
-                        <li
-                          key={item.title}
-                          className="flex items-start gap-3"
-                        >
-                          <HexBadge variant={item.variant} size="sm" noGlow>
-                            <item.icon className="h-3.5 w-3.5" />
-                          </HexBadge>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold text-[#ededed]">
-                              {item.title}
-                            </p>
-                            <p className="mt-0.5 text-[12px] leading-relaxed text-[#a3a9b8]">
-                              {item.desc}
-                            </p>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+      <main className="relative z-10 flex min-h-[calc(100vh-200px)] items-start justify-center px-6 pt-6 pb-16 sm:pt-10">
+        <section className="w-full max-w-md">
+          <div>
 
             {/* Right: login card */}
             <motion.div
@@ -261,16 +172,16 @@ export function LoginContent() {
             >
               <div className="card-neon-green p-5 sm:p-8 md:p-10">
                 <div className="relative">
-                  {/* Mobile headline — subtitle dropped to match the
-                      desktop redesign; the dashboard-preview panel is
-                      desktop-only because on mobile the form itself is
-                      the immediate next step. */}
-                  <div className="mb-6 lg:hidden">
+                  {/* Slim auth headline — shown on every viewport now
+                      the marketing promo column is gone. Keeps the
+                      form recognisable as "the BetsPlug login" without
+                      pulling in any sales copy. */}
+                  <div className="mb-6">
                     <span className="section-label">
                       <LogIn className="h-3 w-3" />
                       {t("login.badge")}
                     </span>
-                    <h1 className="text-heading mt-2 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
+                    <h1 className="text-heading mt-2 text-balance break-words text-2xl text-[#ededed] sm:text-3xl">
                       {t("login.title")}{" "}
                       <span className="gradient-text-green">
                         {t("login.titleHighlight")}
@@ -508,7 +419,22 @@ export function LoginContent() {
         </section>
       </main>
 
-      <BetsPlugFooter />
+      {/* Slim auth footer — minimal legal + escape hatch back to
+          the marketing site. Marketing nav/footer is intentionally
+          suppressed on auth routes; this single line keeps the
+          page legally compliant without re-introducing site chrome. */}
+      <footer className="relative z-10 border-t border-white/[0.04] py-6 text-center text-xs text-[#6b7280]">
+        <p>
+          © {new Date().getFullYear()} BetsPlug · Educational simulation
+          only · 18+ · No financial advice ·{" "}
+          <a
+            href="https://betsplug.com"
+            className="underline decoration-white/20 underline-offset-2 hover:text-white"
+          >
+            Back to public site
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }

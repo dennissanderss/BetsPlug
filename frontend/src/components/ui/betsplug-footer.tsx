@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Send,
   Twitter,
@@ -37,7 +38,39 @@ const socialLinks = [
   { icon: Send, label: "Telegram", href: "https://t.me/BetsPluggs" },
 ];
 
+// Routes where the marketing footer must be suppressed entirely.
+// Matches the auth funnel + dashboard surface — same set as
+// SiteNav above, kept inline so footer can ship as a single file
+// without a circular import.
+const HIDDEN_FOOTER_PATTERNS: ReadonlyArray<RegExp> = [
+  /^\/(?:[a-z]{2}\/)?login(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?register(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?forgot-password(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?reset-password(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?dashboard(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?predictions(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?bet-of-the-day(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?combo-of-the-day(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?results(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?trackrecord(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?reports(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?strategy(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?subscription(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?myaccount(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?admin(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?live-score(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?favorites(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?deals(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?matches(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?teams(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?weekly-report(?:\/|$)/,
+  /^\/(?:[a-z]{2}\/)?search(?:\/|$)/,
+];
+
 export function BetsPlugFooter() {
+  const pathname = usePathname() ?? "";
+  if (HIDDEN_FOOTER_PATTERNS.some((rx) => rx.test(pathname))) return null;
+
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const isNl = locale === "nl";
