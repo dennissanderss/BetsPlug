@@ -182,7 +182,12 @@ class Settings(BaseSettings):
     coupon_discount_percent: float = 5.0         # 5% off
     coupon_expiry_days: int = 1                  # coupon valid for 24 hours
     recovery_token_expiry_hours: int = 24        # recovery link valid 24 hours
-    site_url: str = "https://www.betsplug.com"   # used in email links
+    # DEPRECATED — use ``app_base_url`` (for authed routes) or
+    # ``public_site_url`` (for marketing) helpers instead. Default
+    # bumped from www.betsplug.com to apex so any legacy code that
+    # still reads this hits the canonical Astro homepage rather
+    # than a 308-redirect chain.
+    site_url: str = "https://betsplug.com"
 
     # Reports
     reports_output_dir: str = "/app/reports"

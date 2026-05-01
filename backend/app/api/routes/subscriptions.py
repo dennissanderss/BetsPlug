@@ -60,8 +60,14 @@ class CreateCheckoutRequest(BaseModel):
     # recurring plans (silver/gold). Bronze/Platinum are one-time so a
     # trial makes no sense for them.
     with_trial: bool = False
-    success_url: str = "http://localhost:3000/subscriptions?success=true"
-    cancel_url: str = "http://localhost:3000/subscriptions?cancelled=true"
+    # Stripe Checkout success/cancel callback URLs. The frontend
+    # always sets these explicitly (built from window.location.origin
+    # so checkout from app.betsplug.com → callback on app.betsplug.com),
+    # so these defaults only fire if a script forgets to send them.
+    # Updated to the production app surface so a missed override no
+    # longer leaks "localhost:3000" into a real Stripe session.
+    success_url: str = "https://app.betsplug.com/thank-you?success=true"
+    cancel_url: str = "https://app.betsplug.com/checkout?cancelled=true"
 
 
 class CheckoutResponse(BaseModel):
