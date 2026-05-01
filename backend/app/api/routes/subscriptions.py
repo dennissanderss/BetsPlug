@@ -1113,8 +1113,9 @@ async def create_billing_portal_session(
     download past invoices, and cancel — all on a Stripe-hosted page.
     The frontend should redirect the browser to the returned URL.
 
-    Stripe redirects the user back to ``{frontend_url}/subscription``
-    when they're done in the portal.
+    Stripe redirects the user back to ``{app_url}/subscription``
+    when they're done in the portal — that's the dashboard surface
+    on app.betsplug.com after the marketing/app split.
     """
     result = await db.execute(
         select(Subscription).where(Subscription.user_id == current_user.id)
@@ -1137,10 +1138,9 @@ async def create_billing_portal_session(
             detail="Stripe is not configured on the server.",
         )
 
-    return_url = (
-        (settings.frontend_url or "https://betsplug.com").rstrip("/")
-        + "/subscription"
-    )
+    # /subscription lives on app.betsplug.com after the
+    # marketing/app split — must use app_base_url, not frontend_url.
+    return_url = settings.app_base_url + "/subscription"
 
     try:
         import stripe

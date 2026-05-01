@@ -230,7 +230,8 @@ def _pretty_plan(plan: str | None) -> str:
 def _layout(title: str, body_html: str) -> str:
     """Wrap a block of HTML in the responsive BetsPlug email shell."""
     settings = get_settings()
-    site = (settings.frontend_url or "https://betsplug.com").rstrip("/")
+    # Footer "back to home" → public marketing site (Astro).
+    site = settings.public_site_url
     return f"""\
 <!doctype html>
 <html lang="en">
@@ -290,10 +291,14 @@ def _button(label: str, url: str) -> str:
 async def send_verification_email(to: str, token: str, username: str) -> bool:
     """Send the post-registration welcome + verification message."""
     settings = get_settings()
-    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    verify_url = f"{base}/verify-email?token={token}"
-    site_url = base
-    account_url = f"{base}/subscription"
+    # /verify-email and /subscription live on the authed surface
+    # (app.betsplug.com); the email footer's "back to home" link goes
+    # to the marketing site (betsplug.com). Two URLs since the
+    # marketing/app split (2026-05-01).
+    app_base = settings.app_base_url
+    site_url = settings.public_site_url
+    verify_url = f"{app_base}/verify-email?token={token}"
+    account_url = f"{app_base}/subscription"
 
     subject = f"Welcome to BetsPlug, {username} — verify your email"
 
@@ -367,8 +372,9 @@ async def send_verification_email(to: str, token: str, username: str) -> bool:
 async def send_password_reset_email(to: str, token: str, username: str) -> bool:
     """Send the forgot-password reset link."""
     settings = get_settings()
-    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    reset_url = f"{base}/reset-password?token={token}"
+    # /reset-password lives on app.betsplug.com.
+    app_base = settings.app_base_url
+    reset_url = f"{app_base}/reset-password?token={token}"
 
     subject = "Reset your BetsPlug password / Reset je BetsPlug-wachtwoord"
 
@@ -428,9 +434,10 @@ async def send_welcome_email(
     when the next charge is, how to cancel).
     """
     settings = get_settings()
-    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    dashboard_url = f"{base}/dashboard"
-    subscription_url = f"{base}/subscription"
+    # /dashboard and /subscription live on app.betsplug.com.
+    app_base = settings.app_base_url
+    dashboard_url = f"{app_base}/dashboard"
+    subscription_url = f"{app_base}/subscription"
 
     plan_title = _pretty_plan(plan)
     currency_upper = (currency or "EUR").upper()
@@ -519,8 +526,9 @@ async def send_payment_receipt_email(
 ) -> bool:
     """Send a payment receipt after a successful charge."""
     settings = get_settings()
-    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    billing_url = f"{base}/account/billing"
+    # /account/billing lives on app.betsplug.com.
+    app_base = settings.app_base_url
+    billing_url = f"{app_base}/account/billing"
 
     currency_upper = (currency or "EUR").upper()
     amount_str = f"{amount:.2f} {currency_upper}"
@@ -562,8 +570,9 @@ async def send_subscription_cancelled_email(
 ) -> bool:
     """Send a cancel-confirmation email when the user schedules a cancel."""
     settings = get_settings()
-    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    subscription_url = f"{base}/subscription"
+    # /subscription lives on app.betsplug.com.
+    app_base = settings.app_base_url
+    subscription_url = f"{app_base}/subscription"
 
     subject = "Your BetsPlug cancellation is scheduled / Je opzegging is verwerkt"
 

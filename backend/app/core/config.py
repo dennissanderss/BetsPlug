@@ -66,9 +66,41 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
 
-    # CORS
+    # Frontend URLs — TWO of them after the marketing/app split
+    # (2026-05-01):
+    #
+    # - frontend_url is the public marketing site (Astro on
+    #   betsplug.com). Used in email footers / "back to site" links
+    #   and CORS allow-list.
+    # - app_url is the authenticated dashboard surface (Next.js on
+    #   app.betsplug.com). Used in EVERY email that contains a link
+    #   to /verify-email, /reset-password, /welcome, /dashboard,
+    #   /subscription, /myaccount — those routes only exist there.
+    #
+    # On Railway set BOTH:
+    #   FRONTEND_URL=https://betsplug.com
+    #   APP_URL=https://app.betsplug.com
     frontend_url: str = ""  # Used by Railway for CORS; appended to cors_origins
+    app_url: str = ""  # Authed dashboard URL; used by email + auth flows
     cors_origins: str = "http://localhost:3000"
+
+    @property
+    def app_base_url(self) -> str:
+        """Return the authed-dashboard base URL with sensible fallback.
+
+        Order of precedence:
+          1. APP_URL env var (the post-split value)
+          2. FRONTEND_URL env var (back-compat for boxes that haven't
+             been migrated to the two-URL config yet — but that
+             FALLS BACK to wrong URL after the split, so fix Railway)
+          3. Hardcoded https://app.betsplug.com production default
+        """
+        return (self.app_url or self.frontend_url or "https://app.betsplug.com").rstrip("/")
+
+    @property
+    def public_site_url(self) -> str:
+        """Return the public Astro marketing URL with sensible fallback."""
+        return (self.frontend_url or "https://betsplug.com").rstrip("/")
 
     # Celery
     celery_broker_url: str = "redis://redis:6379/1"

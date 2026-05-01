@@ -344,8 +344,9 @@ def _process_single_session(db, session: AbandonedCheckout) -> None:
     session.coupon_id = coupon.id
     session.coupon_code = coupon.code
 
-    # 4. Build recovery URL
-    recovery_url = f"{settings.site_url}/checkout?plan={session.plan_id}&billing={session.billing_cycle}&recovery={session.recovery_token}&coupon={coupon.code}"
+    # 4. Build recovery URL — /checkout lives on app.betsplug.com
+    # after the marketing/app split, NOT on the marketing site.
+    recovery_url = f"{settings.app_base_url}/checkout?plan={session.plan_id}&billing={session.billing_cycle}&recovery={session.recovery_token}&coupon={coupon.code}"
 
     # 5. Look up username from registered users (if they have an account)
     display_name = None

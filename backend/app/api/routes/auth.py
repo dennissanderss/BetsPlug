@@ -695,7 +695,9 @@ async def admin_get_verification_link(
     settings = get_settings()
     verification_url: str | None = None
     if user.email_verification_token:
-        base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
+        # /auth/verify-email lives on the authed surface
+        # (app.betsplug.com) after the marketing/app split.
+        base = settings.app_base_url
         verification_url = (
             f"{base}/auth/verify-email?token={user.email_verification_token}"
         )
@@ -1036,7 +1038,8 @@ async def admin_get_password_reset_link(
     await db.flush()
 
     settings = get_settings()
-    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
+    # /auth/reset-password lives on app.betsplug.com.
+    base = settings.app_base_url
     reset_url = f"{base}/auth/reset-password?token={user.reset_password_token}"
 
     logger.warning(
