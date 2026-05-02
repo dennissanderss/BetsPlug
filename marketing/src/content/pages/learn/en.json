@@ -1,0 +1,102 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Learn — Football Prediction Methods Explained | BetsPlug",
+    "description": "Deep guides on Elo, Poisson, machine learning, value betting, and bankroll management. Learn the math behind AI football predictions.",
+    "ogImage": "/og-images/learn-en.jpg"
+  },
+  "hero": {
+    "h1": "Learn the Math Behind Football Predictions",
+    "subheadline": "Deep guides on the statistical models, betting concepts, and analytical frameworks behind data-driven football predictions. No fluff. Just the actual math.",
+    "trustStrip": ["Written by engineers", "Updated regularly", "No affiliate spam"]
+  },
+  "grid": {
+    "h2": "Browse Articles",
+    "readMore": "Read article",
+    "difficultyLabels": {
+      "Beginner": "Beginner",
+      "Intermediate": "Intermediate",
+      "Advanced": "Advanced"
+    },
+    "categories": [
+      {
+        "title": "Statistical Models",
+        "articles": [
+          {
+            "slug": "expected-goals-explained",
+            "title": "Expected Goals (xG) Explained",
+            "excerpt": "How xG measures shot quality and predicts long-term team performance better than traditional goal counts.",
+            "readingTime": "8 min read",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "elo-rating-explained",
+            "title": "Elo Rating System for Football",
+            "excerpt": "The dynamic ranking system that adjusts team strength after every match. Originally for chess, now powering modern football predictions.",
+            "readingTime": "10 min read",
+            "difficulty": "Intermediate"
+          },
+          {
+            "slug": "poisson-goal-models",
+            "title": "Poisson Goal Models",
+            "excerpt": "The mathematical distribution that predicts the probability of specific match scores based on attacking and defensive rates.",
+            "readingTime": "12 min read",
+            "difficulty": "Intermediate"
+          }
+        ]
+      },
+      {
+        "title": "Betting Concepts",
+        "articles": [
+          {
+            "slug": "what-is-value-betting",
+            "title": "What is Value Betting?",
+            "excerpt": "Why finding bets with positive expected value is the only mathematically sound long-term strategy. The difference between predicting and profiting.",
+            "readingTime": "9 min read",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "kelly-criterion",
+            "title": "The Kelly Criterion",
+            "excerpt": "The mathematical formula for optimal bet sizing based on edge and odds. Why most bettors size bets wrong.",
+            "readingTime": "11 min read",
+            "difficulty": "Advanced"
+          },
+          {
+            "slug": "bankroll-management",
+            "title": "Bankroll Management",
+            "excerpt": "How to manage your prediction following capital so short-term variance doesn't destroy long-term results.",
+            "readingTime": "8 min read",
+            "difficulty": "Beginner"
+          }
+        ]
+      },
+      {
+        "title": "AI & Analysis",
+        "articles": [
+          {
+            "slug": "ai-vs-tipsters",
+            "title": "AI vs Human Tipsters",
+            "excerpt": "The structural advantages and limitations of AI-driven predictions versus human expertise. Where each excels.",
+            "readingTime": "10 min read",
+            "difficulty": "Intermediate"
+          }
+        ]
+      }
+    ]
+  },
+  "whyTopics": {
+    "h2": "Why We Wrote These Guides",
+    "paragraphs": [
+      "Most football prediction sites either treat their methods as 'proprietary secrets' or oversimplify them to seem user-friendly. Both approaches fail readers who genuinely want to understand what's happening.",
+      "Our learn section explains the actual mathematics behind our predictions — Elo ratings, Poisson distributions, machine learning patterns — at a level that respects your intelligence. If you're ready to learn, the depth is here.",
+      "These articles also cover concepts every serious bettor should understand: value betting, Kelly criterion, bankroll management. Knowing how predictions work helps you use them effectively."
+    ]
+  },
+  "finalCta": {
+    "h2": "Ready to See These Concepts in Action?",
+    "body": "Same engine, same methodology — applied across 30+ leagues every day.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "How Our Engine Works", "canonical": "methodology" }
+  }
+}

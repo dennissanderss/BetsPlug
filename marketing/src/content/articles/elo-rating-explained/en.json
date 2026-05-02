@@ -1,0 +1,120 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Elo Rating System for Football Explained | BetsPlug Learn",
+    "description": "How Elo ratings measure team strength dynamically. Originally for chess, now powering modern football predictions. Formula, examples, and limitations.",
+    "ogImage": "/og-images/learn-elo-rating-en.jpg"
+  },
+  "header": {
+    "h1": "The Elo Rating System: How Football Team Strength Is Measured",
+    "excerpt": "The dynamic ranking system that adjusts team strength after every match. Originally for chess, now powering modern football predictions.",
+    "readingTime": "10 min read",
+    "difficulty": "Intermediate",
+    "category": "Statistical Models",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In This Article",
+  "breadcrumbLearn": "Learn",
+  "intro": "League tables tell you which teams have accumulated the most points. They tell you nothing about why, or whether those points reflect actual current strength. A team can sit fourth in the table on the back of a hot start that's now fading. A team can sit eighth despite being clearly stronger than the four teams ahead of them. Elo ratings cut through this noise. Each team carries a single numerical rating that updates after every match — going up when they win, down when they lose, by amounts proportional to whether the result was expected. This guide explains how Elo works, why it adapts so well to football, and where it falls short. The system underpins most modern prediction engines, including ours.",
+  "sections": [
+    {
+      "id": "what-is-elo",
+      "h2": "What is Elo Rating?",
+      "blocks": [
+        { "type": "paragraph", "text": "Elo is a numerical strength rating, expressed on an open-ended scale typically running from around 1200 (very weak) to 2200 (world-class). The rating compresses thousands of historical match results into a single current-strength estimate. Two teams with the same rating are deemed equally strong; the bigger the rating gap, the bigger the favourite." },
+        { "type": "paragraph", "text": "Every team starts at a baseline (often 1500) the first time they enter the system. Their rating then evolves over time. Win against a strong opponent: gain a lot. Lose to a weak opponent: lose a lot. Draw with an equal opponent: no change. The rating is a moving estimate that gets more accurate the longer the team is in the system." },
+        { "type": "h3", "text": "Where Elo came from" },
+        { "type": "paragraph", "text": "Arpad Elo was a Hungarian-American physics professor who designed the system in the 1950s for chess rankings. The US Chess Federation adopted it in 1960; FIDE (the international chess body) followed in 1970. Elo never intended his system to extend beyond chess, but its mathematical generality made it natural to adapt. Football Elo emerged in the 1990s; today, sites like clubelo.com and eloratings.net publish public Elo ratings for thousands of clubs and national teams." }
+      ]
+    },
+    {
+      "id": "how-elo-updates",
+      "h2": "How Elo Ratings Update",
+      "blocks": [
+        { "type": "paragraph", "text": "The Elo update formula is the heart of the system:" },
+        { "type": "formula", "latex": "R_{\\text{new}} = R_{\\text{old}} + K \\times (S - E)", "caption": "K is the volatility constant; S is actual result (1 win, 0.5 draw, 0 loss); E is expected result based on rating difference." },
+        { "type": "paragraph", "text": "S is straightforward: 1 for a win, 0.5 for a draw, 0 for a loss. E (expected result) comes from a logistic function of the rating difference: a team with a 200-point Elo edge has an expected outcome of roughly 0.76 (76% \"share\" of the result). K controls how much one match shifts the rating. Football Elo typically uses K = 20 to 40. Higher K = more volatility, faster adaptation. Lower K = more stability, slower adaptation." },
+        { "type": "diagram", "name": "elo-update", "caption": "Two teams enter the match with current ratings; the result and expected outcome combine to update both ratings symmetrically." },
+        { "type": "example", "label": "Worked example", "body": "In December 2024, Bayern Munich had an Elo rating of 2087 and played mid-table Augsburg with rating 1834. Rating difference: +253 in Bayern's favour, giving an expected result of roughly 0.81 — Bayern \"should\" earn 81% of the points on average. The match ended 2-3 to Augsburg. Bayern's S was 0, E was 0.81, so ΔR = 32 × (0 − 0.81) = −26 (using K=32). Bayern dropped to 2061. Augsburg's S was 1, E was 0.19, so ΔR = +26. Augsburg jumped to 1860. The bigger the upset, the bigger the rating swing." }
+      ]
+    },
+    {
+      "id": "football-adjustments",
+      "h2": "Football-Specific Elo Adjustments",
+      "blocks": [
+        { "type": "paragraph", "text": "Pure chess Elo doesn't quite fit football out of the box. Football Elo systems extend the basic formula in three important ways." },
+        { "type": "h3", "text": "Goal difference factor" },
+        { "type": "paragraph", "text": "A 4-0 win conveys more information than a 1-0 win. Most football Elo systems multiply the K-factor by a goal-difference adjustment — typically a logarithmic scale so that large margins still matter but with diminishing returns. A 4-0 might apply 1.5× the standard rating shift; a 7-0 might apply 1.75×. This stops blowouts from dominating ratings while still rewarding decisive wins more than narrow ones." },
+        { "type": "h3", "text": "Home advantage" },
+        { "type": "paragraph", "text": "Football has consistent home advantage worth roughly 60-100 Elo points across major leagues. Football Elo bakes this into the expected result calculation: a team with a true 1900 rating playing at home is treated as a 1980-effective-rating team for that match. The Premier League has historically had the strongest home advantage in major European football; some leagues (notably Eredivisie) have lower home advantage." },
+        { "type": "h3", "text": "Match importance multiplier" },
+        { "type": "paragraph", "text": "A Champions League knockout match conveys more information than a friendly. Most Elo systems weight K higher for high-stakes competitions: K=30 for league matches, K=40 for cup finals, K=50 for major tournament games. International Elo (used by FIFA's World Football Ranking, which is roughly Elo-based) uses tournament-specific multipliers." }
+      ]
+    },
+    {
+      "id": "why-works",
+      "h2": "Why Elo Works for Predictions",
+      "blocks": [
+        { "type": "h3", "text": "Recency-weighted accuracy" },
+        { "type": "paragraph", "text": "Elo naturally weights recent matches more heavily than older ones — not by deliberately discounting old results, but by the structural fact that more recent matches have more influence on the current rating. A team's rating from 18 months ago has been overwritten dozens of times by intervening results. This makes Elo respond well to changes in form, manager, or squad without manual tuning." },
+        { "type": "h3", "text": "Self-correcting" },
+        { "type": "paragraph", "text": "If Elo over-rates a team (by giving them a hot-streak rating they don't deserve), they lose points the moment they start losing matches against opponents below them. The system corrects errors automatically — it doesn't need an analyst to flag \"this team is overrated\" and manually adjust. The rating moves where the results dictate." },
+        { "type": "h3", "text": "No arbitrary weighting" },
+        { "type": "paragraph", "text": "Many ranking systems involve subjective weighting: how much should we value home wins vs away? Recent vs old? Quality of opponent? Elo encodes all of this in two parameters (K and home advantage), both of which can be tuned empirically against historical data. There's no \"vibes\" component." }
+      ]
+    },
+    {
+      "id": "betsplug-elo",
+      "h2": "How BetsPlug Uses Elo",
+      "blocks": [
+        { "type": "paragraph", "text": "Every team in our covered leagues carries a current Elo rating, updated within minutes of every match's final whistle. Pre-match Elo difference is the strongest single predictor in our system — it captures team strength, recent form, and home advantage in one number." },
+        { "type": "paragraph", "text": "But Elo doesn't stand alone. We feed Elo difference into a Poisson goal model along with recent xG trend, opponent defensive xG, lineup strength, and rest days, producing expected goals (lambda) for both teams. From there, our machine learning layer adjusts the Elo influence per match context — Elo matters more in stable league fixtures and less in cup matches with rotated lineups, for example. The methodology page covers the integration in detail." }
+      ]
+    },
+    {
+      "id": "elo-limitations",
+      "h2": "Elo Limitations",
+      "blocks": [
+        { "type": "paragraph", "text": "Elo is robust but not infallible. Anyone using Elo-based predictions should know its weak points." },
+        { "type": "h3", "text": "Slow reaction to squad changes" },
+        { "type": "paragraph", "text": "If a team's star striker is injured for three months, the team is meaningfully weaker — but their Elo rating only adjusts as match results accumulate. The first few matches after the injury, Elo will overestimate the team. This is a particular problem for cup competitions where squads are rotated and Elo doesn't \"know\" the lineup is different." },
+        { "type": "h3", "text": "Tactical matchups invisible" },
+        { "type": "paragraph", "text": "Elo treats teams as monolithic strength values. It doesn't capture that Team A struggles against high-pressing opponents while excelling against deep blocks, or that Team B's strength is in counter-attacks that don't work against compact defences. Modern prediction engines layer ML on top of Elo specifically to capture these matchup effects." },
+        { "type": "h3", "text": "K-factor assumptions break for cup matches" },
+        { "type": "paragraph", "text": "Cup matches are noisier than league matches — rotated squads, low motivation in early rounds, drama in finals. A single K-factor can't capture this variance. Sophisticated systems use match-type-specific K-factors or exclude certain cup matches from rating updates entirely." },
+        { "type": "h3", "text": "Different implementations differ" },
+        { "type": "paragraph", "text": "There's no single canonical \"football Elo\". Clubelo, eloratings.net, FiveThirtyEight's SPI (loosely Elo-based), and our internal Elo all give slightly different ratings for the same teams. The differences are usually small (within 30-50 points) but real. Pick one and stick with it for consistency." }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Key Takeaways",
+    "items": [
+      "Elo is a single numerical strength rating that updates after every match.",
+      "The update formula uses K (volatility), S (actual result), and E (expected result based on rating difference).",
+      "Football Elo extends the basic system with goal-difference, home advantage, and match-importance adjustments.",
+      "Elo is recency-weighted and self-correcting — strong baseline predictor.",
+      "Limitations: slow to react to squad changes, blind to tactical matchups, sensitive to K-factor choice."
+    ]
+  },
+  "faq": {
+    "h2": "Elo Rating FAQ",
+    "questions": [
+      { "q": "What's the highest Elo rating ever in football?", "a": "Around 2200 — historic peaks for the Brazilian national team in the early 1960s and the Spanish national team during their 2008-2012 dominance. Top club teams typically peak around 2050-2100 when they're at their absolute best (Pep Guardiola's Barcelona, prime Bayern under Heynckes). Most strong club teams sit in the 1850-1980 range." },
+      { "q": "How fast does an Elo rating change?", "a": "Depends on K-factor. With K=32 (typical for football), a major upset (a 1500-rated team beating a 1900-rated team) shifts ratings by about 25 points. Sustained good or bad form moves a team's rating by 100+ points over a single season. A team that goes 5W-0L-0D against opponents 50 points stronger gains roughly 60-80 Elo points over those matches." },
+      { "q": "Can I check Elo ratings for my team?", "a": "Yes. Clubelo.com and eloratings.net publish public Elo ratings for thousands of football clubs and national teams. They use slightly different methodologies, so the numbers won't match exactly between sites, but they'll be in the same ballpark. BetsPlug uses our own Elo implementation tuned for prediction accuracy — we don't publish individual team ratings, but the underlying methodology is the same." },
+      { "q": "How is Elo different from FIFA rankings?", "a": "FIFA's World Football Ranking (used for national teams) is loosely Elo-based but uses different K-factors per competition and is updated less frequently. Critics have long argued FIFA's system underrates competitive non-tournament friendlies and overrates regional confederation matches. Pure Elo is generally considered more accurate as a predictive tool." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Related Articles",
+    "slugs": ["expected-goals-explained", "poisson-goal-models", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "See Elo-Driven Predictions",
+    "body": "Elo difference is the strongest single signal in our prediction engine, combined with Poisson goal models and machine learning. Every prediction across 30+ leagues reflects this integrated methodology.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Read Methodology", "canonical": "methodology" }
+  }
+}

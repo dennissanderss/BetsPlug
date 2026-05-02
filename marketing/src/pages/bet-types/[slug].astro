@@ -1,135 +1,36 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import SiteNav from "../../components/SiteNav.astro";
-import Footer from "../../components/Footer.astro";
-import PageHeader from "../../components/PageHeader.astro";
-import Prose from "../../components/Prose.astro";
-import {
-  sanity,
-  localised,
-  renderPortableText,
-} from "../../lib/sanity";
+/**
+ * Legacy /bet-types/{slug} URLs from the old NOCTURNE build are
+ * consolidated into the new /bet-types pillar page. Each legacy slug
+ * 301-redirects to the matching anchor on the pillar.
+ *
+ * Per spec docs/specs/01-site-architecture.md "URLs die samenvoegen
+ * tot pillar".
+ */
+const slugToAnchor: Record<string, string> = {
+  "both-teams-to-score":  "btts",
+  "double-chance":        "double-chance",
+  "draw-no-bet":          "draw-no-bet",
+  "over-2-5-goals":       "over-under",
+  "asian-handicap":       "asian-handicap",
+  "correct-score":        "correct-score",
+  "ht-ft":                "ht-ft",
+  "match-result":         "match-result",
+};
 
-const allBetTypeHubsQuery = `
-  *[_type == "betTypeHub"] {
-    _id, slug
-  }
-`;
-
-const betTypeHubBySlugQuery = `
-  *[_type == "betTypeHub" && slug.current == $slug][0] {
-    _id, name, slug, shortCode, tagline, explainer, strategy,
-    matchesHeading, matchesSub, metaTitle, metaDescription, faqs
-  }
-`;
-
-interface BetTypeHubFull {
-  _id: string;
-  name: any;
-  slug: { current: string };
-  shortCode?: string;
-  tagline?: any;
-  explainer?: any;
-  strategy?: any;
-  matchesHeading?: any;
-  matchesSub?: any;
-  metaTitle?: any;
-  metaDescription?: any;
-  faqs?: Array<{ _key: string; question?: any; answer?: any }>;
+export function getStaticPaths() {
+  return Object.keys({
+    "both-teams-to-score":  "btts",
+    "double-chance":        "double-chance",
+    "draw-no-bet":          "draw-no-bet",
+    "over-2-5-goals":       "over-under",
+    "asian-handicap":       "asian-handicap",
+    "correct-score":        "correct-score",
+    "ht-ft":                "ht-ft",
+    "match-result":         "match-result",
+  }).map((slug) => ({ params: { slug } }));
 }
 
-export async function getStaticPaths() {
-  let hubs: Array<{ slug: { current: string } }> = [];
-  try {
-    hubs = await sanity.fetch(allBetTypeHubsQuery);
-  } catch {}
-  return hubs.map((h) => ({ params: { slug: h.slug.current } }));
-}
-
-const { slug } = Astro.params;
-let hub: BetTypeHubFull | null = null;
-try {
-  hub = await sanity.fetch<BetTypeHubFull | null>(betTypeHubBySlugQuery, {
-    slug,
-  });
-} catch {
-  hub = null;
-}
-if (!hub) return Astro.redirect("/bet-types", 302);
-
-const title = localised(hub.name);
-const tagline = localised(hub.tagline);
-const metaTitle =
-  localised(hub.metaTitle) || `${title} predictions explained — BetsPlug`;
-const metaDescription = localised(hub.metaDescription) || tagline;
-
-function localisedPortableText(value: any, locale = "en"): unknown {
-  if (!value) return null;
-  if (Array.isArray(value)) return value;
-  return value[locale] ?? value.en ?? null;
-}
+const anchor = slugToAnchor[String(Astro.params.slug ?? "")];
+return Astro.redirect(anchor ? `/bet-types#${anchor}` : "/bet-types", 301);
 ---
-
-<Layout title={metaTitle} description={metaDescription}>
-  <SiteNav />
-
-  <main>
-    <PageHeader
-      kicker={hub.shortCode ? `Bet type · ${hub.shortCode}` : "Bet type"}
-      title={title}
-      subtitle={tagline}
-    />
-
-    {hub.explainer && (
-      <Prose>
-        <Fragment
-          set:html={renderPortableText(
-            localisedPortableText(hub.explainer),
-          )}
-        />
-      </Prose>
-    )}
-
-    {hub.strategy && (
-      <section class="mx-auto max-w-3xl px-4 pb-8 sm:px-6 lg:px-8">
-        <div class="card-neon card-neon-green p-6">
-          <h2 class="text-base font-bold text-white">Strategy notes</h2>
-          <Prose>
-            <Fragment
-              set:html={renderPortableText(
-                localisedPortableText(hub.strategy),
-              )}
-            />
-          </Prose>
-        </div>
-      </section>
-    )}
-
-    {hub.faqs && hub.faqs.length > 0 && (
-      <section class="mx-auto max-w-3xl px-4 pb-12 sm:px-6 lg:px-8">
-        <h2 class="mb-4 text-xl font-bold text-white">FAQ</h2>
-        <div class="space-y-3">
-          {hub.faqs.map((faq) => (
-            <details class="card-neon p-4">
-              <summary class="cursor-pointer text-sm font-semibold text-white">
-                {localised(faq.question)}
-              </summary>
-              <p class="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
-                {localised(faq.answer)}
-              </p>
-            </details>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <section class="mx-auto max-w-3xl px-4 pb-12 sm:px-6 lg:px-8">
-      <div class="flex flex-wrap items-center gap-3">
-        <a href="/pricing" class="btn-primary">See the tiers</a>
-        <a href="/bet-types" class="btn-ghost">All bet types →</a>
-      </div>
-    </section>
-
-    <Footer />
-  </main>
-</Layout>

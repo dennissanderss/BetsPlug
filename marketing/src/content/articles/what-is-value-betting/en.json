@@ -1,0 +1,115 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "What is Value Betting? The Math of Long-Term Profit | BetsPlug Learn",
+    "description": "Value betting is the only mathematically sound long-term strategy. Learn how to calculate expected value, identify positive-EV bets, and avoid the bookmaker's edge.",
+    "ogImage": "/og-images/learn-value-betting-en.jpg"
+  },
+  "header": {
+    "h1": "What is Value Betting? The Math of Long-Term Profit",
+    "excerpt": "Why finding bets with positive expected value is the only mathematically sound long-term strategy. The difference between predicting and profiting.",
+    "readingTime": "9 min read",
+    "difficulty": "Beginner",
+    "category": "Betting Concepts",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In This Article",
+  "breadcrumbLearn": "Learn",
+  "intro": "Most bettors lose money long-term. That fact has nothing to do with luck — it's a mathematical certainty for anyone who doesn't understand value. Bookmakers build a margin into every market they offer, which means the average bet is a losing proposition by definition. The only way to profit consistently is to find specific bets where the bookmaker's odds are wrong in your favour — bets with positive expected value (EV). This guide explains what value is, why it matters more than picking winners, and how to identify it. The math is simpler than it sounds.",
+  "sections": [
+    {
+      "id": "what-is-value",
+      "h2": "What is Value?",
+      "blocks": [
+        { "type": "paragraph", "text": "A bet has \"value\" when the probability of winning is higher than the probability implied by the odds. That's the entire definition. Note what's missing: nothing about confidence, nothing about who you think will win, nothing about \"sure things\". Value is purely about whether the odds undervalue the actual probability." },
+        { "type": "h3", "text": "Expected value, formally" },
+        { "type": "paragraph", "text": "Expected value (EV) is what you'd expect to win or lose, on average, per unit staked, if the same bet was placed an infinite number of times. The formula:" },
+        { "type": "formula", "latex": "\\text{EV} = (P_{\\text{win}} \\times \\text{Profit}) - (P_{\\text{loss}} \\times \\text{Stake})", "caption": "Positive EV means you profit on average; negative EV means you lose on average." },
+        { "type": "example", "label": "Worked example", "body": "You estimate Real Madrid has a 50% probability of winning at home. The bookmaker offers decimal odds of 2.20 (potential profit of €1.20 on a €1 stake). EV = (0.5 × €1.20) − (0.5 × €1.00) = +€0.10 per €1 staked. This is a positive-EV bet: average profit of 10 cents per euro. Same match, same probability estimate, but odds of 1.80 instead: EV = (0.5 × €0.80) − (0.5 × €1.00) = −€0.10. Identical pick, opposite outcome over the long run." }
+      ]
+    },
+    {
+      "id": "value-vs-winners",
+      "h2": "Why Value Beats Picking Winners",
+      "blocks": [
+        { "type": "paragraph", "text": "Imagine two bettors. Bettor A picks 65% winners but only at odds where the implied probability is 70%. Bettor B picks 45% winners but consistently at odds where the implied probability is 40%. Bettor A goes broke; Bettor B gets rich. Counter-intuitive? Run the numbers." },
+        { "type": "paragraph", "text": "Bettor A's expected value per €1 stake at 65% wins / 70% implied probability (decimal odds 1.43): EV = (0.65 × €0.43) − (0.35 × €1.00) = −€0.07. Negative — Bettor A loses 7 cents per euro on average. Bettor B at 45% wins / 40% implied (decimal odds 2.50): EV = (0.45 × €1.50) − (0.55 × €1.00) = +€0.13. Positive — Bettor B profits 13 cents per euro on average." },
+        { "type": "paragraph", "text": "Picking winners is necessary but not sufficient. The odds have to be wrong in your favour. This is why \"who do you think will win?\" is the wrong question — the right question is \"which odds are mispriced?\"." }
+      ]
+    },
+    {
+      "id": "identifying-value",
+      "h2": "How to Identify Value",
+      "blocks": [
+        { "type": "h3", "text": "Step 1: Estimate true probability" },
+        { "type": "paragraph", "text": "This is the hard part. You need a probability estimate for the outcome you're considering — say, 58% chance of Over 2.5 goals. Your estimate has to come from somewhere defensible: a statistical model, a track record of accurate predictions, or rigorous analysis of the matchup. Gut feeling doesn't count, because gut feelings are systematically biased." },
+        { "type": "h3", "text": "Step 2: Convert odds to implied probability" },
+        { "type": "paragraph", "text": "Implied probability = 1 / decimal odds. Odds of 1.85 imply 1/1.85 = 54% probability. Odds of 3.50 imply 29%. Odds of 2.00 imply exactly 50%. Note that the implied probabilities across all outcomes of a market sum to more than 100% — the excess is the bookmaker's margin." },
+        { "type": "h3", "text": "Step 3: Compare and bet only the gap" },
+        { "type": "paragraph", "text": "If your estimate is higher than implied: that's a positive-EV bet. If your estimate is lower or equal: skip it. The size of the gap matters — a 2% edge (your 60% vs implied 58%) is technically positive-EV but barely covers your estimation noise. Most professional bettors require a 5%+ edge before staking. Below that threshold, the EV is real but variance dominates." }
+      ]
+    },
+    {
+      "id": "bookmaker-edge",
+      "h2": "The Bookmaker's Edge",
+      "blocks": [
+        { "type": "paragraph", "text": "Bookmakers don't price markets at \"true\" probability. They price them at true probability plus a margin — typically 5–10% on football 1X2 markets, 3–5% on Over/Under, sometimes higher on niche markets like correct-score or Asian handicap on lower leagues. This margin is why the implied probabilities sum to more than 100%." },
+        { "type": "paragraph", "text": "Concrete example: a perfectly balanced match where each outcome has 33.3% true probability. A bookmaker with a 5% margin offers odds around 2.85 / 2.85 / 2.85 (each implying 35.1% probability — sum is 105.3%). The 5.3% excess is the margin. To beat this market over time, your probability estimates have to be accurate enough to overcome the 5.3% built-in disadvantage. Most bettors don't even know this margin exists." },
+        { "type": "h3", "text": "Why most bettors lose" },
+        { "type": "paragraph", "text": "If you bet randomly across all bookmaker markets, you lose roughly the margin per bet — say 5%. Even if you pick winners 50% of the time at random odds, the math still grinds you down because the odds are skewed against you. Beating the bookmaker requires consistently identifying mispriced markets. Most bettors don't do this systematically — they bet on hunches, recency bias, or fan loyalty, all of which produce neutral-to-negative selection bias." }
+      ]
+    },
+    {
+      "id": "common-mistakes",
+      "h2": "Value Betting Mistakes",
+      "blocks": [
+        { "type": "h3", "text": "Confusing confidence with value" },
+        { "type": "paragraph", "text": "A 90%-confident pick at odds of 1.10 is a negative-EV bet (implied probability 91%, your estimate 90%). A 25%-confident pick at odds of 5.00 is a positive-EV bet (implied 20%, your estimate 25%). Confidence and value are different. The first is about how likely; the second is about how mispriced." },
+        { "type": "h3", "text": "Overconfidence in your probability estimates" },
+        { "type": "paragraph", "text": "Most amateur bettors think they're more accurate than they are. If you estimate \"80% probability\" but win only 65% of those bets, your estimates are systematically over-optimistic and you've been losing money on \"value\" bets that weren't actually value. Tracking your accuracy over hundreds of bets is the only way to calibrate." },
+        { "type": "h3", "text": "Chasing big odds" },
+        { "type": "paragraph", "text": "Long-shot value bets (odds 5.00+) are real but high-variance. You need a much larger sample to confirm an edge — the natural rate of misjudging long-shot probability is high. Most experienced value bettors focus on 1.5–3.5 odds where probability estimates are most reliable." },
+        { "type": "h3", "text": "Ignoring sample size" },
+        { "type": "paragraph", "text": "100 bets is not enough to know if you have an edge. Variance dominates that range. 500-1,000 bets is the minimum sample to start making confident statements about your value-betting accuracy. Most bettors quit at 50-100 bets — winning or losing — without ever knowing their true edge." }
+      ]
+    },
+    {
+      "id": "betsplug-help",
+      "h2": "How BetsPlug Helps Find Value",
+      "blocks": [
+        { "type": "paragraph", "text": "Our prediction engine outputs probability estimates for each match — what we call confidence percentages. These are calibrated against historical match data: when our engine says 70%, roughly 70% of those predictions have resolved correctly across our public track record. That calibration is the foundation of value identification: an honest probability estimate is the input value betting requires." },
+        { "type": "paragraph", "text": "Subscribers see implied probability alongside our estimate, making the value calculation explicit. Free users see our top-confidence pick per match — useful, but lacking the comparison data needed for systematic value betting. Either way, what BetsPlug provides is one input — your bankroll management, stake sizing, and execution discipline are still your responsibility." }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Key Takeaways",
+    "items": [
+      "Value = your probability estimate higher than the odds' implied probability.",
+      "Positive expected value (EV) is the only mathematically sound long-term strategy.",
+      "Picking winners isn't enough — odds must be mispriced in your favour.",
+      "Bookmakers bake in 5–10% margin per market — your edge has to overcome this.",
+      "Track 500+ bets to honestly assess whether your probability estimates are calibrated."
+    ]
+  },
+  "faq": {
+    "h2": "Value Betting FAQ",
+    "questions": [
+      { "q": "Can value betting really beat bookmakers long-term?", "a": "Yes, but rarely. Maybe 1-2% of bettors achieve consistent long-term profit through value betting. It requires accurate probability estimation, large sample sizes, disciplined stake sizing, and the patience to weather variance. Most bettors who try value betting either give up before the sample size is meaningful, or overestimate their probability accuracy." },
+      { "q": "What's a 'good' edge to aim for?", "a": "5%+ is the conventional threshold for stake-worthy value bets. Below 5%, your edge is fragile against estimation error and bookmaker line movement. Above 15%, you should question your probability estimate — markets rarely offer that much edge unless something is seriously wrong with the line, in which case bookmakers usually correct it before you can capitalise." },
+      { "q": "Do bookmakers limit successful value bettors?", "a": "Yes. Most bookmakers identify and limit accounts that consistently win — sometimes by capping stakes, sometimes by closing accounts entirely. This is a real constraint on the value-betting strategy at scale. Sharper bookmakers (Pinnacle, Betfair Exchange) tolerate winners; recreational bookmakers don't." },
+      { "q": "How does this differ from arbitrage?", "a": "Arbitrage exploits pricing differences across multiple bookmakers — covering all outcomes of a market at odds that guarantee profit regardless of result. Value betting takes a single side of one market because you believe the odds undervalue its probability. Arbitrage has near-zero variance; value betting has high variance. Both are real strategies; they're answering different questions." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Related Articles",
+    "slugs": ["kelly-criterion", "bankroll-management", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "See Probability Estimates That Could Reveal Value",
+    "body": "Every BetsPlug prediction shows our calibrated probability estimate. Compare to your bookmaker's odds to identify potential value bets — or let our engine flag the strongest opportunities.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "View Track Record", "canonical": "track-record" }
+  }
+}

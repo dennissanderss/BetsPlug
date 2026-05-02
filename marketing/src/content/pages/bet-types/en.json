@@ -1,0 +1,267 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Football Bet Types Explained: Complete Guide | BetsPlug",
+    "description": "Complete guide to football bet types: 1X2, BTTS, Over/Under, Asian Handicap, Correct Score, and more. How AI predicts each market type.",
+    "ogImage": "/og-images/bet-types-en.jpg"
+  },
+  "hero": {
+    "h1": "Football Bet Types: A Complete Guide",
+    "subheadline": "Every major football bet market explained: how it works, when it's predictable, and how BetsPlug AI generates predictions for each. No fluff."
+  },
+  "toc": {
+    "label": "On This Page",
+    "items": [
+      { "id": "match-result",  "label": "Match Result (1X2)" },
+      { "id": "double-chance", "label": "Double Chance" },
+      { "id": "btts",          "label": "Both Teams to Score (BTTS)" },
+      { "id": "over-under",    "label": "Over/Under Goals" },
+      { "id": "asian-handicap","label": "Asian Handicap" },
+      { "id": "correct-score", "label": "Correct Score" },
+      { "id": "ht-ft",         "label": "Half-Time / Full-Time" },
+      { "id": "draw-no-bet",   "label": "Draw No Bet" },
+      { "id": "coverage",      "label": "Coverage by tier" }
+    ]
+  },
+  "sectionLabels": {
+    "howItWorks": "How It Works",
+    "whenPredictable": "When This Market is Predictable",
+    "howBetsplugPredicts": "How BetsPlug Predicts This Market",
+    "tips": "Tips for This Market",
+    "exampleTitle": "Example prediction"
+  },
+  "betTypes": [
+    {
+      "id": "match-result",
+      "h2": "Match Result (1X2)",
+      "definition": "Predicting whether the home team wins (1), the match is drawn (X), or the away team wins (2).",
+      "howItWorks": [
+        "1X2 is the most fundamental football market. Three possible outcomes per match, with odds offered for each. The market resolves based on the result after 90 minutes plus stoppage time. Extra time and penalties don't count for 1X2 — extra-time scenarios apply only to specific cup-knockout markets.",
+        "Each outcome's odds reflect the bookmaker's implied probability plus a built-in margin. A typical Premier League fixture has implied probabilities summing to roughly 105% — the 5% excess is the bookmaker's edge. To beat this market long-term, your probability estimates need to be more accurate than the market's, by enough to overcome the margin."
+      ],
+      "whenPredictable": [
+        "1X2 markets are most predictable when the Elo gap between teams is large. A title-favourite home to a relegation-battle visitor produces clear probability skew that data-driven engines can exploit. Closely-matched derbies are statistically harder — the inherent uncertainty caps prediction accuracy.",
+        "Cup matches, especially early rounds with rotated squads, are notably harder to predict than league fixtures. Match-week-end fixtures after international breaks introduce extra noise from late returns and travel fatigue."
+      ],
+      "howBetsplugPredicts": [
+        "Our 1X2 predictions blend Elo difference, recent xG trend, lineup-strength estimates, and historical home advantage. The Poisson goal model produces a probability distribution over scores, which we then sum into 1X2 probabilities. The ML layer adjusts for context: derby fixtures get extra noise tolerance, cup matches get rotation-adjusted lineups.",
+        "The result is a single confidence percentage per outcome — what we publish on the prediction card. Subscribers see all three probabilities (home/draw/away)."
+      ],
+      "tips": [
+        "Compare your model's probability with the bookmaker's implied probability. A 5%+ gap is the conventional threshold for stake-worthy value bets.",
+        "Avoid 1X2 in unusual fixtures: pre-international-break dead rubbers, end-of-season nothing-on-the-line games, cup ties with confirmed rotation.",
+        "1X2 is harder to predict than Over/Under — the three-outcome structure spreads probability differently than two-outcome markets.",
+        "Track your accuracy by league. Some leagues (Bundesliga, Premier League) have richer historical data and produce more accurate model output than others."
+      ],
+      "example": { "homeTeam": "Manchester City", "awayTeam": "Crystal Palace", "league": "Premier League", "prediction": "Home Win", "confidence": 71 }
+    },
+    {
+      "id": "double-chance",
+      "h2": "Double Chance",
+      "definition": "Covering two of the three 1X2 outcomes with a single bet. Variants: 1X (home or draw), X2 (draw or away), 12 (home or away — neither team draws).",
+      "howItWorks": [
+        "Double Chance is essentially 1X2 with a built-in safety margin. By covering two outcomes, you accept lower odds in exchange for higher win probability. Common use: backing a stronger team without exposure to the draw, or hedging an away underdog while still profiting if they don't lose.",
+        "Mathematically, Double Chance odds equal (1 / sum of individual implied probabilities) minus the bookmaker's margin. A team with 50% home-win probability and 25% draw probability has a true 75% chance of \"home or draw\". Bookmakers offer odds reflecting this minus their margin (typically 4-7%)."
+      ],
+      "whenPredictable": [
+        "Double Chance is most predictable when one outcome (typically away win) has very low probability and the other two are reasonably likely. Strong-favourite-at-home fixtures often produce excellent 1X opportunities — the away team has minimal chance, so home-or-draw covers a near-certain outcome.",
+        "Less predictable in three-way coin-flips where all outcomes have similar implied probability. The market structure offers less edge in these cases because the lower-odds payoff matches the lower-risk profile too cleanly."
+      ],
+      "howBetsplugPredicts": [
+        "Double Chance probabilities are derived directly from our 1X2 model: P(1X) = P(home win) + P(draw); P(X2) = P(draw) + P(away win); P(12) = P(home win) + P(away win). No separate model needed — the underlying Poisson + ML calculation produces this for free.",
+        "We highlight Double Chance opportunities where the implied probability gap is largest — typically heavy home favourites where 1X offers strong safety with reasonable odds."
+      ],
+      "tips": [
+        "Double Chance is most useful when you have medium confidence rather than high confidence. High-confidence picks should usually go on 1X2 directly.",
+        "Avoid Double Chance odds below 1.20 — the implied probability is so high that the bookmaker's margin dominates the bet's expected value.",
+        "Useful for risk management when following a tipster you don't fully trust yet — covering the draw protects against tipster's optimism bias.",
+        "Don't use Double Chance to mask weak picks. The reduced odds reflect reduced risk; bad analysis isn't fixed by hedging."
+      ],
+      "example": { "homeTeam": "Bayern Munich", "awayTeam": "Augsburg", "league": "Bundesliga", "prediction": "1X (Home or Draw)", "confidence": 86 }
+    },
+    {
+      "id": "btts",
+      "h2": "Both Teams to Score (BTTS)",
+      "definition": "Predicts whether both teams score at least one goal each during regulation time. Two outcomes: Yes (both score) or No (one or both fail to score).",
+      "howItWorks": [
+        "BTTS is a binary market simpler than 1X2 — only two outcomes. The market resolves based on whether both home AND away team score at least once during regulation time (90 minutes plus stoppage). Extra time and penalties don't count. Own goals count for the team awarded the goal.",
+        "BTTS is one of the most popular alternative markets because it's intuitive: \"will both teams score, yes or no?\" The bookmaker margin on BTTS is typically 4-6%, slightly tighter than 1X2 because the binary structure is more efficient to price."
+      ],
+      "whenPredictable": [
+        "BTTS markets are highly predictable using statistical models because they reduce to two clear probability distributions. High-scoring leagues like the Bundesliga and Eredivisie have BTTS Yes rates around 55-60% historically. Defensive leagues like Serie A historically had lower BTTS rates around 45-50%, though modern Serie A has shifted toward more open play.",
+        "BTTS is most predictable when one team has both strong attack AND vulnerable defence (BTTS Yes likely) or weak attack AND strong defence (BTTS No likely). Combinations like top-attack-vs-top-defence are harder — the asymmetry produces variance."
+      ],
+      "howBetsplugPredicts": [
+        "Our Poisson goal model directly outputs BTTS probabilities. We calculate expected goals (lambda) for both teams, then derive the joint probability of each scoring at least once. The Dixon-Coles adjustment handles edge cases (low-scoring matches where pure Poisson underestimates draws).",
+        "Recent xG trends weight heavily — teams in attacking form increase BTTS likelihood. Lineup data also matters: confirmed absences of key strikers shift our BTTS prediction noticeably."
+      ],
+      "tips": [
+        "Check both teams' scoring streaks. BTTS Yes is more reliable when both teams have scored in 3+ consecutive matches.",
+        "Avoid BTTS in unusual fixtures: cup matches with rotated lineups, end-of-season dead rubbers, matches affected by recent international duty.",
+        "BTTS Yes correlates with high-pressure tactics; check expected formations.",
+        "Be cautious of BTTS markets in matches with major defensive injuries — sample size for that specific scenario is small, model accuracy is lower."
+      ],
+      "example": { "homeTeam": "Borussia Dortmund", "awayTeam": "Bayer Leverkusen", "league": "Bundesliga", "prediction": "BTTS Yes", "confidence": 74 }
+    },
+    {
+      "id": "over-under",
+      "h2": "Over/Under Goals",
+      "definition": "Predicts whether the total combined goals will go over or under a specified threshold. Most common lines: 0.5, 1.5, 2.5, 3.5, 4.5.",
+      "howItWorks": [
+        "The bookmaker sets a goal threshold (e.g. 2.5). Over wins if the match has 3 or more total goals; Under wins if the match has 2 or fewer. The 0.5 fractional threshold guarantees a winner — there's no \"push\" outcome.",
+        "Over 2.5 is the most popular line because it sits near the league average for most major competitions. A typical Premier League match averages 2.7 goals; Bundesliga averages closer to 3.0; Serie A historically averaged 2.5; modern Serie A is closer to 2.7."
+      ],
+      "whenPredictable": [
+        "Over/Under markets are highly statistical — Poisson distribution direct application. Models can output expected goal totals and Over/Under probabilities with strong reliability.",
+        "Most predictable when expected goal totals diverge significantly from the line. A match with 3.4 expected goals against an Over/Under 2.5 line is a much clearer signal than a match with 2.6 expected goals against the same line.",
+        "Less predictable in matches with major motivation imbalances — title-deciding matches often produce different goal patterns than expected because tactics shift mid-match."
+      ],
+      "howBetsplugPredicts": [
+        "Our Poisson model produces a probability distribution over total goals. P(Over X) = sum of all match outcomes with home + away goals greater than X. We publish predictions for 0.5, 1.5, 2.5, and 3.5 lines.",
+        "BetsPlug specializes in 2.5 line predictions because this is statistically the most informative line for most leagues. Subscribers see all four common thresholds; free users see the 2.5 line only when it's our highest-confidence pick."
+      ],
+      "tips": [
+        "Compare expected goals (xG) with the line. Significant divergence (xG total > 3.0 against an Over 2.5 line) is the strongest signal.",
+        "Track league averages. Premier League and Bundesliga averages drift over time; Italian Serie A has trended noticeably higher in recent seasons.",
+        "Cup matches are harder to predict — rotation and motivation cause Over/Under distributions to deviate from league norms.",
+        "Avoid Over/Under markets where weather is a major factor. Heavy rain or wind reduces shot conversion in ways most models don't fully capture."
+      ],
+      "example": { "homeTeam": "Real Madrid", "awayTeam": "Sevilla", "league": "La Liga", "prediction": "Over 2.5 Goals", "confidence": 68 }
+    },
+    {
+      "id": "asian-handicap",
+      "h2": "Asian Handicap",
+      "definition": "Eliminates the draw outcome by giving one team a virtual head start (handicap). Whole-number handicaps can result in a push (refund); half-line handicaps guarantee a winner.",
+      "howItWorks": [
+        "Asian Handicap was developed in Asian betting markets and has spread globally because of its precision. Common handicaps: -0.5 (favourite must win), -1.0 (favourite must win by 2+; 1-goal win is a push), -1.5 (favourite must win by 2+), and quarter-handicaps like -0.75 which split the stake between -0.5 and -1.0.",
+        "Quarter-handicaps like -0.25 or +0.75 split your stake. -0.25 means half your stake is on Draw No Bet (refund if draw) and half is on the team to win outright. This precision makes Asian Handicap odds typically more competitive than 1X2 alternatives — bookmaker margins are 2-3% rather than 5-7%."
+      ],
+      "whenPredictable": [
+        "Asian Handicap is most predictable in matches with clear favourites. Heavy mismatches where the favourite is expected to win comfortably are the natural fit — handicaps reflect that expectation in the line.",
+        "Less predictable in evenly matched games where the line sits at 0 or +/-0.25. The market essentially becomes a refined 1X2 with similar variance.",
+        "Better-suited for league matches than cup matches due to lineup rotation in cups."
+      ],
+      "howBetsplugPredicts": [
+        "Our Asian Handicap predictions derive from the same Poisson + ML stack as 1X2. The probability of covering a -1.5 handicap is the probability of winning by 2+ goals, summed from the score-probability matrix.",
+        "We publish Asian Handicap predictions only when the model has high confidence — the bookmaker's tighter margin on this market means small probability differences matter more for value identification."
+      ],
+      "tips": [
+        "Asian Handicap is most useful for backing strong favourites at improved odds — the handicap shifts payoff while keeping decent win rate.",
+        "Quarter-handicaps reduce variance — useful when you're uncertain about exact margin but confident in direction.",
+        "Avoid Asian Handicap in derbies and emotionally-charged matches where margin variance is highest.",
+        "Sharper bookmakers (Pinnacle, exchanges) offer better Asian Handicap lines than recreational bookmakers — the tighter margins matter more in this market than in 1X2."
+      ],
+      "example": { "homeTeam": "Manchester City", "awayTeam": "Brentford", "league": "Premier League", "prediction": "Man City -1.5", "confidence": 62 }
+    },
+    {
+      "id": "correct-score",
+      "h2": "Correct Score",
+      "definition": "Predict the exact final score of the match. Highest variance, highest odds among common markets.",
+      "howItWorks": [
+        "Correct Score offers odds on every plausible final score (typically 0-0 through 5-4, sometimes higher). Each outcome has individually low probability — even the most likely score in a match rarely exceeds 12% probability — so odds are correspondingly long.",
+        "The bookmaker margin on Correct Score is typically larger than other markets (8-12%) because the many low-probability outcomes give bookmakers more room to shade individual lines without users noticing."
+      ],
+      "whenPredictable": [
+        "Correct Score is statistically the hardest market to predict. The discrete nature of football scoring combined with high variance makes any specific score outcome inherently uncertain.",
+        "What CAN be predicted is the cluster of likely scores. A match with expected goals 2.4 vs 0.9 has its highest probability concentrated around 2-0, 2-1, 1-0, and 3-0 scorelines. The probability matrix shows this clearly.",
+        "Most useful when used as a portfolio — covering 2-3 likely scores rather than a single bet on the single most likely outcome."
+      ],
+      "howBetsplugPredicts": [
+        "Our Poisson model produces a complete probability matrix for every plausible exact score. Subscribers see this matrix directly: every cell shows the probability of that exact score, with the most likely scores highlighted.",
+        "We don't publish a single \"Correct Score prediction\" because no single score is ever genuinely the dominant outcome. Subscribers can identify the highest-probability cluster and pick which scores to back. Free users see the most likely score only when it's a particularly clear cluster."
+      ],
+      "tips": [
+        "Don't bet a single Correct Score — variance is too high. Cover 2-3 of the most likely scores from the model output.",
+        "Combine Correct Score with Both Teams to Score for variance reduction — knowing both teams will score eliminates 0-0, 1-0, and 0-1 from consideration.",
+        "Track which Correct Score lines bookmakers shade most. Common-feeling scores (1-1, 2-1) are often shorter than their model probability; less-common feeling scores (2-2, 3-2) are often longer.",
+        "Avoid Correct Score in matches with high variance: cup ties, rotation-affected fixtures, end-of-season dead rubbers."
+      ],
+      "example": { "homeTeam": "Bayern Munich", "awayTeam": "Eintracht Frankfurt", "league": "Bundesliga", "prediction": "2-1 Bayern", "confidence": 12 }
+    },
+    {
+      "id": "ht-ft",
+      "h2": "Half-Time / Full-Time",
+      "definition": "Predict the result at half-time AND at full-time. Nine possible outcome combinations (HW/HW, HW/D, HW/AW, D/HW, etc.).",
+      "howItWorks": [
+        "HT/FT requires correctly predicting both the half-time leader (or draw) AND the full-time leader. Notation: HW/HW means home leading at half-time and full-time; D/HW means draw at half-time, home win at full-time; etc.",
+        "Odds are typically long — the nine-outcome structure spreads probability widely. Even the most likely combination rarely exceeds 30% probability. Bookmaker margins are 6-10%, similar to other multi-outcome markets."
+      ],
+      "whenPredictable": [
+        "HT/FT is most predictable for heavily favoured teams expected to dominate from kickoff. A title-favourite home to relegation visitors often shows HW/HW probability around 35-45%, providing a viable single-outcome bet.",
+        "Less predictable in matches where comebacks are common. Some leagues and tactical patterns produce more comeback drama than others.",
+        "Niche market with smaller sample sizes than 1X2, so model calibration is slightly weaker."
+      ],
+      "howBetsplugPredicts": [
+        "We use a split Poisson model: HT goals modeled separately from second-half goals. This produces joint probabilities for each HT/FT combination. The split lambda accounts for tactical shifts: teams chasing a lead score differently in second halves than in first halves.",
+        "Subscribers see the 3x3 HT/FT probability matrix per match. Free users don't typically see HT/FT predictions — the market's complexity favours subscriber depth."
+      ],
+      "tips": [
+        "HT/FT is high-variance — limit to 5-10% of your prediction following.",
+        "Best targets: HW/HW or AW/AW for big favourites where dominance is expected throughout.",
+        "Avoid D/HW or D/AW (comeback predictions) — comebacks are inherently unpredictable.",
+        "Useful for emotional bettors who want simpler narrative bets — but variance is real."
+      ],
+      "example": { "homeTeam": "Real Madrid", "awayTeam": "Almeria", "league": "La Liga", "prediction": "Madrid HT/FT", "confidence": 38 }
+    },
+    {
+      "id": "draw-no-bet",
+      "h2": "Draw No Bet",
+      "definition": "Eliminates the draw outcome from 1X2. If the match draws, your stake is refunded. Otherwise it resolves like a normal 1X2 winner pick.",
+      "howItWorks": [
+        "Draw No Bet (DNB) is essentially Asian Handicap with a 0 line, but presented more intuitively. Two outcomes pay: home win or away win. A draw refunds the stake.",
+        "DNB odds are slightly lower than the corresponding 1X2 odds because the draw refund effectively shifts probability to the chosen team. Bookmaker margins are typically 4-5%, similar to BTTS."
+      ],
+      "whenPredictable": [
+        "DNB is most useful when you're confident in direction (this team is better) but uncertain about whether they'll win or draw. Backing the favourite via DNB protects against the draw scenario at the cost of slightly lower odds.",
+        "Less useful in matches where the draw is statistically unlikely anyway — DNB protection is wasted, and the lower odds vs 1X2 represents pure value loss.",
+        "More predictable in tight derbies where draws are more probable, particularly when one team has a slight edge in form or home advantage."
+      ],
+      "howBetsplugPredicts": [
+        "DNB probabilities derive directly from our 1X2 model: P(Home DNB win) = P(home win) / (P(home win) + P(away win)), conditional on no draw. Same calculation reversed for away DNB.",
+        "We highlight DNB opportunities when the draw probability is meaningfully high (above 30%) AND we have clear directional confidence. In one-sided matches with low draw probability, 1X2 is the better market."
+      ],
+      "tips": [
+        "DNB is best for medium-confidence picks where the draw is a real possibility. High-confidence directional picks should usually go on 1X2 directly.",
+        "Compare DNB odds to Asian Handicap 0 odds. They represent the same bet structurally but bookmakers sometimes price them differently.",
+        "Useful for backing modest favourites in tight away fixtures — protection against the draw without sacrificing too much potential payoff.",
+        "Don't use DNB to fix bad picks. The draw refund doesn't compensate for poor analysis."
+      ],
+      "example": { "homeTeam": "Arsenal", "awayTeam": "Tottenham", "league": "Premier League", "prediction": "Arsenal DNB", "confidence": 56 }
+    }
+  ],
+  "coverage": {
+    "h2": "Which Bet Types BetsPlug Covers",
+    "body": "Free tier shows the highest-confidence pick per match — typically 1X2. Paid subscribers see all market types with full analysis.",
+    "headers": { "betType": "Bet Type", "freeTier": "Free Tier", "paidTier": "Paid Tier" },
+    "rows": [
+      { "betType": "1X2",                "free": true,  "paid": true },
+      { "betType": "Double Chance",      "free": false, "paid": true },
+      { "betType": "BTTS",               "free": false, "paid": true },
+      { "betType": "Over/Under 2.5",     "free": false, "paid": true },
+      { "betType": "Over/Under 1.5/3.5", "free": false, "paid": true },
+      { "betType": "Asian Handicap",     "free": false, "paid": true },
+      { "betType": "Correct Score",      "free": false, "paid": "matrix" },
+      { "betType": "HT/FT",              "free": false, "paid": true },
+      { "betType": "Draw No Bet",        "free": false, "paid": true }
+    ],
+    "note": "Free tier shows the highest-confidence pick per match (typically 1X2). Paid subscribers see all market types with full analysis.",
+    "cta": { "label": "View Pricing", "canonical": "pricing" }
+  },
+  "faq": {
+    "h2": "Bet Types FAQ",
+    "questions": [
+      { "q": "Which bet type is most predictable?", "a": "Statistically, Over/Under 2.5 goals and BTTS markets are most predictable using Poisson models. They have well-defined probability distributions and large historical sample sizes. Asian Handicap is also highly predictable in clear-favourite matches but less so in tight games. 1X2 sits in the middle — predictable but with the inherent uncertainty of three-outcome markets." },
+      { "q": "Why does BetsPlug recommend specific bet types per match?", "a": "Our engine identifies the highest-confidence prediction for each match — the market where statistical signal is strongest. This varies per match: sometimes 1X2 has clearest signal, sometimes Over/Under, sometimes BTTS. We publish the strongest signal rather than forcing a single market across all fixtures." },
+      { "q": "Can I see all bet type predictions for a single match?", "a": "Paid subscribers see all market predictions per match — every prediction we generate, including the probability matrix for Correct Score. Free users see the engine's highest-confidence pick per match (typically 1X2 or Over/Under 2.5)." },
+      { "q": "Why don't you predict specific player goalscorers?", "a": "Player-level predictions have much higher variance than team-level predictions. Lineup uncertainty, individual form variance, and tactical changes make accurate goalscorer prediction unreliable. We focus on team-level markets where accuracy is achievable. Player-prop markets are also less efficient at most bookmakers, making the data harder to model." },
+      { "q": "What's the difference between probability and confidence?", "a": "Probability is the mathematical likelihood we calculate (e.g., 78% chance of Over 2.5). Confidence is our certainty in that probability — affected by data quality, sample size, and matching match characteristics. We display probability numbers; high-confidence predictions are flagged separately in the subscriber UI." },
+      { "q": "Why are some bet types only available on paid plans?", "a": "Free tier shows our highest-confidence pick per match — typically 1X2. Other markets (Over/Under, BTTS, Asian Handicap, Correct Score, HT/FT, DNB) require subscriber access. This balances free value with sustainable subscription model. Subscribers also see the underlying probability matrix and can build their own multi-market strategies." }
+    ]
+  },
+  "finalCta": {
+    "h2": "See Bet Type Predictions in Action",
+    "body": "Every prediction across 30+ leagues. Multi-market analysis. Locked before kickoff. Public track record.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "How Predictions Work", "canonical": "methodology" }
+  }
+}

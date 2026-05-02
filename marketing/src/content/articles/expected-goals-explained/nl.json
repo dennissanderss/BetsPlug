@@ -1,0 +1,119 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Expected Goals (xG) Uitgelegd | BetsPlug Leren",
+    "description": "Expected Goals (xG) meet schotkwaliteit, niet alleen aantal. Leer hoe xG wordt berekend, waarom het lange-termijn prestaties voorspelt, en hoe BetsPlug het gebruikt.",
+    "ogImage": "/og-images/learn-expected-goals-nl.jpg"
+  },
+  "header": {
+    "h1": "Expected Goals (xG) Uitgelegd: Hoe Kwaliteit Kwantiteit Verslaat",
+    "excerpt": "Hoe xG schotkwaliteit meet en lange-termijn teamprestaties beter voorspelt dan traditionele doelpunttellingen.",
+    "readingTime": "8 min lezen",
+    "difficulty": "Beginner",
+    "category": "Statistische Modellen",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In Dit Artikel",
+  "breadcrumbLearn": "Leren",
+  "intro": "Voetbalfans discussiëren al decennia over 'verdiende' overwinningen. Een team domineert balbezit, raakt twee keer de paal, verliest dan met 1-0 — pech, of werden ze gewoon overspeeld? Tot 2012 was dit een meningsverschil. Toen kwam expected goals (xG): een statistische maat die schotkwaliteit kwantificeert en het lange-termijn signaal scheidt van korte-termijn variantie. xG wordt nu gebruikt door elke grote voetbalclub, elke serieuze data-analist, en elke moderne voorspellingsengine. In Nederland werd xG onder andere bij Ajax en PSV vroeg omarmd. Deze gids legt uit wat xG is, hoe het wordt berekend, waarom het belangrijk is, en waar het tekortschiet.",
+  "sections": [
+    {
+      "id": "what-is-xg",
+      "h2": "Wat is Expected Goals?",
+      "blocks": [
+        { "type": "paragraph", "text": "Expected goals is de waarschijnlijkheid dat een specifiek schot een doelpunt wordt, uitgedrukt op een schaal van 0,0 tot 1,0. Een strafschop heeft een xG van ongeveer 0,78 — historisch in 78% van de gevallen benut. Een schot van 30 meter met een verdediger op de schietlijn heeft een xG van ongeveer 0,03 — drie procent kans op een doelpunt. Tel de xG van elk schot dat een team neemt bij elkaar op, en je krijgt hun totale xG voor de wedstrijd: een maat voor hoeveel doelpunten hun kansen waard waren, gemiddeld." },
+        { "type": "paragraph", "text": "De intuïtie is simpel. Doelpunten zijn zeldzame gebeurtenissen met hoge variantie — een team kan domineren en niet scoren, of een 1-0 stelen tegen de loop van het spel in. Doelpunten tellen vertelt je wat er in één wedstrijd gebeurde. xG tellen vertelt je wat er zou zijn gebeurd als dezelfde kansen duizend keer waren voorgekomen." },
+        { "type": "diagram", "name": "xg-shot-map", "caption": "Voorbeeldwaarden van xG per schotlocatie. Strafschop (~0,78), kopbal vanuit zes-meter (~0,45), rand zestien (~0,09), 30-meter schot (~0,03)." }
+      ]
+    },
+    {
+      "id": "how-calculated",
+      "h2": "Hoe wordt xG berekend?",
+      "blocks": [
+        { "type": "paragraph", "text": "xG-modellen worden getraind op historische schotdata — typisch honderdduizenden schoten getagd met hun context. Voor elk schot beschouwt het model een set inputvariabelen en geeft een waarschijnlijkheid uit." },
+        { "type": "h3", "text": "Variabelen die xG aandrijven" },
+        { "type": "list", "items": [
+          "Schotlocatie: afstand en hoek tot het doel — verreweg het sterkste signaal.",
+          "Lichaamsdeel: voet vs hoofd — koppen converteren minder vaak dan equivalente voetschoten.",
+          "Type assist: dieptepass, voorzet, passje terug, terugspeelbal — beïnvloedt schiet-tijd.",
+          "Verdediger-druk: aantal verdedigers tussen schot en doel, plus druk op de schutter.",
+          "Spelsituatie: open spel, vrije trap, strafschop, snelle counter — counters produceren kwalitatief betere kansen.",
+          "Keeperpositie: alleen beschikbaar in sommige geavanceerde modellen."
+        ]},
+        { "type": "paragraph", "text": "Een modern xG-model kan logistische regressie, een gradient-boosted tree (XGBoost), of een klein neuraal netwerk gebruiken. Het exacte algoritme is minder belangrijk dan de trainingsdata: meer schoten en zuiverder labelling = beter model. Verschillende leveranciers (Opta, StatsBomb, Understat) produceren licht verschillende xG-cijfers omdat ze verschillende trainingsdata en feature-sets gebruiken — meestal komen hun cijfers binnen ~10% overeen op team-totalen." },
+        { "type": "example", "label": "Voorbeeld uit de praktijk", "body": "Ajax had vorig seizoen 14 schoten tegen NEC, totaal xG 2,4. Ze scoorden 1 keer. NEC had 4 schoten, totaal xG 0,3, en scoorde 2 keer. Eindstand: 1-2 voor NEC. Het xG-verschil van 2,1 vs 0,3 suggereert dat Ajax veel betere kansen creëerde. Op de lange termijn wint het team met hoger xG vaker dan de werkelijke uitslag suggereert." }
+      ]
+    },
+    {
+      "id": "why-matters",
+      "h2": "Waarom xG Voorspellingen Belangrijk Maakt",
+      "blocks": [
+        { "type": "paragraph", "text": "Doelpunten uit het verleden zijn ruisig. xG is minder ruisig. Dat is het hele inzicht. Een team met 1,0 doelpunten per wedstrijd over 5 wedstrijden maar 1,6 xG per wedstrijd zal in de volgende 5 wedstrijden waarschijnlijk meer scoren — ze hebben kansen gecreëerd op een hoger tempo dan hun conversie heeft weerspiegeld. Statistisch \"regresseert xG naar het gemiddelde\" sneller en voorspelbaarder dan doelpunten." },
+        { "type": "paragraph", "text": "Daarom wegen voetbalanalisten en voorspellingsengines recente xG-trends zwaar — typisch de laatste 5 tot 10 wedstrijden. Een team in een dip (lage doelpunten maar hoge xG) wordt ondergewaardeerd door traditionele vormtabellen; een team op een hot streak (hoge doelpunten maar lage xG) wordt overgewaardeerd. xG identificeert beide." },
+        { "type": "h3", "text": "Waar xG goed in is" },
+        { "type": "list", "items": [
+          "Identificeren van teams waarvan recente resultaten misleidend zijn (goede xG, slechte vorm of vice versa).",
+          "Toekomstige doelpunttotalen nauwkeuriger voorspellen dan eerdere doelpunttotalen.",
+          "Teams vergelijken over verschillende competities en tactische stijlen.",
+          "Tactische wijzigingen evalueren — de xG-signatuur van een nieuwe trainer verschijnt meestal binnen 5-8 wedstrijden."
+        ]}
+      ]
+    },
+    {
+      "id": "betsplug-use",
+      "h2": "Hoe BetsPlug xG Gebruikt",
+      "blocks": [
+        { "type": "paragraph", "text": "xG is één van meer dan 40 inputvariabelen in onze voorspellingsengine, maar het is een bijzonder zwaargewogen variabele. We tracken drie xG-metrics per team: xG voor (gecreëerde kansen), xG tegen (toegelaten kansen), en xG-verschil (het netto-verschil). Recente vorm-xG (laatste 6-10 wedstrijden) weegt zwaarder dan seizoens-gemiddelde xG, met exponentieel verval zodat de meest recente wedstrijden het zwaarst tellen." },
+        { "type": "paragraph", "text": "Ons Poisson-doelpuntmodel gebruikt xG-afgeleide verwachte scoringspercentages als primaire input. Een team's lambda (verwachte doelpunten per wedstrijd) mengt Elo-sterkte, huidige xG-trend, defensieve xG van tegenstander, en thuis/uit-splits. Het resultaat voedt direct in Over/Under, BTTS en exact-score voorspellingen." },
+        { "type": "paragraph", "text": "Lees onze methodologie-pagina voor het volledige beeld van hoe xG, Elo, Poisson en machine learning combineren tot eindvoorspellingen." }
+      ]
+    },
+    {
+      "id": "limitations",
+      "h2": "Beperkingen van xG",
+      "blocks": [
+        { "type": "paragraph", "text": "xG is geen magisch getal. Het heeft echte beperkingen die iedereen die het gebruikt zou moeten begrijpen." },
+        { "type": "h3", "text": "Waar xG tekortschiet" },
+        { "type": "list", "items": [
+          "Leverancier-verschillen: Opta, StatsBomb en Understat geven licht verschillende xG-waarden voor hetzelfde schot. Vergelijk niet over leveranciers heen.",
+          "Verdedigingsfouten niet vastgelegd: een eigen doelpunt of verdedigingsblunder wordt niet weerspiegeld in xG-modellen.",
+          "Scheidsrechter-impact: strafschop-beslissingen en rode kaarten beïnvloeden wedstrijden maar zijn geen xG-input.",
+          "Weer en grasmat: zware regen of een slechte mat verlaagt schotkwaliteit op manieren die xG-modellen niet vastleggen.",
+          "Kleine samples: in laag-schot wedstrijden (4-5 schoten totaal) heeft xG hoge variantie en is minder betrouwbaar.",
+          "Setpiece-specialisten: een team met een uitzonderlijke vrije-trap-nemer presteert beter dan generieke xG-voorspellingen voor die schoten."
+        ]},
+        { "type": "paragraph", "text": "Deze beperkingen zijn waarom geen serieuze analist xG alleen gebruikt. Het is een input — een sterke — naast vorm, onderlinge geschiedenis, opstellingen en tactische context. Voorspellingsengines die uitsluitend op xG vertrouwen zijn minder accuraat dan engines die xG combineren met andere signalen." }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Belangrijkste Punten",
+    "items": [
+      "xG meet schotkwaliteit op een 0,0–1,0 schaal — totaal xG aggregeert kansenkwaliteit per wedstrijd.",
+      "xG voorspelt toekomstige doelpunten beter dan eerdere doelpunten, vooral over 5-10 wedstrijden.",
+      "Verschillende xG-leveranciers geven licht verschillende getallen — kies één en blijf consistent.",
+      "BetsPlug gebruikt xG als één van 40+ inputs, gewogen naar recente vorm (laatste 6-10 wedstrijden).",
+      "xG mist verdedigingsfouten, setpiece-specialisten en kleine-sample wedstrijden — combineer met andere signalen."
+    ]
+  },
+  "faq": {
+    "h2": "Expected Goals FAQ",
+    "questions": [
+      { "q": "Wat is een 'goede' xG per wedstrijd?", "a": "Topteams in grote competities gemiddeld 1,5-2,0 xG per wedstrijd. Middenmoters typisch 1,1-1,4. Onderkant gemiddeld 0,8-1,1. Cijfers variëren per competitie: Bundesliga en Eredivisie produceren historisch hogere xG-gemiddelden dan Serie A of Ligue 1." },
+      { "q": "Wordt xG door professionele clubs gebruikt?", "a": "Ja. De meeste Premier League en grote Europese clubs hebben data-analisten die xG en vergelijkbare metrics gebruiken voor tactische analyse, scouten van tegenstanders en spelersrekrutering. Liverpool's aanstelling van Ian Graham als Director of Research in 2012 was een vroeg high-profile voorbeeld." },
+      { "q": "Kan ik xG gebruiken om zelf wedstrijden te voorspellen?", "a": "Recente xG-trends zijn nuttige inputs, vooral wanneer ze afwijken van vorm. Maar xG alleen is niet genoeg — combineer met team-vorm, onderlinge geschiedenis, opstellings-nieuws en context. Daarom mengen voorspellingsengines meerdere metrics." },
+      { "q": "Waar vind ik gratis xG-data?", "a": "Understat publiceert gratis xG-data voor Europese topcompetities. FBref en StatsBomb bieden ook publieke data. Voor real-time, uitgebreide xG over 30+ competities heb je doorgaans een betaalde data-leverancier nodig — wat professionele clubs en data-gedreven voorspellingsdiensten gebruiken." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Gerelateerde Artikelen",
+    "slugs": ["poisson-goal-models", "elo-rating-explained", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "Zie xG Toegepast op Echte Voorspellingen",
+    "body": "BetsPlug gebruikt xG als één van 40+ variabelen in onze voorspellingsengine, gecombineerd met Elo-ratings en Poisson-doelpuntmodellen. Elke voorspelling over 30+ competities weerspiegelt deze xG-bewuste methodologie.",
+    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Lees Methodologie", "canonical": "methodology" }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Bankroll Management: Don't Let Variance Destroy You | BetsPlug Learn",
+    "description": "How to size your stakes so short-term variance doesn't wreck your long-term results. The unit system, common mistakes, and rules that actually work.",
+    "ogImage": "/og-images/learn-bankroll-management-en.jpg"
+  },
+  "header": {
+    "h1": "Bankroll Management: Don't Let Variance Destroy You",
+    "excerpt": "How to manage your prediction following capital so short-term variance doesn't destroy long-term results.",
+    "readingTime": "8 min read",
+    "difficulty": "Beginner",
+    "category": "Betting Concepts",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In This Article",
+  "breadcrumbLearn": "Learn",
+  "intro": "The single biggest reason serious bettors fail isn't bad picks — it's bad bankroll management. A bettor with a 55% win rate and 1.95 average odds will profit long-term, but only if they survive the short-term variance. That \"only if\" is doing a lot of work: random clusters of losses can wipe out an entire bankroll if stakes are too large. This guide explains what a bankroll is, why variance matters more than most people realise, and how the unit system protects you from yourself. None of this is glamorous. All of it is essential.",
+  "sections": [
+    {
+      "id": "what-is-bankroll",
+      "h2": "What is a Bankroll?",
+      "blocks": [
+        { "type": "paragraph", "text": "Your bankroll is the dedicated capital you've decided to commit to following predictions. It is not your savings, not your salary, not money you'd miss next week. It is a specific, separate amount of money you've ring-fenced for this purpose. The mental separation matters as much as the financial one." },
+        { "type": "paragraph", "text": "Two rules before you go further. First, your bankroll must be money you can afford to lose entirely. If losing the whole amount would change your living situation, the bankroll is too large. Second, top-ups are a decision, not a reflex. If your bankroll busts, you don't replenish it instantly with new money. You stop, evaluate what went wrong, and only redeploy fresh capital after you've identified the cause." },
+        { "type": "h3", "text": "Setting the initial amount" },
+        { "type": "paragraph", "text": "There's no universal correct number. Common starting points: €100 for casual followers learning the ropes, €500–€1,000 for serious users tracking results, €5,000+ for full-time bettors with a documented edge. Choose an amount where a 30% drawdown wouldn't change your daily life — because 30% drawdowns happen to everyone, including the most successful bettors in the world." }
+      ]
+    },
+    {
+      "id": "why-variance",
+      "h2": "Why Variance Matters",
+      "blocks": [
+        { "type": "paragraph", "text": "Even a positive-expected-value bettor experiences losing streaks. The math says so, and the math doesn't care about how confident you feel. Run a simple simulation: a bettor with a 55% win rate placing 1,000 bets at even money will, on average, win 550 and lose 450 — but they'll also experience at least one streak of 8 consecutive losses about 40% of the time, and at least one streak of 10 consecutive losses about 12% of the time." },
+        { "type": "paragraph", "text": "A 10-loss streak at 5% bankroll per bet drops you to 60% of starting capital. A 10-loss streak at 10% per bet drops you to 35%. A 10-loss streak at 20% per bet drops you to 11% — close to busted, even though your underlying edge hasn't changed at all. This is why stake sizing dominates results. Two bettors with identical picks can end up in completely different financial places based purely on how they sized their bets." },
+        { "type": "example", "label": "The variance reality", "body": "A bettor with a true 55% win rate placing 100 bets at decimal odds 1.95: expected return is +€7.25 on a €1,000 bankroll with 1% stakes. Standard deviation: ±€26. There's roughly a 25% chance you'll be down after 100 bets despite having a winning system. Your edge is real; the variance is also real." }
+      ]
+    },
+    {
+      "id": "unit-system",
+      "h2": "The Unit System",
+      "blocks": [
+        { "type": "paragraph", "text": "The unit system is the standard solution. You define one \"unit\" as a fixed percentage of your current bankroll — typically between 1% and 5%. Every bet is sized in units, not in absolute money. This auto-scales your stakes: as your bankroll grows, units grow; as it shrinks, units shrink. You compound during winning runs and shrink exposure during losing ones, automatically." },
+        { "type": "h3", "text": "Conservative: 1–2% per bet" },
+        { "type": "paragraph", "text": "Recommended for most followers, especially when you're new and haven't proven your edge yet. Survives 20+ consecutive losses without busting. The downside is slow growth even when you're winning consistently. Use this if your goal is steady learning rather than fast returns." },
+        { "type": "h3", "text": "Standard: 2–3% per bet" },
+        { "type": "paragraph", "text": "The middle ground. Decent growth rate when winning, manageable drawdowns when losing. Most professional bettors with proven edges sit in this range. Recommended once you've placed at least 200 bets and tracked results — you've earned the right to slightly larger units." },
+        { "type": "h3", "text": "Aggressive: 3–5% per bet" },
+        { "type": "paragraph", "text": "Reserved for high-confidence bets only — typically the top 20% of plays in your system. Variance becomes severe at this level. A run of 10 consecutive losses at 5% drops you to 60% of capital. Not recommended unless you've documented an edge over 1,000+ bets and have a thick skin for drawdown." }
+      ]
+    },
+    {
+      "id": "rebalancing",
+      "h2": "Rebalancing Unit Size",
+      "blocks": [
+        { "type": "paragraph", "text": "Don't rebalance after every bet — that's overkill and emotionally exhausting. Rebalance after meaningful bankroll changes. A common rule: recalculate unit size whenever your bankroll moves by 25% from the level at which it was last set." },
+        { "type": "paragraph", "text": "Example: starting bankroll €1,000, 2% unit = €20. After a winning month, bankroll is €1,250 (up 25%). New unit = €25. Continue at €25 until bankroll either hits €1,562 (up another 25%) or drops to €937 (down 25% from €1,250). This rule prevents both timid stake-shrinking after one bad week and overconfident stake-growth after one good one." }
+      ]
+    },
+    {
+      "id": "common-mistakes",
+      "h2": "Common Bankroll Mistakes",
+      "blocks": [
+        { "type": "h3", "text": "Chasing losses" },
+        { "type": "paragraph", "text": "The single deadliest mistake. After a string of losses, the urge to \"win it back\" by doubling your stake is overwhelming and almost always disastrous. Doubling stakes during a losing streak amplifies losses exponentially. The solution is mechanical: never increase stake size mid-session, regardless of recent results." },
+        { "type": "h3", "text": "Going all-in on \"sure things\"" },
+        { "type": "paragraph", "text": "There are no sure things in football. A 90%-confidence pick still loses 10% of the time. A bettor who treats one match as a sure thing and stakes 50% of their bankroll experiences the 10% loss eventually — usually sooner than they expect. Stick to your unit size even on your most confident picks." },
+        { "type": "h3", "text": "Mixing your bankroll with everyday money" },
+        { "type": "paragraph", "text": "If your bankroll lives in the same account as your rent and groceries, you'll inevitably blur the line. Use a separate account, separate card, or at minimum a tracked spreadsheet that mentally walls off the bankroll. The friction of moving money in and out is a feature, not a bug." },
+        { "type": "h3", "text": "Withdrawing winnings too early" },
+        { "type": "paragraph", "text": "Some bettors withdraw profits after every winning month \"to lock in gains\". This caps your compounding growth and means you never get to the unit sizes that make a real difference. Decide on a withdrawal rule upfront — e.g. \"only withdraw when bankroll has doubled, then take 50%\" — and stick to it." }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Key Takeaways",
+    "items": [
+      "Your bankroll must be capital you can afford to lose entirely — separated from living expenses.",
+      "Variance is real: a positive-EV bettor still hits 8-10 loss streaks regularly. Sizing for survival matters more than sizing for growth.",
+      "Stick to a unit system: 1–2% conservative, 2–3% standard, 3–5% aggressive — match it to your experience and edge.",
+      "Rebalance unit size after every 25% bankroll change, not after every bet.",
+      "Never chase losses by increasing stakes mid-session. The math always wins; emotional sizing always loses."
+    ]
+  },
+  "faq": {
+    "h2": "Bankroll Management FAQ",
+    "questions": [
+      { "q": "What if I'm using free predictions and have no real edge?", "a": "Then bankroll management still applies — but with smaller absolute amounts. Treat the activity as paid entertainment with educational value rather than expected profit. Use 1% units, expect to break even or lose slightly, and use the experience to learn how variance and stake sizing actually feel before deploying larger capital." },
+      { "q": "How do I track my bankroll?", "a": "A spreadsheet works fine. Columns for date, match, market, stake (in units and absolute), odds, result, P/L, running bankroll. Update after every bet. Reviewing this monthly is the single highest-leverage activity for improving as a bettor — patterns in your wins and losses surface when you have the data." },
+      { "q": "Should I use Kelly Criterion instead of flat units?", "a": "Kelly is mathematically optimal if your probability estimates are accurate. In practice, your estimates are not that accurate — you'll over-bet on Full Kelly. Half or Quarter Kelly is reasonable for experienced bettors. Most followers should stick with flat units until they've documented 500+ bets of data on their own probability accuracy. See our dedicated Kelly Criterion guide for details." },
+      { "q": "What if my bankroll busts?", "a": "Stop. Don't deposit fresh capital for at least a week. Review every losing bet — were the picks bad, or was variance? If picks were bad, fix the source (better predictions, different markets). If variance, reset with stricter unit sizing (1% instead of 3%). Resuming at the same stakes after a bust almost always leads to a second bust." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Related Articles",
+    "slugs": ["kelly-criterion", "what-is-value-betting", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "Predictions Are Only Half the Game",
+    "body": "Even the best predictions need disciplined sizing to translate into long-term results. BetsPlug provides the predictions; bankroll management is on you.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Compare Plans", "canonical": "pricing" }
+  }
+}

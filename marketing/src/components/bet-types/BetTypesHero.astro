@@ -1,0 +1,19 @@
+---
+import Container from "@/components/ui/Container.astro";
+import type { BetTypesContent } from "@/content/pages/bet-types/types";
+
+interface Props { content: BetTypesContent["hero"] }
+const { content } = Astro.props;
+---
+
+<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[35vh] py-14 md:py-20" aria-labelledby="bet-types-hero-h1">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-dark);"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-[-10%] h-[480px] w-[480px] rounded-full opacity-30 blur-[100px]" style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"></div>
+
+  <Container size="md" class="relative text-center">
+    <h1 id="bet-types-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl xl:text-[56px] font-bold leading-[1.05] tracking-tight text-white-pure">
+      {content.h1}
+    </h1>
+    <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white-soft max-w-2xl mx-auto">{content.subheadline}</p>
+  </Container>
+</section>

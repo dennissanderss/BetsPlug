@@ -1,0 +1,11 @@
+---
+/**
+ * EloUpdateDiagram — wrapper around methodology's EloDiagram for use
+ * in learn article context (light surface).
+ */
+import EloDiagram from "@/components/methodology/diagrams/EloDiagram.astro";
+interface Props { caption: string }
+const { caption } = Astro.props;
+---
+
+<EloDiagram caption={caption} surface="light" />

@@ -1,0 +1,80 @@
+---
+/**
+ * ArticleBody — renders structured article sections.
+ * Each section: H2 heading + array of blocks (paragraph, formula,
+ * diagram, list, h3, example, quote).
+ */
+import katex from "katex";
+import XgShotMap            from "@/components/learn/diagrams/XgShotMap.astro";
+import EloUpdateDiagram     from "@/components/learn/diagrams/EloUpdateDiagram.astro";
+import KellyCurve           from "@/components/learn/diagrams/KellyCurve.astro";
+import PoissonDistribution  from "@/components/learn/diagrams/PoissonDistribution.astro";
+import type { ArticleSection, Block } from "@/content/articles/types";
+
+interface Props { sections: ArticleSection[] }
+const { sections } = Astro.props;
+
+function renderFormula(latex: string): string {
+  return katex.renderToString(latex, { throwOnError: false, displayMode: true });
+}
+---
+
+<div class="article-body">
+  {sections.map((section) => (
+    <section id={section.id} class="scroll-mt-24 mt-12 first:mt-0">
+      <h2 class="text-2xl sm:text-3xl font-bold leading-tight tracking-tight text-charcoal-900">
+        {section.h2}
+      </h2>
+
+      <div class="mt-5 space-y-5">
+        {section.blocks.map((block: Block) => {
+          if (block.type === "paragraph") {
+            return <p class="text-base lg:text-[17px] leading-relaxed text-charcoal-700">{block.text}</p>;
+          }
+          if (block.type === "h3") {
+            return <h3 class="mt-6 text-xl font-bold text-charcoal-900">{block.text}</h3>;
+          }
+          if (block.type === "list") {
+            const Tag = block.ordered ? "ol" : "ul";
+            return (
+              <Tag class={`pl-6 space-y-2 text-base leading-relaxed text-charcoal-700 ${block.ordered ? "list-decimal" : "list-disc"}`}>
+                {block.items.map((item) => <li>{item}</li>)}
+              </Tag>
+            );
+          }
+          if (block.type === "formula") {
+            return (
+              <div class="my-6">
+                <div class="rounded-xl border border-stadium-white-200 bg-stadium-white-50 p-5 text-center" set:html={renderFormula(block.latex)}></div>
+                {block.caption && <p class="mt-2 text-center text-xs text-charcoal-500">{block.caption}</p>}
+              </div>
+            );
+          }
+          if (block.type === "diagram") {
+            if (block.name === "xg-shot-map")          return <XgShotMap caption={block.caption} surface="light" />;
+            if (block.name === "elo-update")           return <EloUpdateDiagram caption={block.caption} />;
+            if (block.name === "kelly-curve")          return <KellyCurve caption={block.caption} surface="light" />;
+            if (block.name === "poisson-distribution") return <PoissonDistribution caption={block.caption} />;
+            return null;
+          }
+          if (block.type === "example") {
+            return (
+              <aside class="my-6 rounded-xl border-l-4 border-pitch-green-500 bg-pitch-green-500/5 p-5">
+                <p class="text-xs font-semibold uppercase tracking-wider text-pitch-green-700">{block.label}</p>
+                <p class="mt-2 text-sm leading-relaxed text-charcoal-900">{block.body}</p>
+              </aside>
+            );
+          }
+          if (block.type === "quote") {
+            return (
+              <blockquote class="my-6 border-l-4 border-charcoal-300 pl-5 italic text-charcoal-700">
+                {block.text}
+              </blockquote>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </section>
+  ))}
+</div>

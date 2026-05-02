@@ -1,0 +1,133 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "The Kelly Criterion: Optimal Bet Sizing | BetsPlug Learn",
+    "description": "Kelly Criterion explained: the math formula for optimal bet sizing. Why most bettors size wrong, when Kelly fails, and why fractional Kelly is usually safer.",
+    "ogImage": "/og-images/learn-kelly-en.jpg"
+  },
+  "header": {
+    "h1": "The Kelly Criterion: Optimal Bet Sizing for Long-Term Growth",
+    "excerpt": "The mathematical formula for optimal bet sizing based on edge and odds. Why most bettors size bets wrong.",
+    "readingTime": "11 min read",
+    "difficulty": "Advanced",
+    "category": "Betting Concepts",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In This Article",
+  "breadcrumbLearn": "Learn",
+  "intro": "Most bettors get stake sizing wrong. They go too big when confident, too small when uncertain, and they stake fixed amounts regardless of edge. The Kelly Criterion solves this by deriving the mathematically optimal stake from two inputs: your estimated probability of winning and the odds offered. Use Kelly correctly and you maximise long-term bankroll growth. Use it incorrectly — overestimate your edge by even a few percent — and you go broke faster than flat-staking. This guide walks through the math, the practical adjustments (Half Kelly, Quarter Kelly), and the failure modes nobody warns you about.",
+  "sections": [
+    {
+      "id": "what-is-kelly",
+      "h2": "What is the Kelly Criterion?",
+      "blocks": [
+        { "type": "paragraph", "text": "John Kelly Jr. published the criterion in 1956 while working at Bell Labs. He was studying long-distance telephone signal noise, but realised the same math applied to gambling: given a sequence of bets with positive expected value, what fraction of your bankroll should you stake to maximise long-term growth? His answer became one of the foundational results in mathematical finance and gambling theory." },
+        { "type": "h3", "text": "The formula" },
+        { "type": "formula", "latex": "f^* = \\dfrac{bp - q}{b}", "caption": "f* = optimal stake fraction; b = decimal odds minus 1 (net winnings per unit); p = probability of winning; q = 1 − p." },
+        { "type": "paragraph", "text": "Decoded: numerator is your expected profit per unit stake, denominator is the payout multiple. Multiply by current bankroll to get the actual money to stake. If f* is negative, the bet has negative expected value — don't bet at all." }
+      ]
+    },
+    {
+      "id": "why-kelly-works",
+      "h2": "Why Kelly Maximises Long-Term Growth",
+      "blocks": [
+        { "type": "paragraph", "text": "Kelly is provably optimal in one specific sense: it maximises the expected logarithm of your bankroll over time, which is equivalent to maximising compound growth rate. Larger stakes than Kelly produce higher arithmetic returns but lower geometric (compound) returns. Smaller stakes than Kelly are safer but grow slower. Kelly is the unique fraction that hits the sweet spot — and importantly, that sweet spot is the maximum compound growth, not the average win." },
+        { "type": "diagram", "name": "kelly-curve", "caption": "Bankroll trajectory simulation: 100 bets at 55% win rate, 2.0 odds. Full Kelly (10%) outpaces flat 2%; Over-Kelly (25%) crashes due to amplified losing streaks." },
+        { "type": "paragraph", "text": "The intuition: bet too small and you don't compound. Bet too large and you can't recover from variance — a 50% drawdown requires a 100% gain to recover, but a 20% drawdown only requires 25% gain. Kelly threads this needle by tying stake size to your edge and the odds offered." },
+        { "type": "h3", "text": "Comparison with other staking systems" },
+        { "type": "list", "items": [
+          "Flat staking (e.g. 2% per bet): simple, robust to estimation error. Lower long-term growth than Kelly when edge is real.",
+          "Martingale (double after each loss): mathematically suicidal. A long enough loss streak bankrupts any finite bankroll.",
+          "Full Kelly: theoretically optimal but high variance. 50% drawdowns from peak are common.",
+          "Half Kelly: lower growth (about 75% of Full Kelly's growth) but much lower variance. Most professionals' choice."
+        ]}
+      ]
+    },
+    {
+      "id": "calculating-kelly",
+      "h2": "Calculating Kelly Bet Size",
+      "blocks": [
+        { "type": "h3", "text": "Step-by-step walkthrough" },
+        { "type": "paragraph", "text": "1. Estimate true probability p of the outcome (this is the hard part — covered separately in our Value Betting guide). 2. Get decimal odds from the bookmaker; calculate b = odds − 1. 3. Compute q = 1 − p. 4. Apply formula f* = (bp − q) / b. 5. Multiply f* by current bankroll for actual stake size." },
+        { "type": "example", "label": "Worked example", "body": "You estimate Real Madrid has a 60% probability of winning at home (p = 0.60). Bookmaker offers 2.10 decimal odds (b = 1.10). q = 0.40. f* = (1.10 × 0.60 − 0.40) / 1.10 = (0.66 − 0.40) / 1.10 = 0.236. Full Kelly suggests staking 23.6% of bankroll. On a €1,000 bankroll, that's €236 on this single bet. Most practitioners would use Half Kelly (~11.8%, €118) or Quarter Kelly (~5.9%, €59) for variance reduction." },
+        { "type": "h3", "text": "Common calculation mistakes" },
+        { "type": "list", "items": [
+          "Confusing implied probability with your probability estimate. Implied probability comes from odds; your estimate must come from independent analysis.",
+          "Using bookmaker odds as both the b and the probability source. If you do this, f* is always 0 — you have no edge.",
+          "Forgetting to multiply by bankroll. f* is a fraction; the actual stake is f* × bankroll.",
+          "Applying Kelly to the same bet across multiple bookmakers without combining the bets — each bet should be sized against current bankroll, not pre-bet bankroll."
+        ]}
+      ]
+    },
+    {
+      "id": "fractional-kelly",
+      "h2": "Full Kelly vs Fractional Kelly",
+      "blocks": [
+        { "type": "paragraph", "text": "Full Kelly is theoretically optimal — but only if your probability estimates are perfectly accurate. In the real world, estimates are noisy. Even a 5% overestimate of your edge causes Full Kelly to substantially overbet, increasing variance dramatically. The standard practical adjustment is to bet some fraction of Full Kelly." },
+        { "type": "h3", "text": "Half Kelly (50%)" },
+        { "type": "paragraph", "text": "Bet half the Kelly-suggested fraction. Mathematically, this delivers about 75% of Full Kelly's long-term growth rate at roughly half the variance. Many professional bettors and quantitative funds default here because the variance reduction is worth the slight growth penalty." },
+        { "type": "h3", "text": "Quarter Kelly (25%)" },
+        { "type": "paragraph", "text": "Bet a quarter of the Kelly-suggested fraction. Slower growth but much smoother bankroll curve. Recommended for bettors who don't fully trust their probability estimates — which honestly is most bettors. Quarter Kelly tolerates moderate estimation error without going bust." },
+        { "type": "h3", "text": "Why over-Kelly is suicidal" },
+        { "type": "paragraph", "text": "Betting more than Full Kelly produces strictly worse outcomes: higher variance AND lower expected long-term growth. A common mistake is double-Kelly (\"I'm extra confident, let me bet 2x what Kelly suggests\"). The math shows this strategy goes broke at a rate that increases dramatically as you overbet. Cap yourself at Full Kelly always; reduce to fractional in practice." }
+      ]
+    },
+    {
+      "id": "when-kelly-fails",
+      "h2": "When Kelly Fails",
+      "blocks": [
+        { "type": "h3", "text": "Inaccurate probability estimates" },
+        { "type": "paragraph", "text": "Kelly is only optimal if your probability estimate is correct. Overestimate by 5% and you over-bet noticeably; overestimate by 10% and you risk catastrophic drawdowns. Most amateur bettors systematically overestimate their edge — they remember winners more than losers, and they confuse confidence with accuracy. The real-world solution is to use fractional Kelly that's robust to the size of estimation error you actually have." },
+        { "type": "h3", "text": "Small samples" },
+        { "type": "paragraph", "text": "Kelly's optimality is asymptotic — it's the long-run answer. In small samples (under 100 bets), variance dominates. You can run Full Kelly perfectly and still go bust through bad luck if your sample is small. This is why combining Kelly with separate bankroll-management rules (e.g. \"never stake more than 10% even if Kelly says 20%\") is standard practice." },
+        { "type": "h3", "text": "Closing odds" },
+        { "type": "paragraph", "text": "Kelly assumes you bet at fixed odds. In reality, odds move between when you analyse the market and when you place the bet. If your stake is large enough to move the line yourself (relative to bookmaker liquidity), the effective odds you get are worse than the displayed odds. Account for this by reducing Kelly fraction slightly on large stakes." },
+        { "type": "h3", "text": "Limited bankroll" },
+        { "type": "paragraph", "text": "Kelly assumes a continuous bankroll where any fraction can be staked. With a small bankroll, minimum stake constraints (most bookmakers have €1+ minimums) and round-number stake sizing distort the calculation. Smaller bankrolls should use simpler rules — flat percentages tend to outperform poorly-applied Kelly at small scales." }
+      ]
+    },
+    {
+      "id": "practical-kelly",
+      "h2": "Practical Kelly Application",
+      "blocks": [
+        { "type": "list", "ordered": true, "items": [
+          "Use fractional Kelly (typically 0.25 to 0.5). Full Kelly is too aggressive for almost everyone.",
+          "Update bankroll for stake calculation regularly. Recompute f* against current bankroll, not starting bankroll.",
+          "Cap individual stakes at 5-10% of bankroll regardless of what Kelly says. This is a sanity floor.",
+          "Don't stake under ~1% of bankroll — minimums and round-number friction make tiny stakes inefficient.",
+          "Track results over 500+ bets and compare to predicted Kelly performance. If you're underperforming significantly, your probability estimates are off and you should reduce Kelly fraction."
+        ]}
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Key Takeaways",
+    "items": [
+      "Kelly Criterion gives the optimal stake fraction: f* = (bp − q) / b. Maximises long-term compound growth.",
+      "Full Kelly is mathematically optimal only with perfect probability estimates. Real-world estimates are noisy.",
+      "Half Kelly delivers ~75% of Full Kelly's growth at much lower variance. Quarter Kelly is the safer practical choice.",
+      "Over-Kelly (more than Full Kelly) is mathematically worse: higher variance AND lower expected growth.",
+      "Kelly's failure modes: inaccurate probability estimates, small samples, closing-odds movement, illiquid bankrolls."
+    ]
+  },
+  "faq": {
+    "h2": "Kelly Criterion FAQ",
+    "questions": [
+      { "q": "Should I use Full Kelly or Fractional Kelly?", "a": "Almost certainly fractional. Full Kelly is theoretically optimal only with perfectly calibrated probability estimates, which essentially nobody has. Half Kelly or Quarter Kelly produces nearly the same long-term growth with dramatically lower variance and much higher tolerance for estimation error. Most professional bettors and quantitative funds use Half or Quarter Kelly as their default." },
+      { "q": "What if my probability estimates aren't very accurate?", "a": "Use Quarter Kelly or even Eighth Kelly. The math underlying fractional Kelly is robust to estimation error — you give up some long-term growth in exchange for much higher tolerance for being wrong. If you genuinely don't know how accurate your estimates are, you don't have an edge yet, and you should be flat-staking or paper-trading until you have a documented track record." },
+      { "q": "Does Kelly apply to sports betting or only to investing?", "a": "Both — and to anything with sequential bets and positive expected value. Kelly is mathematically general; the formula works for stocks, options, poker, sports betting, or any sequential probabilistic decision. The implementation differs (different bookmaker constraints, different odds structures) but the underlying math is identical." },
+      { "q": "How is Kelly related to bankroll management?", "a": "Kelly is one specific bankroll-management strategy that derives optimal stake size from edge. Other bankroll-management strategies (flat staking, percentage of bankroll, unit systems) don't use Kelly's formula — they substitute simpler rules that don't require accurate probability estimates. For most bettors without large samples and proven calibration, simpler bankroll-management strategies actually outperform poorly-applied Kelly. See our dedicated Bankroll Management guide for alternatives." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Related Articles",
+    "slugs": ["what-is-value-betting", "bankroll-management", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "Probability Estimates Power Kelly",
+    "body": "Kelly is only as good as the probability estimate feeding it. BetsPlug publishes calibrated confidence percentages on every prediction — feed them into Kelly with appropriate fractional discount.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "View Track Record", "canonical": "track-record" }
+  }
+}

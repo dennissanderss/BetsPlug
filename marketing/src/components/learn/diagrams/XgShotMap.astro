@@ -1,0 +1,105 @@
+---
+/**
+ * XgShotMap — football pitch with color-coded shot locations and xG values.
+ * Shots near goal have higher xG (warmer color), distant shots have lower
+ * xG (cooler color). Pure SVG, no external assets.
+ */
+interface Props {
+  caption: string;
+  surface?: "light" | "dark";
+}
+const { caption, surface = "light" } = Astro.props;
+
+const fg     = surface === "dark" ? "rgb(232,234,239)" : "rgb(15,20,25)";
+const muted  = surface === "dark" ? "rgb(155,163,181)" : "rgb(90,100,120)";
+const pitchBg     = surface === "dark" ? "rgb(10,30,15)" : "rgb(232,242,232)";
+const pitchLine   = surface === "dark" ? "rgba(255,255,255,0.4)" : "rgba(15,20,25,0.5)";
+
+// Shot data: x (0-100, attacker shoots toward right=100), y (0-100), xG.
+const shots = [
+  { x: 92, y: 50, xg: 0.78, label: "Penalty" },     // penalty spot
+  { x: 88, y: 50, xg: 0.45 },
+  { x: 85, y: 42, xg: 0.32 },
+  { x: 85, y: 58, xg: 0.30 },
+  { x: 82, y: 50, xg: 0.22 },
+  { x: 78, y: 38, xg: 0.12 },
+  { x: 78, y: 62, xg: 0.13 },
+  { x: 75, y: 50, xg: 0.09 },
+  { x: 70, y: 30, xg: 0.06 },
+  { x: 70, y: 70, xg: 0.06 },
+  { x: 65, y: 50, xg: 0.04 },
+  { x: 55, y: 50, xg: 0.03 },
+];
+
+function colorFor(xg: number): string {
+  // Map xG 0..1 to red→amber→green gradient (high xG = warm = high probability).
+  if (xg >= 0.5) return "#dc2626"; // danger red — high quality
+  if (xg >= 0.2) return "#f59e0b"; // warning amber — medium
+  if (xg >= 0.08) return "#3b82f6"; // info blue — low-medium
+  return "#9ba3b5";                  // muted — very low
+}
+
+const W = 720, H = 360;
+// Pitch dimensions (right half only — attacking direction).
+const px = (x: number) => 60 + (x / 100) * (W - 120);
+const py = (y: number) => 30 + (y / 100) * (H - 60);
+---
+
+<figure class="my-8">
+  <div class={`rounded-2xl border ${surface === "dark" ? "border-deep-navy-600 bg-deep-navy-800/60" : "border-stadium-white-200 bg-white"} p-6 lg:p-8`}>
+    <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+      <!-- Pitch background -->
+      <rect x="60" y="30" width={W - 120} height={H - 60} fill={pitchBg} stroke={pitchLine} stroke-width="2" />
+      <!-- Halfway line -->
+      <line x1="60" y1={H / 2} x2={W - 60} y2={H / 2} stroke={pitchLine} stroke-width="1.5" stroke-dasharray="4 4" />
+      <!-- Penalty area (right side — attacking goal) -->
+      <rect x={W - 60 - 138} y={H / 2 - 110} width="138" height="220" fill="none" stroke={pitchLine} stroke-width="1.5" />
+      <!-- 6-yard box -->
+      <rect x={W - 60 - 50} y={H / 2 - 50} width="50" height="100" fill="none" stroke={pitchLine} stroke-width="1.5" />
+      <!-- Penalty spot -->
+      <circle cx={W - 60 - 90} cy={H / 2} r="2" fill={pitchLine} />
+      <!-- Goal -->
+      <line x1={W - 60} y1={H / 2 - 30} x2={W - 60} y2={H / 2 + 30} stroke={pitchLine} stroke-width="4" />
+
+      <!-- Shots -->
+      {shots.map((s) => (
+        <g>
+          <circle
+            cx={px(s.x)} cy={py(s.y)}
+            r={6 + s.xg * 14}
+            fill={colorFor(s.xg)}
+            opacity="0.7"
+            stroke={surface === "dark" ? "rgb(10,14,31)" : "white"}
+            stroke-width="1.5"
+          />
+          <text
+            x={px(s.x)} y={py(s.y) + 3}
+            font-family="JetBrains Mono, monospace"
+            font-size="9"
+            text-anchor="middle"
+            fill={surface === "dark" ? "white" : "white"}
+            font-weight="700"
+          >
+            {s.xg.toFixed(2)}
+          </text>
+        </g>
+      ))}
+
+      <!-- Legend -->
+      <g>
+        <rect x="60" y={H - 25} width="280" height="20" fill={surface === "dark" ? "rgba(10,14,31,0.7)" : "rgba(255,255,255,0.9)"} stroke={muted} stroke-opacity="0.3" rx="4" />
+        <circle cx="75" cy={H - 15} r="5" fill="#dc2626" />
+        <text x="86" y={H - 12} font-family="Inter, sans-serif" font-size="10" fill={fg}>≥ 0.50</text>
+        <circle cx="135" cy={H - 15} r="5" fill="#f59e0b" />
+        <text x="146" y={H - 12} font-family="Inter, sans-serif" font-size="10" fill={fg}>0.20-0.49</text>
+        <circle cx="210" cy={H - 15} r="5" fill="#3b82f6" />
+        <text x="221" y={H - 12} font-family="Inter, sans-serif" font-size="10" fill={fg}>0.08-0.19</text>
+        <circle cx="290" cy={H - 15} r="5" fill="#9ba3b5" />
+        <text x="301" y={H - 12} font-family="Inter, sans-serif" font-size="10" fill={fg}>&lt; 0.08</text>
+      </g>
+    </svg>
+  </div>
+  <figcaption class={`mt-3 text-center text-sm ${surface === "dark" ? "text-white-muted" : "text-charcoal-500"}`}>
+    {caption}
+  </figcaption>
+</figure>

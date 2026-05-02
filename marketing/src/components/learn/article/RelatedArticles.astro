@@ -1,0 +1,37 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import ArticleCard from "@/components/learn/ArticleCard.astro";
+import { type Locale } from "@/lib/i18n";
+import type { ArticleCardData, Difficulty } from "@/content/pages/learn/types";
+
+interface Props {
+  locale: Locale;
+  h2: string;
+  /** Article cards already resolved + localized — passed in from caller. */
+  articles: ArticleCardData[];
+  readMoreLabel: string;
+  difficultyLabels: Record<Difficulty, string>;
+}
+const { locale, h2, articles, readMoreLabel, difficultyLabels } = Astro.props;
+---
+
+<Section surface="dark" spacing="lg" ariaLabelledby="related-articles-h2">
+  <Container size="xl">
+    <h2 id="related-articles-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-white-pure">{h2}</h2>
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {articles.map((article) => (
+        <ArticleCard
+          locale={locale}
+          slug={article.slug}
+          title={article.title}
+          excerpt={article.excerpt}
+          readingTime={article.readingTime}
+          difficulty={article.difficulty}
+          readMoreLabel={readMoreLabel}
+          difficultyLabels={difficultyLabels}
+        />
+      ))}
+    </div>
+  </Container>
+</Section>

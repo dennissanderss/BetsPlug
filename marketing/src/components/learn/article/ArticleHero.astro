@@ -1,0 +1,59 @@
+---
+import Container from "@/components/ui/Container.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { ArticleContent } from "@/content/articles/types";
+import type { Difficulty } from "@/content/pages/learn/types";
+
+interface Props {
+  locale: Locale;
+  header: ArticleContent["header"];
+  intro: string;
+  breadcrumbLearn: string;
+  difficultyLabels: Record<Difficulty, string>;
+}
+const { locale, header, intro, breadcrumbLearn, difficultyLabels } = Astro.props;
+
+const learnHref = getLocalizedPath("learn", locale);
+const homeHref  = locale === "en" ? "/" : `/${locale}/`;
+
+const difficultyClasses: Record<Difficulty, string> = {
+  Beginner:     "bg-pitch-green-100 text-pitch-green-900",
+  Intermediate: "bg-plasma-blue-300 text-deep-navy-900",
+  Advanced:     "bg-charcoal-300 text-charcoal-900",
+};
+
+const updatedDisplay = new Date(header.updatedAt).toLocaleDateString("en-GB", {
+  year: "numeric", month: "long", day: "numeric",
+});
+---
+
+<section class="relative w-full bg-stadium-white-50 border-b border-stadium-white-200 py-12 md:py-16">
+  <Container size="md">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="text-xs text-charcoal-500 mb-4">
+      <ol class="flex flex-wrap items-center gap-1.5">
+        <li><a href={homeHref} class="hover:text-pitch-green-600">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href={learnHref} class="hover:text-pitch-green-600">{breadcrumbLearn}</a></li>
+        <li aria-hidden="true">/</li>
+        <li class="text-charcoal-700 truncate">{header.h1}</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-charcoal-900">
+      {header.h1}
+    </h1>
+
+    <!-- Meta info row -->
+    <div class="mt-5 flex flex-wrap items-center gap-3 text-xs text-charcoal-500">
+      <span class={`inline-flex items-center rounded-full px-2.5 py-0.5 font-bold uppercase tracking-wider ${difficultyClasses[header.difficulty]}`}>
+        {difficultyLabels[header.difficulty]}
+      </span>
+      <span class="font-mono">{header.readingTime}</span>
+      <span aria-hidden="true">·</span>
+      <span>Updated {updatedDisplay}</span>
+    </div>
+
+    <p class="mt-6 text-lg leading-relaxed text-charcoal-700">{intro}</p>
+  </Container>
+</section>

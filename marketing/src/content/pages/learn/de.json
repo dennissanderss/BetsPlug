@@ -1,0 +1,56 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Lernen — Methoden Hinter Fußballvorhersagen | BetsPlug",
+    "description": "Tiefe Anleitungen über Elo, Poisson, Machine Learning, Value Betting und Bankroll Management. Lerne die Mathematik hinter KI-Fußballvorhersagen.",
+    "ogImage": "/og-images/learn-de.jpg"
+  },
+  "hero": {
+    "h1": "Lerne die Mathematik Hinter Fußballvorhersagen",
+    "subheadline": "Tiefe Anleitungen zu statistischen Modellen, Wett-Konzepten und analytischen Frameworks hinter datengetriebenen Fußballvorhersagen. Kein Fluff. Nur die echte Mathematik.",
+    "trustStrip": ["Von Ingenieuren geschrieben", "Regelmäßig aktualisiert", "Kein Affiliate-Spam"]
+  },
+  "grid": {
+    "h2": "Artikel Durchsuchen",
+    "readMore": "Artikel lesen",
+    "difficultyLabels": { "Beginner": "Einsteiger", "Intermediate": "Fortgeschritten", "Advanced": "Experte" },
+    "categories": [
+      {
+        "title": "Statistische Modelle",
+        "articles": [
+          { "slug": "expected-goals-explained", "title": "Expected Goals (xG) Erklärt", "excerpt": "Wie xG die Schussqualität misst und langfristige Teamleistung besser vorhersagt als traditionelle Tor-Zählungen.", "readingTime": "8 Min Lesezeit", "difficulty": "Beginner" },
+          { "slug": "elo-rating-explained", "title": "Elo-Bewertungssystem für Fußball", "excerpt": "Das dynamische Ranking-System, das Teamstärke nach jedem Spiel anpasst. Ursprünglich für Schach, jetzt Motor moderner Fußballvorhersagen.", "readingTime": "10 Min Lesezeit", "difficulty": "Intermediate" },
+          { "slug": "poisson-goal-models", "title": "Poisson-Tor-Modelle", "excerpt": "Die mathematische Verteilung, die die Wahrscheinlichkeit spezifischer Spielergebnisse basierend auf Angriffs- und Verteidigungsraten vorhersagt.", "readingTime": "12 Min Lesezeit", "difficulty": "Intermediate" }
+        ]
+      },
+      {
+        "title": "Wett-Konzepte",
+        "articles": [
+          { "slug": "what-is-value-betting", "title": "Was ist Value Betting?", "excerpt": "Warum das Finden von Wetten mit positivem erwarteten Wert die einzige mathematisch solide Langzeit-Strategie ist.", "readingTime": "9 Min Lesezeit", "difficulty": "Beginner" },
+          { "slug": "kelly-criterion", "title": "Das Kelly-Kriterium", "excerpt": "Die mathematische Formel für optimale Einsatzgröße basierend auf Edge und Quoten. Warum die meisten Wetter ihre Einsätze falsch dimensionieren.", "readingTime": "11 Min Lesezeit", "difficulty": "Advanced" },
+          { "slug": "bankroll-management", "title": "Bankroll Management", "excerpt": "Wie du dein Vorhersage-Kapital verwaltest, damit kurzfristige Varianz die langfristigen Ergebnisse nicht zerstört.", "readingTime": "8 Min Lesezeit", "difficulty": "Beginner" }
+        ]
+      },
+      {
+        "title": "KI & Analyse",
+        "articles": [
+          { "slug": "ai-vs-tipsters", "title": "KI vs Menschliche Tipster", "excerpt": "Die strukturellen Vorteile und Grenzen KI-getriebener Vorhersagen versus menschlicher Expertise. Wo jeder glänzt.", "readingTime": "10 Min Lesezeit", "difficulty": "Intermediate" }
+        ]
+      }
+    ]
+  },
+  "whyTopics": {
+    "h2": "Warum Wir Diese Anleitungen Geschrieben Haben",
+    "paragraphs": [
+      "Die meisten Vorhersage-Sites behandeln ihre Methoden als 'proprietäre Geheimnisse' oder vereinfachen sie übermäßig, um benutzerfreundlich zu wirken. Beide Ansätze versagen Leser, die wirklich verstehen wollen.",
+      "Unser Lernbereich erklärt die echte Mathematik hinter unseren Vorhersagen — Elo-Bewertungen, Poisson-Verteilungen, Machine-Learning-Muster — auf einem Niveau, das deine Intelligenz respektiert. Wenn du bereit bist zu lernen, ist die Tiefe hier.",
+      "Diese Artikel behandeln auch Konzepte, die jeder ernsthafte Wetter verstehen sollte: Value Betting, Kelly-Kriterium, Bankroll Management. Zu wissen wie Vorhersagen funktionieren hilft dir, sie effektiv zu nutzen."
+    ]
+  },
+  "finalCta": {
+    "h2": "Bereit, Diese Konzepte in Aktion zu Sehen?",
+    "body": "Dieselbe Engine, dieselbe Methodik — täglich auf 30+ Ligen angewendet.",
+    "ctaPrimary": { "label": "Heutige Vorhersagen ansehen", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Wie unsere Engine funktioniert", "canonical": "methodology" }
+  }
+}

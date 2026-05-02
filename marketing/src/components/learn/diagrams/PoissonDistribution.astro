@@ -1,0 +1,11 @@
+---
+/**
+ * PoissonDistribution — wrapper around methodology PoissonDiagram
+ * for use in learn article context (light surface).
+ */
+import PoissonDiagram from "@/components/methodology/diagrams/PoissonDiagram.astro";
+interface Props { caption: string }
+const { caption } = Astro.props;
+---
+
+<PoissonDiagram caption={caption} surface="light" />

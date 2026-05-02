@@ -1,0 +1,56 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Apprendre — Méthodes Derrière les Pronostics Football | BetsPlug",
+    "description": "Guides approfondis sur Elo, Poisson, machine learning, value betting et gestion de bankroll. Apprenez les maths derrière les pronostics football IA.",
+    "ogImage": "/og-images/learn-fr.jpg"
+  },
+  "hero": {
+    "h1": "Apprenez les Maths Derrière les Pronostics Football",
+    "subheadline": "Guides approfondis sur les modèles statistiques, concepts de paris et frameworks analytiques derrière les pronostics football basés sur les données. Pas de fluff. Juste les vraies maths.",
+    "trustStrip": ["Écrit par des ingénieurs", "Mis à jour régulièrement", "Pas de spam d'affiliation"]
+  },
+  "grid": {
+    "h2": "Parcourir les Articles",
+    "readMore": "Lire l'article",
+    "difficultyLabels": { "Beginner": "Débutant", "Intermediate": "Intermédiaire", "Advanced": "Avancé" },
+    "categories": [
+      {
+        "title": "Modèles Statistiques",
+        "articles": [
+          { "slug": "expected-goals-explained", "title": "Expected Goals (xG) Expliqué", "excerpt": "Comment xG mesure la qualité des tirs et prédit la performance long terme mieux que les comptages traditionnels.", "readingTime": "8 min de lecture", "difficulty": "Beginner" },
+          { "slug": "elo-rating-explained", "title": "Système de Classement Elo pour le Football", "excerpt": "Le système de classement dynamique qui ajuste la force d'équipe après chaque match. À l'origine pour les échecs, maintenant moteur des pronostics modernes.", "readingTime": "10 min de lecture", "difficulty": "Intermediate" },
+          { "slug": "poisson-goal-models", "title": "Modèles Poisson de Buts", "excerpt": "La distribution mathématique qui prédit la probabilité de scores spécifiques basée sur les taux d'attaque et de défense.", "readingTime": "12 min de lecture", "difficulty": "Intermediate" }
+        ]
+      },
+      {
+        "title": "Concepts de Paris",
+        "articles": [
+          { "slug": "what-is-value-betting", "title": "Qu'est-ce que le Value Betting ?", "excerpt": "Pourquoi trouver des paris à valeur attendue positive est la seule stratégie long terme mathématiquement solide.", "readingTime": "9 min de lecture", "difficulty": "Beginner" },
+          { "slug": "kelly-criterion", "title": "Le Critère de Kelly", "excerpt": "La formule mathématique pour la taille optimale de mise basée sur l'avantage et les cotes. Pourquoi la plupart des parieurs dimensionnent mal.", "readingTime": "11 min de lecture", "difficulty": "Advanced" },
+          { "slug": "bankroll-management", "title": "Gestion de Bankroll", "excerpt": "Comment gérer votre capital de pronostic pour que la variance court terme ne détruise pas les résultats long terme.", "readingTime": "8 min de lecture", "difficulty": "Beginner" }
+        ]
+      },
+      {
+        "title": "IA & Analyse",
+        "articles": [
+          { "slug": "ai-vs-tipsters", "title": "IA vs Pronostiqueurs Humains", "excerpt": "Les avantages structurels et limites des pronostics IA versus l'expertise humaine. Où chacun excelle.", "readingTime": "10 min de lecture", "difficulty": "Intermediate" }
+        ]
+      }
+    ]
+  },
+  "whyTopics": {
+    "h2": "Pourquoi Nous Avons Écrit Ces Guides",
+    "paragraphs": [
+      "La plupart des sites de pronostics traitent leurs méthodes comme 'secrets propriétaires' ou les simplifient à l'excès pour paraître conviviaux. Les deux approches échouent face aux lecteurs qui veulent vraiment comprendre.",
+      "Notre section apprendre explique les vraies maths derrière nos pronostics — classements Elo, distributions Poisson, motifs machine learning — à un niveau qui respecte votre intelligence.",
+      "Ces articles couvrent aussi des concepts que tout parieur sérieux devrait comprendre : value betting, critère de Kelly, gestion de bankroll. Comprendre comment fonctionnent les pronostics aide à les utiliser efficacement."
+    ]
+  },
+  "finalCta": {
+    "h2": "Prêt à Voir Ces Concepts en Action ?",
+    "body": "Même moteur, même méthodologie — appliquée sur 30+ ligues chaque jour.",
+    "ctaPrimary": { "label": "Voir les pronostics du jour", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Comment fonctionne notre moteur", "canonical": "methodology" }
+  }
+}

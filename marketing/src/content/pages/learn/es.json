@@ -1,0 +1,56 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Aprender — Métodos Detrás de los Pronósticos | BetsPlug",
+    "description": "Guías profundas sobre Elo, Poisson, machine learning, value betting y gestión de bankroll. Aprende las matemáticas detrás de los pronósticos IA.",
+    "ogImage": "/og-images/learn-es.jpg"
+  },
+  "hero": {
+    "h1": "Aprende las Matemáticas Detrás de los Pronósticos",
+    "subheadline": "Guías profundas sobre los modelos estadísticos, conceptos de apuestas y frameworks analíticos detrás de los pronósticos basados en datos. Sin relleno. Solo las matemáticas reales.",
+    "trustStrip": ["Escrito por ingenieros", "Actualizado regularmente", "Sin spam de afiliados"]
+  },
+  "grid": {
+    "h2": "Explorar Artículos",
+    "readMore": "Leer artículo",
+    "difficultyLabels": { "Beginner": "Principiante", "Intermediate": "Intermedio", "Advanced": "Avanzado" },
+    "categories": [
+      {
+        "title": "Modelos Estadísticos",
+        "articles": [
+          { "slug": "expected-goals-explained", "title": "Expected Goals (xG) Explicado", "excerpt": "Cómo xG mide la calidad de tiros y predice rendimiento a largo plazo mejor que los conteos tradicionales.", "readingTime": "8 min de lectura", "difficulty": "Beginner" },
+          { "slug": "elo-rating-explained", "title": "Sistema de Clasificación Elo para Fútbol", "excerpt": "El sistema dinámico que ajusta la fuerza de equipo tras cada partido. Originalmente para ajedrez, ahora motor de pronósticos modernos.", "readingTime": "10 min de lectura", "difficulty": "Intermediate" },
+          { "slug": "poisson-goal-models", "title": "Modelos Poisson de Goles", "excerpt": "La distribución matemática que predice la probabilidad de marcadores específicos basada en tasas de ataque y defensa.", "readingTime": "12 min de lectura", "difficulty": "Intermediate" }
+        ]
+      },
+      {
+        "title": "Conceptos de Apuestas",
+        "articles": [
+          { "slug": "what-is-value-betting", "title": "¿Qué es Value Betting?", "excerpt": "Por qué encontrar apuestas con valor esperado positivo es la única estrategia matemáticamente sólida a largo plazo.", "readingTime": "9 min de lectura", "difficulty": "Beginner" },
+          { "slug": "kelly-criterion", "title": "El Criterio de Kelly", "excerpt": "La fórmula matemática para tamaño óptimo de apuesta basada en ventaja y cuotas. Por qué la mayoría apuestan mal.", "readingTime": "11 min de lectura", "difficulty": "Advanced" },
+          { "slug": "bankroll-management", "title": "Gestión de Bankroll", "excerpt": "Cómo gestionar tu capital de pronósticos para que la variancia a corto plazo no destruya los resultados a largo plazo.", "readingTime": "8 min de lectura", "difficulty": "Beginner" }
+        ]
+      },
+      {
+        "title": "IA y Análisis",
+        "articles": [
+          { "slug": "ai-vs-tipsters", "title": "IA vs Tipsters Humanos", "excerpt": "Las ventajas estructurales y limitaciones de pronósticos IA versus experiencia humana. Dónde sobresale cada uno.", "readingTime": "10 min de lectura", "difficulty": "Intermediate" }
+        ]
+      }
+    ]
+  },
+  "whyTopics": {
+    "h2": "Por Qué Escribimos Estas Guías",
+    "paragraphs": [
+      "La mayoría de sitios de pronósticos tratan sus métodos como 'secretos propietarios' o los simplifican excesivamente para parecer amigables. Ambos enfoques fallan a lectores que genuinamente quieren entender.",
+      "Nuestra sección aprender explica las matemáticas reales detrás de nuestros pronósticos — puntuaciones Elo, distribuciones Poisson, patrones de machine learning — a un nivel que respeta tu inteligencia.",
+      "Estos artículos también cubren conceptos que todo apostador serio debería entender: value betting, criterio de Kelly, gestión de bankroll. Saber cómo funcionan los pronósticos te ayuda a usarlos efectivamente."
+    ]
+  },
+  "finalCta": {
+    "h2": "¿Listo para Ver Estos Conceptos en Acción?",
+    "body": "Mismo motor, misma metodología — aplicada en 30+ ligas cada día.",
+    "ctaPrimary": { "label": "Ver pronósticos de hoy", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Cómo funciona nuestro motor", "canonical": "methodology" }
+  }
+}

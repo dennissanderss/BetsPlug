@@ -1,0 +1,47 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import ArticleCard from "@/components/learn/ArticleCard.astro";
+import type { Locale } from "@/lib/i18n";
+import type { LearnHubContent } from "@/content/pages/learn/types";
+
+interface Props {
+  locale: Locale;
+  content: LearnHubContent["grid"];
+}
+const { locale, content } = Astro.props;
+---
+
+<Section surface="light" spacing="lg" ariaLabelledby="article-grid-h2">
+  <Container size="xl">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2 id="article-grid-h2" class="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight tracking-tight text-charcoal-900">
+        {content.h2}
+      </h2>
+    </header>
+
+    <div class="mt-12 lg:mt-16 space-y-12 lg:space-y-16">
+      {content.categories.map((category) => (
+        <div>
+          <h3 class="text-xl sm:text-2xl font-bold text-charcoal-900 border-b border-stadium-white-200 pb-3">
+            {category.title}
+          </h3>
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+            {category.articles.map((article) => (
+              <ArticleCard
+                locale={locale}
+                slug={article.slug}
+                title={article.title}
+                excerpt={article.excerpt}
+                readingTime={article.readingTime}
+                difficulty={article.difficulty}
+                readMoreLabel={content.readMore}
+                difficultyLabels={content.difficultyLabels}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </Container>
+</Section>

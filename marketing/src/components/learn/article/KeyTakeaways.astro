@@ -1,0 +1,19 @@
+---
+import type { ArticleContent } from "@/content/articles/types";
+interface Props { content: ArticleContent["keyTakeaways"] }
+const { content } = Astro.props;
+---
+
+<aside class="mt-12 rounded-2xl border border-pitch-green-500/30 bg-pitch-green-500/5 p-6 lg:p-8">
+  <h3 class="text-xl font-bold text-charcoal-900">{content.h3}</h3>
+  <ul class="mt-4 space-y-3 text-base text-charcoal-700">
+    {content.items.map((item) => (
+      <li class="flex items-start gap-2">
+        <svg class="h-5 w-5 text-pitch-green-600 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+</aside>

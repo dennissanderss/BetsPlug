@@ -1,77 +1,89 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import SiteNav from "../../components/SiteNav.astro";
-import Footer from "../../components/Footer.astro";
-import PageHeader from "../../components/PageHeader.astro";
-import { sanity, localised } from "../../lib/sanity";
+/**
+ * Bet Types pillar page — English root.
+ * URL: /bet-types
+ *
+ * Spec: docs/specs/13-bet-types.md
+ *
+ * 8 unique bet-type sections + coverage table + FAQ + final CTA.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
 
-const allBetTypeHubsQuery = `
-  *[_type == "betTypeHub"] | order(name.en asc) {
-    _id, name, slug, shortCode, tagline
-  }
-`;
+import BetTypesHero      from "@/components/bet-types/BetTypesHero.astro";
+import BetTypesTOC       from "@/components/bet-types/BetTypesTOC.astro";
+import BetTypeSectionC   from "@/components/bet-types/BetTypeSection.astro";
+import CoverageTable     from "@/components/bet-types/CoverageTable.astro";
+import BetTypesFAQ       from "@/components/bet-types/BetTypesFAQ.astro";
+import BetTypesFinalCTA  from "@/components/bet-types/BetTypesFinalCTA.astro";
 
-interface BetTypeHub {
-  _id: string;
-  name: any;
-  slug: { current: string };
-  shortCode?: string;
-  tagline?: any;
-}
+import { loadBetTypesContent } from "@/lib/bet-types-page";
 
-let hubs: BetTypeHub[] = [];
-try {
-  hubs = await sanity.fetch<BetTypeHub[]>(allBetTypeHubsQuery);
-} catch {}
+const locale = "en" as const;
+const content = await loadBetTypesContent(locale);
+
+const SITE = "https://betsplug.com";
+const canonicalPath = "/bet-types";
+
+const techArticleSchema = {
+  "@context": "https://schema.org", "@type": "TechArticle",
+  headline: content.hero.h1, description: content.meta.description,
+  author: { "@type": "Organization", name: "BetsPlug" },
+  publisher: { "@type": "Organization", name: "BetsPlug", logo: { "@type": "ImageObject", url: `${SITE}/logo.webp` } },
+  datePublished: "2026-04-15", dateModified: content._meta.lastUpdated,
+  articleSection: "Betting Markets",
+  inLanguage: locale,
+  url: `${SITE}${canonicalPath}`,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home",      item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Bet Types", item: `${SITE}${canonicalPath}` },
+  ],
+};
+const faqSchema = {
+  "@context": "https://schema.org", "@type": "FAQPage",
+  mainEntity: content.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+};
 ---
 
-<Layout
-  title="Bet types — football markets explained"
-  description="1×2, BTTS, over/under, Asian handicaps and more — every market explained, with the model's edge per type."
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
 >
-  <SiteNav />
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(techArticleSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
 
-  <main>
-    <PageHeader
-      kicker="Bet types"
-      title="Markets the engine <span class='gradient-text-green'>has an edge on</span>."
-      subtitle="Every football market we cover, with a plain-English explanation and the model's historical accuracy on that exact bet type."
-    />
+  <BetTypesHero content={content.hero} />
 
-    <section class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-      {hubs.length === 0 ? (
-        <div class="card-neon p-8 text-center text-sm text-[var(--color-text-muted)]">
-          Bet-type guides are loading. Try again in a moment.
+  <Section surface="light" spacing="lg">
+    <Container size="xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+        <div class="lg:col-span-3">
+          <BetTypesTOC toc={content.toc} />
         </div>
-      ) : (
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {hubs.map((h) => (
-            <a
-              href={`/bet-types/${h.slug.current}`}
-              class="card-neon block p-5 transition-transform hover:-translate-y-0.5"
-            >
-              <div class="flex items-baseline justify-between gap-3">
-                <h2 class="text-base font-bold text-white">
-                  {localised(h.name)}
-                </h2>
-                {h.shortCode && (
-                  <span class="rounded-full border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[10px] font-mono uppercase tracking-widest text-[var(--color-text-faint)]">
-                    {h.shortCode}
-                  </span>
-                )}
-              </div>
-              <p class="mt-2 text-sm text-[var(--color-text-muted)]">
-                {localised(h.tagline)}
-              </p>
-              <span class="mt-4 inline-flex text-xs text-[var(--color-accent-green-bright)]">
-                Read guide →
-              </span>
-            </a>
+        <article class="lg:col-span-9">
+          {content.betTypes.map((section) => (
+            <BetTypeSectionC section={section} labels={content.sectionLabels} />
           ))}
-        </div>
-      )}
-    </section>
 
-    <Footer />
-  </main>
-</Layout>
+          <CoverageTable locale={locale} content={content.coverage} />
+
+          <BetTypesFAQ content={content.faq} />
+        </article>
+      </div>
+    </Container>
+  </Section>
+
+  <BetTypesFinalCTA locale={locale} content={content.finalCta} />
+</MarketingLayout>

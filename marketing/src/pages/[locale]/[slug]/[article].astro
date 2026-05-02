@@ -1,0 +1,156 @@
+---
+/**
+ * Per-locale article page template.
+ * URLs: /nl/leren/{localized-slug}, /de/lernen/{localized-slug}, etc.
+ *
+ * Conflicts with /[locale]/[slug]/[league].astro? No — Astro's
+ * routing differentiates by `params.slug` value: when slug matches
+ * a learn-folder slug, the article catch-all wins; when it matches
+ * a predictions-folder slug, the league catch-all wins.
+ *
+ * Astro picks routes based on getStaticPaths output. Both files use
+ * `[slug]/[article]` and `[slug]/[league]` patterns — same shape — so
+ * Astro merges by priority (filename alphabetical). To avoid conflict,
+ * `[article].astro` and `[league].astro` each generate paths only for
+ * the slugs they own (learn folder vs predictions folder).
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import ArticleHero            from "@/components/learn/article/ArticleHero.astro";
+import ArticleTableOfContents from "@/components/learn/article/ArticleTableOfContents.astro";
+import ArticleBody            from "@/components/learn/article/ArticleBody.astro";
+import KeyTakeaways           from "@/components/learn/article/KeyTakeaways.astro";
+import ArticleFAQ             from "@/components/learn/article/ArticleFAQ.astro";
+import RelatedArticles        from "@/components/learn/article/RelatedArticles.astro";
+import ApplyThisCTA           from "@/components/learn/article/ApplyThisCTA.astro";
+
+import { isLocale, defaultLocale, getCanonicalSlug, type Locale } from "@/lib/i18n";
+import { locales, folderSlugs, articleSlugs } from "@/i18n/slug-mappings";
+import { loadArticle, type ArticleSlug } from "@/lib/article-page";
+import { loadLearnHubContent } from "@/lib/learn-page";
+
+export function getStaticPaths() {
+  // For each non-EN locale, enumerate learn-folder slug × article slugs
+  // (using the localized article slug from articleSlugs map).
+  const out: Array<{ params: { locale: string; slug: string; article: string } }> = [];
+  const learnFolderSlugs = folderSlugs["learn"];
+  const articleCanonicals = Object.keys(articleSlugs);
+
+  for (const locale of locales) {
+    if (locale === defaultLocale) continue;
+    const learnFolder = learnFolderSlugs[locale];
+    if (!learnFolder) continue;
+
+    for (const canonical of articleCanonicals) {
+      const localizedArticle = articleSlugs[canonical]?.[locale];
+      if (!localizedArticle) continue;
+      out.push({ params: { locale, slug: learnFolder, article: localizedArticle } });
+    }
+  }
+  return out;
+}
+
+const { locale: paramLocale, slug, article: articleParam } = Astro.params;
+const locale: Locale = isLocale(paramLocale) ? paramLocale : defaultLocale;
+
+// Resolve learn-folder canonical (must be "learn" for this template).
+const folderCanonical = getCanonicalSlug(String(slug ?? ""), locale);
+if (folderCanonical !== "learn") {
+  // Fall through — let other [slug]/[league].astro handle it.
+  return Astro.redirect("/", 302);
+}
+
+// Resolve article slug back to canonical English slug.
+const articleCanonical = getCanonicalSlug(String(articleParam ?? ""), locale);
+if (!articleCanonical) {
+  return Astro.redirect(`/${locale}/${slug}`, 302);
+}
+
+const articleSlug = articleCanonical as ArticleSlug;
+const articleContent = await loadArticle(articleSlug, locale);
+const hub = await loadLearnHubContent(locale);
+
+const allHubArticles = hub.grid.categories.flatMap((c) => c.articles);
+const relatedArticleCards = articleContent.relatedArticles.slugs
+  .map((s) => allHubArticles.find((a) => a.slug === s))
+  .filter((a): a is NonNullable<typeof a> => Boolean(a));
+
+const SITE = "https://betsplug.com";
+const canonicalPath = `/learn/${articleSlug}`;
+
+const techArticleSchema = {
+  "@context": "https://schema.org", "@type": "TechArticle",
+  headline: articleContent.header.h1, description: articleContent.meta.description,
+  author: { "@type": "Organization", name: "BetsPlug" },
+  publisher: { "@type": "Organization", name: "BetsPlug", logo: { "@type": "ImageObject", url: `${SITE}/logo.webp` } },
+  datePublished: articleContent.header.publishedAt, dateModified: articleContent.header.updatedAt,
+  articleSection: articleContent.header.category, inLanguage: locale,
+  url: `${SITE}${canonicalPath}`,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home",  item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Learn", item: `${SITE}/${locale}/${slug}` },
+    { "@type": "ListItem", position: 3, name: articleContent.header.h1, item: `${SITE}/${locale}/${slug}/${articleParam}` },
+  ],
+};
+const faqSchema = {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: articleContent.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+};
+---
+
+<MarketingLayout
+  title={articleContent.meta.title}
+  description={articleContent.meta.description}
+  ogImage={articleContent.meta.ogImage}
+  canonicalPath={canonicalPath}
+>
+  <Fragment slot="head">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(techArticleSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <ArticleHero
+    locale={locale}
+    header={articleContent.header}
+    intro={articleContent.intro}
+    breadcrumbLearn={articleContent.breadcrumbLearn}
+    difficultyLabels={hub.grid.difficultyLabels}
+  />
+
+  <Section surface="light" spacing="lg">
+    <Container size="xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+        <div class="lg:col-span-3">
+          <ArticleTableOfContents label={articleContent.tocLabel} sections={articleContent.sections} />
+        </div>
+        <article class="lg:col-span-9 max-w-3xl">
+          <ArticleBody    sections={articleContent.sections} />
+          <KeyTakeaways   content={articleContent.keyTakeaways} />
+          <ArticleFAQ     content={articleContent.faq} />
+        </article>
+      </div>
+    </Container>
+  </Section>
+
+  {relatedArticleCards.length > 0 && (
+    <RelatedArticles
+      locale={locale}
+      h2={articleContent.relatedArticles.h2}
+      articles={relatedArticleCards}
+      readMoreLabel={hub.grid.readMore}
+      difficultyLabels={hub.grid.difficultyLabels}
+    />
+  )}
+
+  <ApplyThisCTA locale={locale} content={articleContent.applyThis} />
+</MarketingLayout>
