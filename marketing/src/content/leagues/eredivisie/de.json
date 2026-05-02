@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Eredivisie Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte Eredivisie-Vorhersagen für jedes Spiel. Ajax, PSV, Feyenoord und der Rest — analysiert mit Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-eredivisie-de.jpg"
+  },
+  "hero": {
+    "h1": "Eredivisie Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes Eredivisie-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Eredivisie Vorhersagen",
+    "paragraphs": [
+      "Die Eredivisie ist die höchste Fußballliga der Niederlande, ausgetragen von 18 Clubs an 34 Spieltagen von August bis Mai. Historisch eine Talentschmiede — mit Spielern wie Cruyff, Van Basten, Bergkamp und neuerdings De Jong, Van Dijk und Van de Beek — hat die Liga eine ausgeprägte Angriffsidentität. Ajax, PSV und Feyenoord bilden die historische 'Big Three', mit AZ, Twente und Utrecht als etablierten Herausforderern. Unsere KI-Engine analysiert jedes Eredivisie-Spiel mit aktueller Form, direkten Begegnungen, Expected Goals und 40+ weiteren Variablen.",
+      "Die Eredivisie ist eine der torreichsten Ligen Europas — durchschnittlich deutlich über 3,0 Tore pro Spiel — vergleichbar mit der Bundesliga und deutlich höher als Serie A oder Ligue 1. Die Betonung von Angriffsfußball und hohen Verteidigungslinien bedeutet, dass Tor-Märkte (Über 2,5, Beide Teams Treffen) starke Vorhersagesignale tragen. Unsere Poisson-Schicht ist auf das erhöhte Torumfeld des niederländischen Fußballs kalibriert.",
+      "Jede Eredivisie-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Eredivisie-Vorhersagen sind Teil aller bezahlten Pläne."
+    ],
+    "statsPanel": { "h3": "Eredivisie auf einen Blick", "ctaLabel": "Eredivisie in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Eredivisie Teams" },
+  "methodology": {
+    "h2": "Wie Eredivisie Vorhersagen Erstellt Werden",
+    "body": "Eredivisie-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen: Elo-Bewertungen, auf die hohe Torquote kalibrierte Poisson-Modelle und Machine Learning.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Eredivisie Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für die Eredivisie?", "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp. Wir veröffentlichen jede Eredivisie-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum sind Eredivisie-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf die Top-3-Ligen beschränkt. Eredivisie-Vorhersagen sind Teil aller bezahlten Pläne." },
+      { "q": "Welche Vorhersagetypen veröffentlicht ihr für die Eredivisie?", "a": "Mehrere Märkte mit besonderem Fokus auf Tor-Märkte (Über/Unter, BTTS) angesichts der hohen Torquote." },
+      { "q": "Wie früh sind Eredivisie-Vorhersagen verfügbar?", "a": "Abonnenten sehen Eredivisie-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr KNVB-Pokal-Spiele ab?", "a": "Wir decken alle Eredivisie-Ligaspiele ab. KNVB-Pokal ist nicht in unserer Standard-Abdeckung." },
+      { "q": "Kann ich Eredivisie-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Eredivisie Vorhersagen?",
+    "h2Gated": "Eredivisie Vorhersagen Freischalten",
+    "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Eredivisie-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_eredivisie" }
+  }
+}

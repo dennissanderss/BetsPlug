@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Championship Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte EFL Championship-Vorhersagen für jedes Spiel. Englands zweite Liga — analysiert mit Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-championship-de.jpg"
+  },
+  "hero": {
+    "h1": "Championship Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes Championship-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Championship Vorhersagen",
+    "paragraphs": [
+      "Die EFL Championship ist Englands zweite Fußballdivision — die anspruchsvollste 'zweite Liga' der Welt, ausgetragen von 24 Clubs an 46 Spieltagen plus einem Vier-Team-Playoff für den letzten Aufstiegsplatz. Kürzlich abgestiegene Premier League-Clubs (mit Fallschirm-Zahlungen) konkurrieren neben langjährigen Championship-Clubs und aufgestiegenen League-One-Clubs, was eines der unvorhersehbarsten Wettbewerbsumfelder im Fußball schafft. Aufstieg in die Premier League wird auf £170 Millionen Einnahmen geschätzt. Unsere KI-Engine analysiert jedes Championship-Spiel mit aktueller Form, direkten Begegnungen, Expected Goals und 40+ weiteren Variablen.",
+      "Championship-Vorhersagen sind statistisch unterschiedlich von europäischen Top-Ligen. Spielvolumen ist außergewöhnlich hoch (46 Ligaspiele plus Pokal-Verpflichtungen), was Verletzungs-Akkumulation und Kader-Rotations-Dynamiken erzeugt, die in 38-Spiele-Ligen nicht auftreten. Unser Modell berücksichtigt Spielplan-Überlastung, Fallschirm-Zahlungs-Kaderqualitäts-Differenzen und Saisonend-Playoff-Positionierungs-Kontext.",
+      "Jede Championship-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Championship-Vorhersagen sind Teil aller bezahlten Pläne."
+    ],
+    "statsPanel": { "h3": "Championship auf einen Blick", "ctaLabel": "Championship in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Championship Teams" },
+  "methodology": {
+    "h2": "Wie Championship Vorhersagen Erstellt Werden",
+    "body": "Championship-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen, mit spezieller Abstimmung auf das hohe Spielvolumen und die Spielplan-Überlastungs-Auswirkungen.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Championship Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für die Championship?", "a": "Genauigkeit variiert. Wir veröffentlichen jede Championship-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum sind Championship-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf die Top-3-Ligen beschränkt." },
+      { "q": "Wie behandelt das Modell das hohe Spielvolumen?", "a": "Unsere ML-Schicht wendet Spielplan-Überlastungs-Anpassungen basierend auf Ruhetagen und Mid-Week-Spielfrequenz an." },
+      { "q": "Wie früh sind Championship-Vorhersagen verfügbar?", "a": "Abonnenten sehen Championship-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr FA Cup und EFL Cup-Spiele ab?", "a": "Wir decken alle Championship-Ligaspiele ab. FA Cup und EFL Cup sind nicht in unserer Standard-Abdeckung." },
+      { "q": "Kann ich Championship-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Championship Vorhersagen?",
+    "h2Gated": "Championship Vorhersagen Freischalten",
+    "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Championship-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_championship" }
+  }
+}

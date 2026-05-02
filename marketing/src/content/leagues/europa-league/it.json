@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostici Europa League | IA | BetsPlug",
+    "description": "Pronostici IA UEFA Europa League per ogni partita. Fase a girone fino alle eliminazioni dirette — analizzati con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-europa-league-it.jpg"
+  },
+  "hero": {
+    "h1": "Pronostici Europa League",
+    "subheadline": "Pronostici IA per ogni partita di UEFA Europa League. Generati con classifiche Elo, modelli Poisson e machine learning. Bloccati prima del calcio d'inizio.",
+    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sui pronostici Europa League",
+    "paragraphs": [
+      "La UEFA Europa League è la seconda competizione europea per club, un livello sotto la Champions League. La stagione 2024-25 ha anche adottato il nuovo formato di fase a girone con 36 club. I partecipanti provengono da tutte le nazioni membri UEFA. Vincitori recenti notabili includono Atalanta, Eintracht Frankfurt, Siviglia e Atlético Madrid.",
+      "I pronostici di Europa League presentano una sfida diversa rispetto alla Champions League: il divario competitivo è spesso più piccolo, ma la volatilità delle formazioni è più alta. Molti partecipanti trattano l'Europa League come priorità secondaria. Il nostro modello tiene conto della pesatura della forma nazionale e della probabilità di rotazione attesa.",
+      "Ogni pronostico Europa League viene bloccato con un timestamp pubblico prima del calcio d'inizio. I pronostici Europa League sono parte di tutti i piani a pagamento."
+    ],
+    "statsPanel": { "h3": "Europa League a colpo d'occhio", "ctaLabel": "Vedi Europa League nell'app" }
+  },
+  "topTeams": { "h2": "Top club Europa League" },
+  "methodology": {
+    "h2": "Come vengono creati i pronostici Europa League",
+    "body": "I pronostici Europa League usano lo stesso motore principale, con calibrazione per tassi di rotazione più alti e livelli competitivi vari.",
+    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostici Europa League",
+    "questions": [
+      { "q": "Quanto sono accurati i pronostici IA Europa League?", "a": "L'accuratezza varia con i pattern di rotazione. Pubblichiamo ogni pronostico nel nostro track record pubblico." },
+      { "q": "Perché i pronostici Europa League sono solo a pagamento?", "a": "I pronostici gratuiti sono limitati ai 3 campionati nazionali top." },
+      { "q": "Come gestisce il modello i club che ruotano pesantemente?", "a": "Il nostro layer ML pesa la posizione in tabella nazionale per stimare le formazioni probabili." },
+      { "q": "Quando sono disponibili i pronostici?", "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio." },
+      { "q": "Coprite la Conference League?", "a": "Copriamo Champions League ed Europa League. Conference League non è nella nostra copertura standard." },
+      { "q": "Pronostici Europa League via Telegram?", "a": "Sì, per gli abbonati paganti." }
+    ],
+    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Vuoi tutti i pronostici Europa League?",
+    "h2Gated": "Sblocca i pronostici Europa League",
+    "bodyFree": "Gli abbonati hanno ogni partita con analisi completa.",
+    "bodyGated": "I pronostici Europa League sono inclusi in tutti i piani a pagamento.",
+    "ctaPrimary": { "label": "Vedi Prezzi", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Prova Gratis", "href": "https://app.betsplug.com/register?source=league_europa-league" }
+  }
+}

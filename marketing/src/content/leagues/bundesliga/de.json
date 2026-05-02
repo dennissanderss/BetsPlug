@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Bundesliga Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte Bundesliga-Vorhersagen für jedes Spiel. Vor Anpfiff gesperrt, öffentlicher Track Record. Hochscorende Liga-Analyse mit Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-bundesliga-de.jpg"
+  },
+  "hero": {
+    "h1": "Bundesliga Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes Bundesliga-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Bundesliga Vorhersagen",
+    "paragraphs": [
+      "Die Bundesliga ist Deutschlands höchste Fußballliga, ausgetragen von 18 Clubs an 34 Spieltagen von August bis Mai. Die Liga ist die torreichste der europäischen Big Five — durchschnittlich deutlich über 3,0 Tore pro Spiel in den letzten Saisons — und hat die höchste Stadionauslastung pro Spiel weltweit. Die historische Dominanz von Bayern München wird nun aktiv von Bayer Leverkusen, RB Leipzig und Borussia Dortmund herausgefordert. Unsere KI-Engine analysiert jedes Bundesliga-Spiel mit aktueller Form, direkten Begegnungen, Expected Goals, Aufstellungsdaten und 40+ weiteren Variablen.",
+      "Die hohe Torquote der Bundesliga macht Tor-Märkte (Über 2,5, Beide Teams Treffen) statistisch reichhaltigere Signale als in defensiv organisierten Ligen. Unsere Poisson-Schicht ist auf die Angriffsmuster des deutschen Fußballs kalibriert, wo Mittelfeld-Teams regelmäßig gegen Top-Gegner treffen. Das 18-Team-Format bedeutet auch weniger Spiele pro Spieltag, was statistische Signale konzentriert — aktuelle Form über die letzten 4-6 Spiele trägt hier mehr Vorhersagekraft als in 20-Team-Ligen.",
+      "Jede Bundesliga-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Kostenlose Nutzer sehen täglich 2-3 Bundesliga-Vorhersagen; Abonnenten erhalten jede Begegnung mit vollständiger Analyse: xG-Aufschlüsselung, Tor-Verteilungs-Wahrscheinlichkeiten, Aufstellungsstärke und taktischer Kontext."
+    ],
+    "statsPanel": { "h3": "Bundesliga auf einen Blick", "ctaLabel": "Bundesliga in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Bundesliga Teams" },
+  "methodology": {
+    "h2": "Wie Bundesliga Vorhersagen Erstellt Werden",
+    "body": "Bundesliga-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen: Elo-Bewertungen, auf die hohe Torquote der Liga kalibrierte Poisson-Modelle und Machine Learning. Das Modell berücksichtigt das deutsche Angriffsmuster, einschließlich der hohen Inzidenz später Tore.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Bundesliga Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für die Bundesliga?", "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp. Wir veröffentlichen jede Bundesliga-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum bietet ihr kostenlose Bundesliga-Vorhersagen an?", "a": "Die Bundesliga ist eine von drei Top-Ligen, in denen wir täglich 2-3 kostenlose Vorhersagen veröffentlichen. Abonnenten erhalten jedes Bundesliga-Spiel mit vollständiger Analyse." },
+      { "q": "Welche Vorhersagetypen veröffentlicht ihr für die Bundesliga?", "a": "Für jedes Bundesliga-Spiel veröffentlichen wir Vorhersagen über mehrere Märkte, mit besonderem Fokus auf Tor-Märkte (Über/Unter, BTTS) angesichts der hochscorenden Natur. Wir decken auch 1X2 und Doppelte Chance ab." },
+      { "q": "Wie früh sind Bundesliga-Vorhersagen verfügbar?", "a": "Abonnenten sehen Bundesliga-Vorhersagen bis zu 24 Stunden vor Anpfiff. Kostenlose Nutzer sehen sie 2 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr DFB-Pokal und europäische Spiele mit Bundesliga-Clubs ab?", "a": "Wir decken alle Bundesliga-Ligaspiele ab. DFB-Pokal, Champions League und Europa League-Spiele mit Bundesliga-Clubs werden separat abgedeckt." },
+      { "q": "Kann ich Bundesliga-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Bundesliga-Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Bundesliga Vorhersagen?",
+    "h2Gated": "Bundesliga Vorhersagen Freischalten",
+    "bodyFree": "Kostenlose Nutzer sehen 2-3 tägliche Picks. Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Bundesliga-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Pläne ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenloses Konto", "href": "https://app.betsplug.com/register?source=league_bundesliga" }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "La Liga Voorspellingen Vandaag | AI-Gedreven | BetsPlug",
+    "description": "AI-gedreven La Liga-voorspellingen voor elke wedstrijd. Vergrendeld vóór de aftrap, publiek track record. Dagelijkse picks voor Real Madrid, Barcelona, Atlético en de rest.",
+    "ogImage": "/og-images/league-la-liga-nl.jpg"
+  },
+  "hero": {
+    "h1": "La Liga Voorspellingen",
+    "subheadline": "AI-gedreven voorspellingen voor elke La Liga-wedstrijd. Gegenereerd met Elo-ratings, Poisson-modellen en machine learning. Vergrendeld vóór de aftrap.",
+    "ctaSecondary": { "label": "Hoe het werkt", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Over La Liga Voorspellingen",
+    "paragraphs": [
+      "La Liga is Spanjes hoogste voetbalcompetitie, betwist door 20 clubs over 38 speeldagen van augustus tot mei. De competitie wordt historisch gedomineerd door Real Madrid en Barcelona, met Atlético Madrid als derde gevestigde grootmacht, hoewel titelraces de laatste seizoenen opener zijn geworden. Onze AI-engine analyseert elke La Liga-wedstrijd op basis van actuele vorm, El Clásico-rivaliteitsdata, expected goals, transfermarkt-gerelateerde opstellingswijzigingen en 40+ andere variabelen.",
+      "La Liga onderscheidt zich technisch van andere Europese topcompetities: wedstrijden hebben gemiddeld lagere xG en strakker balbezit-gericht spel, vooral buiten de top zes. Dit maakt doelpuntmarkten (Over/Under, BTTS) statistisch volatieler dan in de Premier League of Bundesliga. Ons model houdt hier rekening mee door Spaanse-voetbal-specifieke patronen mee te wegen — defensieve veerkracht van middenmoters, late seizoens-rotatie en de impact van Europese wedstrijden op midweekse La Liga-fixtures.",
+      "Elke La Liga-voorspelling wordt vergrendeld met een publiek tijdstempel vóór de aftrap. Zowel winst als verlies komen in ons publieke track record. Gratis gebruikers zien dagelijks 2-3 La Liga-voorspellingen, gewogen naar de hoogst-confidence wedstrijden; leden ontvangen elke fixture met volledige statistische uitsplitsing inclusief xG, opstellingsterkte en onderlinge geschiedenis."
+    ],
+    "statsPanel": { "h3": "La Liga in een oogopslag", "ctaLabel": "Bekijk La Liga in app" }
+  },
+  "topTeams": { "h2": "Top La Liga Teams" },
+  "methodology": {
+    "h2": "Hoe La Liga Voorspellingen Worden Gemaakt",
+    "body": "La Liga-voorspellingen gebruiken dezelfde engine als al onze voetbalvoorspellingen: Elo-ratings voor teamsterkte, Poisson-modellen voor doelpunt-waarschijnlijkheid en machine learning. Het model is getraind op La Liga-specifieke historische data, rekening houdend met de lagere doelpuntgemiddelden en balbezit-gedreven dynamiek.",
+    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "La Liga Voorspellingen FAQ",
+    "questions": [
+      { "q": "Hoe nauwkeurig zijn AI-voorspellingen voor La Liga?", "a": "Nauwkeurigheid varieert per speeldag en voorspellingstype. We publiceren elke La Liga-voorspelling in ons publieke track record zodat je de prestaties zelf kunt verifiëren." },
+      { "q": "Waarom bieden jullie gratis La Liga-voorspellingen?", "a": "La Liga is een van drie topcompetities waar we dagelijks 2-3 gratis voorspellingen publiceren. Leden ontvangen elke La Liga-wedstrijd met volledige analyse." },
+      { "q": "Welke types voorspellingen publiceren jullie voor La Liga?", "a": "Voor elke La Liga-wedstrijd publiceren we voorspellingen voor meerdere markten: 1X2, Over/Under doelpunten (waar de strakkere Spaanse scoringspatronen zijn meegenomen), Beide Teams Scoren en Dubbele Kans." },
+      { "q": "Hoe vroeg zijn La Liga-voorspellingen beschikbaar?", "a": "Leden zien La Liga-voorspellingen tot 24 uur vóór de aftrap. Gratis gebruikers zien ze 2 uur vóór de aftrap." },
+      { "q": "Behandelen jullie Copa del Rey en Europese wedstrijden van La Liga-clubs?", "a": "We behandelen alle La Liga-wedstrijden. Copa del Rey, Champions League en Europa League-wedstrijden van La Liga-clubs worden afzonderlijk behandeld." },
+      { "q": "Kan ik La Liga-voorspellingen via Telegram krijgen?", "a": "Ja. Betalende leden ontvangen Telegram-meldingen voor high-confidence La Liga-voorspellingen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Wil Je Alle La Liga Voorspellingen?",
+    "h2Gated": "Ontgrendel La Liga Voorspellingen",
+    "bodyFree": "Gratis gebruikers zien 2-3 picks per dag. Leden krijgen elke wedstrijd met volledige statistische analyse.",
+    "bodyGated": "La Liga-voorspellingen zijn onderdeel van alle betaalde plannen.",
+    "ctaPrimary": { "label": "Bekijk Plannen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Gratis Account", "href": "https://app.betsplug.com/register?source=league_la-liga" }
+  }
+}

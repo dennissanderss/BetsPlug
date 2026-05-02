@@ -1,0 +1,50 @@
+---
+/**
+ * LeagueDateFilter — Today / This Week / All Upcoming tabs.
+ * URL param-driven (?date=week|upcoming).
+ */
+import type { Locale } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/i18n";
+import type { LeaguePageContent } from "@/content/leagues/types";
+import type { LeagueSlug } from "@/config/leagues";
+
+type ActiveTab = "today" | "week" | "upcoming";
+
+interface Props {
+  locale: Locale;
+  leagueSlug: LeagueSlug;
+  content: LeaguePageContent["filter"];
+  active: ActiveTab;
+}
+
+const { locale, leagueSlug, content, active } = Astro.props;
+
+// Build base path: /predictions/{slug} on EN, /{locale}/{folder}/{slug} on others.
+const folder = getLocalizedPath("predictions", locale).replace(/^\//, "");
+const baseHref = locale === "en" ? `/${folder}/${leagueSlug}` : `/${folder}/${leagueSlug}`;
+
+const tabs: { key: ActiveTab; label: string; href: string }[] = [
+  { key: "today",    label: content.today,       href: baseHref },
+  { key: "week",     label: content.thisWeek,    href: `${baseHref}?date=week` },
+  { key: "upcoming", label: content.allUpcoming, href: `${baseHref}?date=upcoming` },
+];
+---
+
+<div id="league-cards" class="flex items-center gap-1 rounded-full border border-deep-navy-600 bg-charcoal-700 p-1" role="tablist">
+  {tabs.map((tab) => (
+    <a
+      href={tab.href}
+      role="tab"
+      aria-selected={tab.key === active}
+      class={[
+        "inline-flex items-center justify-center h-9 px-4 rounded-full text-sm font-semibold transition-colors duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900",
+        tab.key === active
+          ? "bg-pitch-green-500 text-deep-navy-950"
+          : "text-white-soft hover:text-white-pure hover:bg-white-pure/5",
+      ].join(" ")}
+    >
+      {tab.label}
+    </a>
+  ))}
+</div>

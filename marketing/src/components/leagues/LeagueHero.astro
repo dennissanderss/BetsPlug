@@ -1,0 +1,143 @@
+---
+/**
+ * LeagueHero — Section 1 of /predictions/{league}.
+ * 60/40 desktop split: copy left, league-stats panel right with the
+ * league's primary color as accent. CTA varies by isTopThree:
+ *   - top-3:  "View Free Predictions" anchor scroll
+ *   - others: "Unlock {LEAGUE} Predictions" → /pricing
+ */
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { LeagueConfig } from "@/config/leagues";
+import type { LeaguePageContent } from "@/content/leagues/types";
+
+interface Props {
+  locale: Locale;
+  league: LeagueConfig;
+  content: LeaguePageContent["hero"];
+  /** Real number from API (or 0 fallback). */
+  predictionsThisWeek: number;
+  currentMatchweek: number;
+}
+
+const { locale, league, content, predictionsThisWeek, currentMatchweek } = Astro.props;
+
+const pricingHref = getLocalizedPath("pricing", locale);
+const methodologyHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+
+const ctaPrimaryLabel = league.isTopThree
+  ? content.ctaPrimaryFreeLabel
+  : content.ctaPrimaryGatedLabel;
+const ctaPrimaryHref = league.isTopThree ? "#league-cards" : pricingHref;
+
+const trustStripWeek = content.trustStripPredictionsThisWeek.replace(
+  "{count}",
+  String(predictionsThisWeek),
+);
+---
+
+<section
+  class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[35vh] py-14 md:py-20"
+  aria-labelledby="league-hero-h1"
+>
+  <!-- League-color accent gradient -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 pointer-events-none"
+    style={`background: linear-gradient(135deg, ${league.primaryColor}22 0%, transparent 60%);`}
+  ></div>
+  <!-- Standard hero gradient overlay -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 pointer-events-none opacity-80"
+    style="background: var(--gradient-hero-dark);"
+  ></div>
+  <!-- Pitch-line pattern -->
+  <svg aria-hidden="true" class="absolute inset-0 h-full w-full opacity-[0.025] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="lp-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+        <path d="M 80 0 L 0 0 0 80" fill="none" stroke="white" stroke-width="1" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#lp-grid)" />
+  </svg>
+
+  <Container size="xl" class="relative">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <!-- Copy (60%) -->
+      <div class="lg:col-span-7">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em]" style={`color: ${league.primaryColor}; filter: brightness(1.4);`}>
+          {league.country}
+        </p>
+        <h1
+          id="league-hero-h1"
+          class="mt-3 text-3xl sm:text-4xl lg:text-5xl xl:text-[56px] font-bold leading-[1.05] tracking-tight text-white-pure"
+        >
+          {content.h1}
+        </h1>
+        <p class="mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-white-soft">
+          {content.subheadline}
+        </p>
+
+        <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white-soft">
+          {[trustStripWeek, content.trustStripUpdated, content.trustStripLocked].map((item) => (
+            <li class="inline-flex items-center gap-2">
+              <svg class="h-4 w-4 text-pitch-green-400 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">
+            {ctaPrimaryLabel}
+          </Button>
+          <Button href={methodologyHref} variant="secondary" size="lg" surface="dark">
+            {content.ctaSecondary.label}
+          </Button>
+        </div>
+      </div>
+
+      <!-- League stats panel (40%) -->
+      <div class="lg:col-span-5">
+        <div
+          class="rounded-2xl border border-deep-navy-600 bg-deep-navy-800/70 p-6 lg:p-8"
+          style={`box-shadow: 0 0 0 1px ${league.primaryColor}33 inset;`}
+        >
+          <!-- Big league mark -->
+          <div class="flex items-center gap-4">
+            <div
+              class="h-16 w-16 shrink-0 rounded-2xl flex items-center justify-center text-white text-xl font-bold"
+              style={`background: linear-gradient(135deg, ${league.primaryColor} 0%, ${league.primaryColor}cc 100%);`}
+              aria-hidden="true"
+            >
+              {league.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+            </div>
+            <div>
+              <p class="text-base font-bold text-white-pure">{league.name}</p>
+              <p class="text-xs text-white-muted">{league.country} · {league.season}</p>
+            </div>
+          </div>
+
+          <dl class="mt-6 grid grid-cols-3 gap-3">
+            <div class="rounded-lg border border-deep-navy-600 bg-deep-navy-900 p-3 text-center">
+              <dt class="text-[10px] font-medium uppercase tracking-wider text-white-muted">{content.statsTeams}</dt>
+              <dd class="mt-1 font-mono text-2xl font-bold text-white-pure">{league.teams}</dd>
+            </div>
+            <div class="rounded-lg border border-deep-navy-600 bg-deep-navy-900 p-3 text-center">
+              <dt class="text-[10px] font-medium uppercase tracking-wider text-white-muted">{content.statsMatchweek}</dt>
+              <dd class="mt-1 font-mono text-2xl font-bold text-white-pure">{currentMatchweek}</dd>
+            </div>
+            <div class="rounded-lg border border-deep-navy-600 bg-deep-navy-900 p-3 text-center">
+              <dt class="text-[10px] font-medium uppercase tracking-wider text-white-muted">{content.statsThisWeek}</dt>
+              <dd class="mt-1 font-mono text-2xl font-bold text-pitch-green-400">{predictionsThisWeek}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>

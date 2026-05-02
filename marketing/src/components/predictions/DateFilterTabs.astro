@@ -1,0 +1,49 @@
+---
+/**
+ * DateFilterTabs — Today / Tomorrow / This Week filter for predictions hub.
+ * URL param-driven: /predictions?date=tomorrow|week (default: today).
+ *
+ * Each tab is a real <a href> so crawlers + JS-disabled users see the
+ * correct content for every filter state.
+ */
+import type { Locale } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/i18n";
+import type { PredictionsHubContent } from "@/content/pages/predictions/types";
+
+type ActiveTab = "today" | "tomorrow" | "week";
+
+interface Props {
+  locale: Locale;
+  content: PredictionsHubContent["filter"];
+  active: ActiveTab;
+}
+
+const { locale, content, active } = Astro.props;
+
+const baseHref = getLocalizedPath("predictions", locale);
+
+const tabs: { key: ActiveTab; label: string; href: string }[] = [
+  { key: "today",    label: content.today,    href: baseHref },
+  { key: "tomorrow", label: content.tomorrow, href: `${baseHref}?date=tomorrow` },
+  { key: "week",     label: content.thisWeek, href: `${baseHref}?date=week` },
+];
+---
+
+<div class="flex items-center gap-1 rounded-full border border-deep-navy-600 bg-charcoal-700 p-1" role="tablist" aria-label={content.todayActiveAria}>
+  {tabs.map((tab) => (
+    <a
+      href={tab.href}
+      role="tab"
+      aria-selected={tab.key === active}
+      class={[
+        "inline-flex items-center justify-center h-9 px-4 rounded-full text-sm font-semibold transition-colors duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900",
+        tab.key === active
+          ? "bg-pitch-green-500 text-deep-navy-950"
+          : "text-white-soft hover:text-white-pure hover:bg-white-pure/5",
+      ].join(" ")}
+    >
+      {tab.label}
+    </a>
+  ))}
+</div>

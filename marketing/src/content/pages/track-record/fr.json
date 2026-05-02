@@ -1,0 +1,73 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Track Record BetsPlug — Chaque Pronostic Public | BetsPlug",
+    "description": "Voyez chaque pronostic IA BetsPlug jamais publié — victoires et défaites. Track record live mis à jour quotidiennement.",
+    "ogImage": "/og-images/track-record-fr.jpg"
+  },
+  "hero": {
+    "h1": "Chaque Pronostic. Public. Pour Toujours.",
+    "subheadline": "La plupart des sites de pronostics ne montrent que leurs gagnants. Nous publions tout — victoires, défaites, pronostics exacts et horodatages. Vérifiez chaque pronostic que nous avons fait.",
+    "trustStrip": ["Verrouillé avant le coup d'envoi", "Non modifiable", "Victoires et défaites"],
+    "ctaPrimary": { "label": "Comment ça marche", "canonical": "methodology" },
+    "ctaSecondary": { "label": "Voir les pronostics", "canonical": "predictions" }
+  },
+  "widget": {
+    "h2": "Track Record en Direct",
+    "subhead": "Mis à jour automatiquement à la fin des matchs. Cliquez sur un pronostic pour les détails complets.",
+    "rangeLabel": "Période",
+    "range30": "30 derniers jours",
+    "range90": "90 derniers jours",
+    "rangeAll": "Tout",
+    "leagueLabel": "Ligue",
+    "leagueAll": "Toutes les ligues",
+    "statsTotal": "Total pronostics",
+    "statsWins": "Gagnés",
+    "statsLosses": "Perdus",
+    "statsVoids": "Annulés",
+    "legendWin": "Gagné",
+    "legendLoss": "Perdu",
+    "legendVoid": "Annulé / reporté",
+    "explanationH3": "Comment Lire Ces Données",
+    "explanationBody": "Chaque tuile représente un pronostic publié. La couleur indique le résultat : vert pour correct, rouge pour incorrect, gris pour annulé. Cliquez sur une tuile pour les détails complets incluant l'horodatage de verrouillage.",
+    "loadingLabel": "Chargement du track record. Actualisez bientôt.",
+    "errorLabel": "Track record temporairement indisponible.",
+    "tooltipPattern": "{result}: {home} vs {away}, {prediction}, verrouillé {date}"
+  },
+  "whyPublishLosses": {
+    "h2": "Pourquoi Nous Publions Aussi les Pertes",
+    "paragraphs": [
+      "L'industrie des pronostics a un problème d'intégrité. La plupart des sites montrent sélectivement les pronostics gagnants tout en supprimant silencieusement les pertes. Nous avons rejeté cette approche dès le premier jour.",
+      "Chaque pronostic BetsPlug est verrouillé avec un horodatage public avant le coup d'envoi. Une fois publié, il ne peut être modifié, supprimé ou caché. Victoire ou défaite, le pronostic reste pour toujours dans notre registre public.",
+      "Notre track record est la preuve derrière notre méthodologie. Si nous prétendions 90% de précision sans montrer chaque pronostic, vous n'auriez aucune raison de nous croire. En montrant tout, notre performance réelle parle d'elle-même."
+    ],
+    "panel": {
+      "totalLabel": "Total pronostics jamais publiés",
+      "daysLabel": "Jours de tracking continu",
+      "leaguesLabel": "Ligues couvertes",
+      "lastAddedLabel": "Dernier pronostic ajouté",
+      "leaguesValue": "30+"
+    }
+  },
+  "methodologyLink": {
+    "h2": "La Méthodologie Derrière Ces Chiffres",
+    "body": "Chaque pronostic dans notre track record a été généré par le même moteur IA : classements Elo, modèles Poisson de buts et machine learning combinés.",
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Track Record",
+    "questions": [
+      { "q": "Les pronostics peuvent-ils être retirés du track record ?", "a": "Non. Chaque pronostic est verrouillé avec un horodatage immuable avant le coup d'envoi. Architecturalement, pas par politique." },
+      { "q": "Que signifie 'annulé' dans le track record ?", "a": "Le statut annulé s'applique aux pronostics où le match a été reporté ou annulé. Nous ne les comptons ni comme victoires ni comme défaites." },
+      { "q": "Pourquoi ne montrez-vous pas de pourcentages de précision spécifiques en évidence ?", "a": "La précision varie considérablement selon la ligue, le type de marché et la période. Nous préférons montrer les données brutes." },
+      { "q": "Puis-je télécharger les données du track record ?", "a": "Les données du track record sont disponibles via notre API pour les abonnés payants." },
+      { "q": "Comment vérifier qu'un pronostic spécifique a été verrouillé avant le coup d'envoi ?", "a": "Cliquez sur n'importe quel pronostic. La page de détails montre l'horodatage de verrouillage par rapport à l'heure du coup d'envoi." }
+    ]
+  },
+  "finalCta": {
+    "h2": "Prêt à Voir les Pronostics du Jour ?",
+    "body": "Même moteur, même transparence. Essayez nos pronostics gratuits aujourd'hui.",
+    "ctaPrimary": { "label": "Obtenir des picks gratuits", "href": "https://app.betsplug.com/register?source=track_record_final" },
+    "ctaSecondary": { "label": "Comparer les plans", "canonical": "pricing" }
+  }
+}

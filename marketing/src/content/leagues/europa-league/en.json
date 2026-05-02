@@ -1,0 +1,82 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Europa League Predictions | AI-Powered | BetsPlug",
+    "description": "AI-powered UEFA Europa League predictions for every match. League phase to knockout — analyzed with Elo + Poisson + ML. Available with any paid plan.",
+    "ogImage": "/og-images/league-europa-league-en.jpg"
+  },
+  "hero": {
+    "h1": "Europa League Predictions",
+    "subheadline": "AI-powered predictions for every UEFA Europa League match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
+    "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
+    "trustStripUpdated": "Updated every minute",
+    "trustStripLocked": "Locked before kickoff",
+    "ctaPrimaryFreeLabel": "View Free Predictions",
+    "ctaPrimaryGatedLabel": "Unlock Europa League Predictions",
+    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "statsTeams": "Clubs",
+    "statsMatchweek": "Current matchday",
+    "statsThisWeek": "Predictions this week"
+  },
+  "cards": {
+    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
+    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "viewPricing": "View Pricing"
+  },
+  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "cardsSection": {
+    "moreTodayPaid": "{count} more predictions today — paid only",
+    "unlockAll": "Subscribe to view all Europa League predictions",
+    "fixturesOnlyHeading": "Upcoming Fixtures",
+    "fixturesEmpty": "No upcoming fixtures in this window."
+  },
+  "context": {
+    "h2": "About Europa League Predictions",
+    "paragraphs": [
+      "The UEFA Europa League is Europe's secondary club competition, sitting one tier below the Champions League. The 2024-25 season also adopted the new league-phase format with 36 clubs in a unified table. Participants come from across UEFA's member nations: domestic-cup winners, lower-finishing top-league clubs, and parachute teams dropping from Champions League play. Notable recent winners include Atalanta, Eintracht Frankfurt, Sevilla and Atlético Madrid. Our AI engine analyzes every Europa League fixture using current form, head-to-head, expected goals and 40+ other variables.",
+      "Europa League predictions present a different challenge than Champions League: the competitive gap between league-phase opponents is often smaller, but lineup volatility is higher. Many participants treat Europa League as a secondary priority — clubs balancing strong domestic seasons frequently rotate heavily for European weeks. Our model factors in domestic-form weighting, expected rotation likelihood (especially for clubs in tight league battles), and Thursday-night fixture fatigue patterns into following-weekend domestic-form predictions.",
+      "Every Europa League prediction is locked with a public timestamp before kickoff. Wins and losses both go into our public track record. Europa League predictions are part of all paid plans — subscribers receive every fixture with full analysis including rotation likelihood for participating clubs and post-match domestic-fixture impact projections."
+    ],
+    "statsPanel": {
+      "h3": "Europa League at a glance",
+      "teamsLabel": "Clubs", "seasonLabel": "Season", "matchweekLabel": "Matchday",
+      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated", "ctaLabel": "View Europa League on app"
+    }
+  },
+  "topTeams": {
+    "h2": "Top Europa League Clubs",
+    "positionLabel": "League-phase position", "formLabel": "Form", "viewTeamLabel": "View team"
+  },
+  "methodology": {
+    "h2": "How Europa League Predictions Are Made",
+    "body": "Europa League predictions use the same core engine as our domestic predictions, with calibration for the competition's higher rotation rates and varied competitive levels. Our ML layer specifically accounts for clubs treating European fixtures as secondary priorities relative to domestic title or relegation battles.",
+    "pillars": [
+      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning with rotation modeling" },
+      { "icon": "lock", "label": "Locked & timestamped" }
+    ],
+    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Europa League Predictions FAQ",
+    "questions": [
+      { "q": "How accurate are AI predictions for the Europa League?", "a": "Accuracy varies, with rotation patterns adding variance compared to Champions League. We publish every Europa League prediction in our public track record." },
+      { "q": "Why are Europa League predictions paid only?", "a": "Free predictions are limited to the top 3 domestic leagues. Europa League predictions are part of all paid plans, with rotation analysis included." },
+      { "q": "How does the model handle clubs that rotate heavily for Europa League?", "a": "Our ML layer weighs domestic-table position and recent rotation patterns to estimate likely starters. Predictions for known rotators (e.g. Premier League clubs in tight relegation fights) account for expected lineup downgrades." },
+      { "q": "How early are Europa League predictions available?", "a": "Subscribers see Europa League predictions up to 24 hours before kickoff." },
+      { "q": "Do you cover Conference League fixtures?", "a": "Currently we cover Champions League and Europa League. Conference League is not in our default coverage." },
+      { "q": "Can I get Europa League predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Europa League predictions." }
+    ],
+    "cta": { "label": "All FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Want All Europa League Predictions?",
+    "h2Gated": "Unlock Europa League Predictions",
+    "bodyFree": "Subscribers get every match with full statistical analysis.",
+    "bodyGated": "Europa League predictions are part of all paid plans.",
+    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_europa-league" }
+  }
+}

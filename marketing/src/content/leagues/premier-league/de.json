@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Premier League Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte Premier League-Vorhersagen für jedes Spiel. Vor Anpfiff gesperrt, öffentlicher Track Record. Tägliche kostenlose Picks — vollständige Analyse für Abonnenten.",
+    "ogImage": "/og-images/league-premier-league-de.jpg"
+  },
+  "hero": {
+    "h1": "Premier League Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes Premier-League-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Premier League Vorhersagen",
+    "paragraphs": [
+      "Die Premier League ist Englands höchste Fußballliga, ausgetragen von 20 Clubs an 38 Spieltagen von August bis Mai. 1992 gegründet, ist sie zur weltweit meistgesehenen Fußballliga aufgestiegen, mit Sendeerlösen von über £10 Milliarden pro Zyklus. Unsere KI-Engine analysiert jedes Premier-League-Spiel mit aktueller Form, direkten Begegnungen, Expected Goals, Aufstellungsdaten und 40+ weiteren Variablen.",
+      "Premier-League-Vorhersagen sind besonders herausfordernd wegen der wettkampfmäßigen Tiefe der Liga. Die Top-Sechs-Clubs treffen regelmäßig auf unvorhersehbare Herausforderungen von Mittelfeldteams, und Saisonend-Spiele beinhalten oft signifikante Motivationsunterschiede (Top-Vier-Rennen vs Abstiegskampf). Unser Modell wertet aktuelle Form stark — besonders die letzten 6-10 Spiele — kombiniert mit Heim/Auswärts-Verhältnissen, wo der Premier-League-Heimvorteil historisch zu den stärksten Europas zählt.",
+      "Jede Premier-League-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Kostenlose Nutzer sehen täglich 2-3 Premier-League-Vorhersagen; Abonnenten erhalten jedes Spiel der Liga mit vollständiger statistischer Analyse: xG, Ballbesitz, Aufstellungsstärke und taktischer Kontext."
+    ],
+    "statsPanel": { "h3": "Premier League auf einen Blick", "ctaLabel": "Premier League in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Premier League Teams" },
+  "methodology": {
+    "h2": "Wie Premier League Vorhersagen Erstellt Werden",
+    "body": "Premier-League-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen: Elo-Bewertungen für Teamstärke, Poisson-Modelle für Tor-Wahrscheinlichkeit und Machine Learning für Mustererkennung. Das Modell wird auf historischen Premier-League-Daten trainiert — über ein Jahrzehnt an Spielergebnissen, Aufstellungen und Form-Daten — und kontinuierlich nach jedem abgeschlossenen Spiel aktualisiert.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Premier League Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für die Premier League?", "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp. Wir veröffentlichen jede Premier-League-Vorhersage in unserem öffentlichen Track Record, damit du die Leistung selbst überprüfen kannst." },
+      { "q": "Warum bietet ihr kostenlose Premier-League-Vorhersagen an?", "a": "Die Premier League ist eine von drei Top-Ligen, in denen wir täglich 2-3 kostenlose Vorhersagen veröffentlichen. Abonnenten erhalten jedes Premier-League-Spiel mit vollständiger Analyse." },
+      { "q": "Welche Vorhersagetypen veröffentlicht ihr für die Premier League?", "a": "Für jedes Premier-League-Spiel veröffentlichen wir Vorhersagen über mehrere Märkte: 1X2 (Spielergebnis), Über/Unter Tore, Beide Teams Treffen und Doppelte Chance." },
+      { "q": "Wie früh sind Premier-League-Vorhersagen verfügbar?", "a": "Abonnenten sehen Premier-League-Vorhersagen bis zu 24 Stunden vor Anpfiff. Kostenlose Nutzer sehen sie 2 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr FA Cup und europäische Spiele mit Premier-League-Clubs ab?", "a": "Wir decken alle Premier-League-Ligaspiele ab. FA Cup, Champions League und Europa League-Spiele mit Premier-League-Clubs werden separat unter ihren eigenen Wettbewerbsseiten abgedeckt." },
+      { "q": "Kann ich Premier-League-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Premier-League-Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Premier League Vorhersagen?",
+    "h2Gated": "Premier League Vorhersagen Freischalten",
+    "bodyFree": "Kostenlose Nutzer sehen 2-3 tägliche Picks. Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Premier-League-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Pläne ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenloses Konto", "href": "https://app.betsplug.com/register?source=league_premier-league" }
+  }
+}

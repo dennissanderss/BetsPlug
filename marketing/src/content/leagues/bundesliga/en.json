@@ -1,0 +1,82 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Bundesliga Predictions Today | AI-Powered | BetsPlug",
+    "description": "AI-powered Bundesliga predictions for every match. Locked before kickoff, public track record. High-scoring league analysis with Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-bundesliga-en.jpg"
+  },
+  "hero": {
+    "h1": "Bundesliga Predictions",
+    "subheadline": "AI-powered predictions for every Bundesliga match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
+    "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
+    "trustStripUpdated": "Updated every minute",
+    "trustStripLocked": "Locked before kickoff",
+    "ctaPrimaryFreeLabel": "View Free Predictions",
+    "ctaPrimaryGatedLabel": "Unlock Bundesliga Predictions",
+    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "statsTeams": "Teams",
+    "statsMatchweek": "Current matchweek",
+    "statsThisWeek": "Predictions this week"
+  },
+  "cards": {
+    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
+    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "viewPricing": "View Pricing"
+  },
+  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "cardsSection": {
+    "moreTodayPaid": "{count} more predictions today — paid only",
+    "unlockAll": "Subscribe to view all Bundesliga predictions",
+    "fixturesOnlyHeading": "Upcoming Fixtures",
+    "fixturesEmpty": "No upcoming fixtures in this window."
+  },
+  "context": {
+    "h2": "About Bundesliga Predictions",
+    "paragraphs": [
+      "The Bundesliga is Germany's top football division, contested by 18 clubs across 34 matchdays from August to May. The league is the highest-scoring of Europe's big five — averaging well above 3.0 goals per match in most recent seasons — and has the highest stadium attendance per match worldwide. Bayern Munich's historical dominance is now actively challenged by Bayer Leverkusen, RB Leipzig and Borussia Dortmund. Our AI engine analyzes every Bundesliga match using current form, head-to-head, expected goals, lineup data and 40+ other variables.",
+      "The Bundesliga's high scoring rate makes goal-line markets (Over 2.5, Both Teams to Score) statistically richer signals than in defensively organized leagues. Our Poisson layer is calibrated to German football's attacking patterns, where mid-table sides regularly score against top opposition. The 18-team format also means fewer matches per matchday, which concentrates statistical signals — recent form across the previous 4-6 matches carries more predictive weight here than in 20-team leagues.",
+      "Every Bundesliga prediction is locked with a public timestamp before kickoff. Wins and losses both go into our public track record. Free users see 2-3 Bundesliga predictions daily; subscribers receive every fixture with full analysis: xG breakdown, goal-distribution probabilities, lineup strength and tactical context."
+    ],
+    "statsPanel": {
+      "h3": "Bundesliga at a glance",
+      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated", "ctaLabel": "View Bundesliga on app"
+    }
+  },
+  "topTeams": {
+    "h2": "Top Bundesliga Teams",
+    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+  },
+  "methodology": {
+    "h2": "How Bundesliga Predictions Are Made",
+    "body": "Bundesliga predictions use the same engine as all our football predictions: Elo ratings for team strength, Poisson models calibrated for the league's high scoring rate, and machine learning for pattern recognition. The model accounts for German football's attacking style, including the high incidence of late goals.",
+    "pillars": [
+      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning trained on Bundesliga data" },
+      { "icon": "lock", "label": "Locked & timestamped" }
+    ],
+    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Bundesliga Predictions FAQ",
+    "questions": [
+      { "q": "How accurate are AI predictions for the Bundesliga?", "a": "Accuracy varies per matchday and prediction type. We publish every Bundesliga prediction in our public track record so you can verify performance yourself." },
+      { "q": "Why do you offer free Bundesliga predictions?", "a": "The Bundesliga is one of three top leagues where we publish 2-3 free predictions daily. Subscribers receive every Bundesliga match with full analysis." },
+      { "q": "What types of predictions do you publish for the Bundesliga?", "a": "For every Bundesliga match we publish predictions across multiple markets, with goal-line markets (Over/Under, BTTS) particularly emphasized given the league's high-scoring nature. We also cover 1X2 and Double Chance." },
+      { "q": "How early are Bundesliga predictions available?", "a": "Subscribers see Bundesliga predictions up to 24 hours before kickoff. Free users see them 2 hours before kickoff." },
+      { "q": "Do you cover DFB-Pokal and European fixtures involving Bundesliga clubs?", "a": "We cover all Bundesliga league matches. DFB-Pokal, Champions League and Europa League fixtures involving Bundesliga clubs are covered separately under their own competition pages." },
+      { "q": "Can I get Bundesliga predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Bundesliga predictions." }
+    ],
+    "cta": { "label": "All FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Want All Bundesliga Predictions?",
+    "h2Gated": "Unlock Bundesliga Predictions",
+    "bodyFree": "Free users see 2-3 daily picks. Subscribers get every match with full statistical analysis.",
+    "bodyGated": "Bundesliga predictions are part of all paid plans.",
+    "ctaPrimary": { "label": "View Plans", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Get Free Account", "href": "https://app.betsplug.com/register?source=league_bundesliga" }
+  }
+}

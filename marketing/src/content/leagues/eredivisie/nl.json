@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Eredivisie Voorspellingen Vandaag | AI-Gedreven | BetsPlug",
+    "description": "AI-gedreven Eredivisie-voorspellingen voor elke wedstrijd. Ajax, PSV, Feyenoord en de rest — geanalyseerd met Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-eredivisie-nl.jpg"
+  },
+  "hero": {
+    "h1": "Eredivisie Voorspellingen",
+    "subheadline": "AI-gedreven voorspellingen voor elke Eredivisie-wedstrijd. Gegenereerd met Elo-ratings, Poisson-modellen en machine learning. Vergrendeld vóór de aftrap.",
+    "ctaSecondary": { "label": "Hoe het werkt", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Over Eredivisie Voorspellingen",
+    "paragraphs": [
+      "De Eredivisie is Nederlands hoogste voetbalcompetitie, betwist door 18 clubs over 34 speeldagen van augustus tot mei. Historisch een ontwikkelingsmacht voor jeugdtalent — met spelers als Cruijff, Van Basten, Bergkamp en recenter De Jong, Van Dijk en Van de Beek — heeft de competitie een uitgesproken aanvallende identiteit. Ajax, PSV en Feyenoord vormen de historische 'Grote Drie', met AZ, Twente en Utrecht als gevestigde uitdagers. Onze AI-engine analyseert elke Eredivisie-wedstrijd op basis van actuele vorm, onderlinge geschiedenis, expected goals en 40+ andere variabelen.",
+      "De Eredivisie is een van Europa's meest doelpuntenrijke competities, gemiddeld ruim boven 3,0 doelpunten per wedstrijd — vergelijkbaar met de Bundesliga en aanzienlijk hoger dan Serie A of Ligue 1. De nadruk op aanvallend voetbal en hoge verdedigingslinies zorgt dat doelpuntmarkten (Over 2.5, Beide Teams Scoren) sterke voorspellingssignalen dragen. Onze Poisson-laag is gekalibreerd op de verhoogde scoringsomgeving van het Nederlandse voetbal, en onze ML-laag houdt rekening met de relatief brede kloof tussen de top-drie clubs en de rest, plus de impact van Europese-fixture rotatie op de Eredivisie-prestaties in het weekend.",
+      "Elke Eredivisie-voorspelling wordt vergrendeld met een publiek tijdstempel vóór de aftrap. Zowel winst als verlies komen in ons publieke track record. Eredivisie-voorspellingen zijn onderdeel van alle betaalde plannen — gratis gebruikers zien fixturelijsten zonder voorspellingen, terwijl leden elke wedstrijd ontvangen met volledige statistische analyse inclusief xG-uitsplitsingen, doelpuntdistributie-waarschijnlijkheden en tactische-context notities."
+    ],
+    "statsPanel": { "h3": "Eredivisie in een oogopslag", "ctaLabel": "Bekijk Eredivisie in app" }
+  },
+  "topTeams": { "h2": "Top Eredivisie Teams" },
+  "methodology": {
+    "h2": "Hoe Eredivisie Voorspellingen Worden Gemaakt",
+    "body": "Eredivisie-voorspellingen gebruiken dezelfde engine als al onze voetbalvoorspellingen: Elo-ratings, Poisson-doelpuntmodellen gekalibreerd op de hoge scoringsrate, en machine learning. Het model houdt rekening met Nederlands aanvallend voetbalpatroon en de Europese-fixture rotatie-impact op de top drie clubs.",
+    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Eredivisie Voorspellingen FAQ",
+    "questions": [
+      { "q": "Hoe nauwkeurig zijn AI-voorspellingen voor de Eredivisie?", "a": "Nauwkeurigheid varieert per speeldag en voorspellingstype. We publiceren elke Eredivisie-voorspelling in ons publieke track record zodat je de prestaties zelf kunt verifiëren." },
+      { "q": "Waarom zijn Eredivisie-voorspellingen alleen voor leden?", "a": "Gratis voorspellingen zijn beperkt tot top 3 competities (Premier League, La Liga, Bundesliga). Eredivisie-voorspellingen zijn onderdeel van alle betaalde plannen, met volledige wedstrijdanalyse." },
+      { "q": "Welke types voorspellingen publiceren jullie voor de Eredivisie?", "a": "Voor elke Eredivisie-wedstrijd publiceren we voorspellingen voor meerdere markten, met doelpuntmarkten (Over/Under, BTTS) bijzonder benadrukt gezien de hoge scoring. We dekken ook 1X2 en Dubbele Kans." },
+      { "q": "Hoe vroeg zijn Eredivisie-voorspellingen beschikbaar?", "a": "Leden zien Eredivisie-voorspellingen tot 24 uur vóór de aftrap." },
+      { "q": "Behandelen jullie KNVB Beker-wedstrijden?", "a": "We behandelen alle Eredivisie-wedstrijden. KNVB Beker-wedstrijden zijn niet in onze standaard dekking; Europese wedstrijden van Ajax, PSV en Feyenoord worden afzonderlijk behandeld." },
+      { "q": "Kan ik Eredivisie-voorspellingen via Telegram krijgen?", "a": "Ja. Betalende leden ontvangen Telegram-meldingen voor high-confidence Eredivisie-voorspellingen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Wil Je Alle Eredivisie Voorspellingen?",
+    "h2Gated": "Ontgrendel Eredivisie Voorspellingen",
+    "bodyFree": "Leden krijgen elke wedstrijd met volledige statistische analyse.",
+    "bodyGated": "Eredivisie-voorspellingen zijn onderdeel van alle betaalde plannen.",
+    "ctaPrimary": { "label": "Bekijk Prijzen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Probeer Gratis", "href": "https://app.betsplug.com/register?source=league_eredivisie" }
+  }
+}

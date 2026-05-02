@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "La Liga Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte La Liga-Vorhersagen für jedes Spiel. Vor Anpfiff gesperrt. Tägliche Picks für Real Madrid, Barcelona, Atlético und den Rest.",
+    "ogImage": "/og-images/league-la-liga-de.jpg"
+  },
+  "hero": {
+    "h1": "La Liga Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes La-Liga-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über La Liga Vorhersagen",
+    "paragraphs": [
+      "La Liga ist Spaniens höchste Fußballliga, ausgetragen von 20 Clubs an 38 Spieltagen von August bis Mai. Die Liga wird historisch von Real Madrid und Barcelona dominiert, mit Atlético Madrid als drittem etablierten Big-Player, obwohl Titelrennen in den letzten Saisons offener geworden sind. Unsere KI-Engine analysiert jedes La-Liga-Spiel mit aktueller Form, El-Clásico-bezogenen Rivalitätsdaten, Expected Goals, transferfenster-bedingten Aufstellungsänderungen und 40+ weiteren Variablen.",
+      "La Liga unterscheidet sich technisch von anderen europäischen Top-Ligen: Spiele haben durchschnittlich niedrigere xG und engeres ballbesitzbasiertes Spiel, besonders außerhalb der Top Sechs. Das macht Tor-Märkte (Über/Unter, BTTS) statistisch volatiler als in Premier League oder Bundesliga. Unser Modell berücksichtigt das durch Gewichtung spanisch-fußball-spezifischer Muster — defensive Resilienz von Mittelfeld-Teams, spätsaisonale Rotation und der Einfluss europäischer Spiele auf La-Liga-Mittwochsspiele.",
+      "Jede La-Liga-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Kostenlose Nutzer sehen täglich 2-3 La-Liga-Vorhersagen, gewichtet nach den höchsten Konfidenzspielen; Abonnenten erhalten jede Begegnung mit vollständigen statistischen Aufschlüsselungen einschließlich xG, Aufstellungsstärke und direkten Begegnungen."
+    ],
+    "statsPanel": { "h3": "La Liga auf einen Blick", "ctaLabel": "La Liga in App ansehen" }
+  },
+  "topTeams": { "h2": "Top La Liga Teams" },
+  "methodology": {
+    "h2": "Wie La Liga Vorhersagen Erstellt Werden",
+    "body": "La-Liga-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen: Elo-Bewertungen für Teamstärke, Poisson-Modelle für Tor-Wahrscheinlichkeit und Machine Learning. Das Modell ist auf La-Liga-spezifischen historischen Daten trainiert und berücksichtigt die niedrigeren Torquoten und ballbesitzgetriebene Spieldynamik der Liga.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "La Liga Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für La Liga?", "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp. Wir veröffentlichen jede La-Liga-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum bietet ihr kostenlose La-Liga-Vorhersagen an?", "a": "La Liga ist eine von drei Top-Ligen, in denen wir täglich 2-3 kostenlose Vorhersagen veröffentlichen. Abonnenten erhalten jedes La-Liga-Spiel mit vollständiger Analyse." },
+      { "q": "Welche Vorhersagetypen veröffentlicht ihr für La Liga?", "a": "Für jedes La-Liga-Spiel veröffentlichen wir Vorhersagen über mehrere Märkte: 1X2, Über/Unter Tore (mit Berücksichtigung der engeren spanischen Torquoten), Beide Teams Treffen und Doppelte Chance." },
+      { "q": "Wie früh sind La-Liga-Vorhersagen verfügbar?", "a": "Abonnenten sehen La-Liga-Vorhersagen bis zu 24 Stunden vor Anpfiff. Kostenlose Nutzer sehen sie 2 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr Copa del Rey und europäische Spiele mit La-Liga-Clubs ab?", "a": "Wir decken alle La-Liga-Ligaspiele ab. Copa del Rey, Champions League und Europa League-Spiele mit La-Liga-Clubs werden separat abgedeckt." },
+      { "q": "Kann ich La-Liga-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence La-Liga-Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle La Liga Vorhersagen?",
+    "h2Gated": "La Liga Vorhersagen Freischalten",
+    "bodyFree": "Kostenlose Nutzer sehen 2-3 tägliche Picks. Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "La-Liga-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Pläne ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenloses Konto", "href": "https://app.betsplug.com/register?source=league_la-liga" }
+  }
+}

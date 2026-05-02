@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostici Bundesliga Oggi | IA | BetsPlug",
+    "description": "Pronostici IA Bundesliga per ogni partita. Campionato ad alto scoring analizzato con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-bundesliga-it.jpg"
+  },
+  "hero": {
+    "h1": "Pronostici Bundesliga",
+    "subheadline": "Pronostici IA per ogni partita di Bundesliga. Generati con classifiche Elo, modelli Poisson e machine learning. Bloccati prima del calcio d'inizio.",
+    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sui pronostici Bundesliga",
+    "paragraphs": [
+      "La Bundesliga è la massima divisione tedesca, contestata da 18 club su 34 giornate da agosto a maggio. Il campionato è il più ricco di gol del big five europeo — ben oltre 3,0 gol per partita di media — e ha l'affluenza media per partita più alta al mondo. La dominazione storica del Bayern Monaco è ora attivamente sfidata da Bayer Leverkusen, RB Leipzig e Borussia Dortmund.",
+      "L'alto tasso di scoring della Bundesliga rende i mercati gol (Over 2,5, BTTS) statisticamente segnali più ricchi che nei campionati difensivamente organizzati. Il nostro layer Poisson è calibrato sui pattern d'attacco tedeschi, dove le squadre di centro classifica segnano regolarmente contro le top. Il formato a 18 squadre concentra anche i segnali statistici.",
+      "Ogni pronostico Bundesliga viene bloccato con un timestamp pubblico prima del calcio d'inizio. Gli utenti gratuiti vedono 2-3 pronostici Bundesliga al giorno; gli abbonati ricevono ogni partita con analisi completa: scomposizione xG, probabilità di distribuzione gol."
+    ],
+    "statsPanel": { "h3": "Bundesliga a colpo d'occhio", "ctaLabel": "Vedi Bundesliga nell'app" }
+  },
+  "topTeams": { "h2": "Top squadre Bundesliga" },
+  "methodology": {
+    "h2": "Come vengono creati i pronostici Bundesliga",
+    "body": "I pronostici Bundesliga usano lo stesso motore, con modelli Poisson calibrati sull'alto tasso di scoring del campionato.",
+    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostici Bundesliga",
+    "questions": [
+      { "q": "Quanto sono accurati i pronostici IA Bundesliga?", "a": "L'accuratezza varia. Pubblichiamo ogni pronostico nel nostro track record pubblico." },
+      { "q": "Perché offrite pronostici Bundesliga gratuiti?", "a": "La Bundesliga è uno dei tre campionati top con 2-3 pronostici gratuiti al giorno." },
+      { "q": "Quali tipi di pronostici per la Bundesliga?", "a": "Mercati multipli con enfasi sui mercati gol (Over/Under, BTTS) data la natura ad alto scoring." },
+      { "q": "Quando sono disponibili i pronostici?", "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio." },
+      { "q": "Coprite la DFB-Pokal?", "a": "Copriamo tutte le partite di Bundesliga. DFB-Pokal e competizioni europee separatamente." },
+      { "q": "Pronostici Bundesliga via Telegram?", "a": "Sì, per gli abbonati paganti." }
+    ],
+    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Vuoi tutti i pronostici Bundesliga?",
+    "h2Gated": "Sblocca i pronostici Bundesliga",
+    "bodyFree": "Gli utenti gratuiti vedono 2-3 pick al giorno. Gli abbonati hanno ogni partita con analisi completa.",
+    "bodyGated": "I pronostici Bundesliga sono inclusi in tutti i piani a pagamento.",
+    "ctaPrimary": { "label": "Vedi i Piani", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Account Gratuito", "href": "https://app.betsplug.com/register?source=league_bundesliga" }
+  }
+}

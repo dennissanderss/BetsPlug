@@ -1,0 +1,137 @@
+---
+/**
+ * Per-league page — locale variants.
+ * URLs: /nl/voorspellingen/{league}, /de/vorhersagen/{league}, etc.
+ *
+ * `getStaticPaths()` enumerates all (locale × predictions-slug ×
+ * league-slug) combinations. League slugs are universal — only the
+ * folder slug ("predictions") translates per locale.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import LeagueHero                from "@/components/leagues/LeagueHero.astro";
+import LeagueDateFilter          from "@/components/leagues/LeagueDateFilter.astro";
+import LeagueCardsGrid           from "@/components/leagues/LeagueCardsGrid.astro";
+import LeagueContext             from "@/components/leagues/LeagueContext.astro";
+import TopTeamsGrid              from "@/components/leagues/TopTeamsGrid.astro";
+import LeagueMethodologyPreview  from "@/components/leagues/LeagueMethodologyPreview.astro";
+import LeagueFAQ                 from "@/components/leagues/LeagueFAQ.astro";
+import LeagueFinalCTA            from "@/components/leagues/LeagueFinalCTA.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import { isLocale, defaultLocale, type Locale } from "@/lib/i18n";
+import { locales, folderSlugs } from "@/i18n/slug-mappings";
+import { leagues, leagueOrder, type LeagueSlug } from "@/config/leagues";
+import { loadLeaguePageBundle } from "@/lib/league-page";
+
+export function getStaticPaths() {
+  const out: Array<{ params: { locale: string; slug: string; league: string } }> = [];
+  for (const locale of locales) {
+    if (locale === defaultLocale) continue;
+    const localizedFolder = folderSlugs["predictions"]?.[locale];
+    if (!localizedFolder) continue;
+    for (const leagueSlug of leagueOrder) {
+      out.push({ params: { locale, slug: localizedFolder, league: leagueSlug } });
+    }
+  }
+  return out;
+}
+
+const { locale: paramLocale, league: leagueParam } = Astro.params;
+const locale: Locale = isLocale(paramLocale) ? paramLocale : defaultLocale;
+const slug = leagueParam as LeagueSlug;
+const league = leagues[slug];
+
+if (!league) {
+  return Astro.redirect("/", 302);
+}
+
+const { content, data } = await loadLeaguePageBundle(league, locale, Astro.site);
+
+const dateParam = (Astro.url.searchParams.get("date") ?? "today").toLowerCase();
+const active: "today" | "week" | "upcoming" =
+  dateParam === "week" ? "week" : dateParam === "upcoming" ? "upcoming" : "today";
+
+const SITE = "https://betsplug.com";
+const canonicalPath = `/predictions/${slug}`;
+
+const sportsLeagueSchema = {
+  "@context": "https://schema.org", "@type": "SportsLeague",
+  name: league.name, sport: "Football", numberOfTeams: league.teams,
+  url: `${SITE}${canonicalPath}`, inLanguage: locale,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Predictions", item: `${SITE}/${locale}/${Astro.params.slug}` },
+    { "@type": "ListItem", position: 3, name: league.name, item: `${SITE}/${locale}/${Astro.params.slug}/${slug}` },
+  ],
+};
+const faqSchema = {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: content.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+};
+---
+
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(sportsLeagueSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <LeagueHero
+    locale={locale}
+    league={league}
+    content={content.hero}
+    predictionsThisWeek={data.predictionsThisWeek}
+    currentMatchweek={data.league.currentMatchweek}
+  />
+
+  <Section surface="dark" spacing="lg" ariaLabelledby="league-cards-h2">
+    <Container size="xl">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <h2 id="league-cards-h2" class="sr-only">{league.name}</h2>
+        <LeagueDateFilter locale={locale} leagueSlug={slug} content={content.filter} active={active} />
+        <p class="text-sm text-white-muted">{data.today.freeCount}/{data.today.totalCount}</p>
+      </div>
+      <div class="mt-8">
+        <LeagueCardsGrid
+          locale={locale}
+          league={league}
+          content={content}
+          active={active}
+          freeMatches={data.today.freeMatches}
+          lockedMatches={data.today.lockedMatches}
+          fixtures={data.today.fixtures}
+        />
+      </div>
+    </Container>
+  </Section>
+
+  <LeagueContext
+    league={league}
+    content={content.context}
+    currentMatchweek={data.league.currentMatchweek}
+    topScorer={data.topScorer}
+    predictionsThisSeason={data.predictionsThisSeason}
+    updatedIso={data.lastUpdated}
+  />
+
+  <TopTeamsGrid league={league} content={content.topTeams} topTeams={data.topTeams} />
+
+  <LeagueMethodologyPreview locale={locale} content={content.methodology} />
+
+  <LeagueFAQ locale={locale} content={content.faq} />
+
+  <LeagueFinalCTA locale={locale} league={league} content={content.finalCta} />
+</MarketingLayout>

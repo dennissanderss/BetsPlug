@@ -1,0 +1,52 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "cards": {
+    "locked": "Verrouillé", "freePick": "Pick gratuit", "unlock": "Débloquer le pronostic",
+    "subscribeToView": "Abonnez-vous pour voir le pronostic", "viewAnalysis": "Voir l'analyse du match",
+    "confidence": "Confiance", "lockedBeforeKickoff": "Verrouillé avant le coup d'envoi",
+    "viewPricing": "Voir les Tarifs"
+  },
+  "filter": { "today": "Aujourd'hui", "thisWeek": "Cette Semaine", "allUpcoming": "À Venir" },
+  "hero": {
+    "trustStripPredictionsThisWeek": "{count} pronostics cette journée",
+    "trustStripUpdated": "Mis à jour chaque minute",
+    "trustStripLocked": "Verrouillé avant le coup d'envoi",
+    "ctaPrimaryFreeLabel": "Voir les Pronostics Gratuits",
+    "ctaPrimaryGatedLabel": "Débloquer les Pronostics {league}",
+    "ctaSecondaryLabel": "Comment ça marche",
+    "statsTeams": "Équipes",
+    "statsMatchweek": "Journée actuelle",
+    "statsThisWeek": "Pronostics cette semaine"
+  },
+  "methodologyPillars": [
+    { "icon": "calc", "label": "Modèles mathématiques (Elo + Poisson)" },
+    { "icon": "ml", "label": "Machine learning entraîné sur les données {league}" },
+    { "icon": "lock", "label": "Verrouillé & horodaté" }
+  ],
+  "topTeams": {
+    "positionLabel": "Position", "formLabel": "Forme", "viewTeamLabel": "Voir l'équipe"
+  },
+  "context": {
+    "statsPanel": {
+      "teamsLabel": "Équipes",
+      "seasonLabel": "Saison",
+      "matchweekLabel": "Journée",
+      "topScorerLabel": "Meilleur buteur",
+      "predictionsThisSeasonLabel": "Pronostics cette saison",
+      "updatedLabel": "Mis à jour"
+    }
+  },
+  "cardsSection": {
+    "moreTodayPaid": "{count} pronostics de plus aujourd'hui — réservés aux abonnés",
+    "fixturesOnlyHeading": "Matchs à venir",
+    "fixturesEmpty": "Aucun match à venir dans cette fenêtre."
+  },
+  "ctaLabels": {
+    "readFullMethodology": "Lire la méthodologie complète",
+    "allFaqs": "Toutes les FAQs",
+    "viewPlans": "Voir les Plans",
+    "viewPricing": "Voir les Tarifs",
+    "getFreeAccount": "Compte Gratuit",
+    "tryFree": "Essayer Gratuitement"
+  }
+}

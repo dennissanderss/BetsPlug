@@ -1,0 +1,143 @@
+---
+/**
+ * HubCardsGrid — Section 2 prediction cards container.
+ * Renders 5 cards based on the active filter:
+ *   - today:    5 free cards from top-3 leagues
+ *   - tomorrow: 1 locked teaser + 4 placeholder fixture cards
+ *   - week:     daily counts overview (no cards)
+ *
+ * Uses the shared PredictionCard for all card variants.
+ */
+import PredictionCard from "@/components/predictions/PredictionCard.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { PredictionsHubContent } from "@/content/pages/predictions/types";
+
+interface Prediction {
+  id: string;
+  league: { name: string; slug: string; logo: string; country: string };
+  kickoff: string;
+  homeTeam: { name: string; logo: string; slug: string };
+  awayTeam: { name: string; logo: string; slug: string };
+  prediction: string;
+  market: string;
+  confidence: number;
+  locked: boolean;
+  lockedAt: string;
+  matchUrl: string;
+}
+
+interface Props {
+  locale: Locale;
+  content: PredictionsHubContent;
+  active: "today" | "tomorrow" | "week";
+  todayPredictions: Prediction[];
+  tomorrowTeaser: Prediction;
+  tomorrowCount: number;
+  weekDailyCounts: { date: string; count: number }[];
+}
+
+const { locale, content, active, todayPredictions, tomorrowTeaser, tomorrowCount, weekDailyCounts } = Astro.props;
+
+const cardLabels = content.cards;
+
+const tomorrowCtaHref = getLocalizedPath(content.tomorrowEmpty.cta.canonical, locale);
+const weekCtaHref = getLocalizedPath(content.weekTab.cta.canonical, locale);
+---
+
+<div id="hub-cards-grid">
+  {active === "today" && (
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+      data-grid="today"
+    >
+      {todayPredictions.length === 0 && [0, 1, 2, 3, 4].map(() => (
+        <PredictionCard variant="skeleton" locale={locale} labels={cardLabels} />
+      ))}
+      {todayPredictions.length > 0 && todayPredictions.slice(0, 5).map((p) => (
+        <PredictionCard
+          variant="free"
+          locale={locale}
+          league={p.league}
+          kickoff={p.kickoff}
+          homeTeam={p.homeTeam}
+          awayTeam={p.awayTeam}
+          prediction={p.prediction}
+          confidence={p.confidence}
+          matchUrl={p.matchUrl}
+          labels={cardLabels}
+        />
+      ))}
+    </div>
+  )}
+
+  {active === "tomorrow" && (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" data-grid="tomorrow">
+      <!-- 1 teaser-locked card showing real match meta -->
+      <PredictionCard
+        variant="locked"
+        locale={locale}
+        league={tomorrowTeaser.league}
+        kickoff={tomorrowTeaser.kickoff}
+        homeTeam={tomorrowTeaser.homeTeam}
+        awayTeam={tomorrowTeaser.awayTeam}
+        prediction="••••••"
+        confidence={50}
+        labels={cardLabels}
+      />
+      <!-- 4 placeholder fixture cards -->
+      {[0, 1, 2, 3].map(() => (
+        <PredictionCard variant="skeleton" locale={locale} labels={cardLabels} />
+      ))}
+    </div>
+  )}
+
+  {active === "tomorrow" && (
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-deep-navy-600 bg-charcoal-700 p-4">
+      <p class="text-sm text-white-soft">
+        {content.tomorrowEmpty.teaserBody.replace("{count}", String(tomorrowCount))}
+      </p>
+      <a
+        href={tomorrowCtaHref}
+        class="inline-flex items-center justify-center h-9 px-4 rounded-md text-sm font-bold
+               bg-pitch-green-500 text-deep-navy-950 hover:bg-pitch-green-400
+               transition-colors duration-150
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400
+               focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900"
+      >
+        {content.tomorrowEmpty.cta.label}
+      </a>
+    </div>
+  )}
+
+  {active === "week" && (
+    <div class="rounded-2xl border border-deep-navy-600 bg-charcoal-700 p-6 lg:p-8" data-grid="week">
+      <h3 class="text-xl font-bold text-white-pure">{content.weekTab.h3}</h3>
+      <p class="mt-2 text-sm text-white-soft">{content.weekTab.body}</p>
+
+      <ul class="mt-6 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        {weekDailyCounts.map((day, idx) => (
+          <li class="rounded-lg border border-deep-navy-600 bg-deep-navy-900 p-4 text-center">
+            <p class="text-xs font-semibold uppercase tracking-wider text-white-muted">
+              {content.weekTab.weekdayLabels[idx % 7]}
+            </p>
+            <p class="mt-2 font-mono text-2xl font-bold text-pitch-green-400">{day.count}</p>
+            <p class="mt-1 text-[11px] text-white-muted">predictions</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-6 text-center">
+        <a
+          href={weekCtaHref}
+          class="inline-flex items-center justify-center h-11 px-5 rounded-md text-sm font-bold
+                 bg-pitch-green-500 text-deep-navy-950 hover:bg-pitch-green-400
+                 transition-colors duration-150
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400
+                 focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900"
+        >
+          {content.weekTab.cta.label}
+        </a>
+      </div>
+    </div>
+  )}
+</div>

@@ -1,0 +1,45 @@
+---
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { MethodologyContent } from "@/content/pages/methodology/types";
+
+interface Props {
+  locale: Locale;
+  content: MethodologyContent["faq"];
+}
+const { locale, content } = Astro.props;
+const ctaHref = getLocalizedPath(content.cta.canonical, locale);
+---
+
+<section class="mt-16">
+  <h2 class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+    {content.h2}
+  </h2>
+
+  <div class="mt-8 divide-y divide-stadium-white-200 rounded-2xl border border-stadium-white-200 bg-white shadow-[var(--shadow-sm)]">
+    {content.questions.map((item) => (
+      <details class="group" name="methodology-faq">
+        <summary class="flex items-center justify-between gap-4 cursor-pointer px-6 py-5 list-none text-left focus-visible:outline-none focus-visible:bg-stadium-white-100 rounded-2xl">
+          <span class="text-base lg:text-lg font-semibold text-charcoal-900">{item.q}</span>
+          <svg class="h-5 w-5 shrink-0 text-charcoal-500 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </summary>
+        <div class="px-6 pb-5 text-base leading-relaxed text-charcoal-700">{item.a}</div>
+      </details>
+    ))}
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href={ctaHref} class="inline-flex items-center gap-2 text-sm font-semibold text-pitch-green-600 hover:text-pitch-green-500 transition-colors">
+      {content.cta.label}
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::marker { content: ""; }
+</style>

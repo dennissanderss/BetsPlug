@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostics Eredivisie Aujourd'hui | IA | BetsPlug",
+    "description": "Pronostics IA Eredivisie pour chaque match. Ajax, PSV, Feyenoord et le reste — analysés avec Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-eredivisie-fr.jpg"
+  },
+  "hero": {
+    "h1": "Pronostics Eredivisie",
+    "subheadline": "Pronostics IA pour chaque match d'Eredivisie. Générés avec classements Elo, modèles de Poisson et machine learning. Verrouillés avant le coup d'envoi.",
+    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "À propos des pronostics Eredivisie",
+    "paragraphs": [
+      "L'Eredivisie est la première division des Pays-Bas, disputée par 18 clubs sur 34 journées d'août à mai. Historiquement une vivier de jeunes talents — produisant Cruyff, Van Basten, Bergkamp et plus récemment De Jong, Van Dijk et Van de Beek — la ligue a une identité offensive distincte. Ajax, PSV et Feyenoord forment le 'Big Three' historique, avec AZ, Twente et Utrecht comme challengers établis. Notre moteur IA analyse chaque match avec 40+ variables.",
+      "L'Eredivisie est l'une des ligues les plus prolifiques en buts d'Europe — bien au-dessus de 3,0 buts par match — comparable à la Bundesliga. L'accent sur le football offensif rend les marchés de buts (Plus 2,5, BTTS) porteurs de signaux prédictifs forts. Notre couche Poisson est calibrée sur l'environnement de scoring élevé du football néerlandais.",
+      "Chaque pronostic Eredivisie est verrouillé avec un horodatage public avant le coup d'envoi. Les pronostics Eredivisie font partie de tous les plans payants."
+    ],
+    "statsPanel": { "h3": "Eredivisie en bref", "ctaLabel": "Voir Eredivisie sur l'app" }
+  },
+  "topTeams": { "h2": "Top équipes Eredivisie" },
+  "methodology": {
+    "h2": "Comment les pronostics Eredivisie sont créés",
+    "body": "Les pronostics Eredivisie utilisent le même moteur, avec modèles Poisson calibrés sur le taux de scoring élevé.",
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostics Eredivisie",
+    "questions": [
+      { "q": "Quelle précision pour les pronostics IA Eredivisie ?", "a": "La précision varie. Nous publions chaque pronostic dans notre historique public." },
+      { "q": "Pourquoi les pronostics Eredivisie sont-ils payants uniquement ?", "a": "Les pronostics gratuits sont limités aux 3 ligues principales." },
+      { "q": "Quels types de pronostics pour l'Eredivisie ?", "a": "Marchés multiples avec emphase sur les marchés de buts vu le scoring élevé." },
+      { "q": "Quand les pronostics Eredivisie sont-ils disponibles ?", "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi." },
+      { "q": "Couvrez-vous la KNVB Beker ?", "a": "Nous couvrons tous les matchs d'Eredivisie. KNVB Beker n'est pas dans notre couverture standard." },
+      { "q": "Pronostics Eredivisie via Telegram ?", "a": "Oui, pour les abonnés payants." }
+    ],
+    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Voulez-vous tous les pronostics Eredivisie ?",
+    "h2Gated": "Débloquez les pronostics Eredivisie",
+    "bodyFree": "Les abonnés ont chaque match avec analyse complète.",
+    "bodyGated": "Les pronostics Eredivisie sont inclus dans tous les plans payants.",
+    "ctaPrimary": { "label": "Voir les Tarifs", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Essayer Gratuitement", "href": "https://app.betsplug.com/register?source=league_eredivisie" }
+  }
+}

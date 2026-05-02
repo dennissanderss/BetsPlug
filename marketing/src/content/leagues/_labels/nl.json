@@ -1,0 +1,52 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "cards": {
+    "locked": "Vergrendeld", "freePick": "Gratis pick", "unlock": "Voorspelling ontgrendelen",
+    "subscribeToView": "Abonneer om voorspelling te zien", "viewAnalysis": "Bekijk wedstrijdanalyse",
+    "confidence": "Vertrouwen", "lockedBeforeKickoff": "Vergrendeld vóór de aftrap",
+    "viewPricing": "Bekijk Prijzen"
+  },
+  "filter": { "today": "Vandaag", "thisWeek": "Deze Week", "allUpcoming": "Alle Komende" },
+  "hero": {
+    "trustStripPredictionsThisWeek": "{count} voorspellingen deze speeldag",
+    "trustStripUpdated": "Elke minuut bijgewerkt",
+    "trustStripLocked": "Vergrendeld vóór de aftrap",
+    "ctaPrimaryFreeLabel": "Bekijk Gratis Voorspellingen",
+    "ctaPrimaryGatedLabel": "Ontgrendel {league} Voorspellingen",
+    "ctaSecondaryLabel": "Hoe het werkt",
+    "statsTeams": "Teams",
+    "statsMatchweek": "Huidige speeldag",
+    "statsThisWeek": "Voorspellingen deze week"
+  },
+  "methodologyPillars": [
+    { "icon": "calc", "label": "Wiskundige modellen (Elo + Poisson)" },
+    { "icon": "ml", "label": "Machine learning getraind op {league}-data" },
+    { "icon": "lock", "label": "Vergrendeld & getimestamped" }
+  ],
+  "topTeams": {
+    "positionLabel": "Positie", "formLabel": "Vorm", "viewTeamLabel": "Bekijk team"
+  },
+  "context": {
+    "statsPanel": {
+      "teamsLabel": "Teams",
+      "seasonLabel": "Seizoen",
+      "matchweekLabel": "Speeldag",
+      "topScorerLabel": "Topscorer",
+      "predictionsThisSeasonLabel": "Voorspellingen dit seizoen",
+      "updatedLabel": "Bijgewerkt"
+    }
+  },
+  "cardsSection": {
+    "moreTodayPaid": "{count} meer voorspellingen vandaag — alleen voor leden",
+    "fixturesOnlyHeading": "Komende Wedstrijden",
+    "fixturesEmpty": "Geen komende wedstrijden in dit venster."
+  },
+  "ctaLabels": {
+    "readFullMethodology": "Lees volledige methodologie",
+    "allFaqs": "Alle FAQs",
+    "viewPlans": "Bekijk Plannen",
+    "viewPricing": "Bekijk Prijzen",
+    "getFreeAccount": "Gratis Account",
+    "tryFree": "Probeer Gratis"
+  }
+}

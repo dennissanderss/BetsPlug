@@ -8,19 +8,17 @@ export default defineConfig({
 
   // Locales — see docs/specs/16-i18n.md.
   // Default locale (en) is served at "/", others at "/{code}/".
+  // No fallback config — every localized route is rendered explicitly
+  // by its dedicated locale page or the [locale]/[slug] dispatcher.
+  // The fallback was previously creating 0-byte mirror files for
+  // legacy NOCTURNE pages that haven't been migrated yet AND was
+  // claiming /{locale}/track-record before our dispatcher could.
   i18n: {
     defaultLocale: "en",
     locales: ["en", "nl", "de", "fr", "es", "it"],
     routing: {
       prefixDefaultLocale: false,
       redirectToDefaultLocale: false,
-    },
-    fallback: {
-      nl: "en",
-      de: "en",
-      fr: "en",
-      es: "en",
-      it: "en",
     },
   },
 

@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostics Serie A Aujourd'hui | IA | BetsPlug",
+    "description": "Pronostics IA Serie A pour chaque match. Analyse tactique du football italien avec Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-serie-a-fr.jpg"
+  },
+  "hero": {
+    "h1": "Pronostics Serie A",
+    "subheadline": "Pronostics IA pour chaque match de Serie A. Générés avec classements Elo, modèles de Poisson et machine learning. Verrouillés avant le coup d'envoi.",
+    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "À propos des pronostics Serie A",
+    "paragraphs": [
+      "La Serie A est la première division italienne, disputée par 20 clubs sur 38 journées d'août à mai. La ligue a été historiquement caractérisée par la sophistication tactique et l'organisation défensive — des termes comme 'catenaccio' y sont nés — bien que la Serie A moderne se soit déplacée vers un jeu plus ouvert basé sur la possession. Inter, Juventus, AC Milan et Naples sont les puissances historiques, avec l'Atalanta, la Roma et la Lazio comme challengers établis.",
+      "Les pronostics Serie A nécessitent une pondération spéciale sur les matchups tactiques. La ligue a la corrélation la plus forte entre stabilité d'entraîneur et résultats de match parmi les big five européens. Notre modèle prend en compte le mandat d'entraîneur, les changements de formation attendus et la performance historique contre des configurations tactiques spécifiques.",
+      "Chaque pronostic Serie A est verrouillé avec un horodatage public avant le coup d'envoi. Les pronostics Serie A font partie de tous les plans payants — les utilisateurs gratuits voient les calendriers sans pronostics, tandis que les abonnés reçoivent chaque match avec analyse statistique complète."
+    ],
+    "statsPanel": { "h3": "Serie A en bref", "ctaLabel": "Voir Serie A sur l'app" }
+  },
+  "topTeams": { "h2": "Top équipes Serie A" },
+  "methodology": {
+    "h2": "Comment les pronostics Serie A sont créés",
+    "body": "Les pronostics Serie A utilisent le même moteur, ajusté pour les patterns tactiques italiens et la valeur prédictive de la stabilité des entraîneurs.",
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostics Serie A",
+    "questions": [
+      { "q": "Quelle précision pour les pronostics IA Serie A ?", "a": "La précision varie. Nous publions chaque pronostic dans notre historique public." },
+      { "q": "Pourquoi les pronostics Serie A sont-ils payants uniquement ?", "a": "Les pronostics gratuits sont limités aux 3 ligues principales. Serie A fait partie de tous les plans payants." },
+      { "q": "Quels types de pronostics pour la Serie A ?", "a": "1X2, Plus/Moins, BTTS, Double Chance — avec contexte de matchup tactique." },
+      { "q": "Quand les pronostics Serie A sont-ils disponibles ?", "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi." },
+      { "q": "Couvrez-vous la Coppa Italia et les fixtures européennes ?", "a": "Nous couvrons tous les matchs de Serie A. Coppa Italia et compétitions européennes séparément." },
+      { "q": "Pronostics Serie A via Telegram ?", "a": "Oui, pour les abonnés payants." }
+    ],
+    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Voulez-vous tous les pronostics Serie A ?",
+    "h2Gated": "Débloquez les pronostics Serie A",
+    "bodyFree": "Les abonnés ont chaque match avec analyse complète.",
+    "bodyGated": "Les pronostics Serie A sont inclus dans tous les plans payants.",
+    "ctaPrimary": { "label": "Voir les Tarifs", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Essayer Gratuitement", "href": "https://app.betsplug.com/register?source=league_serie-a" }
+  }
+}

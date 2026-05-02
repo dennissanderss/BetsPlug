@@ -1,0 +1,144 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Methodik: Wie BetsPlug KI-Vorhersagen Funktionieren | BetsPlug",
+    "description": "Detaillierte Methodik hinter BetsPlug KI-Fußballvorhersagen. Elo-Bewertungen, Poisson-Tor-Modelle, Machine Learning. Offen, reproduzierbar, vor Anpfiff gesperrt.",
+    "ogImage": "/og-images/methodology-de.jpg"
+  },
+  "hero": {
+    "h1": "Die Methodik Hinter BetsPlug Vorhersagen",
+    "subheadline": "Wie wir Elo-Bewertungen, Poisson-Tor-Modelle und Machine Learning zu einer einzigen Vorhersage-Engine kombinieren. Kein geheimer Algorithmus. Keine redaktionelle Auswahl. Nur Mathematik, transparent angewendet.",
+    "trustStrip": ["Offene Methodik", "Reproduzierbare Logik", "Gesperrte Vorhersagen"],
+    "ctaPrimary": { "label": "Vorhersagen erhalten", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Track Record ansehen", "canonical": "track-record" }
+  },
+  "toc": {
+    "h2": "Auf Dieser Seite",
+    "items": [
+      { "id": "pillars", "label": "Die drei Säulen" },
+      { "id": "elo", "label": "Elo-Bewertungssystem" },
+      { "id": "poisson", "label": "Poisson-Tor-Modelle" },
+      { "id": "ml", "label": "Machine-Learning-Schicht" },
+      { "id": "data", "label": "Datenquellen & Validierung" },
+      { "id": "locking", "label": "Der Sperr-Mechanismus" },
+      { "id": "what-we-dont-do", "label": "Was wir nicht tun" },
+      { "id": "limitations", "label": "Grenzen & Ehrlichkeit" }
+    ]
+  },
+  "pillars": {
+    "h2": "Die Drei Säulen Unserer Engine",
+    "intro": "BetsPlug verlässt sich nicht auf eine einzige statistische Methode. Stattdessen kombinieren wir drei etablierte Ansätze — jeder stark in unterschiedlichen Aspekten der Fußballvorhersage — und lassen Machine Learning ihre Outputs basierend auf dem jeweiligen Spielkontext gewichten.",
+    "items": [
+      { "tagline": "Teamstärke, dynamisch aktualisiert", "oneLiner": "Jedes Team hat eine numerische Stärke-Bewertung, die sich nach jedem Spiel basierend auf Ergebnis und Gegnerqualität anpasst.", "icon": "elo" },
+      { "tagline": "Mathematik der Tor-Wahrscheinlichkeit", "oneLiner": "Statistische Verteilung, die die Wahrscheinlichkeit spezifischer Ergebnisausgänge berechnet.", "icon": "poisson" },
+      { "tagline": "Mustererkennung über Tausende Spiele", "oneLiner": "Algorithmen, die nicht-offensichtliche Korrelationen zwischen Spielvariablen und Ergebnissen erkennen.", "icon": "ml" }
+    ]
+  },
+  "elo": {
+    "h2": "Elo-Bewertungssystem",
+    "paragraphs": [
+      "Das Elo-System wurde ursprünglich von Arpad Elo in den 1950er Jahren für Schach-Rankings entwickelt. Wir haben es für Fußball angepasst, wo Teams Spieler ersetzen und Spielergebnisse Partieausgänge ersetzen. Jedes Team trägt eine einzelne numerische Bewertung — typischerweise zwischen 1200 und 2200 für Top-Clubs.",
+      "Wenn zwei Teams aufeinandertreffen, nutzt das Elo-System ihre aktuellen Bewertungen zur Berechnung erwarteter Ausgänge. Die Erwartung E für das Heimteam ist eine logistische Funktion der Bewertungsdifferenz plus Heimvorteil-Term. Nach dem Spiel werden die Bewertungen mit einem K-Faktor mal der Differenz zwischen tatsächlichem und erwartetem Ergebnis angepasst.",
+      "Fußball-Elo unterscheidet sich auf drei wichtige Arten von Schach-Elo: Wir berücksichtigen Tordifferenz, Heimvorteil ist in erwartete Ausgänge eingebaut, und wir wenden einen Spiel-Wichtigkeit-Multiplikator an.",
+      "Die Stärke von Elo ist die Aktualitäts-gewichtete Genauigkeit. Ein Team in guter aktueller Form hat eine höhere Bewertung, als ihr historischer Durchschnitt vermuten lässt. Auf sich allein gestellt ignoriert Elo aber Tor-Muster und kontextuelle Variablen — deshalb kombinieren wir es mit Poisson und Machine Learning."
+    ],
+    "formulaCaption": "Elo-Update-Formel: Neue Bewertung gleich alte Bewertung plus K-Faktor mal Differenz zwischen tatsächlichem und erwartetem Score.",
+    "exampleBoxLabel": "Beispiel aus der Praxis",
+    "exampleBoxBody": "Als Manchester City 2024 mit 2-1 gegen ein Mittelfeld-Team verlor, fiel ihre Elo-Bewertung um 18 Punkte. Über die nächsten zehn Spiele erholte sich die Bewertung, als ihre Ergebnisse normalisierten."
+  },
+  "poisson": {
+    "h2": "Poisson-Tor-Modelle",
+    "paragraphs": [
+      "Die Poisson-Verteilung ist eine mathematische Formel, die die Wahrscheinlichkeit eines diskreten Ereignisses innerhalb eines festen Intervalls berechnet, gegeben eine bekannte durchschnittliche Rate. Für Fußball ist das 'Ereignis' ein Tor und das 'Intervall' 90 Minuten.",
+      "Wir berechnen zwei Poisson-Raten pro Spiel: die erwarteten Tore des Heimteams (Lambda H) und des Auswärtsteams (Lambda A). Beide Raten speisen eine Wahrscheinlichkeitsmatrix für jedes mögliche Ergebnis. Die Summe relevanter Zellen liefert Wahrscheinlichkeiten für jeden Markt.",
+      "Die Poisson-Schicht erzeugt Wahrscheinlichkeiten, die gegen Buchmacher-Quoten und historische Daten kalibriert sind. Für ein Bayern vs Frankfurt-Spiel könnte unser Modell Bayerns erwartete Tore mit 2,4 und Frankfurts mit 0,9 berechnen.",
+      "Pure Poisson neigt dazu, Unentschieden und torreiche Spiele zu unterschätzen. Wir wenden die Dixon-Coles-Anpassung an — eine Verfeinerung, die einen Tau-Parameter hinzufügt — und mischen sie mit unserer ML-Schicht."
+    ],
+    "formulaCaption": "Poisson-Wahrscheinlichkeitsmasse-Funktion: Wahrscheinlichkeit von k Toren bei erwarteter Rate Lambda.",
+    "exampleBoxLabel": "Beispiel aus der Praxis",
+    "exampleBoxBody": "Für ein Bayern vs Frankfurt-Spiel könnte unser Poisson-Modell Bayerns erwartete Tore mit 2,4 und Frankfurts mit 0,9 berechnen. Daraus leiten wir ab: Über 2,5 ~62%, BTTS Ja ~58%, wahrscheinlichstes Ergebnis 2-1 (~12%)."
+  },
+  "ml": {
+    "h2": "Machine-Learning-Schicht",
+    "paragraphs": [
+      "Elo und Poisson sind mächtig, aber mechanisch. Sie erfassen Teamstärke und Tor-Wahrscheinlichkeit gut, übersehen aber subtilere Signale. Machine Learning füllt diese Lücke, indem es Muster über Tausende historische Spiele erkennt.",
+      "Unsere ML-Schicht verarbeitet 40+ Variablen pro Spiel: aktuelle Form, Heim/Auswärts-Verhältnisse, direkte Begegnungen, Expected Goals Trends, Ballbesitz-Statistiken, Aufstellungsstärke, Ruhetage, Wetterbedingungen, Schiedsrichter-Tendenzen, Spielwichtigkeit.",
+      "Die ML-Schicht ersetzt Elo oder Poisson nicht — sie gewichtet ihre Outputs basierend auf Kontext. Für ein Spiel mit niedrigem Einsatz gibt sie Elo + Poisson das meiste Gewicht. Für ein Spiel mit hohem Einsatz gewichtet sie basierend auf ähnlichen historischen Situationen neu.",
+      "Unser Modell ist auf mehreren Saisons historischer Spieldaten trainiert — über 100.000 Spiele über die abgedeckten Ligen. Wir verwenden eine Holdout-Methodik und Walk-Forward-Validierung.",
+      "Nach jedem Spiel fließt das Ergebnis zurück ins Modell. Erfolgreiche Vorhersagen werden verstärkt; gescheiterte markieren Muster zur Neubewertung. Major-Retrainings laufen wöchentlich."
+    ],
+    "diagramCaption": "Vereinfachtes neuronales Netzwerk: 40+ Eingangsvariablen fließen durch verborgene Schichten zu einer gewichteten Vorhersage."
+  },
+  "data": {
+    "h2": "Datenquellen & Validierung",
+    "paragraphs": [
+      "Wir aggregieren Spiel- und Teamdaten von lizenzierten Sportdaten-Anbietern — denselben Quellen, die von großen Sportmedien und Buchmachern verwendet werden.",
+      "Bevor Daten in unsere Vorhersage-Engine gelangen, durchlaufen sie eine Validierungs-Pipeline: Format-Normalisierung, Anomalie-Erkennung, Querverweise mit mehreren Quellen, und menschliche Überprüfung markierter Ausnahmen.",
+      "Spieldaten aktualisieren sich nahezu in Echtzeit während Spielen. Team- und Spielerstatistiken aktualisieren sich nach Spielen. Unsere Vorhersage-Engine berechnet kontinuierlich neu."
+    ],
+    "panelTitle": "Datenquellen",
+    "panelItems": [
+      "Spielergebnisse & Live-Daten (lizenzierte Anbieter)",
+      "Historische Spielarchive (Multi-Saison-Datenbank)",
+      "Aufstellungs- & Verletzungsdaten (vor Spielbeginn verifiziert)",
+      "Wetter- & Spielort-Bedingungen (Drittanbieter-APIs)",
+      "Spieler-Bewertungen & Leistungsmetriken (lizenzierte Anbieter)"
+    ]
+  },
+  "locking": {
+    "h2": "Der Sperr-Mechanismus",
+    "paragraphs": [
+      "Jede Vorhersage, die wir veröffentlichen, hat einen Sperr-Zeitstempel — den exakten Moment, in dem sie erstellt und in unseren öffentlichen Track Record commited wurde. Nach diesem Zeitstempel kann die Vorhersage nicht bearbeitet, gelöscht oder ersetzt werden. Das ist keine Richtlinie, die wir versprechen — es ist eine architektonische Beschränkung.",
+      "Die meisten Vorhersage-Sites haben ein Integritätsproblem: Sie können verlierende Vorhersagen still entfernen oder nachträglich 'aktualisieren'. Wir haben diese Möglichkeit by Design eliminiert. Gesperrte Vorhersagen sind append-only.",
+      "Jede Vorhersage in unserem öffentlichen Track Record enthält ihren Sperr-Zeitstempel. Du kannst verifizieren, dass eine bestimmte Vorhersage vor dem tatsächlichen Anpfiff veröffentlicht wurde."
+    ],
+    "timelineCaption": "Vorhersage-Lebenszyklus: 24h vor Anpfiff erstellt, bei 2h vor gesperrt, danach für immer unveränderlich.",
+    "timelineSteps": [
+      { "label": "24h vor Anpfiff", "detail": "Vorhersage erstellt (Abonnenten-Zugriff)" },
+      { "label": "2h vor Anpfiff", "detail": "Öffentliche Sperre + Free-Zugriff" },
+      { "label": "Anpfiff", "detail": "Spiel beginnt" },
+      { "label": "Nach dem Spiel", "detail": "Ergebnis zum Track Record hinzugefügt" },
+      { "label": "Für immer", "detail": "Vorhersage unveränderlich" }
+    ]
+  },
+  "whatWeDontDo": {
+    "h2": "Was Wir Nicht Tun",
+    "intro": "Transparenz funktioniert in beide Richtungen. Hier sind Dinge, die einige Vorhersagedienste tun, die wir bewusst nicht tun:",
+    "items": [
+      { "title": "Wir verkaufen keine 'Fixed Matches'", "detail": "Wir haben keine Insiderinformationen. Jeder, der behauptet Fixed Matches zu verkaufen, begeht Betrug." },
+      { "title": "Wir bearbeiten keine Vorhersagen nach Veröffentlichung", "detail": "Einmal gesperrt, können Vorhersagen nicht modifiziert werden — architektonisch, nicht per Richtlinie." },
+      { "title": "Wir verstecken keine Verluste in unserem Track Record", "detail": "Jede Vorhersage wird veröffentlicht — Gewinne, Verluste und Pushes gleichermaßen." },
+      { "title": "Wir versprechen keine spezifischen Genauigkeitsprozentsätze", "detail": "KI-Vorhersagen haben probabilistische Genauigkeit, die je nach Markt und Wettbewerb variiert." },
+      { "title": "Wir verwenden keine redaktionelle Voreingenommenheit", "detail": "Vorhersagen werden von der Engine ohne menschliche Überschreibung erstellt." },
+      { "title": "Wir agieren nicht als Buchmacher", "detail": "Wir nehmen keine Wetten an, halten kein Geld und ermöglichen kein Glücksspiel." },
+      { "title": "Wir teilen keine Nutzerdaten mit Buchmachern", "detail": "Deine Kontoinformationen bleiben innerhalb von BetsPlug." }
+    ]
+  },
+  "limitations": {
+    "h2": "Grenzen & Ehrlichkeit",
+    "paragraphs": [
+      "KI-Vorhersagen sind keine Magie. Sie sind statistisch fundierte Wahrscheinlichkeiten. Eine 78%-Vorhersage hat immer noch 22% Chance, falsch zu sein.",
+      "Unsere Vorhersagen funktionieren am besten in: Hoch-Volumen, gut-dokumentierten Ligen; mittlere-Bereich-Märkte; Spiele, in denen Teams stabile Aufstellungen haben.",
+      "Unsere Vorhersagen sind weniger zuverlässig in: Niedrig-Daten-Ligen; ungewöhnlichen Spielen; Spielen mit großen Aufstellungsstörungen; extrem niedrig-Wahrscheinlichkeit-Ereignissen.",
+      "Wir behaupten nicht, Fußball perfekt vorherzusagen. Wir behaupten, ihn transparent und methodisch vorherzusagen. Nutze unsere Vorhersagen als einen Input in deiner eigenen Analyse."
+    ]
+  },
+  "faq": {
+    "h2": "Methodik FAQ",
+    "questions": [
+      { "q": "Kann ich den tatsächlichen Modellcode sehen?", "a": "Wir veröffentlichen keinen Quellcode (das ist unser Kern-IP), aber wir veröffentlichen detaillierte Methodik." },
+      { "q": "Wie behandelt ihr unerwartete Ereignisse während eines Spiels?", "a": "Unsere Vorhersagen werden vor dem Anpfiff erstellt und gesperrt, also aktualisieren sie sich nicht während eines Spiels." },
+      { "q": "Warum mehrere Modelle statt einem perfekten Modell?", "a": "Keine einzelne statistische Methode erfasst die gesamte Fußballdynamik." },
+      { "q": "Wie genau sind eure Vorhersagen im Vergleich zu Buchmacher-Quoten?", "a": "Wir veröffentlichen keine vergleichende Genauigkeit. Schau in unseren öffentlichen Track Record für die rohe Leistung." },
+      { "q": "Berücksichtigt ihr spielerspezifische Daten?", "a": "Ja, aber auf Teamebene. Wir berücksichtigen Aufstellungsstärke basierend auf individuellen Spieler-Bewertungen." },
+      { "q": "Wie oft wird das Modell neu trainiert?", "a": "Kontinuierlich, mit großen Retraining-Zyklen nach jedem Spieltag." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "Sieh die Methodik in Aktion",
+    "body": "Jetzt da du verstehst, wie unsere Vorhersagen funktionieren, sieh sie über 30+ Ligen angewandt.",
+    "ctaPrimary": { "label": "Heutige Vorhersagen ansehen", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Pläne vergleichen", "canonical": "pricing" }
+  }
+}

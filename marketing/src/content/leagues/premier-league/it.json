@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostici Premier League Oggi | IA | BetsPlug",
+    "description": "Pronostici IA Premier League per ogni partita. Bloccati prima del calcio d'inizio, track record pubblico.",
+    "ogImage": "/og-images/league-premier-league-it.jpg"
+  },
+  "hero": {
+    "h1": "Pronostici Premier League",
+    "subheadline": "Pronostici IA per ogni partita di Premier League. Generati con classifiche Elo, modelli Poisson e machine learning. Bloccati prima del calcio d'inizio.",
+    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sui pronostici Premier League",
+    "paragraphs": [
+      "La Premier League è la massima divisione inglese, contestata da 20 club su 38 giornate da agosto a maggio. Fondata nel 1992, è diventata il campionato di calcio più visto al mondo, generando ricavi da diritti TV oltre i £10 miliardi per ciclo. Il nostro motore IA analizza ogni partita di Premier League con la forma attuale, gli scontri diretti, gli expected goals, le formazioni e altre 40+ variabili.",
+      "I pronostici di Premier League sono particolarmente impegnativi a causa della profondità competitiva del campionato. I sei top club affrontano regolarmente sfide imprevedibili dalle squadre di centro classifica, e le partite di fine stagione spesso comportano differenze motivazionali significative. Il nostro modello pesa molto la forma recente — particolarmente le ultime 6-10 partite — combinata con i dati casa/trasferta, dove il vantaggio del fattore campo in Premier League è storicamente tra i più forti d'Europa.",
+      "Ogni pronostico Premier League viene bloccato con un timestamp pubblico prima del calcio d'inizio. Sia vittorie che sconfitte entrano nel nostro track record pubblico. Gli utenti gratuiti vedono 2-3 pronostici Premier League al giorno; gli abbonati ricevono ogni partita con analisi statistica completa: xG, possesso, forza della formazione e contesto tattico."
+    ],
+    "statsPanel": { "h3": "Premier League a colpo d'occhio", "ctaLabel": "Vedi Premier League nell'app" }
+  },
+  "topTeams": { "h2": "Top squadre Premier League" },
+  "methodology": {
+    "h2": "Come vengono creati i pronostici Premier League",
+    "body": "I pronostici Premier League usano lo stesso motore di tutti i nostri pronostici: classifiche Elo, modelli Poisson e machine learning. Il modello è addestrato su dati storici di Premier League — oltre un decennio di risultati, formazioni e dati di forma — e aggiornato continuamente.",
+    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostici Premier League",
+    "questions": [
+      { "q": "Quanto sono accurati i pronostici IA Premier League?", "a": "L'accuratezza varia. Pubblichiamo ogni pronostico nel nostro track record pubblico." },
+      { "q": "Perché offrite pronostici Premier League gratuiti?", "a": "La Premier League è uno dei tre campionati top con 2-3 pronostici gratuiti al giorno." },
+      { "q": "Quali tipi di pronostici per la Premier League?", "a": "1X2, Over/Under gol, Both Teams to Score, Doppia Chance." },
+      { "q": "Quando sono disponibili i pronostici?", "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio." },
+      { "q": "Coprite FA Cup e partite europee?", "a": "Copriamo tutte le partite di Premier League. FA Cup e competizioni europee separatamente." },
+      { "q": "Pronostici Premier League via Telegram?", "a": "Sì, per gli abbonati paganti." }
+    ],
+    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Vuoi tutti i pronostici Premier League?",
+    "h2Gated": "Sblocca i pronostici Premier League",
+    "bodyFree": "Gli utenti gratuiti vedono 2-3 pick al giorno. Gli abbonati hanno ogni partita con analisi completa.",
+    "bodyGated": "I pronostici Premier League sono inclusi in tutti i piani a pagamento.",
+    "ctaPrimary": { "label": "Vedi i Piani", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Account Gratuito", "href": "https://app.betsplug.com/register?source=league_premier-league" }
+  }
+}

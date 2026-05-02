@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for fr."
+  },
+  "meta": {
+    "title": "Pronostics Football IA Aujourd'hui - Toutes Ligues | BetsPlug",
+    "description": "Pronostics football IA quotidiens pour 30+ ligues. Picks gratuits aujourd'hui, verrouillés avant le coup d'envoi. Historique public.",
+    "ogImage": "/og-images/predictions-fr.jpg"
+  },
+  "hero": {
+    "h1Template": "Pronostics Football IA pour {date}",
+    "subheadline": "Pronostics quotidiens pour 30+ ligues, générés par notre moteur IA avec Elo, Poisson et machine learning. Verrouillés avant le coup d'envoi.",
+    "trustStrip": ["Mises à jour live", "Pronostics verrouillés", "Historique public"],
+    "liveLabel": "Mis à jour",
+    "liveSecondsAgo": "il y a {seconds}s",
+    "ctaPrimary": { "label": "Pronostics Illimités", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" },
+    "miniRecord": {
+      "title": "30 derniers jours",
+      "subtitle": "Tous les pronostics publiés — registre public",
+      "legendWin": "Gagné",
+      "legendLoss": "Perdu"
+    }
+  },
+  "filter": {
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "thisWeek": "Cette Semaine",
+    "todayActiveAria": "Afficher les pronostics du jour"
+  },
+  "cards": {
+    "locked": "Verrouillé",
+    "freePick": "Pick gratuit",
+    "unlock": "Débloquer le pronostic",
+    "subscribeToView": "Abonnez-vous pour voir le pronostic",
+    "viewAnalysis": "Voir l'analyse du match",
+    "confidence": "Confiance",
+    "lockedBeforeKickoff": "Verrouillé avant le coup d'envoi",
+    "viewPricing": "Voir les Tarifs"
+  },
+  "tomorrowEmpty": {
+    "teaserTitle": "Débloquez les Pronostics de Demain",
+    "teaserBody": "{count} pronostics de plus demain — réservés aux abonnés",
+    "cta": { "label": "Voir les tarifs", "canonical": "pricing" }
+  },
+  "weekTab": {
+    "h3": "Aperçu de la Semaine",
+    "body": "Les abonnés voient chaque pronostic des 7 prochains jours. Les utilisateurs gratuits voient seulement aujourd'hui.",
+    "weekdayLabels": ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+    "cta": { "label": "Obtenez la semaine entière à l'avance", "canonical": "pricing" }
+  },
+  "paywall": {
+    "h2Template": "Vous Voyez 5 sur {total} Pronostics du Jour",
+    "body": "Les abonnés voient chaque pronostic des 30+ ligues, l'analyse complète des matchs, et les reçoivent 24 heures avant le coup d'envoi.",
+    "bullets": [
+      "Pronostics quotidiens illimités (vs 5 gratuits)",
+      "Toutes les 30+ ligues (vs top 3 seulement)",
+      "Analyse complète : xG, H2H, compositions, raisonnement",
+      "Pronostics 24h à l'avance (vs 2h avant coup d'envoi)",
+      "Notifications Telegram pour les picks haute confiance"
+    ],
+    "ctaPrimary": { "label": "Voir les Plans", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Comparer gratuit vs payant", "canonical": "free-vs-paid" }
+  },
+  "leagueGrid": {
+    "h2": "Pronostics par Compétition",
+    "cardCta": "Voir les pronostics",
+    "todayCountTemplate": "{count} pronostics aujourd'hui",
+    "featuredBadge": "À la une"
+  },
+  "methodology": {
+    "h2": "Comment Ces Pronostics Sont Créés",
+    "body": [
+      "Chaque pronostic sur cette page est généré par notre moteur IA, pas par des éditeurs ou des pronostiqueurs. Le moteur combine classements Elo (force des équipes), modèles de Poisson (probabilité de buts) et machine learning (reconnaissance de motifs) pour évaluer chaque match sur 40+ variables.",
+      "Les pronostics sont verrouillés avec un horodatage public avant le coup d'envoi. Nous publions à la fois victoires et défaites — vérifiable dans notre historique public."
+    ],
+    "pillars": [
+      { "icon": "calc", "label": "Modèles mathématiques (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning" },
+      { "icon": "lock", "label": "Verrouillé & horodaté" }
+    ],
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostics",
+    "questions": [
+      { "q": "À quelle fréquence les pronostics sont-ils mis à jour ?", "a": "Les pronostics sont générés en continu. La page hub rafraîchit les données chaque minute. Une fois verrouillé, un pronostic ne peut être modifié." },
+      { "q": "Pourquoi seulement 5 pronostics gratuits par jour ?", "a": "Les pronostics gratuits sont un échantillon de notre production quotidienne. Les abonnés reçoivent tous les pronostics quotidiens pour 30+ ligues, plus l'analyse complète." },
+      { "q": "Puis-je obtenir des pronostics pour un match spécifique ?", "a": "Les abonnés peuvent parcourir tous les pronostics pour n'importe quelle ligue ou match. Les utilisateurs gratuits voient une sélection des ligues principales." },
+      { "q": "Que signifie le 'pourcentage de confiance' ?", "a": "La confiance reflète la certitude de notre modèle sur le résultat prédit. 78% de confiance sur 'Plus de 2,5 buts' signifie que le modèle estime cette probabilité à 78%." },
+      { "q": "Pourquoi verrouiller les pronostics avant le coup d'envoi ?", "a": "Verrouiller les pronostics avec un horodatage public garantit que nous ne pouvons pas les modifier rétroactivement. C'est le cœur de notre garantie de transparence." },
+      { "q": "Les pronostics gratuits ont-ils une précision moindre ?", "a": "Non. Les pronostics gratuits utilisent le même moteur et la même méthodologie que les pronostics payants. La différence est le volume, la profondeur, le timing et la couverture des ligues." }
+    ],
+    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "Vous Voulez Tous les Pronostics ?",
+    "body": "5 gratuits par jour. Illimités avec n'importe quel plan payant.",
+    "ctaPrimary": { "label": "Voir les Plans", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Compte Gratuit", "href": "https://app.betsplug.com/register?source=predictions_hub_final" }
+  }
+}

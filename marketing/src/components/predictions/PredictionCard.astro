@@ -1,0 +1,208 @@
+---
+/**
+ * PredictionCard — central reusable card.
+ * Used on: homepage live grid, predictions hub, all 10 league pages.
+ *
+ * Four variants:
+ *   - "free":      everything visible, "Free pick" badge
+ *   - "locked":    prediction + confidence blurred, paywall overlay
+ *   - "fixture":   teams + kickoff only, "Subscribe to view" link
+ *   - "skeleton":  loading shimmer placeholder
+ *
+ * Layout: 16:10 aspect on desktop (auto on mobile to avoid empty space)
+ *   Top: league badge (left) + status indicator (right)
+ *   Mid: home + away teams
+ *   Bot: prediction (bold) + confidence bar
+ *
+ * The card is a static surface — no client JS. Polling lives on the
+ * parent (predictions hub / league page) which can re-render via DOM
+ * surgery, but for marketing surfaces the static render is the canon.
+ */
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+
+type Variant = "free" | "locked" | "fixture" | "skeleton";
+
+interface Team {
+  name: string;
+  logo?: string;
+  slug?: string;
+}
+
+interface LeagueRef {
+  name: string;
+  slug: string;
+  logo?: string;
+}
+
+interface Props {
+  variant: Variant;
+  locale: Locale;
+  league?: LeagueRef;
+  kickoff?: string;
+  homeTeam?: Team;
+  awayTeam?: Team;
+  prediction?: string;
+  confidence?: number;
+  matchUrl?: string;
+  /** Localized labels — caller passes from content JSON. */
+  labels: {
+    locked: string;        // "Locked"
+    freePick: string;      // "Free pick"
+    unlock: string;        // "Unlock prediction"
+    subscribeToView: string; // "Subscribe to view prediction"
+    viewAnalysis: string;  // "View match analysis"
+    confidence: string;    // "Confidence"
+    lockedBeforeKickoff: string; // "Locked before kickoff"
+    viewPricing: string;   // "View Pricing"
+  };
+  /** Extra utility classes on root. */
+  class?: string;
+}
+
+const {
+  variant,
+  locale,
+  league,
+  kickoff,
+  homeTeam,
+  awayTeam,
+  prediction,
+  confidence,
+  matchUrl,
+  labels,
+  class: extraClass = "",
+} = Astro.props;
+
+const pricingHref = getLocalizedPath("pricing", locale);
+
+const confidenceWidth =
+  typeof confidence === "number"
+    ? `${Math.max(0, Math.min(100, confidence))}%`
+    : "0%";
+
+const baseSurface =
+  "relative rounded-xl border bg-charcoal-700 border-deep-navy-600 " +
+  "p-4 sm:p-5 transition-all duration-200 overflow-hidden";
+
+const cls = [baseSurface, extraClass].join(" ");
+---
+
+{variant === "skeleton" && (
+  <div class={`${cls} animate-pulse h-[260px]`} aria-busy="true" aria-live="polite">
+    <div class="h-3 w-20 rounded bg-charcoal-700/60"></div>
+    <div class="mt-6 space-y-3">
+      <div class="h-4 w-3/4 rounded bg-charcoal-700/60"></div>
+      <div class="h-4 w-2/3 rounded bg-charcoal-700/60"></div>
+    </div>
+    <div class="mt-8 h-2 w-full rounded bg-charcoal-700/60"></div>
+  </div>
+)}
+
+{variant !== "skeleton" && (
+  <article class={`${cls} group hover:border-pitch-green-500/40 hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5`}>
+    {/* Top row — league badge + status */}
+    <header class="flex items-center justify-between text-xs">
+      {league && (
+        <span class="inline-flex items-center gap-1.5 font-semibold text-white-soft">
+          <span class="h-1.5 w-1.5 rounded-full bg-pitch-green-500" aria-hidden="true"></span>
+          {league.name}
+        </span>
+      )}
+      {variant === "free" && (
+        <span class="inline-flex items-center rounded-full bg-pitch-green-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-pitch-green-400">
+          {labels.freePick}
+        </span>
+      )}
+      {variant === "locked" && (
+        <span class="inline-flex items-center gap-1 text-white-muted" aria-hidden="true">
+          <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 1a4 4 0 00-4 4v3H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zm2 7V5a2 2 0 10-4 0v3h4z" clip-rule="evenodd" />
+          </svg>
+        </span>
+      )}
+    </header>
+
+    {/* Kickoff */}
+    {kickoff && (
+      <p class="mt-3 font-mono text-xs text-white-muted">{kickoff}</p>
+    )}
+
+    {/* Teams */}
+    {homeTeam && awayTeam && (
+      <div class="mt-3 space-y-2">
+        <p class="text-sm font-semibold text-white-pure truncate">{homeTeam.name}</p>
+        <p class="text-sm font-semibold text-white-pure truncate">{awayTeam.name}</p>
+      </div>
+    )}
+
+    {/* Prediction + confidence (visible for free, blurred for locked, hidden for fixture) */}
+    {(variant === "free" || variant === "locked") && (
+      <div class={variant === "locked" ? "relative blur-[6px] select-none pointer-events-none" : ""}>
+        {prediction && (
+          <p class="mt-5 text-base font-bold text-pitch-green-400">{prediction}</p>
+        )}
+
+        {typeof confidence === "number" && (
+          <div class="mt-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-white-muted">{labels.confidence}</span>
+              <span class="font-mono font-semibold text-white-pure">{confidence}%</span>
+            </div>
+            <div class="mt-1.5 h-1.5 rounded-full bg-deep-navy-900 overflow-hidden">
+              <div
+                class="h-full rounded-full bg-pitch-green-500"
+                style={`width: ${confidenceWidth};`}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        <p class="mt-4 text-[11px] text-white-muted">
+          🔒 {labels.lockedBeforeKickoff}
+        </p>
+      </div>
+    )}
+
+    {/* Fixture — no prediction, subscribe link */}
+    {variant === "fixture" && (
+      <p class="mt-5 text-sm font-medium text-white-muted">
+        {labels.subscribeToView}
+      </p>
+    )}
+
+    {/* Locked overlay — sits above blurred content */}
+    {variant === "locked" && (
+      <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-t from-deep-navy-900/95 via-deep-navy-900/80 to-deep-navy-900/30 p-4 text-center">
+        <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-pitch-green-500/15">
+          <svg class="h-5 w-5 text-pitch-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 1a4 4 0 00-4 4v3H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zm2 7V5a2 2 0 10-4 0v3h4z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <p class="text-sm font-semibold text-white-pure">{labels.unlock}</p>
+        <a
+          href={pricingHref}
+          class="inline-flex items-center justify-center h-9 px-4 rounded-md text-xs font-bold
+                 bg-pitch-green-500 text-deep-navy-950 hover:bg-pitch-green-400
+                 transition-colors duration-150
+                 focus-visible:outline-none focus-visible:ring-2
+                 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                 focus-visible:ring-offset-deep-navy-900"
+        >
+          {labels.viewPricing}
+        </a>
+      </div>
+    )}
+
+    {/* Whole-card link for free + fixture variants */}
+    {(variant === "free" || variant === "fixture") && matchUrl && (
+      <a
+        href={matchUrl}
+        class="absolute inset-0 rounded-xl
+               focus-visible:outline-none focus-visible:ring-2
+               focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+               focus-visible:ring-offset-deep-navy-900"
+        aria-label={`${homeTeam?.name ?? ""} vs ${awayTeam?.name ?? ""} ${variant === "free" ? labels.viewAnalysis : labels.subscribeToView}`}
+      ></a>
+    )}
+  </article>
+)}

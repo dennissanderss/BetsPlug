@@ -1,0 +1,138 @@
+---
+/**
+ * LeagueCardsGrid — Section 2 of /predictions/{league}.
+ * Implements the gating logic per league.isTopThree:
+ *   - top-3 + Today: 2-3 free cards + locked teaser + fixture-only rest
+ *   - top-3 + Week:  2-3 free cards (highest profile) + rest blurred
+ *   - top-3 + Upcoming: full fixture list, no predictions
+ *   - others + Today/Week/Upcoming: 1 large locked teaser + fixture list
+ */
+import PredictionCard from "@/components/predictions/PredictionCard.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { LeagueConfig } from "@/config/leagues";
+import type { LeaguePageContent } from "@/content/leagues/types";
+
+interface Match {
+  id: string;
+  league: { name: string; slug: string; logo: string };
+  kickoff: string;
+  homeTeam: { name: string; logo: string; slug: string };
+  awayTeam: { name: string; logo: string; slug: string };
+  /** Set on locked/free; absent on fixture-only. */
+  prediction?: string;
+  market?: string;
+  confidence?: number;
+  matchUrl: string;
+}
+
+interface Props {
+  locale: Locale;
+  league: LeagueConfig;
+  content: LeaguePageContent;
+  active: "today" | "week" | "upcoming";
+  freeMatches: Match[];        // visible free cards (top-3 only, ≤3)
+  lockedMatches: Match[];      // blurred teaser cards
+  fixtures: Match[];           // fixture-only entries
+}
+
+const { locale, league, content, active, freeMatches, lockedMatches, fixtures } = Astro.props;
+
+const cardLabels = content.cards;
+const totalGated =
+  (lockedMatches?.length ?? 0) + (fixtures?.length ?? 0);
+const moreTodayPaid = content.cardsSection.moreTodayPaid.replace(
+  "{count}",
+  String(totalGated),
+);
+
+const pricingHref = getLocalizedPath("pricing", locale);
+---
+
+<div>
+  {/* Free cards (top-3 only) */}
+  {league.isTopThree && active !== "upcoming" && freeMatches.length > 0 && (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {freeMatches.map((m) => (
+        <PredictionCard
+          variant="free"
+          locale={locale}
+          league={m.league}
+          kickoff={m.kickoff}
+          homeTeam={m.homeTeam}
+          awayTeam={m.awayTeam}
+          prediction={m.prediction}
+          confidence={m.confidence}
+          matchUrl={m.matchUrl}
+          labels={cardLabels}
+        />
+      ))}
+    </div>
+  )}
+
+  {/* Locked teaser cards */}
+  {lockedMatches.length > 0 && (
+    <div class={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ${freeMatches.length > 0 ? "mt-6" : ""}`}>
+      {lockedMatches.map((m) => (
+        <PredictionCard
+          variant="locked"
+          locale={locale}
+          league={m.league}
+          kickoff={m.kickoff}
+          homeTeam={m.homeTeam}
+          awayTeam={m.awayTeam}
+          prediction="••••••"
+          confidence={50}
+          labels={cardLabels}
+        />
+      ))}
+    </div>
+  )}
+
+  {/* Conversion strip when there is more in the gate */}
+  {(lockedMatches.length > 0 || fixtures.length > 0) && (
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-deep-navy-600 bg-charcoal-700 p-4">
+      <p class="text-sm text-white-soft">
+        {league.isTopThree ? moreTodayPaid : content.cardsSection.unlockAll}
+      </p>
+      <a
+        href={pricingHref}
+        class="inline-flex items-center justify-center h-9 px-4 rounded-md text-sm font-bold
+               bg-pitch-green-500 text-deep-navy-950 hover:bg-pitch-green-400
+               transition-colors duration-150
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400
+               focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900"
+      >
+        {cardLabels.viewPricing}
+      </a>
+    </div>
+  )}
+
+  {/* Fixture-only list */}
+  {fixtures.length > 0 && (
+    <div class="mt-10">
+      <h3 class="text-base font-bold uppercase tracking-wider text-white-soft">
+        {content.cardsSection.fixturesOnlyHeading}
+      </h3>
+      <ul class="mt-4 divide-y divide-deep-navy-600 rounded-xl border border-deep-navy-600 bg-charcoal-700">
+        {fixtures.map((m) => (
+          <li class="flex items-center justify-between gap-4 px-4 py-3 text-sm">
+            <span class="font-mono text-xs text-white-muted shrink-0">{m.kickoff}</span>
+            <span class="flex-1 text-white-soft truncate">
+              {m.homeTeam.name} vs {m.awayTeam.name}
+            </span>
+            <span class="text-xs text-white-muted shrink-0">
+              {cardLabels.subscribeToView}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {/* Empty state */}
+  {freeMatches.length === 0 && lockedMatches.length === 0 && fixtures.length === 0 && (
+    <p class="rounded-xl border border-deep-navy-600 bg-charcoal-700 p-8 text-center text-sm text-white-muted">
+      {content.cardsSection.fixturesEmpty}
+    </p>
+  )}
+</div>

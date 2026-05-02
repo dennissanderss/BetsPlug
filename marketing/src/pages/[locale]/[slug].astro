@@ -1,0 +1,356 @@
+---
+/**
+ * Per-locale slug dispatcher.
+ *
+ * Routes:
+ *   /nl/voorspellingen, /de/vorhersagen, /fr/pronostics,
+ *   /es/pronosticos, /it/pronostici  → predictions hub
+ *
+ * `getStaticPaths()` enumerates only the supported (locale, slug)
+ * combinations. New canonical pages added later (pricing, about,
+ * methodology, etc.) extend SUPPORTED_CANONICAL — and add a
+ * matching <Fragment> render branch below.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import {
+  isLocale,
+  defaultLocale,
+  getCanonicalSlug,
+  type Locale,
+} from "@/lib/i18n";
+import { locales, folderSlugs } from "@/i18n/slug-mappings";
+
+import PredictionsHero            from "@/components/predictions/PredictionsHero.astro";
+import DateFilterTabs             from "@/components/predictions/DateFilterTabs.astro";
+import HubCardsGrid               from "@/components/predictions/HubCardsGrid.astro";
+import PaywallTease               from "@/components/predictions/PaywallTease.astro";
+import LeagueGrid                 from "@/components/predictions/LeagueGrid.astro";
+import PredictionsMethodologyPreview from "@/components/predictions/PredictionsMethodologyPreview.astro";
+import PredictionsFAQ             from "@/components/predictions/PredictionsFAQ.astro";
+import PredictionsFinalCTA        from "@/components/predictions/PredictionsFinalCTA.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import {
+  loadHubContent,
+  loadHubData,
+  formatTodayForLocale,
+  dailyCountsByLeague,
+} from "@/lib/predictions-hub";
+
+import TrackRecordHero          from "@/components/track-record/TrackRecordHero.astro";
+import TrackRecordWidget        from "@/components/track-record/TrackRecordWidget.astro";
+import WhyPublishLossesSection  from "@/components/track-record/WhyPublishLossesSection.astro";
+import MethodologyLink          from "@/components/track-record/MethodologyLink.astro";
+import TrackRecordFAQ           from "@/components/track-record/TrackRecordFAQ.astro";
+import TrackRecordFinalCTA      from "@/components/track-record/TrackRecordFinalCTA.astro";
+import { loadTrackRecordContent, loadTrackRecordSummary, filterByRange } from "@/lib/track-record-page";
+
+import MethodologyHero          from "@/components/methodology/MethodologyHero.astro";
+import MethodologyTOC           from "@/components/methodology/MethodologyTOC.astro";
+import ThreePillarsSection      from "@/components/methodology/ThreePillarsSection.astro";
+import EloSection               from "@/components/methodology/EloSection.astro";
+import PoissonSection           from "@/components/methodology/PoissonSection.astro";
+import MachineLearningSection   from "@/components/methodology/MachineLearningSection.astro";
+import DataSourcesSection       from "@/components/methodology/DataSourcesSection.astro";
+import LockingMechanism         from "@/components/methodology/LockingMechanism.astro";
+import WhatWeDontDo             from "@/components/methodology/WhatWeDontDo.astro";
+import LimitationsSection       from "@/components/methodology/LimitationsSection.astro";
+import MethodologyFAQ           from "@/components/methodology/MethodologyFAQ.astro";
+import MethodologyFinalCTA      from "@/components/methodology/MethodologyFinalCTA.astro";
+import { loadMethodologyContent } from "@/lib/methodology-page";
+
+export function getStaticPaths() {
+  // Astro hoists `getStaticPaths` to a separate scope, so this list
+  // must live inside the function. Mirror it in `SUPPORTED_CANONICAL`
+  // below for runtime branching.
+  const supported = ["predictions", "methodology", "track-record"];
+  const out: Array<{ params: { locale: string; slug: string } }> = [];
+  for (const locale of locales) {
+    if (locale === defaultLocale) continue;
+    for (const canonical of supported) {
+      const localizedSlug = folderSlugs[canonical]?.[locale];
+      if (!localizedSlug) continue;
+      out.push({ params: { locale, slug: localizedSlug } });
+    }
+  }
+  return out;
+}
+
+const { locale: paramLocale, slug } = Astro.params;
+const locale: Locale = isLocale(paramLocale) ? paramLocale : defaultLocale;
+const canonical = getCanonicalSlug(String(slug ?? ""), locale);
+
+const SITE = "https://betsplug.com";
+
+// ── Predictions hub ──────────────────────────────────────────
+const hubContent = canonical === "predictions" ? await loadHubContent(locale) : null;
+const hubData    = canonical === "predictions" ? await loadHubData(Astro.site) : null;
+const formattedDate = canonical === "predictions" ? formatTodayForLocale(locale) : "";
+const dateParam = (Astro.url.searchParams.get("date") ?? "today").toLowerCase();
+const active: "today" | "tomorrow" | "week" =
+  dateParam === "tomorrow" ? "tomorrow" : dateParam === "week" ? "week" : "today";
+
+const hubCollectionSchema = hubContent && hubData ? {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  url: `${SITE}/${locale}/${slug}`,
+  inLanguage: locale,
+  name: hubContent.meta.title,
+  description: hubContent.meta.description,
+} : null;
+
+const hubItemListSchema = hubContent && hubData ? {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: hubData.today.predictions.slice(0, 5).map((p, idx) => ({
+    "@type": "ListItem",
+    position: idx + 1,
+    item: {
+      "@type": "SportsEvent",
+      name: `${p.homeTeam.name} vs ${p.awayTeam.name}`,
+      sport: "Football",
+      startDate: p.lockedAt,
+      homeTeam: { "@type": "SportsTeam", name: p.homeTeam.name },
+      awayTeam: { "@type": "SportsTeam", name: p.awayTeam.name },
+      url: p.matchUrl,
+    },
+  })),
+} : null;
+
+const hubBreadcrumbSchema = hubContent ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home",        item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Predictions", item: `${SITE}/${locale}/${slug}` },
+  ],
+} : null;
+
+const hubFaqSchema = hubContent ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  inLanguage: locale,
+  mainEntity: hubContent.faq.questions.map((q) => ({
+    "@type": "Question",
+    name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+} : null;
+
+// ── Methodology ─────────────────────────────────────────────
+const methodologyContent = canonical === "methodology" ? await loadMethodologyContent(locale) : null;
+
+const methodologyTechSchema = methodologyContent ? {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: methodologyContent.hero.h1,
+  description: methodologyContent.meta.description,
+  author: { "@type": "Organization", name: "BetsPlug Engineering Team" },
+  datePublished: "2026-04-01",
+  dateModified: methodologyContent._meta.lastUpdated,
+  articleSection: "Methodology",
+  inLanguage: locale,
+  url: `${SITE}/${locale}/${slug}`,
+} : null;
+const methodologyBreadcrumbSchema = methodologyContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Methodology", item: `${SITE}/${locale}/${slug}` },
+  ],
+} : null;
+const methodologyFaqSchema = methodologyContent ? {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: methodologyContent.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+} : null;
+
+// ── Track Record ────────────────────────────────────────────
+const trContent = canonical === "track-record" ? await loadTrackRecordContent(locale) : null;
+const trSummary = canonical === "track-record" ? await loadTrackRecordSummary(Astro.site) : null;
+const trRangeParam = Astro.url.searchParams.get("range");
+const trRange: 30 | 90 | "all" = trRangeParam === "30" ? 30 : trRangeParam === "all" ? "all" : 90;
+const trLeagueParam = Astro.url.searchParams.get("league");
+const trLeague = trLeagueParam && trLeagueParam.length > 0 ? trLeagueParam : null;
+const trFilteredSummary = trSummary ? filterByRange(trSummary, trRange) : null;
+const trTopLeagues = ["Premier League", "La Liga", "Bundesliga"];
+const trBaseHref = canonical === "track-record" ? `/${locale}/${slug}` : "";
+
+const trBreadcrumbSchema = trContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Track Record", item: `${SITE}/${locale}/${slug}` },
+  ],
+} : null;
+const trDatasetSchema = trSummary ? {
+  "@context": "https://schema.org", "@type": "Dataset",
+  name: "BetsPlug Prediction Track Record",
+  description: "Public record of all AI football predictions made by BetsPlug.",
+  creator: { "@type": "Organization", name: "BetsPlug" },
+  url: `${SITE}/${locale}/${slug}`,
+  inLanguage: locale,
+  variableMeasured: ["prediction", "result", "lockedAt", "league", "confidence"],
+  isAccessibleForFree: true,
+} : null;
+const trFaqSchema = trContent ? {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: trContent.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+} : null;
+---
+
+{canonical === "predictions" && hubContent && hubData && (
+  <MarketingLayout
+    title={hubContent.meta.title}
+    description={hubContent.meta.description}
+    ogImage={hubContent.meta.ogImage}
+    canonicalPath="/predictions"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hubCollectionSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hubItemListSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hubBreadcrumbSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hubFaqSchema)} />
+    </Fragment>
+
+    <PredictionsHero
+      locale={locale}
+      content={hubContent.hero}
+      formattedDate={formattedDate}
+      lastUpdated={hubData.lastUpdated}
+    />
+
+    <Section surface="dark" spacing="lg" ariaLabelledby="predictions-cards-h2">
+      <Container size="xl">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <h2 id="predictions-cards-h2" class="sr-only">Today's predictions</h2>
+          <DateFilterTabs locale={locale} content={hubContent.filter} active={active} />
+          <p class="text-sm text-white-muted">
+            {hubData.today.freeCount}/{hubData.today.totalCount}
+          </p>
+        </div>
+
+        <div class="mt-8">
+          <HubCardsGrid
+            locale={locale}
+            content={hubContent}
+            active={active}
+            todayPredictions={hubData.today.predictions}
+            tomorrowTeaser={hubData.tomorrow.teaser}
+            tomorrowCount={hubData.tomorrow.totalCount}
+            weekDailyCounts={hubData.week.dailyCounts}
+          />
+        </div>
+      </Container>
+    </Section>
+
+    <PaywallTease locale={locale} content={hubContent.paywall} totalCount={hubData.today.totalCount} />
+
+    <LeagueGrid locale={locale} content={hubContent.leagueGrid} dailyCounts={dailyCountsByLeague()} />
+
+    <PredictionsMethodologyPreview locale={locale} content={hubContent.methodology} />
+
+    <PredictionsFAQ locale={locale} content={hubContent.faq} />
+
+    <PredictionsFinalCTA locale={locale} content={hubContent.finalCta} />
+  </MarketingLayout>
+)}
+
+{canonical === "methodology" && methodologyContent && (
+  <MarketingLayout
+    title={methodologyContent.meta.title}
+    description={methodologyContent.meta.description}
+    ogImage={methodologyContent.meta.ogImage}
+    canonicalPath="/methodology"
+  >
+    <Fragment slot="head">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(methodologyTechSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(methodologyBreadcrumbSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(methodologyFaqSchema)} />
+    </Fragment>
+
+    <MethodologyHero locale={locale} content={methodologyContent.hero} />
+
+    <Section surface="light" spacing="lg">
+      <Container size="xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+          <div class="lg:col-span-3">
+            <MethodologyTOC content={methodologyContent.toc} />
+          </div>
+          <article class="lg:col-span-9 max-w-3xl">
+            <ThreePillarsSection      content={methodologyContent.pillars} />
+            <EloSection               content={methodologyContent.elo} />
+            <PoissonSection           content={methodologyContent.poisson} />
+            <MachineLearningSection   content={methodologyContent.ml} />
+            <DataSourcesSection       content={methodologyContent.data} />
+            <LockingMechanism         content={methodologyContent.locking} />
+            <WhatWeDontDo             content={methodologyContent.whatWeDontDo} />
+            <LimitationsSection       content={methodologyContent.limitations} />
+            <MethodologyFAQ           locale={locale} content={methodologyContent.faq} />
+          </article>
+        </div>
+      </Container>
+    </Section>
+
+    <MethodologyFinalCTA locale={locale} content={methodologyContent.finalCta} />
+  </MarketingLayout>
+)}
+
+{canonical === "track-record" && trContent && (
+  <MarketingLayout
+    title={trContent.meta.title}
+    description={trContent.meta.description}
+    ogImage={trContent.meta.ogImage}
+    canonicalPath="/track-record"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(trBreadcrumbSchema)} />
+      {trDatasetSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(trDatasetSchema)} />}
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(trFaqSchema)} />
+    </Fragment>
+
+    <TrackRecordHero locale={locale} content={trContent.hero} />
+
+    <Section surface="light" spacing="lg">
+      <Container size="xl">
+        <header class="mb-8 text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+            {trContent.widget.h2}
+          </h2>
+          <p class="mt-3 text-base lg:text-lg leading-relaxed text-charcoal-700 max-w-2xl mx-auto">
+            {trContent.widget.subhead}
+          </p>
+        </header>
+
+        <TrackRecordWidget
+          content={trContent.widget}
+          summary={trFilteredSummary}
+          range={trRange}
+          league={trLeague}
+          topLeagues={trTopLeagues}
+          baseHref={trBaseHref}
+        />
+      </Container>
+    </Section>
+
+    <WhyPublishLossesSection
+      content={trContent.whyPublishLosses}
+      totalEverPublished={trSummary?.totalCount ?? 0}
+      daysOfTracking={trSummary?.daysOfTracking ?? 0}
+      lastAddedAt={trSummary?.lastAddedAt ?? new Date().toISOString()}
+    />
+
+    <MethodologyLink locale={locale} content={trContent.methodologyLink} />
+
+    <TrackRecordFAQ content={trContent.faq} />
+
+    <TrackRecordFinalCTA locale={locale} content={trContent.finalCta} />
+  </MarketingLayout>
+)}

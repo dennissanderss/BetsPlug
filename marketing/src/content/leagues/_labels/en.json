@@ -1,0 +1,52 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "cards": {
+    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
+    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "viewPricing": "View Pricing"
+  },
+  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "hero": {
+    "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
+    "trustStripUpdated": "Updated every minute",
+    "trustStripLocked": "Locked before kickoff",
+    "ctaPrimaryFreeLabel": "View Free Predictions",
+    "ctaPrimaryGatedLabel": "Unlock {league} Predictions",
+    "ctaSecondaryLabel": "How it works",
+    "statsTeams": "Teams",
+    "statsMatchweek": "Current matchweek",
+    "statsThisWeek": "Predictions this week"
+  },
+  "methodologyPillars": [
+    { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
+    { "icon": "ml", "label": "Machine learning trained on {league} data" },
+    { "icon": "lock", "label": "Locked & timestamped" }
+  ],
+  "topTeams": {
+    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+  },
+  "context": {
+    "statsPanel": {
+      "teamsLabel": "Teams",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated"
+    }
+  },
+  "cardsSection": {
+    "moreTodayPaid": "{count} more predictions today — paid only",
+    "fixturesOnlyHeading": "Upcoming Fixtures",
+    "fixturesEmpty": "No upcoming fixtures in this window."
+  },
+  "ctaLabels": {
+    "readFullMethodology": "Read full methodology",
+    "allFaqs": "All FAQs",
+    "viewPlans": "View Plans",
+    "viewPricing": "View Pricing",
+    "getFreeAccount": "Get Free Account",
+    "tryFree": "Try Free"
+  }
+}

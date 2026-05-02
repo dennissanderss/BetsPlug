@@ -1,0 +1,144 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Methodology: How BetsPlug AI Predictions Work | BetsPlug",
+    "description": "Detailed methodology behind BetsPlug AI football predictions. Elo ratings, Poisson goal models, machine learning. Open, reproducible, locked before kickoff.",
+    "ogImage": "/og-images/methodology-en.jpg"
+  },
+  "hero": {
+    "h1": "The Methodology Behind BetsPlug Predictions",
+    "subheadline": "How we combine Elo ratings, Poisson goal models and machine learning into a single prediction engine. No secret algorithm. No editorial picking. Just mathematics, transparently applied.",
+    "trustStrip": ["Open methodology", "Reproducible logic", "Locked predictions"],
+    "ctaPrimary": { "label": "Get Predictions", "canonical": "pricing" },
+    "ctaSecondary": { "label": "View Track Record", "canonical": "track-record" }
+  },
+  "toc": {
+    "h2": "On This Page",
+    "items": [
+      { "id": "pillars",       "label": "The three pillars" },
+      { "id": "elo",           "label": "Elo rating system" },
+      { "id": "poisson",       "label": "Poisson goal models" },
+      { "id": "ml",            "label": "Machine learning layer" },
+      { "id": "data",          "label": "Data sources & validation" },
+      { "id": "locking",       "label": "The locking mechanism" },
+      { "id": "what-we-dont-do", "label": "What we don't do" },
+      { "id": "limitations",   "label": "Limitations & honesty" }
+    ]
+  },
+  "pillars": {
+    "h2": "The Three Pillars of Our Engine",
+    "intro": "BetsPlug doesn't rely on a single statistical method. Instead, we combine three established approaches — each strong in different aspects of football prediction — and let machine learning weight their outputs based on what works for each specific match context.",
+    "items": [
+      { "tagline": "Team strength, dynamically updated", "oneLiner": "Each team has a numerical strength rating that adjusts after every match based on result and opponent quality.", "icon": "elo" },
+      { "tagline": "Goal probability mathematics", "oneLiner": "Statistical distribution that calculates the likelihood of specific score outcomes.", "icon": "poisson" },
+      { "tagline": "Pattern recognition across thousands of matches", "oneLiner": "Algorithms that detect non-obvious correlations between match variables and outcomes.", "icon": "ml" }
+    ]
+  },
+  "elo": {
+    "h2": "Elo Rating System",
+    "paragraphs": [
+      "The Elo system was originally developed by Arpad Elo for chess rankings in the 1950s. We adapted it for football, where teams replace players and match results replace game outcomes. Each team carries a single numerical rating — typically between 1200 and 2200 for top-tier clubs — that compresses thousands of historical match results into one current-strength estimate.",
+      "When two teams meet, the Elo system uses their current ratings to calculate expected outcomes. The expectation E for the home team is a logistic function of the rating difference plus a home-advantage term. After the match, ratings are adjusted by a K-factor times the difference between actual and expected result. Better-than-expected performances raise the rating; worse-than-expected lower it. Over thousands of matches, the rating converges on a stable estimate of true strength.",
+      "Football Elo differs from chess Elo in three key ways. We account for goal difference (a 4-0 win moves the rating more than a 1-0), home advantage is built into expected outcomes (typically +60 to +100 Elo points depending on competition), and we apply a match-importance multiplier (Champions League knockouts move ratings more than friendlies).",
+      "Elo's strength is recency-weighted accuracy. A team in great current form will have a higher rating than their historical average suggests, because recent matches have outsized influence on the rating's trajectory. This makes Elo a strong baseline for predicting match outcomes — but on its own, it ignores goal-scoring patterns and contextual variables. That's why we combine it with Poisson and machine learning."
+    ],
+    "formulaCaption": "Elo update formula: new rating equals old rating plus K-factor times the difference between actual score and expected score.",
+    "exampleBoxLabel": "Real-world example",
+    "exampleBoxBody": "When Manchester City lost 2-1 to a mid-table team in 2024, their Elo rating dropped by 18 points — reflecting both the unexpected loss and the goal margin. The mid-table opponent's rating gained the same 18 points. Over the next ten matches, City's rating recovered as their results normalized."
+  },
+  "poisson": {
+    "h2": "Poisson Goal Models",
+    "paragraphs": [
+      "The Poisson distribution is a mathematical formula that calculates the probability of a discrete event occurring within a fixed interval, given a known average rate. For football, the 'event' is a goal and the 'interval' is 90 minutes. The parameter lambda represents the expected number of goals — derived from team attack/defense strengths, home advantage, and recent form.",
+      "We calculate two Poisson rates per match: the home team's expected goals (lambda H) and the away team's expected goals (lambda A). Both rates feed into a probability matrix for every possible score from 0-0 up to 6-6. Summing relevant cells gives us probabilities for any market: 1X2 (match result), Over/Under goal totals, Both Teams to Score, exact-score, and half-time/full-time correlations.",
+      "The Poisson layer outputs probabilities calibrated against bookmaker odds and historical data. For a Bayern vs Frankfurt match, our Poisson model might calculate Bayern's expected goals at 2.4 and Frankfurt's at 0.9. From these, we derive: Over 2.5 around 62%, Both Teams to Score around 58%, most likely score 2-1 at roughly 12%.",
+      "Pure Poisson tends to underestimate draws and high-scoring matches due to its independence assumption — in reality, goal events are weakly correlated. We apply the Dixon-Coles adjustment, a refinement that adds a tau parameter to correct for low-score correlation, and blend it with our ML layer for further calibration. The result is a goal-distribution model that performs significantly better than naive Poisson on real match outcomes."
+    ],
+    "formulaCaption": "Poisson probability mass function: probability of k goals given expected rate lambda.",
+    "exampleBoxLabel": "Real-world example",
+    "exampleBoxBody": "For a Bayern vs Frankfurt match, our Poisson model might calculate Bayern's expected goals at 2.4 and Frankfurt's at 0.9. From these we derive: Over 2.5 ~62%, BTTS yes ~58%, most likely score 2-1 (~12%)."
+  },
+  "ml": {
+    "h2": "Machine Learning Layer",
+    "paragraphs": [
+      "Elo and Poisson are powerful but mechanical. They capture team strength and goal probability well, but miss subtler signals — a team's tactical fit against high-pressing opponents, the predictive value of a key midfielder's absence, or the way certain referees affect home advantage. Machine learning fills that gap by detecting patterns across thousands of historical matches that humans (and simpler statistical models) miss.",
+      "Our ML layer ingests 40+ variables per match: recent form (last 5 / 10 / 20 matches with weighted decay), home/away splits, head-to-head history, expected goals trends (own and conceded), possession statistics, lineup strength based on individual player ratings, days of rest before the match, weather conditions where relevant (wind, rain, heat), referee tendencies (cards-per-game, average penalty rate), and match stakes (top-four race, relegation battle, midweek European fixture).",
+      "The ML layer doesn't replace Elo or Poisson — it weights their outputs based on context. For a low-stakes mid-season fixture between two stable, well-documented teams, the ML layer gives most of the weight to Elo + Poisson. For a high-stakes fixture with major lineup disruptions or unusual context, the ML layer reweighs based on similar historical situations.",
+      "Our model is trained on multiple seasons of historical match data — over 100,000 matches across covered leagues. We use a holdout methodology: the model never sees the matches it's tested on during training, and we use walk-forward validation (training on data up to season N, testing on season N+1) to ensure we're not overfitting to historical noise.",
+      "After every match concludes, the result feeds back into the model. Predictions that succeeded are reinforced; predictions that failed flag patterns for re-evaluation. Major retraining runs weekly, with Elo updates after every match and Poisson parameter adjustments based on rolling form windows. This means the engine you're using today is genuinely different from the engine of three months ago — continuously calibrated against fresh data."
+    ],
+    "diagramCaption": "Simplified neural network: 40+ input variables flow through hidden layers to a weighted prediction output."
+  },
+  "data": {
+    "h2": "Data Sources & Validation",
+    "paragraphs": [
+      "We aggregate match and team data from licensed sports data providers — the same sources used by major sports media organizations and bookmakers. Multiple providers feed into our pipeline so we can cross-reference figures and detect anomalies before they reach the prediction engine.",
+      "Before any data enters our prediction engine, it passes through a validation pipeline: format normalization (standardizing team names, date formats, score notations), anomaly detection (flagging implausible values like '15-0' results or impossible kickoff times), cross-referencing with multiple sources (when sources disagree, we flag for human review rather than picking arbitrarily), and human review of flagged exceptions before they go live.",
+      "Match data updates in near-real-time during games. Team and player statistics update post-match. Our prediction engine recalculates continuously as new data arrives — this is what powers the 'updated every minute' indicator on /predictions. Predictions stay locked once published; only the underlying engine (for future matches) reflects the new data."
+    ],
+    "panelTitle": "Data sources",
+    "panelItems": [
+      "Match results & live data (licensed providers)",
+      "Historical match archives (multi-season database)",
+      "Lineup & injury data (verified pre-match)",
+      "Weather & venue conditions (third-party APIs)",
+      "Player ratings & performance metrics (licensed providers)"
+    ]
+  },
+  "locking": {
+    "h2": "The Locking Mechanism",
+    "paragraphs": [
+      "Every prediction we publish has a lock timestamp — the exact moment it was generated and committed to our public track record. After this timestamp, the prediction cannot be edited, deleted, or replaced. This isn't a policy we promise to follow; it's an architectural constraint of how the system stores predictions. There is no admin button to retroactively edit a prediction.",
+      "Most prediction sites have an integrity problem: they can quietly remove losing predictions or 'update' them after the fact, making any accuracy claim unverifiable. We've eliminated this possibility by design. Locked predictions are append-only — the database accepts new predictions but rejects any modification to existing ones. The same architecture powers our public track record.",
+      "Every prediction in our public track record includes its lock timestamp. You can verify that any specific prediction was published before the actual match kickoff. Combined with the result added post-match, this gives you everything you need to evaluate accuracy yourself: the prediction text, the confidence percentage, the lock time, the kickoff time, and the actual outcome."
+    ],
+    "timelineCaption": "Prediction lifecycle: generated 24h before kickoff, locked at 2h before, immutable forever after.",
+    "timelineSteps": [
+      { "label": "24h before kickoff", "detail": "Prediction generated (subscriber access)" },
+      { "label": "2h before kickoff",  "detail": "Public lock + free user access" },
+      { "label": "Kickoff",            "detail": "Match begins" },
+      { "label": "Post-match",         "detail": "Result added to track record" },
+      { "label": "Forever after",      "detail": "Prediction immutable" }
+    ]
+  },
+  "whatWeDontDo": {
+    "h2": "What We Don't Do",
+    "intro": "Transparency works in both directions. Here are things some prediction services do that we deliberately don't:",
+    "items": [
+      { "title": "We don't sell or claim 'fixed matches'", "detail": "We don't have inside information. Anyone claiming to sell fixed matches is committing fraud." },
+      { "title": "We don't edit predictions after publication", "detail": "Once locked, predictions cannot be modified — architecturally, not by policy." },
+      { "title": "We don't hide losses from our track record", "detail": "Every prediction is published — wins, losses, and pushes alike." },
+      { "title": "We don't promise specific accuracy percentages", "detail": "AI predictions have probabilistic accuracy that varies by market and competition." },
+      { "title": "We don't use editorial bias", "detail": "Predictions are generated by the engine without human override." },
+      { "title": "We don't operate as a bookmaker", "detail": "We don't accept bets, hold money, or facilitate gambling." },
+      { "title": "We don't share user data with bookmakers", "detail": "Your account information stays within BetsPlug." }
+    ]
+  },
+  "limitations": {
+    "h2": "Limitations & Honesty",
+    "paragraphs": [
+      "AI predictions are not magic. They're statistically informed probabilities. A 78% confidence prediction is still 22% likely to be wrong. Confidence scores are calibrated — when we say 78%, we mean roughly 78 of 100 such predictions resolve in our favor over the long run, not that any single prediction is guaranteed.",
+      "Our predictions perform best in: high-volume, well-documented leagues (Premier League, La Liga, Bundesliga have the densest data); mid-range markets where statistical regression dominates (1X2 and Over/Under tend to be more predictable than exact-score markets); and matches where teams have stable lineups (rotation-heavy fixtures introduce more variance).",
+      "Our predictions are less reliable in: low-data leagues where our training set is thinner; unusual fixtures (cup ties, neutral-venue games, post-international-break weeks); matches with major lineup disruptions where our pre-match lineup data is uncertain; and extreme low-probability events (large underdogs winning, very high-scoring scorelines) where the underlying probabilities are inherently noisy.",
+      "We don't claim to predict football perfectly. We claim to predict it transparently and methodically. Use our predictions as one input in your own analysis — alongside your own observations, the latest team news, and your own risk tolerance. The track record is there to help you calibrate your own trust in the model over time."
+    ]
+  },
+  "faq": {
+    "h2": "Methodology FAQ",
+    "questions": [
+      { "q": "Can I see the actual model code?", "a": "We don't publish source code (it's our core IP), but we publish detailed methodology — what models we use, what variables we process, what data sources we use, and how predictions are locked. Anyone with statistics knowledge can replicate the underlying approach." },
+      { "q": "How do you handle unexpected events like red cards or injuries during a match?", "a": "Our predictions are generated and locked before kickoff, so they don't update during a match. In-game events affecting accuracy is part of football's inherent uncertainty — and reflected honestly in our public track record when it costs us a prediction." },
+      { "q": "Why use multiple models instead of one perfect model?", "a": "No single statistical method captures all football dynamics. Elo handles strength, Poisson handles goal distributions, ML handles context. Combining them with weighted integration gives more robust predictions than any one method alone." },
+      { "q": "How accurate are your predictions compared to bookmaker odds?", "a": "We don't publish comparative accuracy versus bookmaker odds — that comparison is too sensitive to which markets and time periods you select. View our public track record for raw prediction performance per league and per market." },
+      { "q": "Do you account for player-specific data?", "a": "Yes, but at the team level. We factor in lineup strength based on individual player ratings, key player presence/absence (using post-confirmed lineup data), and aggregate form. We don't predict player-prop markets." },
+      { "q": "How often is the model retrained?", "a": "Continuously, with major retraining cycles after each match week. Elo ratings update after every match. Poisson parameters adjust based on rolling form windows. The ML layer is retrained weekly on the previous week's data plus the rolling 100k-match training set." }
+    ],
+    "cta": { "label": "All FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "See the Methodology in Action",
+    "body": "Now that you understand how our predictions work, see them applied across 30+ leagues.",
+    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Compare Plans", "canonical": "pricing" }
+  }
+}

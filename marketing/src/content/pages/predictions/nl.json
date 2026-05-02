@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for nl."
+  },
+  "meta": {
+    "title": "AI Voetbalvoorspellingen Vandaag - Alle Competities | BetsPlug",
+    "description": "Dagelijkse AI-voetbalvoorspellingen voor 30+ competities. Gratis picks vandaag, vergrendeld vóór de aftrap. Publiek track record.",
+    "ogImage": "/og-images/predictions-nl.jpg"
+  },
+  "hero": {
+    "h1Template": "AI Voetbalvoorspellingen voor {date}",
+    "subheadline": "Dagelijkse voorspellingen voor 30+ competities, gegenereerd door onze AI-engine met Elo, Poisson en machine learning. Vergrendeld vóór de aftrap.",
+    "trustStrip": ["Live updates", "Vergrendelde voorspellingen", "Publiek track record"],
+    "liveLabel": "Bijgewerkt",
+    "liveSecondsAgo": "{seconds}s geleden",
+    "ctaPrimary": { "label": "Onbeperkte Voorspellingen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Hoe voorspellingen werken", "canonical": "methodology" },
+    "miniRecord": {
+      "title": "Laatste 30 dagen",
+      "subtitle": "Alle voorspellingen gepubliceerd — publiek register",
+      "legendWin": "Winst",
+      "legendLoss": "Verlies"
+    }
+  },
+  "filter": {
+    "today": "Vandaag",
+    "tomorrow": "Morgen",
+    "thisWeek": "Deze Week",
+    "todayActiveAria": "Voorspellingen van vandaag tonen"
+  },
+  "cards": {
+    "locked": "Vergrendeld",
+    "freePick": "Gratis pick",
+    "unlock": "Voorspelling ontgrendelen",
+    "subscribeToView": "Abonneer om voorspelling te zien",
+    "viewAnalysis": "Bekijk wedstrijdanalyse",
+    "confidence": "Vertrouwen",
+    "lockedBeforeKickoff": "Vergrendeld vóór de aftrap",
+    "viewPricing": "Bekijk Prijzen"
+  },
+  "tomorrowEmpty": {
+    "teaserTitle": "Ontgrendel Voorspellingen van Morgen",
+    "teaserBody": "{count} meer voorspellingen morgen — alleen voor leden",
+    "cta": { "label": "Bekijk Prijzen", "canonical": "pricing" }
+  },
+  "weekTab": {
+    "h3": "Overzicht Deze Week",
+    "body": "Leden zien elke voorspelling voor de komende 7 dagen. Gratis gebruikers zien alleen vandaag.",
+    "weekdayLabels": ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"],
+    "cta": { "label": "Krijg de hele week vooraf", "canonical": "pricing" }
+  },
+  "paywall": {
+    "h2Template": "Je Ziet 5 van {total} Voorspellingen Vandaag",
+    "body": "Leden zien elke voorspelling voor 30+ competities, volledige wedstrijdanalyse, en krijgen ze 24 uur vóór de aftrap.",
+    "bullets": [
+      "Onbeperkte dagelijkse voorspellingen (vs 5 gratis)",
+      "Alle 30+ competities (vs alleen top 3)",
+      "Volledige wedstrijdanalyse: xG, H2H, opstellingen, redenering",
+      "Voorspellingen 24u vooraf (vs 2u vóór de aftrap)",
+      "Telegram-meldingen voor high-confidence picks"
+    ],
+    "ctaPrimary": { "label": "Bekijk Plannen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Vergelijk gratis vs betaald", "canonical": "free-vs-paid" }
+  },
+  "leagueGrid": {
+    "h2": "Voorspellingen per Competitie",
+    "cardCta": "Bekijk voorspellingen",
+    "todayCountTemplate": "{count} voorspellingen vandaag",
+    "featuredBadge": "Uitgelicht"
+  },
+  "methodology": {
+    "h2": "Hoe Deze Voorspellingen Worden Gemaakt",
+    "body": [
+      "Elke voorspelling op deze pagina is gegenereerd door onze AI-engine, niet door redacteurs of tipsters. De engine combineert Elo-ratings (teamsterkte), Poisson-modellen (doelpunt-waarschijnlijkheid) en machine learning (patroonherkenning) om elke wedstrijd te beoordelen op 40+ variabelen.",
+      "Voorspellingen worden vergrendeld met een publiek tijdstempel vóór de aftrap. We publiceren zowel winst als verlies — verifieerbaar in ons publieke track record."
+    ],
+    "pillars": [
+      { "icon": "calc", "label": "Wiskundige modellen (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning" },
+      { "icon": "lock", "label": "Vergrendeld & getimestamped" }
+    ],
+    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Voorspellingen FAQ",
+    "questions": [
+      { "q": "Hoe vaak worden voorspellingen bijgewerkt?", "a": "Voorspellingen worden continu gegenereerd. De hub-pagina vernieuwt data elke minuut. Eenmaal vergrendeld kan een voorspelling niet worden aangepast." },
+      { "q": "Waarom maar 5 gratis voorspellingen per dag?", "a": "Gratis voorspellingen zijn een sample van onze dagelijkse output. Leden ontvangen alle dagelijkse voorspellingen voor 30+ competities, plus volledige wedstrijdanalyse." },
+      { "q": "Kan ik voorspellingen krijgen voor een specifieke wedstrijd?", "a": "Leden kunnen alle voorspellingen voor elke competitie of wedstrijd bekijken. Gratis gebruikers zien een gecureerde selectie uit topcompetities." },
+      { "q": "Wat betekent het 'vertrouwenspercentage'?", "a": "Vertrouwen weerspiegelt de zekerheid van ons model over de voorspelde uitkomst. 78% vertrouwen op 'Meer dan 2,5 doelpunten' betekent dat het model die uitkomst op 78% kans schat." },
+      { "q": "Waarom worden voorspellingen vergrendeld vóór de aftrap?", "a": "Voorspellingen vergrendelen met een publiek tijdstempel zorgt dat we ze niet achteraf kunnen aanpassen. Dit is de kern van onze transparantiegarantie." },
+      { "q": "Hebben gratis voorspellingen een lagere nauwkeurigheid dan betaalde?", "a": "Nee. Gratis voorspellingen gebruiken dezelfde engine en methodologie als betaalde. Het verschil is volume, diepte, timing en competitie-dekking." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "Wil Je Alle Voorspellingen?",
+    "body": "5 gratis per dag. Onbeperkt met elk betaald abonnement.",
+    "ctaPrimary": { "label": "Bekijk Plannen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Gratis Account", "href": "https://app.betsplug.com/register?source=predictions_hub_final" }
+  }
+}

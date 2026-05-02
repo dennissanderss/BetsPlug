@@ -1,0 +1,144 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Methodologie: Hoe BetsPlug AI-voorspellingen Werken | BetsPlug",
+    "description": "Gedetailleerde methodologie achter BetsPlug AI-voetbalvoorspellingen. Elo-ratings, Poisson-doelpuntmodellen, machine learning. Open, reproduceerbaar, vergrendeld vóór de aftrap.",
+    "ogImage": "/og-images/methodology-nl.jpg"
+  },
+  "hero": {
+    "h1": "De Methodologie Achter BetsPlug Voorspellingen",
+    "subheadline": "Hoe we Elo-ratings, Poisson-doelpuntmodellen en machine learning combineren tot één voorspellingsengine. Geen geheim algoritme. Geen redactionele keuzes. Alleen wiskunde, transparant toegepast.",
+    "trustStrip": ["Open methodologie", "Reproduceerbare logica", "Vergrendelde voorspellingen"],
+    "ctaPrimary": { "label": "Krijg Voorspellingen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Bekijk Track Record", "canonical": "track-record" }
+  },
+  "toc": {
+    "h2": "Op Deze Pagina",
+    "items": [
+      { "id": "pillars", "label": "De drie pijlers" },
+      { "id": "elo", "label": "Elo-rating systeem" },
+      { "id": "poisson", "label": "Poisson-doelpuntmodellen" },
+      { "id": "ml", "label": "Machine learning laag" },
+      { "id": "data", "label": "Databronnen & validatie" },
+      { "id": "locking", "label": "Het vergrendel-mechanisme" },
+      { "id": "what-we-dont-do", "label": "Wat we niet doen" },
+      { "id": "limitations", "label": "Beperkingen & eerlijkheid" }
+    ]
+  },
+  "pillars": {
+    "h2": "De Drie Pijlers van Onze Engine",
+    "intro": "BetsPlug vertrouwt niet op één enkele statistische methode. In plaats daarvan combineren we drie gevestigde benaderingen — elk sterk in verschillende aspecten van voetbalvoorspelling — en laten machine learning hun output wegen op basis van wat werkt voor elke specifieke wedstrijdcontext.",
+    "items": [
+      { "tagline": "Teamsterkte, dynamisch bijgewerkt", "oneLiner": "Elk team heeft een numerieke sterkte-rating die zich na elke wedstrijd aanpast op basis van resultaat en kwaliteit van de tegenstander.", "icon": "elo" },
+      { "tagline": "Wiskunde van doelpunt-waarschijnlijkheid", "oneLiner": "Statistische verdeling die de waarschijnlijkheid van specifieke score-uitkomsten berekent.", "icon": "poisson" },
+      { "tagline": "Patroonherkenning over duizenden wedstrijden", "oneLiner": "Algoritmes die niet voor de hand liggende correlaties tussen wedstrijdvariabelen en uitkomsten detecteren.", "icon": "ml" }
+    ]
+  },
+  "elo": {
+    "h2": "Elo-rating Systeem",
+    "paragraphs": [
+      "Het Elo-systeem werd oorspronkelijk ontwikkeld door Arpad Elo voor schaakranglijsten in de jaren 1950. We hebben het aangepast voor voetbal, waar teams spelers vervangen en wedstrijduitslagen partijen vervangen. Elk team draagt één numerieke rating — typisch tussen 1200 en 2200 voor topteams — die duizenden historische resultaten samenperst tot één huidige sterkte-schatting.",
+      "Wanneer twee teams elkaar treffen, gebruikt het Elo-systeem hun huidige ratings om verwachte uitkomsten te berekenen. De verwachting E voor het thuisteam is een logistische functie van het rating-verschil plus een thuisvoordeel-term. Na de wedstrijd worden ratings aangepast met een K-factor maal het verschil tussen werkelijk en verwacht resultaat. Beter-dan-verwachte prestaties verhogen de rating; slechter-dan-verwachte verlagen deze. Over duizenden wedstrijden convergeert de rating naar een stabiele schatting van werkelijke sterkte.",
+      "Voetbal-Elo verschilt op drie belangrijke manieren van schaak-Elo. We houden rekening met doelsaldo (een 4-0 winst beweegt de rating meer dan een 1-0), thuisvoordeel zit ingebouwd in verwachte uitkomsten (typisch +60 tot +100 Elo-punten afhankelijk van competitie), en we passen een wedstrijd-belang multiplicator toe.",
+      "De kracht van Elo is recentheid-gewogen nauwkeurigheid. Een team in goede vorm heeft een hogere rating dan hun historisch gemiddelde suggereert, omdat recente wedstrijden buitenproportionele invloed hebben op de trajectorie. Dit maakt Elo een sterke baseline — maar op zichzelf negeert het scoringspatronen en contextuele variabelen. Daarom combineren we het met Poisson en machine learning."
+    ],
+    "formulaCaption": "Elo-update formule: nieuwe rating is oude rating plus K-factor maal het verschil tussen werkelijke score en verwachte score.",
+    "exampleBoxLabel": "Voorbeeld uit de praktijk",
+    "exampleBoxBody": "Toen Manchester City in 2024 met 2-1 verloor van een middenmoter, daalde hun Elo-rating met 18 punten — wat zowel het onverwachte verlies als de doelmarge weerspiegelt. Over de volgende tien wedstrijden herstelde de rating zich naarmate de resultaten normaliseerden."
+  },
+  "poisson": {
+    "h2": "Poisson-doelpuntmodellen",
+    "paragraphs": [
+      "De Poisson-verdeling is een wiskundige formule die de waarschijnlijkheid berekent van een discreet evenement binnen een vast interval, gegeven een bekend gemiddeld tempo. Voor voetbal is het 'evenement' een doelpunt en het 'interval' 90 minuten. De parameter lambda vertegenwoordigt het verwachte aantal doelpunten — afgeleid van aanvalskracht/verdedigingskracht, thuisvoordeel en recente vorm.",
+      "We berekenen twee Poisson-tarieven per wedstrijd: het verwachte aantal doelpunten van het thuisteam (lambda H) en van het uitteam (lambda A). Beide tarieven voeden een waarschijnlijkheidsmatrix voor elke mogelijke score van 0-0 tot 6-6. Het sommeren van relevante cellen geeft ons waarschijnlijkheden voor elke markt: 1X2, Over/Under doelpunten, Beide Teams Scoren, en exact-score uitkomsten.",
+      "De Poisson-laag genereert waarschijnlijkheden gekalibreerd tegen bookmakerodds en historische data. Voor een Bayern vs Frankfurt-wedstrijd kan ons Poisson-model Bayerns expected goals op 2.4 berekenen en Frankfurts op 0.9. Hieruit leiden we af: Over 2.5 ongeveer 62%, Beide Teams Scoren ongeveer 58%, meest waarschijnlijke score 2-1 op grofweg 12%.",
+      "Pure Poisson neigt ertoe gelijke spelen en hoog-scorende wedstrijden te onderschatten vanwege de onafhankelijkheidsaanname. We passen de Dixon-Coles aanpassing toe — een verfijning die een tau-parameter toevoegt om laag-score correlatie te corrigeren — en mengen deze met onze ML-laag voor verdere kalibratie."
+    ],
+    "formulaCaption": "Poisson-waarschijnlijkheidsmassa-functie: kans op k doelpunten gegeven verwacht tempo lambda.",
+    "exampleBoxLabel": "Voorbeeld uit de praktijk",
+    "exampleBoxBody": "Voor een Bayern vs Frankfurt-wedstrijd kan ons Poisson-model Bayerns verwachte doelpunten op 2.4 berekenen en Frankfurts op 0.9. Hieruit volgt: Over 2.5 ~62%, BTTS ja ~58%, meest waarschijnlijke score 2-1 (~12%)."
+  },
+  "ml": {
+    "h2": "Machine Learning Laag",
+    "paragraphs": [
+      "Elo en Poisson zijn krachtig maar mechanisch. Ze vangen teamsterkte en doelpunt-waarschijnlijkheid goed, maar missen subtielere signalen — een teamtactische fit tegen high-pressing tegenstanders, de voorspellingswaarde van de afwezigheid van een sleutel-middenvelder, of de manier waarop bepaalde scheidsrechters thuisvoordeel beïnvloeden. Machine learning vult dat gat op door patronen te detecteren in duizenden historische wedstrijden.",
+      "Onze ML-laag verwerkt 40+ variabelen per wedstrijd: recente vorm (laatste 5 / 10 / 20 wedstrijden met gewogen verval), thuis/uit-splits, onderlinge geschiedenis, expected goals trends, balbezit-statistieken, opstellingssterkte, rustdagen voor de wedstrijd, weersomstandigheden, scheidsrechter-tendensen, en wedstrijd-belang.",
+      "De ML-laag vervangt Elo of Poisson niet — hij weegt hun output op basis van context. Voor een laag-belang midweekse fixture tussen twee stabiele teams geeft de ML-laag het meeste gewicht aan Elo + Poisson. Voor een hoog-belang fixture met grote opstellingsverstoringen herweegt de ML-laag op basis van vergelijkbare historische situaties.",
+      "Ons model is getraind op meerdere seizoenen historische wedstrijddata — meer dan 100.000 wedstrijden over de gedekte competities. We gebruiken een holdout-methodologie: het model ziet de wedstrijden waarop het wordt getest nooit tijdens training, en we gebruiken walk-forward validatie.",
+      "Na elke wedstrijd voedt het resultaat terug in het model. Voorspellingen die slaagden worden bekrachtigd; voorspellingen die faalden markeren patronen voor herevaluatie. Major retrainingen draaien wekelijks. Dit betekent dat de engine die je vandaag gebruikt fundamenteel anders is dan die van drie maanden geleden — continu gekalibreerd tegen verse data."
+    ],
+    "diagramCaption": "Vereenvoudigd neuraal netwerk: 40+ input-variabelen vloeien door verborgen lagen naar een gewogen voorspellingsoutput."
+  },
+  "data": {
+    "h2": "Databronnen & Validatie",
+    "paragraphs": [
+      "We aggregeren wedstrijd- en teamdata van gelicenseerde sport-dataleveranciers — dezelfde bronnen die door grote sportmedia en bookmakers worden gebruikt. Meerdere leveranciers voeden onze pipeline zodat we cijfers kunnen kruiscontroleren en afwijkingen kunnen detecteren voordat ze de voorspellingsengine bereiken.",
+      "Voordat data onze voorspellingsengine binnenkomt, passeert het een validatie-pipeline: format-normalisatie (standaardiseren van teamnamen, datumformaten), afwijking-detectie (markeren van implausibele waarden), kruisreferentie met meerdere bronnen, en menselijke review van gemarkeerde uitzonderingen.",
+      "Wedstrijddata wordt bijna real-time bijgewerkt tijdens wedstrijden. Team- en speler-statistieken worden post-match bijgewerkt. Onze voorspellingsengine herberekent continu naarmate nieuwe data binnenkomt — dit is wat de 'elke minuut bijgewerkt' indicator op /predictions aandrijft."
+    ],
+    "panelTitle": "Databronnen",
+    "panelItems": [
+      "Wedstrijdresultaten & live data (gelicenseerde leveranciers)",
+      "Historische wedstrijdarchieven (multi-seizoen database)",
+      "Opstellings- & blessure-data (geverifieerd pre-match)",
+      "Weers- & locatie-omstandigheden (third-party APIs)",
+      "Speler-ratings & prestatie-metrics (gelicenseerde leveranciers)"
+    ]
+  },
+  "locking": {
+    "h2": "Het Vergrendel-mechanisme",
+    "paragraphs": [
+      "Elke voorspelling die we publiceren heeft een vergrendel-tijdstempel — het exacte moment waarop deze werd gegenereerd en gecommit naar ons publieke track record. Na dit tijdstempel kan de voorspelling niet worden bewerkt, verwijderd of vervangen. Dit is geen beleid dat we beloven te volgen; het is een architectuurbeperking van hoe het systeem voorspellingen opslaat. Er is geen admin-knop om een voorspelling achteraf te bewerken.",
+      "De meeste voorspellingssites hebben een integriteitsprobleem: ze kunnen stilletjes verliezende voorspellingen verwijderen of 'updaten' achteraf. We hebben deze mogelijkheid by design geëlimineerd. Vergrendelde voorspellingen zijn append-only — de database accepteert nieuwe voorspellingen maar weigert elke aanpassing aan bestaande.",
+      "Elke voorspelling in ons publieke track record bevat zijn vergrendel-tijdstempel. Je kunt verifiëren dat een specifieke voorspelling werd gepubliceerd vóór de werkelijke aftrap. Gecombineerd met het post-match toegevoegde resultaat krijg je alles wat je nodig hebt om nauwkeurigheid zelf te beoordelen."
+    ],
+    "timelineCaption": "Voorspelling-levenscyclus: gegenereerd 24u vóór aftrap, vergrendeld op 2u vóór, voor altijd onveranderlijk daarna.",
+    "timelineSteps": [
+      { "label": "24u vóór aftrap", "detail": "Voorspelling gegenereerd (lid-toegang)" },
+      { "label": "2u vóór aftrap", "detail": "Publieke vergrendeling + gratis-toegang" },
+      { "label": "Aftrap", "detail": "Wedstrijd begint" },
+      { "label": "Post-match", "detail": "Resultaat toegevoegd aan track record" },
+      { "label": "Voor altijd", "detail": "Voorspelling onveranderlijk" }
+    ]
+  },
+  "whatWeDontDo": {
+    "h2": "Wat We Niet Doen",
+    "intro": "Transparantie werkt in beide richtingen. Hier zijn dingen die sommige voorspellingsdiensten doen die wij bewust niet doen:",
+    "items": [
+      { "title": "We verkopen geen 'fixed matches'", "detail": "We hebben geen voorkennis. Iedereen die fixed matches claimt te verkopen pleegt fraude." },
+      { "title": "We bewerken geen voorspellingen na publicatie", "detail": "Eenmaal vergrendeld kunnen voorspellingen niet worden gewijzigd — architectonisch, niet per beleid." },
+      { "title": "We verbergen geen verliezen uit ons track record", "detail": "Elke voorspelling wordt gepubliceerd — winst, verlies en push." },
+      { "title": "We beloven geen specifieke nauwkeurigheidspercentages", "detail": "AI-voorspellingen hebben probabilistische nauwkeurigheid die varieert per markt en competitie." },
+      { "title": "We gebruiken geen redactionele bias", "detail": "Voorspellingen worden gegenereerd door de engine zonder menselijke override." },
+      { "title": "We opereren niet als bookmaker", "detail": "We accepteren geen weddenschappen, houden geen geld vast en faciliteren geen gokken." },
+      { "title": "We delen geen gebruikersdata met bookmakers", "detail": "Je accountinformatie blijft binnen BetsPlug." }
+    ]
+  },
+  "limitations": {
+    "h2": "Beperkingen & Eerlijkheid",
+    "paragraphs": [
+      "AI-voorspellingen zijn geen magie. Het zijn statistisch onderbouwde waarschijnlijkheden. Een voorspelling met 78% confidence heeft nog steeds 22% kans om verkeerd te zijn. Confidence-scores zijn gekalibreerd — als we 78% zeggen, bedoelen we ruwweg 78 van de 100 zulke voorspellingen lossen op in ons voordeel op de lange termijn.",
+      "Onze voorspellingen presteren het best in: hoog-volume, goed-gedocumenteerde competities (Premier League, La Liga, Bundesliga); midden-bereik markten waar statistische regressie domineert; en wedstrijden waarin teams stabiele opstellingen hebben.",
+      "Onze voorspellingen zijn minder betrouwbaar in: laag-data competities; ongebruikelijke fixtures; wedstrijden met grote opstellingsverstoringen; en extreem lage-waarschijnlijkheid evenementen.",
+      "We claimen niet voetbal perfect te kunnen voorspellen. We claimen het transparant en methodisch te voorspellen. Gebruik onze voorspellingen als één input in je eigen analyse — naast je eigen observaties, het laatste teamnieuws en je eigen risicotolerantie."
+    ]
+  },
+  "faq": {
+    "h2": "Methodologie FAQ",
+    "questions": [
+      { "q": "Kan ik de werkelijke modelcode zien?", "a": "We publiceren geen broncode (dat is ons kern-IP), maar we publiceren gedetailleerde methodologie — welke modellen we gebruiken, welke variabelen we verwerken, welke databronnen we gebruiken." },
+      { "q": "Hoe gaan jullie om met onverwachte gebeurtenissen tijdens een wedstrijd?", "a": "Onze voorspellingen worden gegenereerd en vergrendeld vóór de aftrap, dus ze updaten niet tijdens een wedstrijd. In-game gebeurtenissen die nauwkeurigheid beïnvloeden zijn deel van voetbal's inherente onzekerheid." },
+      { "q": "Waarom meerdere modellen gebruiken in plaats van één perfect model?", "a": "Geen enkele statistische methode vangt alle voetbaldynamiek. Elo behandelt sterkte, Poisson behandelt doelpunt-distributies, ML behandelt context. Door ze te combineren krijgen we robuustere voorspellingen." },
+      { "q": "Hoe nauwkeurig zijn jullie voorspellingen vergeleken met bookmakerodds?", "a": "We publiceren geen vergelijkende nauwkeurigheid versus bookmakerodds. Bekijk ons publieke track record voor ruwe prestatie." },
+      { "q": "Houden jullie rekening met speler-specifieke data?", "a": "Ja, maar op teamniveau. We factoreren in opstellingssterkte op basis van individuele speler-ratings en sleutelspeler aanwezigheid/afwezigheid." },
+      { "q": "Hoe vaak wordt het model hertraind?", "a": "Continu, met major retraining-cycli na elke speeldag. Elo-ratings updaten na elke wedstrijd. Poisson-parameters passen zich aan op basis van rollende vorm-vensters. ML-laag wordt wekelijks hertraind." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "Zie de Methodologie in Actie",
+    "body": "Nu je begrijpt hoe onze voorspellingen werken, zie ze toegepast over 30+ competities.",
+    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Vergelijk Plannen", "canonical": "pricing" }
+  }
+}

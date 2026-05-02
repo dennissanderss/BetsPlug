@@ -1,0 +1,52 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "cards": {
+    "locked": "Bloqueado", "freePick": "Pick gratis", "unlock": "Desbloquear pronóstico",
+    "subscribeToView": "Suscríbete para ver el pronóstico", "viewAnalysis": "Ver análisis del partido",
+    "confidence": "Confianza", "lockedBeforeKickoff": "Bloqueado antes del inicio",
+    "viewPricing": "Ver Precios"
+  },
+  "filter": { "today": "Hoy", "thisWeek": "Esta Semana", "allUpcoming": "Próximos" },
+  "hero": {
+    "trustStripPredictionsThisWeek": "{count} pronósticos esta jornada",
+    "trustStripUpdated": "Actualizado cada minuto",
+    "trustStripLocked": "Bloqueado antes del inicio",
+    "ctaPrimaryFreeLabel": "Ver Pronósticos Gratis",
+    "ctaPrimaryGatedLabel": "Desbloquear Pronósticos de {league}",
+    "ctaSecondaryLabel": "Cómo funciona",
+    "statsTeams": "Equipos",
+    "statsMatchweek": "Jornada actual",
+    "statsThisWeek": "Pronósticos esta semana"
+  },
+  "methodologyPillars": [
+    { "icon": "calc", "label": "Modelos matemáticos (Elo + Poisson)" },
+    { "icon": "ml", "label": "Machine learning entrenado en datos de {league}" },
+    { "icon": "lock", "label": "Bloqueado y marcado en tiempo" }
+  ],
+  "topTeams": {
+    "positionLabel": "Posición", "formLabel": "Forma", "viewTeamLabel": "Ver equipo"
+  },
+  "context": {
+    "statsPanel": {
+      "teamsLabel": "Equipos",
+      "seasonLabel": "Temporada",
+      "matchweekLabel": "Jornada",
+      "topScorerLabel": "Máximo goleador",
+      "predictionsThisSeasonLabel": "Pronósticos esta temporada",
+      "updatedLabel": "Actualizado"
+    }
+  },
+  "cardsSection": {
+    "moreTodayPaid": "{count} pronósticos más hoy — solo de pago",
+    "fixturesOnlyHeading": "Próximos partidos",
+    "fixturesEmpty": "No hay próximos partidos en esta ventana."
+  },
+  "ctaLabels": {
+    "readFullMethodology": "Leer metodología completa",
+    "allFaqs": "Todas las FAQs",
+    "viewPlans": "Ver Planes",
+    "viewPricing": "Ver Precios",
+    "getFreeAccount": "Cuenta Gratuita",
+    "tryFree": "Probar Gratis"
+  }
+}

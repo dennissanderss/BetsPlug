@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostics Ligue 1 Aujourd'hui | IA | BetsPlug",
+    "description": "Pronostics IA Ligue 1 pour chaque match. PSG, Marseille, Monaco et le reste — analysés avec Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-ligue-1-fr.jpg"
+  },
+  "hero": {
+    "h1": "Pronostics Ligue 1",
+    "subheadline": "Pronostics IA pour chaque match de Ligue 1. Générés avec classements Elo, modèles de Poisson et machine learning. Verrouillés avant le coup d'envoi.",
+    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "À propos des pronostics Ligue 1",
+    "paragraphs": [
+      "La Ligue 1 est la première division française, récemment restructurée à 18 clubs disputant 34 journées d'août à mai. La ligue est historiquement dominée par le Paris Saint-Germain depuis le rachat QSI en 2011, avec Marseille, Monaco, Lille et Lyon en concurrence pour les places européennes. La Ligue 1 est réputée comme ligue de développement — beaucoup des plus brillants jeunes talents européens (Mbappé, Kanté, Pogba, Camavinga) y ont émergé avant d'être vendus à l'étranger. Notre moteur IA analyse chaque match avec 40+ variables.",
+      "Les pronostics Ligue 1 présentent un défi unique : les politiques de rotation du PSG en matchs domestiques (préservation des titulaires pour la Ligue des Champions) introduisent une variance significative de composition. Les équipes du milieu de tableau ont aussi une volatilité tactique plus élevée. Notre modèle prend en compte les patterns de rotation attendus du PSG et l'incidence historiquement élevée de buts tardifs.",
+      "Chaque pronostic Ligue 1 est verrouillé avec un horodatage public avant le coup d'envoi. Les pronostics Ligue 1 font partie de tous les plans payants — les abonnés reçoivent chaque match avec analyse statistique complète."
+    ],
+    "statsPanel": { "h3": "Ligue 1 en bref", "ctaLabel": "Voir Ligue 1 sur l'app" }
+  },
+  "topTeams": { "h2": "Top équipes Ligue 1" },
+  "methodology": {
+    "h2": "Comment les pronostics Ligue 1 sont créés",
+    "body": "Les pronostics Ligue 1 utilisent le même moteur, prenant en compte les patterns de rotation du PSG et la volatilité de mi-tableau spécifique au football français.",
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostics Ligue 1",
+    "questions": [
+      { "q": "Quelle précision pour les pronostics IA Ligue 1 ?", "a": "La précision varie. Nous publions chaque pronostic dans notre historique public." },
+      { "q": "Pourquoi les pronostics Ligue 1 sont-ils payants uniquement ?", "a": "Les pronostics gratuits sont limités aux 3 ligues principales. Ligue 1 fait partie de tous les plans payants." },
+      { "q": "Comment le modèle gère-t-il la rotation du PSG ?", "a": "Notre couche ML prend en compte la composition attendue du PSG basée sur la proximité des matchs de Ligue des Champions." },
+      { "q": "Quand les pronostics Ligue 1 sont-ils disponibles ?", "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi." },
+      { "q": "Couvrez-vous la Coupe de France et les fixtures européennes ?", "a": "Nous couvrons tous les matchs de Ligue 1. Coupe de France et compétitions européennes séparément." },
+      { "q": "Pronostics Ligue 1 via Telegram ?", "a": "Oui, pour les abonnés payants." }
+    ],
+    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Voulez-vous tous les pronostics Ligue 1 ?",
+    "h2Gated": "Débloquez les pronostics Ligue 1",
+    "bodyFree": "Les abonnés ont chaque match avec analyse complète.",
+    "bodyGated": "Les pronostics Ligue 1 sont inclus dans tous les plans payants.",
+    "ctaPrimary": { "label": "Voir les Tarifs", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Essayer Gratuitement", "href": "https://app.betsplug.com/register?source=league_ligue-1" }
+  }
+}

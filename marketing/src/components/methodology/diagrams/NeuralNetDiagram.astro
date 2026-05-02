@@ -1,0 +1,79 @@
+---
+/**
+ * NeuralNetDiagram — simplified visual of a 3-layer feedforward
+ * network: input (8 nodes), hidden (12 nodes), output (1 node).
+ * Pure SVG. Decorative — actual model is more complex.
+ */
+interface Props {
+  caption: string;
+  surface?: "light" | "dark";
+}
+const { caption, surface = "dark" } = Astro.props;
+
+const fg     = surface === "dark" ? "rgb(232,234,239)" : "rgb(15,20,25)";
+const muted  = surface === "dark" ? "rgb(155,163,181)" : "rgb(90,100,120)";
+const accent = "#00d26a";
+
+const W = 720, H = 340;
+const inputN = 8, hiddenN = 12;
+
+const inputX = 100;
+const hiddenX = 360;
+const outputX = 620;
+
+const inputY = (i: number) => 50 + (i * (H - 100)) / (inputN - 1);
+const hiddenY = (i: number) => 30 + (i * (H - 60)) / (hiddenN - 1);
+const outputY = () => H / 2;
+
+// Input labels (decorative subset of 40+ vars)
+const inputLabels = ["Form", "Elo", "xG", "H2H", "Lineup", "Home/Away", "Rest", "Stakes"];
+---
+
+<figure class="my-8">
+  <div class={`rounded-2xl border ${surface === "dark" ? "border-deep-navy-600 bg-deep-navy-800/60" : "border-stadium-white-200 bg-white"} p-6 lg:p-8`}>
+    <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+      <!-- Layer labels -->
+      <text x={inputX}  y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill={muted}>INPUT (40+)</text>
+      <text x={hiddenX} y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill={muted}>HIDDEN</text>
+      <text x={outputX} y="20" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill={muted}>OUTPUT</text>
+
+      <!-- Connections (input → hidden) -->
+      {Array.from({ length: inputN }).map((_, i) => (
+        Array.from({ length: hiddenN }).map((_, j) => (
+          <line
+            x1={inputX} y1={inputY(i)} x2={hiddenX} y2={hiddenY(j)}
+            stroke={muted} stroke-width="0.5" stroke-opacity="0.25"
+          />
+        ))
+      ))}
+      <!-- Connections (hidden → output) -->
+      {Array.from({ length: hiddenN }).map((_, j) => (
+        <line
+          x1={hiddenX} y1={hiddenY(j)} x2={outputX} y2={outputY()}
+          stroke={accent} stroke-width="0.6" stroke-opacity="0.4"
+        />
+      ))}
+
+      <!-- Input nodes -->
+      {Array.from({ length: inputN }).map((_, i) => (
+        <g>
+          <circle cx={inputX} cy={inputY(i)} r="10" fill={surface === "dark" ? "rgb(26,31,46)" : "rgb(244,244,242)"} stroke={accent} stroke-width="1.5"/>
+          <text x={inputX - 18} y={inputY(i) + 4} font-family="Inter, sans-serif" font-size="11" text-anchor="end" fill={fg}>{inputLabels[i] ?? ""}</text>
+        </g>
+      ))}
+
+      <!-- Hidden nodes -->
+      {Array.from({ length: hiddenN }).map((_, j) => (
+        <circle cx={hiddenX} cy={hiddenY(j)} r="9" fill={surface === "dark" ? "rgb(19,24,41)" : "rgb(255,255,255)"} stroke={muted} stroke-width="1"/>
+      ))}
+
+      <!-- Output node -->
+      <circle cx={outputX} cy={outputY()} r="20" fill={accent} stroke={accent} stroke-width="2"/>
+      <text x={outputX} y={outputY() + 5} font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#050811">P</text>
+      <text x={outputX + 30} y={outputY() + 4} font-family="Inter, sans-serif" font-size="11" fill={fg}>weighted prediction</text>
+    </svg>
+  </div>
+  <figcaption class={`mt-3 text-center text-sm ${surface === "dark" ? "text-white-muted" : "text-charcoal-500"}`}>
+    {caption}
+  </figcaption>
+</figure>

@@ -1,0 +1,82 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Primeira Liga Predictions Today | AI-Powered | BetsPlug",
+    "description": "AI-powered Primeira Liga predictions for every match. Benfica, Porto, Sporting and the rest — analyzed with Elo + Poisson + ML. Available with any paid plan.",
+    "ogImage": "/og-images/league-primeira-liga-en.jpg"
+  },
+  "hero": {
+    "h1": "Primeira Liga Predictions",
+    "subheadline": "AI-powered predictions for every Primeira Liga match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
+    "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
+    "trustStripUpdated": "Updated every minute",
+    "trustStripLocked": "Locked before kickoff",
+    "ctaPrimaryFreeLabel": "View Free Predictions",
+    "ctaPrimaryGatedLabel": "Unlock Primeira Liga Predictions",
+    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "statsTeams": "Teams",
+    "statsMatchweek": "Current matchweek",
+    "statsThisWeek": "Predictions this week"
+  },
+  "cards": {
+    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
+    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "viewPricing": "View Pricing"
+  },
+  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "cardsSection": {
+    "moreTodayPaid": "{count} more predictions today — paid only",
+    "unlockAll": "Subscribe to view all Primeira Liga predictions",
+    "fixturesOnlyHeading": "Upcoming Fixtures",
+    "fixturesEmpty": "No upcoming fixtures in this window."
+  },
+  "context": {
+    "h2": "About Primeira Liga Predictions",
+    "paragraphs": [
+      "The Primeira Liga is Portugal's top football division, contested by 18 clubs across 34 matchdays from August to May. The league is dominated by the 'Big Three' — Benfica, Porto and Sporting CP — who have won every Primeira Liga title since the league's modern formation. Portugal is one of Europe's strongest selling leagues: top clubs regularly export developed talents to Premier League, La Liga and Bundesliga sides for substantial transfer fees. Our AI engine analyzes every Primeira Liga match using current form, head-to-head history, expected goals and 40+ other variables.",
+      "Primeira Liga predictions are influenced by squad-volatility patterns rare in other top leagues. Mid-season transfer windows often see significant departures from top-three clubs to wealthier European leagues, and squad reconstruction throughout the season is more pronounced than in Premier League or Bundesliga. Our model factors in transfer-window proximity, expected lineup changes from confirmed and rumored departures, and the historical recovery curve of squads after major sales. Big-three matches against each other carry separate weighting due to their elevated importance for European qualification.",
+      "Every Primeira Liga prediction is locked with a public timestamp before kickoff. Wins and losses both go into our public track record. Primeira Liga predictions are part of all paid plans — subscribers receive every fixture with full statistical analysis including squad-stability metrics, transfer-impact projections and big-three rivalry context."
+    ],
+    "statsPanel": {
+      "h3": "Primeira Liga at a glance",
+      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated", "ctaLabel": "View Primeira Liga on app"
+    }
+  },
+  "topTeams": {
+    "h2": "Top Primeira Liga Teams",
+    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+  },
+  "methodology": {
+    "h2": "How Primeira Liga Predictions Are Made",
+    "body": "Primeira Liga predictions use the same engine as all our football predictions: Elo ratings, Poisson models, and machine learning. The model accounts for Portuguese football's specific dynamics — particularly squad volatility around transfer windows and the dominance of the Big Three.",
+    "pillars": [
+      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning with transfer-window context" },
+      { "icon": "lock", "label": "Locked & timestamped" }
+    ],
+    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Primeira Liga Predictions FAQ",
+    "questions": [
+      { "q": "How accurate are AI predictions for the Primeira Liga?", "a": "Accuracy varies per matchday and prediction type. We publish every Primeira Liga prediction in our public track record so you can verify performance yourself." },
+      { "q": "Why are Primeira Liga predictions paid only?", "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Primeira Liga predictions are part of all paid plans." },
+      { "q": "How does the model handle major mid-season transfers from top Portuguese clubs?", "a": "Our ML layer factors in confirmed transfers immediately and adjusts squad-strength estimates within hours. For high-rumor periods, we apply a volatility-discount until the transfer window closes." },
+      { "q": "How early are Primeira Liga predictions available?", "a": "Subscribers see Primeira Liga predictions up to 24 hours before kickoff." },
+      { "q": "Do you cover Taça de Portugal and European fixtures involving Primeira Liga clubs?", "a": "We cover all Primeira Liga league matches. Taça de Portugal, Champions League and Europa League fixtures involving Primeira Liga clubs are covered separately." },
+      { "q": "Can I get Primeira Liga predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Primeira Liga predictions." }
+    ],
+    "cta": { "label": "All FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Want All Primeira Liga Predictions?",
+    "h2Gated": "Unlock Primeira Liga Predictions",
+    "bodyFree": "Subscribers get every match with full statistical analysis.",
+    "bodyGated": "Primeira Liga predictions are part of all paid plans.",
+    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_primeira-liga" }
+  }
+}

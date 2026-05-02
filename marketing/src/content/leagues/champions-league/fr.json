@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostics Champions League | IA | BetsPlug",
+    "description": "Pronostics IA UEFA Champions League pour chaque match. Phase de ligue jusqu'à la finale — analysés avec Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-champions-league-fr.jpg"
+  },
+  "hero": {
+    "h1": "Pronostics Champions League",
+    "subheadline": "Pronostics IA pour chaque match de l'UEFA Champions League. Générés avec classements Elo, modèles de Poisson et machine learning. Verrouillés avant le coup d'envoi.",
+    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "À propos des pronostics Champions League",
+    "paragraphs": [
+      "L'UEFA Champions League est la première compétition de clubs d'Europe, disputée entre les meilleurs clubs du continent. La saison 2024-25 a introduit un nouveau format de phase de ligue avec 36 clubs dans une table combinée. La compétition culmine en éliminatoires à deux manches et une finale en match unique. Notre moteur IA analyse chaque rencontre de Champions League avec la forme actuelle, les confrontations directes (lorsque les équipes se sont déjà rencontrées), les expected goals et 40+ autres variables.",
+      "Les pronostics Champions League ont des caractéristiques uniques. L'écart compétitif entre équipes est plus large — un Real Madrid vs RB Salzburg a des dynamiques statistiques très différentes de deux équipes de Premier League au niveau égal. Les éliminatoires à deux manches introduisent aussi des considérations stratégiques. Notre modèle traite les phases de ligue et d'élimination directe comme des problèmes de pronostic distincts.",
+      "Chaque pronostic Champions League est verrouillé avec un horodatage public avant le coup d'envoi. Les pronostics Champions League font partie de tous les plans payants — les abonnés reçoivent chaque rencontre avec analyse statistique complète."
+    ],
+    "statsPanel": { "h3": "Champions League en bref", "ctaLabel": "Voir Champions League sur l'app" }
+  },
+  "topTeams": { "h2": "Top clubs Champions League" },
+  "methodology": {
+    "h2": "Comment les pronostics Champions League sont créés",
+    "body": "Les pronostics Champions League utilisent le même moteur principal que nos pronostics nationaux, avec calibration séparée pour la phase de ligue versus la dynamique des phases éliminatoires.",
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostics Champions League",
+    "questions": [
+      { "q": "Quelle précision pour les pronostics IA Champions League ?", "a": "La précision varie. Nous publions chaque pronostic dans notre historique public." },
+      { "q": "Pourquoi les pronostics Champions League sont-ils payants uniquement ?", "a": "Les pronostics gratuits sont limités aux 3 ligues nationales principales." },
+      { "q": "Comment gérez-vous les éliminatoires à deux manches ?", "a": "Nous traitons chaque manche comme un pronostic séparé avec le score cumulé comme variable d'entrée." },
+      { "q": "Quand les pronostics Champions League sont-ils disponibles ?", "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi." },
+      { "q": "Couvrez-vous les tours de qualification de Champions League ?", "a": "Nous couvrons la phase de ligue et les phases éliminatoires. Les tours de qualification antérieurs ne sont pas couverts." },
+      { "q": "Pronostics Champions League via Telegram ?", "a": "Oui, pour les abonnés payants." }
+    ],
+    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Voulez-vous tous les pronostics Champions League ?",
+    "h2Gated": "Débloquez les pronostics Champions League",
+    "bodyFree": "Les abonnés ont chaque match avec analyse complète.",
+    "bodyGated": "Les pronostics Champions League sont inclus dans tous les plans payants.",
+    "ctaPrimary": { "label": "Voir les Tarifs", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Essayer Gratuitement", "href": "https://app.betsplug.com/register?source=league_champions-league" }
+  }
+}

@@ -1,0 +1,32 @@
+---
+import type { MethodologyContent } from "@/content/pages/methodology/types";
+
+interface Props {
+  content: MethodologyContent["pillars"];
+}
+const { content } = Astro.props;
+
+const labels = {
+  elo: "Elo Ratings",
+  poisson: "Poisson Models",
+  ml: "Machine Learning",
+};
+---
+
+<section id="pillars" class="scroll-mt-24">
+  <h2 class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+    {content.h2}
+  </h2>
+  <p class="mt-5 text-lg leading-relaxed text-charcoal-700">{content.intro}</p>
+
+  <ol class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+    {content.items.map((item, i) => (
+      <li class="rounded-xl border border-stadium-white-200 bg-white p-5 shadow-[var(--shadow-sm)]">
+        <p class="font-mono text-xs font-bold text-pitch-green-600">PILLAR {i + 1}</p>
+        <h3 class="mt-2 text-lg font-bold text-charcoal-900">{labels[item.icon]}</h3>
+        <p class="mt-1 text-sm font-semibold text-charcoal-700">{item.tagline}</p>
+        <p class="mt-3 text-sm leading-relaxed text-charcoal-700">{item.oneLiner}</p>
+      </li>
+    ))}
+  </ol>
+</section>

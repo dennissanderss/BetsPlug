@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronósticos Champions League | IA | BetsPlug",
+    "description": "Pronósticos IA UEFA Champions League para cada partido. Fase de liga hasta la final — analizados con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-champions-league-es.jpg"
+  },
+  "hero": {
+    "h1": "Pronósticos Champions League",
+    "subheadline": "Pronósticos IA para cada partido de la UEFA Champions League. Generados con puntuaciones Elo, modelos Poisson y machine learning. Bloqueados antes del inicio.",
+    "ctaSecondary": { "label": "Cómo funciona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sobre los pronósticos de Champions League",
+    "paragraphs": [
+      "La UEFA Champions League es la principal competición de clubes de Europa. La temporada 2024-25 introdujo un nuevo formato de fase de liga con 36 clubes en una tabla combinada. La competición culmina en eliminatorias a doble partido y una final a partido único. Nuestro motor IA analiza cada encuentro con la forma actual, enfrentamientos directos, expected goals y 40+ variables más.",
+      "Los pronósticos de Champions League tienen características únicas. La brecha competitiva entre equipos es más amplia — un Real Madrid vs RB Salzburg tiene dinámicas estadísticas muy diferentes de dos equipos de Premier League al mismo nivel. Las eliminatorias a doble partido también introducen consideraciones estratégicas. Nuestro modelo trata las fases de liga y las eliminatorias como problemas de pronóstico separados.",
+      "Cada pronóstico de Champions League se bloquea con marca de tiempo pública antes del inicio. Los pronósticos de Champions League son parte de todos los planes de pago — los suscriptores reciben cada encuentro con análisis estadístico completo."
+    ],
+    "statsPanel": { "h3": "Champions League de un vistazo", "ctaLabel": "Ver Champions League en la app" }
+  },
+  "topTeams": { "h2": "Mejores clubes Champions League" },
+  "methodology": {
+    "h2": "Cómo se crean los pronósticos de Champions League",
+    "body": "Los pronósticos de Champions League utilizan el mismo motor principal que nuestros pronósticos nacionales, con calibración separada para fase de liga versus dinámica de eliminatorias.",
+    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronósticos Champions League",
+    "questions": [
+      { "q": "¿Qué tan precisos son los pronósticos IA Champions League?", "a": "La precisión varía. Publicamos cada pronóstico en nuestro historial público." },
+      { "q": "¿Por qué los pronósticos Champions League son solo de pago?", "a": "Los pronósticos gratuitos están limitados a las 3 ligas nacionales principales." },
+      { "q": "¿Cómo manejan las eliminatorias a doble partido?", "a": "Tratamos cada partido como un pronóstico separado con la puntuación agregada como variable de entrada." },
+      { "q": "¿Cuándo están disponibles los pronósticos?", "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio." },
+      { "q": "¿Cubren las rondas de clasificación de Champions League?", "a": "Cubrimos fase de liga y eliminatorias. Las rondas de clasificación anteriores no están en nuestra cobertura estándar." },
+      { "q": "¿Pronósticos Champions League vía Telegram?", "a": "Sí, para suscriptores de pago." }
+    ],
+    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "¿Quieres todos los pronósticos Champions League?",
+    "h2Gated": "Desbloquea los pronósticos Champions League",
+    "bodyFree": "Los suscriptores tienen cada partido con análisis completo.",
+    "bodyGated": "Los pronósticos de Champions League están incluidos en todos los planes de pago.",
+    "ctaPrimary": { "label": "Ver Precios", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Probar Gratis", "href": "https://app.betsplug.com/register?source=league_champions-league" }
+  }
+}

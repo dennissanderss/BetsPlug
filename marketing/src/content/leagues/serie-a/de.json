@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Serie A Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte Serie A-Vorhersagen für jedes Spiel. Taktische italienische Fußballanalyse mit Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-serie-a-de.jpg"
+  },
+  "hero": {
+    "h1": "Serie A Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes Serie-A-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Serie A Vorhersagen",
+    "paragraphs": [
+      "Die Serie A ist Italiens höchste Fußballliga, ausgetragen von 20 Clubs an 38 Spieltagen von August bis Mai. Die Liga wurde historisch von taktischer Raffinesse und defensiver Organisation geprägt — Begriffe wie 'catenaccio' entstanden hier — auch wenn die moderne Serie A sich zu einem offeneren, ballbesitzbasierten Spiel verschoben hat. Inter, Juventus, AC Milan und Napoli sind die historischen Mächte, mit Atalanta, Roma und Lazio als etablierten Herausforderern. Unsere KI-Engine analysiert jedes Serie-A-Spiel mit aktueller Form, direkten Begegnungen, Expected Goals und 40+ weiteren Variablen.",
+      "Serie-A-Vorhersagen erfordern besondere Gewichtung auf taktische Matchups. Die Liga hat die stärkste Korrelation zwischen Trainerstabilität und Spielergebnissen unter Europas Big Five, und Mid-Season-Wechsel im taktischen System produzieren signifikante Vorhersage-Verschiebungen. Unser Modell berücksichtigt Trainer-Amtszeit, erwartete Formationsänderungen durch Verletzungen und historische Leistung gegen spezifische taktische Aufstellungen.",
+      "Jede Serie-A-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Serie-A-Vorhersagen sind Teil aller bezahlten Pläne — kostenlose Nutzer sehen Spielpläne ohne Vorhersagen, während Abonnenten jedes Spiel mit vollständiger statistischer Analyse einschließlich xG, Defensivlinien-Höhen-Metriken und taktischen Matchup-Notizen erhalten."
+    ],
+    "statsPanel": { "h3": "Serie A auf einen Blick", "ctaLabel": "Serie A in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Serie A Teams" },
+  "methodology": {
+    "h2": "Wie Serie A Vorhersagen Erstellt Werden",
+    "body": "Serie-A-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen: Elo-Bewertungen, Poisson-Modelle und Machine Learning. Das Modell ist auf italienische Taktikmuster abgestimmt, besonders auf den Vorhersagewert von Formations-Matchups und Trainerstabilität.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Serie A Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für Serie A?", "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp. Wir veröffentlichen jede Serie-A-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum sind Serie-A-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf die Top-3-Ligen beschränkt (Premier League, La Liga, Bundesliga). Serie-A-Vorhersagen sind Teil aller bezahlten Pläne." },
+      { "q": "Welche Vorhersagetypen veröffentlicht ihr für Serie A?", "a": "Für jedes Serie-A-Spiel veröffentlichen wir Vorhersagen über mehrere Märkte: 1X2, Über/Unter Tore, Beide Teams Treffen und Doppelte Chance — mit taktischem Matchup-Kontext." },
+      { "q": "Wie früh sind Serie-A-Vorhersagen verfügbar?", "a": "Abonnenten sehen Serie-A-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr Coppa Italia und europäische Spiele mit Serie-A-Clubs ab?", "a": "Wir decken alle Serie-A-Ligaspiele ab. Coppa Italia, Champions League und Europa League-Spiele mit Serie-A-Clubs werden separat abgedeckt." },
+      { "q": "Kann ich Serie-A-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Serie-A-Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Serie A Vorhersagen?",
+    "h2Gated": "Serie A Vorhersagen Freischalten",
+    "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Serie-A-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_serie-a" }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronósticos Ligue 1 Hoy | IA | BetsPlug",
+    "description": "Pronósticos IA Ligue 1 para cada partido. PSG, Marseille, Monaco y el resto — analizados con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-ligue-1-es.jpg"
+  },
+  "hero": {
+    "h1": "Pronósticos Ligue 1",
+    "subheadline": "Pronósticos IA para cada partido de Ligue 1. Generados con puntuaciones Elo, modelos Poisson y machine learning. Bloqueados antes del inicio.",
+    "ctaSecondary": { "label": "Cómo funciona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sobre los pronósticos de Ligue 1",
+    "paragraphs": [
+      "La Ligue 1 es la primera división francesa, recientemente reestructurada a 18 clubes que disputan 34 jornadas de agosto a mayo. La liga ha sido históricamente dominada por Paris Saint-Germain desde la adquisición de QSI en 2011, con Marseille, Monaco, Lille y Lyon compitiendo por puestos europeos. La Ligue 1 es conocida como liga de desarrollo — muchos de los talentos jóvenes más brillantes de Europa (Mbappé, Kanté, Pogba, Camavinga) emergieron aquí.",
+      "Los pronósticos de Ligue 1 presentan un desafío único: las políticas de rotación del PSG en partidos domésticos (preservando titulares para Champions League) introducen variancia significativa de alineación. Los equipos de mitad de tabla en Ligue 1 también tienen mayor volatilidad táctica. Nuestro modelo tiene en cuenta los patrones de rotación esperados del PSG.",
+      "Cada pronóstico de Ligue 1 se bloquea con marca de tiempo pública antes del inicio. Los pronósticos de Ligue 1 son parte de todos los planes de pago — los suscriptores reciben cada partido con análisis estadístico completo."
+    ],
+    "statsPanel": { "h3": "Ligue 1 de un vistazo", "ctaLabel": "Ver Ligue 1 en la app" }
+  },
+  "topTeams": { "h2": "Mejores equipos Ligue 1" },
+  "methodology": {
+    "h2": "Cómo se crean los pronósticos de Ligue 1",
+    "body": "Los pronósticos de Ligue 1 utilizan el mismo motor, teniendo en cuenta los patrones de rotación del PSG y la volatilidad de mitad de tabla específica del fútbol francés.",
+    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronósticos Ligue 1",
+    "questions": [
+      { "q": "¿Qué tan precisos son los pronósticos IA Ligue 1?", "a": "La precisión varía. Publicamos cada pronóstico en nuestro historial público." },
+      { "q": "¿Por qué los pronósticos Ligue 1 son solo de pago?", "a": "Los pronósticos gratuitos están limitados a las 3 ligas principales." },
+      { "q": "¿Cómo gestiona el modelo la rotación del PSG?", "a": "Nuestra capa ML tiene en cuenta la alineación esperada del PSG basada en la proximidad de partidos de Champions League." },
+      { "q": "¿Cuándo están disponibles los pronósticos?", "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio." },
+      { "q": "¿Cubren la Coupe de France y partidos europeos?", "a": "Cubrimos todos los partidos de Ligue 1. Coupe de France y competiciones europeas por separado." },
+      { "q": "¿Pronósticos Ligue 1 vía Telegram?", "a": "Sí, para suscriptores de pago." }
+    ],
+    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "¿Quieres todos los pronósticos Ligue 1?",
+    "h2Gated": "Desbloquea los pronósticos Ligue 1",
+    "bodyFree": "Los suscriptores tienen cada partido con análisis completo.",
+    "bodyGated": "Los pronósticos de Ligue 1 están incluidos en todos los planes de pago.",
+    "ctaPrimary": { "label": "Ver Precios", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Probar Gratis", "href": "https://app.betsplug.com/register?source=league_ligue-1" }
+  }
+}

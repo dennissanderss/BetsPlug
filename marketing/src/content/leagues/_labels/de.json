@@ -1,0 +1,52 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "cards": {
+    "locked": "Gesperrt", "freePick": "Kostenlos", "unlock": "Vorhersage freischalten",
+    "subscribeToView": "Abonnieren um Vorhersage zu sehen", "viewAnalysis": "Match-Analyse ansehen",
+    "confidence": "Konfidenz", "lockedBeforeKickoff": "Vor Anpfiff gesperrt",
+    "viewPricing": "Preise Anzeigen"
+  },
+  "filter": { "today": "Heute", "thisWeek": "Diese Woche", "allUpcoming": "Alle Kommenden" },
+  "hero": {
+    "trustStripPredictionsThisWeek": "{count} Vorhersagen diesen Spieltag",
+    "trustStripUpdated": "Jede Minute aktualisiert",
+    "trustStripLocked": "Vor Anpfiff gesperrt",
+    "ctaPrimaryFreeLabel": "Kostenlose Vorhersagen Ansehen",
+    "ctaPrimaryGatedLabel": "{league} Vorhersagen Freischalten",
+    "ctaSecondaryLabel": "So funktioniert's",
+    "statsTeams": "Teams",
+    "statsMatchweek": "Aktueller Spieltag",
+    "statsThisWeek": "Vorhersagen diese Woche"
+  },
+  "methodologyPillars": [
+    { "icon": "calc", "label": "Mathematische Modelle (Elo + Poisson)" },
+    { "icon": "ml", "label": "Machine Learning trainiert auf {league}-Daten" },
+    { "icon": "lock", "label": "Gesperrt & zeitgestempelt" }
+  ],
+  "topTeams": {
+    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "Team ansehen"
+  },
+  "context": {
+    "statsPanel": {
+      "teamsLabel": "Teams",
+      "seasonLabel": "Saison",
+      "matchweekLabel": "Spieltag",
+      "topScorerLabel": "Top-Torschütze",
+      "predictionsThisSeasonLabel": "Vorhersagen diese Saison",
+      "updatedLabel": "Aktualisiert"
+    }
+  },
+  "cardsSection": {
+    "moreTodayPaid": "{count} weitere Vorhersagen heute — nur für zahlende Mitglieder",
+    "fixturesOnlyHeading": "Kommende Spiele",
+    "fixturesEmpty": "Keine kommenden Spiele in diesem Zeitraum."
+  },
+  "ctaLabels": {
+    "readFullMethodology": "Vollständige Methodik lesen",
+    "allFaqs": "Alle FAQs",
+    "viewPlans": "Pläne ansehen",
+    "viewPricing": "Preise ansehen",
+    "getFreeAccount": "Kostenloses Konto",
+    "tryFree": "Kostenlos testen"
+  }
+}

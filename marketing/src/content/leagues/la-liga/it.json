@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostici La Liga Oggi | IA | BetsPlug",
+    "description": "Pronostici IA La Liga per ogni partita. Real Madrid, Barcellona, Atlético e il resto — analizzati con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-la-liga-it.jpg"
+  },
+  "hero": {
+    "h1": "Pronostici La Liga",
+    "subheadline": "Pronostici IA per ogni partita di La Liga. Generati con classifiche Elo, modelli Poisson e machine learning. Bloccati prima del calcio d'inizio.",
+    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sui pronostici La Liga",
+    "paragraphs": [
+      "La Liga è la massima divisione spagnola, contestata da 20 club su 38 giornate da agosto a maggio. Il campionato è storicamente dominato da Real Madrid e Barcellona, con l'Atlético Madrid come terza potenza stabilita. Il nostro motore IA analizza ogni partita con la forma attuale, dati di rivalità influenzati da El Clásico, expected goals, cambi di formazione legati al mercato e altre 40+ variabili.",
+      "La Liga è tecnicamente distinta dalle altre top league europee: le partite hanno in media xG più bassi e gioco più stretto basato sul possesso, particolarmente fuori dal top sei. Questo rende i mercati gol (Over/Under, BTTS) statisticamente più volatili che in Premier League o Bundesliga. Il nostro modello tiene conto della resilienza difensiva delle squadre di centro classifica.",
+      "Ogni pronostico La Liga viene bloccato con un timestamp pubblico prima del calcio d'inizio. Gli utenti gratuiti vedono 2-3 pronostici La Liga al giorno, pesati verso le partite con maggiore confidenza; gli abbonati ricevono ogni partita con analisi statistica completa."
+    ],
+    "statsPanel": { "h3": "La Liga a colpo d'occhio", "ctaLabel": "Vedi La Liga nell'app" }
+  },
+  "topTeams": { "h2": "Top squadre La Liga" },
+  "methodology": {
+    "h2": "Come vengono creati i pronostici La Liga",
+    "body": "I pronostici La Liga usano lo stesso motore, calibrato sui medi gol più bassi del campionato e sulla dinamica basata sul possesso.",
+    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostici La Liga",
+    "questions": [
+      { "q": "Quanto sono accurati i pronostici IA La Liga?", "a": "L'accuratezza varia. Pubblichiamo ogni pronostico nel nostro track record pubblico." },
+      { "q": "Perché offrite pronostici La Liga gratuiti?", "a": "La Liga è uno dei tre campionati top con 2-3 pronostici gratuiti al giorno." },
+      { "q": "Quali tipi di pronostici per La Liga?", "a": "1X2, Over/Under gol (con i pattern di scoring spagnoli più stretti considerati), BTTS, Doppia Chance." },
+      { "q": "Quando sono disponibili i pronostici?", "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio." },
+      { "q": "Coprite Copa del Rey e partite europee?", "a": "Copriamo tutte le partite di La Liga. Copa del Rey e competizioni europee separatamente." },
+      { "q": "Pronostici La Liga via Telegram?", "a": "Sì, per gli abbonati paganti." }
+    ],
+    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Vuoi tutti i pronostici La Liga?",
+    "h2Gated": "Sblocca i pronostici La Liga",
+    "bodyFree": "Gli utenti gratuiti vedono 2-3 pick al giorno. Gli abbonati hanno ogni partita con analisi completa.",
+    "bodyGated": "I pronostici La Liga sono inclusi in tutti i piani a pagamento.",
+    "ctaPrimary": { "label": "Vedi i Piani", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Account Gratuito", "href": "https://app.betsplug.com/register?source=league_la-liga" }
+  }
+}

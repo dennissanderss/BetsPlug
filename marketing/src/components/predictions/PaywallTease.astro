@@ -1,0 +1,101 @@
+---
+/**
+ * PaywallTease — Section 3 of /predictions hub.
+ * Conversion strip after the prediction cards. Counts use the live
+ * `totalCount` from the hub API so "5 of 47" reflects real data.
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { PredictionsHubContent } from "@/content/pages/predictions/types";
+
+interface Props {
+  locale: Locale;
+  content: PredictionsHubContent["paywall"];
+  totalCount: number;
+}
+
+const { locale, content, totalCount } = Astro.props;
+
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+
+const h2 = content.h2Template.replace("{total}", String(totalCount));
+---
+
+<Section surface="conversion" spacing="lg" ariaLabelledby="paywall-h2">
+  <Container size="xl" class="relative">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Copy -->
+      <div>
+        <h2
+          id="paywall-h2"
+          class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-white-pure"
+        >
+          {h2}
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-white-soft">
+          {content.body}
+        </p>
+
+        <ul class="mt-6 space-y-2 text-sm text-white-soft">
+          {content.bullets.map((b) => (
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-pitch-green-400 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              <span>{b}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">
+            {content.ctaPrimary.label}
+          </Button>
+          <Button href={ctaSecondaryHref} variant="secondary" size="lg" surface="dark">
+            {content.ctaSecondary.label}
+          </Button>
+        </div>
+      </div>
+
+      <!-- Side-by-side preview -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Free -->
+        <div class="rounded-xl border border-deep-navy-600 bg-charcoal-700 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wider text-white-muted">Free</p>
+          <div class="mt-3 space-y-1 text-xs text-white-soft">
+            <p class="font-semibold text-white-pure">Manchester City</p>
+            <p class="font-semibold text-white-pure">Arsenal</p>
+          </div>
+          <p class="mt-3 text-sm font-bold text-pitch-green-400">Over 2.5 Goals</p>
+          <div class="mt-2 h-1 rounded bg-deep-navy-900 overflow-hidden">
+            <div class="h-full bg-pitch-green-500" style="width: 78%;"></div>
+          </div>
+          <p class="mt-1 font-mono text-[10px] text-white-muted">78%</p>
+        </div>
+
+        <!-- Paid -->
+        <div class="rounded-xl border-2 border-pitch-green-500 bg-charcoal-700 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wider text-pitch-green-400">Subscriber</p>
+          <div class="mt-3 space-y-1 text-xs text-white-soft">
+            <p class="font-semibold text-white-pure">Manchester City</p>
+            <p class="font-semibold text-white-pure">Arsenal</p>
+          </div>
+          <p class="mt-3 text-sm font-bold text-pitch-green-400">Over 2.5 Goals</p>
+          <div class="mt-2 h-1 rounded bg-deep-navy-900 overflow-hidden">
+            <div class="h-full bg-pitch-green-500" style="width: 78%;"></div>
+          </div>
+          <p class="mt-1 font-mono text-[10px] text-white-muted">78%</p>
+          <div class="mt-3 space-y-1 text-[11px] text-white-soft border-t border-deep-navy-600 pt-2">
+            <p>xG: 2.4 — 1.6</p>
+            <p>H2H: City 4W 1D 1L</p>
+            <p>Possession: 58%</p>
+            <p>Form: WWWDW vs WLDDW</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

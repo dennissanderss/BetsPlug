@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for es."
+  },
+  "meta": {
+    "title": "Pronósticos de Fútbol IA Hoy - Todas las Ligas | BetsPlug",
+    "description": "Pronósticos de fútbol IA diarios para 30+ ligas. Picks gratis hoy, bloqueados antes del inicio. Historial público.",
+    "ogImage": "/og-images/predictions-es.jpg"
+  },
+  "hero": {
+    "h1Template": "Pronósticos de Fútbol IA para {date}",
+    "subheadline": "Pronósticos diarios para 30+ ligas, generados por nuestro motor IA con Elo, Poisson y machine learning. Bloqueados antes del inicio.",
+    "trustStrip": ["Actualizaciones live", "Pronósticos bloqueados", "Historial público"],
+    "liveLabel": "Actualizado",
+    "liveSecondsAgo": "hace {seconds}s",
+    "ctaPrimary": { "label": "Pronósticos Ilimitados", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Cómo funciona", "canonical": "methodology" },
+    "miniRecord": {
+      "title": "Últimos 30 días",
+      "subtitle": "Todos los pronósticos publicados — registro público",
+      "legendWin": "Acierto",
+      "legendLoss": "Fallo"
+    }
+  },
+  "filter": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "thisWeek": "Esta Semana",
+    "todayActiveAria": "Mostrando pronósticos de hoy"
+  },
+  "cards": {
+    "locked": "Bloqueado",
+    "freePick": "Pick gratis",
+    "unlock": "Desbloquear pronóstico",
+    "subscribeToView": "Suscríbete para ver el pronóstico",
+    "viewAnalysis": "Ver análisis del partido",
+    "confidence": "Confianza",
+    "lockedBeforeKickoff": "Bloqueado antes del inicio",
+    "viewPricing": "Ver Precios"
+  },
+  "tomorrowEmpty": {
+    "teaserTitle": "Desbloquea los Pronósticos de Mañana",
+    "teaserBody": "{count} pronósticos más mañana — solo de pago",
+    "cta": { "label": "Ver Precios", "canonical": "pricing" }
+  },
+  "weekTab": {
+    "h3": "Resumen de la Semana",
+    "body": "Los suscriptores ven cada pronóstico de los próximos 7 días. Los usuarios gratis solo ven hoy.",
+    "weekdayLabels": ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+    "cta": { "label": "Obtén la semana completa", "canonical": "pricing" }
+  },
+  "paywall": {
+    "h2Template": "Estás Viendo 5 de {total} Pronósticos de Hoy",
+    "body": "Los suscriptores ven cada pronóstico de 30+ ligas, análisis completo de partidos, y los reciben 24 horas antes del inicio.",
+    "bullets": [
+      "Pronósticos diarios ilimitados (vs 5 gratis)",
+      "Todas las 30+ ligas (vs solo top 3)",
+      "Análisis completo: xG, H2H, alineaciones, razonamiento",
+      "Pronósticos 24h antes (vs 2h antes del inicio)",
+      "Notificaciones Telegram para picks de alta confianza"
+    ],
+    "ctaPrimary": { "label": "Ver Planes", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Comparar gratis vs pago", "canonical": "free-vs-paid" }
+  },
+  "leagueGrid": {
+    "h2": "Pronósticos por Liga",
+    "cardCta": "Ver pronósticos",
+    "todayCountTemplate": "{count} pronósticos hoy",
+    "featuredBadge": "Destacado"
+  },
+  "methodology": {
+    "h2": "Cómo Se Crean Estos Pronósticos",
+    "body": [
+      "Cada pronóstico en esta página es generado por nuestro motor IA, no por editores o tipsters. El motor combina puntuaciones Elo (fuerza del equipo), modelos Poisson (probabilidad de goles) y machine learning (reconocimiento de patrones) para evaluar cada partido en 40+ variables.",
+      "Los pronósticos se bloquean con marca de tiempo pública antes del inicio. Publicamos tanto aciertos como fallos — verificable en nuestro historial público."
+    ],
+    "pillars": [
+      { "icon": "calc", "label": "Modelos matemáticos (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning" },
+      { "icon": "lock", "label": "Bloqueado y marcado en tiempo" }
+    ],
+    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ de Pronósticos",
+    "questions": [
+      { "q": "¿Con qué frecuencia se actualizan los pronósticos?", "a": "Los pronósticos se generan continuamente. La página hub actualiza datos cada minuto. Una vez bloqueado, un pronóstico no se puede modificar." },
+      { "q": "¿Por qué solo 5 pronósticos gratis al día?", "a": "Los pronósticos gratis son una muestra de nuestra producción diaria. Los suscriptores reciben todos los pronósticos diarios para 30+ ligas, además del análisis completo." },
+      { "q": "¿Puedo obtener pronósticos para un partido específico?", "a": "Los suscriptores pueden ver todos los pronósticos para cualquier liga o partido. Los usuarios gratis ven una selección curada de las ligas principales." },
+      { "q": "¿Qué significa el 'porcentaje de confianza'?", "a": "La confianza refleja la certeza de nuestro modelo sobre el resultado predicho. 78% de confianza en 'Más de 2,5 goles' significa que el modelo estima ese resultado en 78% de probabilidad." },
+      { "q": "¿Por qué se bloquean los pronósticos antes del inicio?", "a": "Bloquear con marca de tiempo pública garantiza que no podemos editarlos retroactivamente. Es el núcleo de nuestra garantía de transparencia." },
+      { "q": "¿Los pronósticos gratis tienen menor precisión que los pagos?", "a": "No. Los pronósticos gratis usan el mismo motor y metodología que los pagos. La diferencia es volumen, profundidad, timing y cobertura de ligas." }
+    ],
+    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "¿Quieres Todos los Pronósticos?",
+    "body": "5 gratis al día. Ilimitados con cualquier plan de pago.",
+    "ctaPrimary": { "label": "Ver Planes", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Cuenta Gratuita", "href": "https://app.betsplug.com/register?source=predictions_hub_final" }
+  }
+}

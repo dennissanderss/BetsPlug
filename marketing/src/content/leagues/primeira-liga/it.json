@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronostici Primeira Liga Oggi | IA | BetsPlug",
+    "description": "Pronostici IA Primeira Liga per ogni partita. Benfica, Porto, Sporting e il resto — analizzati con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-primeira-liga-it.jpg"
+  },
+  "hero": {
+    "h1": "Pronostici Primeira Liga",
+    "subheadline": "Pronostici IA per ogni partita di Primeira Liga. Generati con classifiche Elo, modelli Poisson e machine learning. Bloccati prima del calcio d'inizio.",
+    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sui pronostici Primeira Liga",
+    "paragraphs": [
+      "La Primeira Liga è la massima divisione portoghese, contestata da 18 club su 34 giornate da agosto a maggio. Il campionato è dominato dai 'Big Three' — Benfica, Porto e Sporting CP. Il Portogallo è uno dei campionati venditori più forti d'Europa: i club principali esportano regolarmente talenti sviluppati a Premier League, La Liga e Bundesliga.",
+      "I pronostici di Primeira Liga sono influenzati da pattern di volatilità della rosa rari in altri campionati top. Le finestre di trasferimento di metà stagione vedono spesso partenze significative dai Big Three verso campionati europei più ricchi. Il nostro modello tiene conto della vicinanza delle finestre di trasferimento.",
+      "Ogni pronostico Primeira Liga viene bloccato con un timestamp pubblico prima del calcio d'inizio. I pronostici Primeira Liga sono parte di tutti i piani a pagamento."
+    ],
+    "statsPanel": { "h3": "Primeira Liga a colpo d'occhio", "ctaLabel": "Vedi Primeira Liga nell'app" }
+  },
+  "topTeams": { "h2": "Top squadre Primeira Liga" },
+  "methodology": {
+    "h2": "Come vengono creati i pronostici Primeira Liga",
+    "body": "I pronostici Primeira Liga usano lo stesso motore, con attenzione speciale alla volatilità della rosa intorno alle finestre di trasferimento.",
+    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronostici Primeira Liga",
+    "questions": [
+      { "q": "Quanto sono accurati i pronostici IA Primeira Liga?", "a": "L'accuratezza varia. Pubblichiamo ogni pronostico nel nostro track record pubblico." },
+      { "q": "Perché i pronostici Primeira Liga sono solo a pagamento?", "a": "I pronostici gratuiti sono limitati ai 3 campionati top." },
+      { "q": "Come gestisce il modello i trasferimenti di metà stagione?", "a": "Il nostro layer ML elabora i trasferimenti confermati immediatamente e regola le stime di forza della rosa entro ore." },
+      { "q": "Quando sono disponibili i pronostici?", "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio." },
+      { "q": "Coprite la Taça de Portugal?", "a": "Copriamo tutte le partite di Primeira Liga. Taça de Portugal e competizioni europee separatamente." },
+      { "q": "Pronostici Primeira Liga via Telegram?", "a": "Sì, per gli abbonati paganti." }
+    ],
+    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Vuoi tutti i pronostici Primeira Liga?",
+    "h2Gated": "Sblocca i pronostici Primeira Liga",
+    "bodyFree": "Gli abbonati hanno ogni partita con analisi completa.",
+    "bodyGated": "I pronostici Primeira Liga sono inclusi in tutti i piani a pagamento.",
+    "ctaPrimary": { "label": "Vedi Prezzi", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Prova Gratis", "href": "https://app.betsplug.com/register?source=league_primeira-liga" }
+  }
+}

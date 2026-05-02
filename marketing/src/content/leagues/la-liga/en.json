@@ -1,0 +1,82 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "La Liga Predictions Today | AI-Powered | BetsPlug",
+    "description": "AI-powered La Liga predictions for every match. Locked before kickoff, public track record. Daily picks for Real Madrid, Barcelona, Atlético and the rest.",
+    "ogImage": "/og-images/league-la-liga-en.jpg"
+  },
+  "hero": {
+    "h1": "La Liga Predictions",
+    "subheadline": "AI-powered predictions for every La Liga match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
+    "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
+    "trustStripUpdated": "Updated every minute",
+    "trustStripLocked": "Locked before kickoff",
+    "ctaPrimaryFreeLabel": "View Free Predictions",
+    "ctaPrimaryGatedLabel": "Unlock La Liga Predictions",
+    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "statsTeams": "Teams",
+    "statsMatchweek": "Current matchweek",
+    "statsThisWeek": "Predictions this week"
+  },
+  "cards": {
+    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
+    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "viewPricing": "View Pricing"
+  },
+  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "cardsSection": {
+    "moreTodayPaid": "{count} more predictions today — paid only",
+    "unlockAll": "Subscribe to view all La Liga predictions",
+    "fixturesOnlyHeading": "Upcoming Fixtures",
+    "fixturesEmpty": "No upcoming fixtures in this window."
+  },
+  "context": {
+    "h2": "About La Liga Predictions",
+    "paragraphs": [
+      "La Liga is Spain's top football division, contested by 20 clubs across 38 matchdays from August to May. The league is historically dominated by Real Madrid and Barcelona, with Atlético Madrid as a third established power, but title races have grown more open in recent seasons. Our AI engine analyzes every La Liga match using current form, El Clásico-influenced rivalry data, expected goals, transfer-window lineup changes, and 40+ other variables.",
+      "La Liga is technically distinct from other top European leagues: matches average lower xG and tighter possession-based play, particularly outside the top six. This makes goal-line markets (Over/Under, BTTS) statistically more volatile than in the Premier League or Bundesliga. Our model accounts for this by weighting Spanish-football-specific patterns — defensive resilience of mid-table sides, late-season squad rotation, and the impact of European fixtures on midweek-followed La Liga matches.",
+      "Every La Liga prediction is locked with a public timestamp before kickoff. Wins and losses both go into our public track record. Free users see 2-3 La Liga predictions daily, weighted toward the highest-confidence matches; subscribers receive every fixture across the league with full statistical breakdowns including xG, lineup strength and head-to-head history."
+    ],
+    "statsPanel": {
+      "h3": "La Liga at a glance",
+      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated", "ctaLabel": "View La Liga on app"
+    }
+  },
+  "topTeams": {
+    "h2": "Top La Liga Teams",
+    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+  },
+  "methodology": {
+    "h2": "How La Liga Predictions Are Made",
+    "body": "La Liga predictions use the same engine as all our football predictions: Elo ratings for team strength, Poisson models for goal probability, and machine learning for pattern recognition. The model is trained on La Liga-specific historical data, accounting for the league's lower scoring averages and possession-driven match dynamics.",
+    "pillars": [
+      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning trained on La Liga data" },
+      { "icon": "lock", "label": "Locked & timestamped" }
+    ],
+    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "La Liga Predictions FAQ",
+    "questions": [
+      { "q": "How accurate are AI predictions for La Liga?", "a": "Accuracy varies per matchday and prediction type. We publish every La Liga prediction in our public track record so you can verify performance yourself." },
+      { "q": "Why do you offer free La Liga predictions?", "a": "La Liga is one of three top leagues where we publish 2-3 free predictions daily. Subscribers receive every La Liga match with full analysis." },
+      { "q": "What types of predictions do you publish for La Liga?", "a": "For every La Liga match we publish predictions across multiple markets: 1X2, Over/Under goals (Spanish football's tighter scoring patterns are factored in), Both Teams to Score, and Double Chance." },
+      { "q": "How early are La Liga predictions available?", "a": "Subscribers see La Liga predictions up to 24 hours before kickoff. Free users see them 2 hours before kickoff." },
+      { "q": "Do you cover Copa del Rey and European fixtures involving La Liga clubs?", "a": "We cover all La Liga matches. Copa del Rey, Champions League and Europa League fixtures involving La Liga clubs are covered separately under their own competition pages." },
+      { "q": "Can I get La Liga predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence La Liga predictions." }
+    ],
+    "cta": { "label": "All FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Want All La Liga Predictions?",
+    "h2Gated": "Unlock La Liga Predictions",
+    "bodyFree": "Free users see 2-3 daily picks. Subscribers get every match with full statistical analysis.",
+    "bodyGated": "La Liga predictions are part of all paid plans.",
+    "ctaPrimary": { "label": "View Plans", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Get Free Account", "href": "https://app.betsplug.com/register?source=league_la-liga" }
+  }
+}

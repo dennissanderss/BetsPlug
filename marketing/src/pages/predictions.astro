@@ -1,0 +1,192 @@
+---
+/**
+ * Predictions hub — English root.
+ * URL: /predictions
+ *
+ * Spec: docs/specs/03-predictions-hub.md
+ *
+ * Section composition (in order):
+ *   1. PredictionsHero — live indicator + mini track record visual
+ *   2. DateFilterTabs + HubCardsGrid — gating per active filter
+ *   3. PaywallTease — "5 of N" conversion strip
+ *   4. LeagueGrid — 10 league cards
+ *   5. PredictionsMethodologyPreview
+ *   6. PredictionsFAQ
+ *   7. PredictionsFinalCTA
+ *
+ * Date filter is URL-param-driven (?date=tomorrow|week). Default = today.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import PredictionsHero            from "@/components/predictions/PredictionsHero.astro";
+import DateFilterTabs             from "@/components/predictions/DateFilterTabs.astro";
+import HubCardsGrid               from "@/components/predictions/HubCardsGrid.astro";
+import PaywallTease               from "@/components/predictions/PaywallTease.astro";
+import LeagueGrid                 from "@/components/predictions/LeagueGrid.astro";
+import PredictionsMethodologyPreview from "@/components/predictions/PredictionsMethodologyPreview.astro";
+import PredictionsFAQ             from "@/components/predictions/PredictionsFAQ.astro";
+import PredictionsFinalCTA        from "@/components/predictions/PredictionsFinalCTA.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import {
+  loadHubContent,
+  loadHubData,
+  formatTodayForLocale,
+  dailyCountsByLeague,
+} from "@/lib/predictions-hub";
+
+const locale = "en" as const;
+const content = await loadHubContent(locale);
+const hub = await loadHubData(Astro.site);
+
+// Date filter from URL param
+const dateParam = (Astro.url.searchParams.get("date") ?? "today").toLowerCase();
+const active: "today" | "tomorrow" | "week" =
+  dateParam === "tomorrow" ? "tomorrow" : dateParam === "week" ? "week" : "today";
+
+const formattedDate = formatTodayForLocale(locale);
+const SITE = "https://betsplug.com";
+
+// Schema.org — CollectionPage + ItemList(SportsEvent) + Breadcrumb + FAQPage
+const collectionSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  url: `${SITE}/predictions`,
+  inLanguage: locale,
+  name: content.meta.title,
+  description: content.meta.description,
+};
+
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: hub.today.predictions.slice(0, 5).map((p, idx) => ({
+    "@type": "ListItem",
+    position: idx + 1,
+    item: {
+      "@type": "SportsEvent",
+      name: `${p.homeTeam.name} vs ${p.awayTeam.name}`,
+      sport: "Football",
+      startDate: p.lockedAt,
+      homeTeam: { "@type": "SportsTeam", name: p.homeTeam.name },
+      awayTeam: { "@type": "SportsTeam", name: p.awayTeam.name },
+      url: p.matchUrl,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home",        item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Predictions", item: `${SITE}/predictions` },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: content.faq.questions.map((q) => ({
+    "@type": "Question",
+    name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+};
+---
+
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath="/predictions"
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <PredictionsHero
+    locale={locale}
+    content={content.hero}
+    formattedDate={formattedDate}
+    lastUpdated={hub.lastUpdated}
+  />
+
+  <Section surface="dark" spacing="lg" ariaLabelledby="predictions-cards-h2">
+    <Container size="xl">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <h2 id="predictions-cards-h2" class="sr-only">Today's predictions</h2>
+        <DateFilterTabs locale={locale} content={content.filter} active={active} />
+        <p class="text-sm text-white-muted">
+          {hub.today.freeCount}/{hub.today.totalCount} {content.cards.freePick.toLowerCase()}s
+        </p>
+      </div>
+
+      <div class="mt-8">
+        <HubCardsGrid
+          locale={locale}
+          content={content}
+          active={active}
+          todayPredictions={hub.today.predictions}
+          tomorrowTeaser={hub.tomorrow.teaser}
+          tomorrowCount={hub.tomorrow.totalCount}
+          weekDailyCounts={hub.week.dailyCounts}
+        />
+      </div>
+    </Container>
+  </Section>
+
+  <PaywallTease locale={locale} content={content.paywall} totalCount={hub.today.totalCount} />
+
+  <LeagueGrid locale={locale} content={content.leagueGrid} dailyCounts={dailyCountsByLeague()} />
+
+  <PredictionsMethodologyPreview locale={locale} content={content.methodology} />
+
+  <PredictionsFAQ locale={locale} content={content.faq} />
+
+  <PredictionsFinalCTA locale={locale} content={content.finalCta} />
+</MarketingLayout>
+
+<script>
+  // Client polling — refresh hub data every 30s while tab visible.
+  // Pauses while tab hidden to save resources, refreshes on focus.
+  (function () {
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const POLL_MS = 30_000;
+
+    async function refresh() {
+      try {
+        const res = await fetch("/api/predictions/hub.json", { headers: { Accept: "application/json" } });
+        if (!res.ok) return;
+        // Touch the live counter so it resets to 0
+        const counter = document.querySelector("[data-live-seconds]") as HTMLElement | null;
+        if (counter) {
+          counter.setAttribute("data-last-updated", new Date().toISOString());
+        }
+      } catch {
+        // Swallow — UI stays as-is
+      }
+    }
+
+    function start() {
+      if (timer) return;
+      timer = setInterval(refresh, POLL_MS);
+    }
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    document.addEventListener("DOMContentLoaded", start);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        stop();
+      } else {
+        refresh();
+        start();
+      }
+    });
+  })();
+</script>

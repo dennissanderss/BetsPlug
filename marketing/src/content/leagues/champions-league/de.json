@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Champions League Vorhersagen | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte UEFA Champions League-Vorhersagen für jedes Spiel. Liga-Phase bis Finale — analysiert mit Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-champions-league-de.jpg"
+  },
+  "hero": {
+    "h1": "Champions League Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes UEFA Champions League-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Champions League Vorhersagen",
+    "paragraphs": [
+      "Die UEFA Champions League ist Europas erstklassiger Vereinswettbewerb, ausgetragen unter den Top-Clubs des Kontinents. Die Saison 2024-25 führte ein neues Liga-Phasen-Format mit 36 Clubs in einer kombinierten Tabelle ein und ersetzte die traditionelle 32-Team-Gruppenphase. Der Wettbewerb gipfelt in zweibeinigen K.-o.-Runden und einem Endspiel. Unsere KI-Engine analysiert jedes Champions League-Spiel mit aktueller Form, direkten Begegnungen (wenn Teams zuvor gespielt haben), Expected Goals und 40+ weiteren Variablen.",
+      "Champions League-Vorhersagen haben einzigartige Eigenschaften, die sie von Liga-Vorhersagen unterscheiden. Die Wettbewerbslücke zwischen Teams ist breiter — ein Real Madrid vs RB Salzburg-Spiel hat sehr unterschiedliche statistische Dynamiken als zwei gleichrangige Premier-League-Teams. Zweibeinige K.-o.-Spiele führen auch strategische Überlegungen ein. Unser Modell behandelt Liga-Phasen- und K.-o.-Spiele als separate Vorhersageprobleme mit unterschiedlichen Feature-Gewichten.",
+      "Jede Champions League-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Champions League-Vorhersagen sind Teil aller bezahlten Pläne — Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse: xG, K.-o.-Kontext-Anpassungen und Rotationsmuster für Clubs, die nationale und europäische Verpflichtungen ausbalancieren."
+    ],
+    "statsPanel": { "h3": "Champions League auf einen Blick", "ctaLabel": "Champions League in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Champions League Clubs" },
+  "methodology": {
+    "h2": "Wie Champions League Vorhersagen Erstellt Werden",
+    "body": "Champions League-Vorhersagen verwenden dieselbe Kern-Engine wie unsere nationalen Vorhersagen, mit separater Kalibrierung für Liga-Phasen versus K.-o.-Runden-Dynamik. Zweibeinige Spiele werden mit Aggregat-Kontext modelliert.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Champions League Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für die Champions League?", "a": "Genauigkeit variiert zwischen Liga-Phase und K.-o.-Spielen. Wir veröffentlichen jede Champions League-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum sind Champions League-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf die nationalen Top-3-Ligen beschränkt." },
+      { "q": "Wie behandelt ihr zweibeinige K.-o.-Spiele?", "a": "Wir behandeln jedes Spiel als separate Vorhersage mit dem Aggregat-Score und Auswärts-Kontext als Eingangsvariablen." },
+      { "q": "Wie früh sind Champions League-Vorhersagen verfügbar?", "a": "Abonnenten sehen Champions League-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr Champions League-Qualifikationsrunden ab?", "a": "Wir decken Liga-Phase und K.-o.-Spiele ab. Frühere Qualifikationsrunden sind nicht in unserer Standard-Abdeckung." },
+      { "q": "Kann ich Champions League-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Champions League-Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Champions League Vorhersagen?",
+    "h2Gated": "Champions League Vorhersagen Freischalten",
+    "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Champions League-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_champions-league" }
+  }
+}

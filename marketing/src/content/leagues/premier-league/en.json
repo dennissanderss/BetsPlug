@@ -1,0 +1,88 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Premier League Predictions Today | AI-Powered | BetsPlug",
+    "description": "AI-powered Premier League predictions for every match. Locked before kickoff, public track record. Free picks daily — full analysis for subscribers.",
+    "ogImage": "/og-images/league-premier-league-en.jpg"
+  },
+  "hero": {
+    "h1": "Premier League Predictions",
+    "subheadline": "AI-powered predictions for every Premier League match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
+    "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
+    "trustStripUpdated": "Updated every minute",
+    "trustStripLocked": "Locked before kickoff",
+    "ctaPrimaryFreeLabel": "View Free Predictions",
+    "ctaPrimaryGatedLabel": "Unlock Premier League Predictions",
+    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "statsTeams": "Teams",
+    "statsMatchweek": "Current matchweek",
+    "statsThisWeek": "Predictions this week"
+  },
+  "cards": {
+    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
+    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "viewPricing": "View Pricing"
+  },
+  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "cardsSection": {
+    "moreTodayPaid": "{count} more predictions today — paid only",
+    "unlockAll": "Subscribe to view all Premier League predictions",
+    "fixturesOnlyHeading": "Upcoming Fixtures",
+    "fixturesEmpty": "No upcoming fixtures in this window."
+  },
+  "context": {
+    "h2": "About Premier League Predictions",
+    "paragraphs": [
+      "The Premier League is England's top football division, contested by 20 clubs across 38 matchdays from August to May. Founded in 1992, it has grown into the most-watched football league globally, generating broadcast revenue exceeding £10 billion per cycle. Our AI engine analyzes every Premier League match using current form, head-to-head history, expected goals, lineup data, and 40+ other variables.",
+      "Premier League predictions are particularly challenging due to the league's competitive depth. Top six clubs regularly face unpredictable challenges from mid-table sides, and end-of-season fixtures often involve significant motivation differences (top four race vs relegation battle). Our model weighs recent form heavily — particularly the last 6-10 matches — combined with home/away splits, where Premier League home advantage is historically among the strongest in European football.",
+      "Every Premier League prediction is locked with a public timestamp before kickoff. Wins and losses both go into our public track record. Free users see 2-3 Premier League predictions daily; subscribers receive every match across the league with full statistical analysis: xG, possession, lineup strength, and tactical context."
+    ],
+    "statsPanel": {
+      "h3": "Premier League at a glance",
+      "teamsLabel": "Teams",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated",
+      "ctaLabel": "View Premier League on app"
+    }
+  },
+  "topTeams": {
+    "h2": "Top Premier League Teams",
+    "positionLabel": "Position",
+    "formLabel": "Form",
+    "viewTeamLabel": "View team"
+  },
+  "methodology": {
+    "h2": "How Premier League Predictions Are Made",
+    "body": "Premier League predictions use the same engine as all our football predictions: Elo ratings for team strength, Poisson models for goal probability, and machine learning for pattern recognition. The model is trained on historical Premier League data — over a decade of match results, lineups and form data — and updated continuously as each match concludes.",
+    "pillars": [
+      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
+      { "icon": "ml", "label": "Machine learning trained on Premier League data" },
+      { "icon": "lock", "label": "Locked & timestamped" }
+    ],
+    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Premier League Predictions FAQ",
+    "questions": [
+      { "q": "How accurate are AI predictions for the Premier League?", "a": "Accuracy varies per matchday and prediction type. We publish every Premier League prediction in our public track record so you can verify performance yourself." },
+      { "q": "Why do you offer free Premier League predictions?", "a": "The Premier League is one of three top leagues where we publish 2-3 free predictions daily. Subscribers receive every Premier League match with full analysis." },
+      { "q": "What types of predictions do you publish for the Premier League?", "a": "For every Premier League match we publish predictions across multiple markets: 1X2 (match result), Over/Under goals, Both Teams to Score, and Double Chance." },
+      { "q": "How early are Premier League predictions available?", "a": "Subscribers see Premier League predictions up to 24 hours before kickoff. Free users see them 2 hours before kickoff." },
+      { "q": "Do you cover FA Cup and European fixtures involving Premier League clubs?", "a": "We cover all Premier League matches. FA Cup, Champions League and Europa League fixtures involving Premier League clubs are covered separately under their own competition pages." },
+      { "q": "Can I get Premier League predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Premier League predictions." }
+    ],
+    "cta": { "label": "All FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Want All Premier League Predictions?",
+    "h2Gated": "Unlock Premier League Predictions",
+    "bodyFree": "Free users see 2-3 daily picks. Subscribers get every match with full statistical analysis.",
+    "bodyGated": "Premier League predictions are part of all paid plans.",
+    "ctaPrimary": { "label": "View Plans", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Get Free Account", "href": "https://app.betsplug.com/register?source=league_premier-league" }
+  }
+}

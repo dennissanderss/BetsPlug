@@ -1,0 +1,82 @@
+---
+/**
+ * LockingTimeline — horizontal timeline showing the lifecycle of a
+ * prediction: generated → publicly locked → kickoff → result added
+ * → immutable forever.
+ */
+interface Step { label: string; detail: string }
+interface Props {
+  caption: string;
+  steps: Step[];
+  surface?: "light" | "dark";
+}
+const { caption, steps, surface = "dark" } = Astro.props;
+
+const fg     = surface === "dark" ? "rgb(232,234,239)" : "rgb(15,20,25)";
+const muted  = surface === "dark" ? "rgb(155,163,181)" : "rgb(90,100,120)";
+const accent = "#00d26a";
+
+const W = 720, H = 200;
+const padX = 60, padT = 60;
+const trackY = padT + 20;
+
+const stepX = (i: number) => padX + (i * (W - 2 * padX)) / (steps.length - 1);
+
+// Wrap each step detail to ~18 chars per line so SVG <text> renders
+// neatly without overflow. Astro JSX doesn't accept complex inline
+// generics, so the wrapping lives here.
+function wrapDetail(detail: string, maxChars = 20): string[] {
+  const words = detail.split(/\s+/);
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > maxChars && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = next;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+const wrappedSteps = steps.map((step) => ({
+  ...step,
+  detailLines: wrapDetail(step.detail),
+}));
+---
+
+<figure class="my-8">
+  <div class={`rounded-2xl border ${surface === "dark" ? "border-deep-navy-600 bg-deep-navy-800/60" : "border-stadium-white-200 bg-white"} p-6 lg:p-8`}>
+    <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+      <!-- Track -->
+      <line x1={padX} y1={trackY} x2={W - padX} y2={trackY} stroke={muted} stroke-width="2" stroke-opacity="0.3"/>
+      <line x1={padX} y1={trackY} x2={stepX(steps.length - 1)} y2={trackY} stroke={accent} stroke-width="2"/>
+
+      {wrappedSteps.map((step, i) => (
+        <g>
+          <!-- Tick -->
+          <circle cx={stepX(i)} cy={trackY} r="9" fill={surface === "dark" ? "rgb(10,14,31)" : "rgb(255,255,255)"} stroke={accent} stroke-width="2"/>
+          <circle cx={stepX(i)} cy={trackY} r="4" fill={accent}/>
+
+          <!-- Label above -->
+          <text x={stepX(i)} y={trackY - 22} font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle" fill={fg}>
+            {step.label}
+          </text>
+
+          <!-- Detail below — pre-wrapped lines -->
+          {step.detailLines.map((line, li) => (
+            <text x={stepX(i)} y={trackY + 38 + li * 14} font-family="Inter, sans-serif" font-size="10" text-anchor="middle" fill={muted}>
+              {line}
+            </text>
+          ))}
+        </g>
+      ))}
+    </svg>
+  </div>
+  <figcaption class={`mt-3 text-center text-sm ${surface === "dark" ? "text-white-muted" : "text-charcoal-500"}`}>
+    {caption}
+  </figcaption>
+</figure>

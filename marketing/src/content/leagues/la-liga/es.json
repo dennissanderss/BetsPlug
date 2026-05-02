@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Pronósticos La Liga Hoy | IA | BetsPlug",
+    "description": "Pronósticos IA La Liga para cada partido. Real Madrid, Barcelona, Atlético y el resto — analizados con Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-la-liga-es.jpg"
+  },
+  "hero": {
+    "h1": "Pronósticos La Liga",
+    "subheadline": "Pronósticos IA para cada partido de La Liga. Generados con puntuaciones Elo, modelos Poisson y machine learning. Bloqueados antes del inicio.",
+    "ctaSecondary": { "label": "Cómo funciona", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Sobre los pronósticos de La Liga",
+    "paragraphs": [
+      "La Liga es la primera división española, disputada por 20 clubes en 38 jornadas de agosto a mayo. La liga está históricamente dominada por Real Madrid y Barcelona, con Atlético Madrid como tercer poder establecido, aunque las carreras por el título se han abierto en temporadas recientes. Nuestro motor IA analiza cada partido con la forma actual, datos de rivalidad influenciados por El Clásico, expected goals, cambios de alineación relacionados con el mercado de fichajes y 40+ variables más.",
+      "La Liga es técnicamente distinta de otras grandes ligas europeas: los partidos promedian xG más bajo y un juego más cerrado basado en posesión, particularmente fuera del top seis. Esto hace que los mercados de goles (Más/Menos, BTTS) sean estadísticamente más volátiles que en Premier League o Bundesliga. Nuestro modelo lo tiene en cuenta ponderando patrones específicos del fútbol español — resiliencia defensiva de equipos de mitad de tabla, rotación de fin de temporada y el impacto de partidos europeos.",
+      "Cada pronóstico de La Liga se bloquea con marca de tiempo pública antes del inicio. Tanto victorias como derrotas entran en nuestro historial público. Los usuarios gratuitos ven 2-3 pronósticos diarios, ponderados hacia los partidos de mayor confianza; los suscriptores reciben cada encuentro con desgloses estadísticos completos."
+    ],
+    "statsPanel": { "h3": "La Liga de un vistazo", "ctaLabel": "Ver La Liga en la app" }
+  },
+  "topTeams": { "h2": "Mejores equipos La Liga" },
+  "methodology": {
+    "h2": "Cómo se crean los pronósticos de La Liga",
+    "body": "Los pronósticos de La Liga utilizan el mismo motor que todos nuestros pronósticos, calibrado en los promedios de goles más bajos de la liga y la dinámica basada en posesión.",
+    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "FAQ Pronósticos La Liga",
+    "questions": [
+      { "q": "¿Qué tan precisos son los pronósticos IA La Liga?", "a": "La precisión varía. Publicamos cada pronóstico en nuestro historial público." },
+      { "q": "¿Por qué ofrecen pronósticos La Liga gratuitos?", "a": "La Liga es una de las tres ligas principales con 2-3 pronósticos gratuitos diarios." },
+      { "q": "¿Qué tipos de pronósticos para La Liga?", "a": "1X2, Más/Menos goles (con los patrones de scoring españoles más cerrados considerados), BTTS, Doble Oportunidad." },
+      { "q": "¿Cuándo están disponibles los pronósticos?", "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio." },
+      { "q": "¿Cubren la Copa del Rey y partidos europeos?", "a": "Cubrimos todos los partidos de La Liga. Copa del Rey y competiciones europeas por separado." },
+      { "q": "¿Pronósticos La Liga vía Telegram?", "a": "Sí, para suscriptores de pago." }
+    ],
+    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "¿Quieres todos los pronósticos La Liga?",
+    "h2Gated": "Desbloquea los pronósticos La Liga",
+    "bodyFree": "Los usuarios gratuitos ven 2-3 picks diarios. Los suscriptores tienen cada partido con análisis completo.",
+    "bodyGated": "Los pronósticos de La Liga están incluidos en todos los planes de pago.",
+    "ctaPrimary": { "label": "Ver Planes", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Cuenta Gratuita", "href": "https://app.betsplug.com/register?source=league_la-liga" }
+  }
+}

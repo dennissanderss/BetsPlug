@@ -1,0 +1,50 @@
+---
+/**
+ * LeagueFinalCTA — Section 7 of /predictions/{league}.
+ * Two H2 + body variants based on league.isTopThree.
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { LeagueConfig } from "@/config/leagues";
+import type { LeaguePageContent } from "@/content/leagues/types";
+
+interface Props {
+  locale: Locale;
+  league: LeagueConfig;
+  content: LeaguePageContent["finalCta"];
+}
+
+const { locale, league, content } = Astro.props;
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+const isFree = league.isTopThree;
+const h2 = isFree ? content.h2Free : content.h2Gated;
+const body = isFree ? content.bodyFree : content.bodyGated;
+---
+
+<Section surface="conversion" spacing="xl" ariaLabelledby="league-final-cta-h2">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-25 blur-[120px]"
+    style={`background: radial-gradient(circle, ${league.primaryColor}80 0%, ${league.primaryColor}00 70%);`}
+  ></div>
+
+  <Container size="md" class="relative">
+    <div class="text-center">
+      <h2 id="league-final-cta-h2" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white-pure">
+        {h2}
+      </h2>
+      <p class="mt-5 text-lg leading-relaxed text-white-soft">{body}</p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">
+          {content.ctaPrimary.label}
+        </Button>
+        <Button href={content.ctaSecondary.href} variant="secondary" size="lg" surface="dark" external>
+          {content.ctaSecondary.label}
+        </Button>
+      </div>
+    </div>
+  </Container>
+</Section>

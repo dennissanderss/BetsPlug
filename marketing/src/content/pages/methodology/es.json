@@ -1,0 +1,144 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Metodología: Cómo Funcionan los Pronósticos IA BetsPlug | BetsPlug",
+    "description": "Metodología detallada detrás de los pronósticos de fútbol IA BetsPlug. Puntuaciones Elo, modelos Poisson, machine learning. Abierto, reproducible, bloqueado antes del inicio.",
+    "ogImage": "/og-images/methodology-es.jpg"
+  },
+  "hero": {
+    "h1": "La Metodología Detrás de los Pronósticos BetsPlug",
+    "subheadline": "Cómo combinamos puntuaciones Elo, modelos Poisson y machine learning en un único motor de pronóstico. Sin algoritmo secreto. Sin selección editorial. Solo matemáticas, aplicadas con transparencia.",
+    "trustStrip": ["Metodología abierta", "Lógica reproducible", "Pronósticos bloqueados"],
+    "ctaPrimary": { "label": "Obtener pronósticos", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Ver historial", "canonical": "track-record" }
+  },
+  "toc": {
+    "h2": "En Esta Página",
+    "items": [
+      { "id": "pillars", "label": "Los tres pilares" },
+      { "id": "elo", "label": "Sistema de puntuación Elo" },
+      { "id": "poisson", "label": "Modelos Poisson de goles" },
+      { "id": "ml", "label": "Capa de machine learning" },
+      { "id": "data", "label": "Fuentes de datos & validación" },
+      { "id": "locking", "label": "Mecanismo de bloqueo" },
+      { "id": "what-we-dont-do", "label": "Lo que no hacemos" },
+      { "id": "limitations", "label": "Limitaciones & honestidad" }
+    ]
+  },
+  "pillars": {
+    "h2": "Los Tres Pilares de Nuestro Motor",
+    "intro": "BetsPlug no se basa en un único método estadístico. En cambio, combinamos tres enfoques establecidos — cada uno fuerte en aspectos diferentes del pronóstico de fútbol — y dejamos que el machine learning pondere sus salidas según el contexto del partido.",
+    "items": [
+      { "tagline": "Fuerza del equipo, actualizada dinámicamente", "oneLiner": "Cada equipo tiene una puntuación numérica de fuerza que se ajusta tras cada partido según resultado y calidad del rival.", "icon": "elo" },
+      { "tagline": "Matemáticas de probabilidad de goles", "oneLiner": "Distribución estadística que calcula la probabilidad de resultados específicos.", "icon": "poisson" },
+      { "tagline": "Reconocimiento de patrones en miles de partidos", "oneLiner": "Algoritmos que detectan correlaciones no obvias entre variables y resultados.", "icon": "ml" }
+    ]
+  },
+  "elo": {
+    "h2": "Sistema de Puntuación Elo",
+    "paragraphs": [
+      "El sistema Elo fue desarrollado originalmente por Arpad Elo para clasificaciones de ajedrez en los años 50. Lo adaptamos al fútbol, donde los equipos reemplazan a los jugadores y los resultados de los partidos reemplazan los desenlaces de las partidas. Cada equipo lleva una puntuación numérica única — típicamente entre 1200 y 2200 para clubes top.",
+      "Cuando dos equipos se enfrentan, el sistema Elo usa sus puntuaciones actuales para calcular resultados esperados. La expectativa E para el equipo local es una función logística de la diferencia de puntuaciones más un término de ventaja de local. Tras el partido, las puntuaciones se ajustan con un factor K multiplicado por la diferencia entre resultado real y esperado.",
+      "El Elo de fútbol difiere del Elo de ajedrez en tres aspectos clave: tenemos en cuenta la diferencia de goles, la ventaja de local está integrada en los resultados esperados, y aplicamos un multiplicador de importancia del partido.",
+      "La fortaleza del Elo es su precisión ponderada por reciente. Un equipo en buena forma actual tendrá una puntuación más alta que la sugerida por su promedio histórico. Pero por sí solo, el Elo ignora patrones de scoring — por eso lo combinamos con Poisson y machine learning."
+    ],
+    "formulaCaption": "Fórmula de actualización Elo: nueva puntuación igual a antigua puntuación más factor K por diferencia entre resultado real y esperado.",
+    "exampleBoxLabel": "Ejemplo del mundo real",
+    "exampleBoxBody": "Cuando Manchester City perdió 2-1 ante un equipo de mitad de tabla en 2024, su puntuación Elo bajó 18 puntos. En los siguientes diez partidos, su puntuación se recuperó a medida que sus resultados se normalizaban."
+  },
+  "poisson": {
+    "h2": "Modelos Poisson de Goles",
+    "paragraphs": [
+      "La distribución de Poisson es una fórmula matemática que calcula la probabilidad de un evento discreto dentro de un intervalo fijo, dada una tasa promedio conocida. Para el fútbol, el 'evento' es un gol y el 'intervalo' son 90 minutos.",
+      "Calculamos dos tasas Poisson por partido: los goles esperados del equipo local (lambda H) y del visitante (lambda A). Ambas tasas alimentan una matriz de probabilidad para cada resultado posible.",
+      "La capa Poisson produce probabilidades calibradas contra cuotas de bookmakers y datos históricos. Para un Bayern vs Frankfurt, nuestro modelo podría calcular goles esperados de Bayern en 2,4 y Frankfurt en 0,9.",
+      "El Poisson puro tiende a subestimar empates y partidos de alto scoring. Aplicamos el ajuste Dixon-Coles — un refinamiento que añade un parámetro tau — y lo mezclamos con nuestra capa ML."
+    ],
+    "formulaCaption": "Función de masa de probabilidad Poisson: probabilidad de k goles dada la tasa esperada lambda.",
+    "exampleBoxLabel": "Ejemplo del mundo real",
+    "exampleBoxBody": "Para un Bayern vs Frankfurt, nuestro modelo Poisson podría calcular goles esperados de Bayern en 2,4 y Frankfurt en 0,9. Derivamos: Más de 2,5 ~62%, BTTS sí ~58%, marcador más probable 2-1 (~12%)."
+  },
+  "ml": {
+    "h2": "Capa de Machine Learning",
+    "paragraphs": [
+      "Elo y Poisson son potentes pero mecánicos. Capturan bien la fuerza del equipo y la probabilidad de goles, pero pierden señales más sutiles. El machine learning llena ese vacío detectando patrones en miles de partidos históricos.",
+      "Nuestra capa ML procesa 40+ variables por partido: forma reciente, divisiones casa/fuera, historial directo, tendencias expected goals, estadísticas de posesión, fuerza de alineación, días de descanso, condiciones meteorológicas, tendencias de árbitros, importancia del partido.",
+      "La capa ML no reemplaza Elo o Poisson — pondera sus salidas según el contexto. Para un partido de bajo riesgo, da más peso a Elo + Poisson. Para un partido de alto riesgo, repondera según situaciones históricas similares.",
+      "Nuestro modelo está entrenado en múltiples temporadas de datos históricos — más de 100.000 partidos en las ligas cubiertas. Usamos metodología holdout y validación walk-forward.",
+      "Tras cada partido, el resultado retroalimenta el modelo. Los pronósticos exitosos se refuerzan; los fallidos marcan patrones para reevaluación. El retraining mayor se ejecuta semanalmente."
+    ],
+    "diagramCaption": "Red neuronal simplificada: 40+ variables de entrada fluyen por capas ocultas hacia una salida de pronóstico ponderada."
+  },
+  "data": {
+    "h2": "Fuentes de Datos & Validación",
+    "paragraphs": [
+      "Agregamos datos de partidos y equipos de proveedores de datos deportivos con licencia — las mismas fuentes usadas por grandes medios deportivos y bookmakers.",
+      "Antes de que cualquier dato entre en nuestro motor de pronóstico, pasa por una pipeline de validación: normalización de formato, detección de anomalías, contraste cruzado con múltiples fuentes, y revisión humana de excepciones marcadas.",
+      "Los datos de partidos se actualizan casi en tiempo real durante los partidos. Las estadísticas de equipos y jugadores se actualizan post-partido. Nuestro motor recalcula continuamente."
+    ],
+    "panelTitle": "Fuentes de datos",
+    "panelItems": [
+      "Resultados de partidos & datos en vivo (proveedores con licencia)",
+      "Archivos históricos de partidos (base multi-temporada)",
+      "Datos de alineación & lesiones (verificados pre-partido)",
+      "Condiciones meteorológicas & del recinto (APIs de terceros)",
+      "Puntuaciones de jugadores & métricas de rendimiento (proveedores con licencia)"
+    ]
+  },
+  "locking": {
+    "h2": "El Mecanismo de Bloqueo",
+    "paragraphs": [
+      "Cada pronóstico que publicamos tiene una marca de tiempo de bloqueo — el momento exacto en que se generó y se comprometió a nuestro historial público. Tras esta marca, el pronóstico no puede editarse, eliminarse ni reemplazarse. No es una política que prometemos seguir — es una restricción arquitectónica.",
+      "La mayoría de sitios de pronósticos tienen un problema de integridad: pueden eliminar silenciosamente pronósticos perdedores o 'actualizarlos' después. Hemos eliminado esta posibilidad por diseño.",
+      "Cada pronóstico en nuestro historial público incluye su marca de tiempo de bloqueo. Puedes verificar que un pronóstico específico se publicó antes del inicio real del partido."
+    ],
+    "timelineCaption": "Ciclo de vida del pronóstico: generado 24h antes del inicio, bloqueado a 2h antes, inmutable para siempre después.",
+    "timelineSteps": [
+      { "label": "24h antes del inicio", "detail": "Pronóstico generado (acceso suscriptores)" },
+      { "label": "2h antes del inicio", "detail": "Bloqueo público + acceso gratuito" },
+      { "label": "Inicio", "detail": "Comienza el partido" },
+      { "label": "Post-partido", "detail": "Resultado añadido al historial" },
+      { "label": "Para siempre", "detail": "Pronóstico inmutable" }
+    ]
+  },
+  "whatWeDontDo": {
+    "h2": "Lo Que No Hacemos",
+    "intro": "La transparencia funciona en ambas direcciones. Aquí hay cosas que algunos servicios de pronósticos hacen que nosotros deliberadamente no hacemos:",
+    "items": [
+      { "title": "No vendemos 'partidos amañados'", "detail": "No tenemos información privilegiada. Cualquiera que afirme vender partidos amañados está cometiendo fraude." },
+      { "title": "No editamos pronósticos tras publicación", "detail": "Una vez bloqueados, los pronósticos no pueden modificarse — arquitectónicamente, no por política." },
+      { "title": "No ocultamos pérdidas en nuestro historial", "detail": "Cada pronóstico se publica — victorias, derrotas y pushes." },
+      { "title": "No prometemos porcentajes de precisión específicos", "detail": "Los pronósticos IA tienen precisión probabilística que varía." },
+      { "title": "No usamos sesgo editorial", "detail": "Los pronósticos son generados por el motor sin intervención humana." },
+      { "title": "No operamos como casa de apuestas", "detail": "No aceptamos apuestas, no retenemos dinero." },
+      { "title": "No compartimos datos de usuarios con bookmakers", "detail": "Tu información de cuenta permanece dentro de BetsPlug." }
+    ]
+  },
+  "limitations": {
+    "h2": "Limitaciones & Honestidad",
+    "paragraphs": [
+      "Los pronósticos IA no son magia. Son probabilidades estadísticamente informadas. Un pronóstico al 78% de confianza todavía tiene 22% de probabilidad de ser incorrecto.",
+      "Nuestros pronósticos funcionan mejor en: ligas de alto volumen y bien documentadas; mercados de rango medio; partidos con alineaciones estables.",
+      "Nuestros pronósticos son menos fiables en: ligas con pocos datos; fixtures inusuales; partidos con grandes alteraciones de alineación; eventos de muy baja probabilidad.",
+      "No afirmamos predecir el fútbol perfectamente. Afirmamos predecirlo de manera transparente y metódica. Usa nuestros pronósticos como una entrada en tu propio análisis."
+    ]
+  },
+  "faq": {
+    "h2": "FAQ Metodología",
+    "questions": [
+      { "q": "¿Puedo ver el código real del modelo?", "a": "No publicamos código fuente (es nuestro IP central), pero publicamos metodología detallada." },
+      { "q": "¿Cómo manejan eventos inesperados durante un partido?", "a": "Nuestros pronósticos se generan y bloquean antes del inicio, así que no se actualizan durante un partido." },
+      { "q": "¿Por qué usar múltiples modelos en lugar de uno perfecto?", "a": "Ningún método estadístico único captura toda la dinámica del fútbol." },
+      { "q": "¿Qué tan precisos son comparados con cuotas de bookmakers?", "a": "No publicamos precisión comparativa. Ver nuestro historial público para rendimiento bruto." },
+      { "q": "¿Tienen en cuenta datos específicos de jugadores?", "a": "Sí, pero a nivel de equipo. Factorizamos fuerza de alineación según puntuaciones individuales." },
+      { "q": "¿Con qué frecuencia se reentrena el modelo?", "a": "Continuamente, con ciclos mayores tras cada jornada." }
+    ],
+    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2": "Ve la Metodología en Acción",
+    "body": "Ahora que entiendes cómo funcionan nuestros pronósticos, míralos aplicados en 30+ ligas.",
+    "ctaPrimary": { "label": "Ver pronósticos de hoy", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Comparar planes", "canonical": "pricing" }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Primeira Liga Vorhersagen Heute | KI-Gestützt | BetsPlug",
+    "description": "KI-gestützte Primeira Liga-Vorhersagen für jedes Spiel. Benfica, Porto, Sporting und der Rest — analysiert mit Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-primeira-liga-de.jpg"
+  },
+  "hero": {
+    "h1": "Primeira Liga Vorhersagen",
+    "subheadline": "KI-gestützte Vorhersagen für jedes Primeira Liga-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
+    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+  },
+  "context": {
+    "h2": "Über Primeira Liga Vorhersagen",
+    "paragraphs": [
+      "Die Primeira Liga ist Portugals höchste Fußballliga, ausgetragen von 18 Clubs an 34 Spieltagen von August bis Mai. Die Liga wird von den 'Big Three' dominiert — Benfica, Porto und Sporting CP — die seit der modernen Liga-Gründung jeden Primeira-Liga-Titel gewonnen haben. Portugal ist eine der stärksten Verkäufer-Ligen Europas: Top-Clubs exportieren regelmäßig entwickelte Talente an Premier League-, La Liga- und Bundesliga-Clubs für erhebliche Transfergelder. Unsere KI-Engine analysiert jedes Primeira Liga-Spiel mit aktueller Form, direkten Begegnungen, Expected Goals und 40+ weiteren Variablen.",
+      "Primeira Liga-Vorhersagen werden durch Kader-Volatilitätsmuster beeinflusst, die in anderen Top-Ligen selten sind. Mid-Season-Transferfenster sehen oft signifikante Abgänge von Top-Three-Clubs zu wohlhabenderen europäischen Ligen. Unser Modell berücksichtigt Transferfenster-Nähe und erwartete Aufstellungsänderungen.",
+      "Jede Primeira Liga-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Primeira Liga-Vorhersagen sind Teil aller bezahlten Pläne."
+    ],
+    "statsPanel": { "h3": "Primeira Liga auf einen Blick", "ctaLabel": "Primeira Liga in App ansehen" }
+  },
+  "topTeams": { "h2": "Top Primeira Liga Teams" },
+  "methodology": {
+    "h2": "Wie Primeira Liga Vorhersagen Erstellt Werden",
+    "body": "Primeira Liga-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen, mit besonderem Fokus auf Kader-Volatilität rund um Transferfenster.",
+    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Primeira Liga Vorhersagen FAQ",
+    "questions": [
+      { "q": "Wie genau sind KI-Vorhersagen für die Primeira Liga?", "a": "Genauigkeit variiert. Wir veröffentlichen jede Primeira Liga-Vorhersage in unserem öffentlichen Track Record." },
+      { "q": "Warum sind Primeira Liga-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf die Top-3-Ligen beschränkt." },
+      { "q": "Wie behandelt das Modell große Mid-Season-Transfers von Top-Clubs?", "a": "Unsere ML-Schicht verarbeitet bestätigte Transfers sofort und passt Kaderstärke-Schätzungen innerhalb von Stunden an." },
+      { "q": "Wie früh sind Primeira Liga-Vorhersagen verfügbar?", "a": "Abonnenten sehen Primeira Liga-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
+      { "q": "Deckt ihr Taça de Portugal-Spiele ab?", "a": "Wir decken alle Primeira Liga-Ligaspiele ab. Taça de Portugal und europäische Wettbewerbe werden separat abgedeckt." },
+      { "q": "Kann ich Primeira Liga-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Vorhersagen." }
+    ],
+    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+  },
+  "finalCta": {
+    "h2Free": "Willst du alle Primeira Liga Vorhersagen?",
+    "h2Gated": "Primeira Liga Vorhersagen Freischalten",
+    "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
+    "bodyGated": "Primeira Liga-Vorhersagen sind Teil aller bezahlten Pläne.",
+    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_primeira-liga" }
+  }
+}

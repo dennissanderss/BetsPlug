@@ -1,0 +1,117 @@
+---
+/**
+ * Methodology long-form — English root.
+ * URL: /methodology
+ *
+ * Spec: docs/specs/06-methodology.md
+ *
+ * 12 sections, ~3500 words EN. Sticky TOC on desktop, dropdown on
+ * mobile. KaTeX-rendered math (Elo + Poisson formulas). 4 SVG
+ * diagrams. FAQPage + TechArticle schema.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import MethodologyHero          from "@/components/methodology/MethodologyHero.astro";
+import MethodologyTOC           from "@/components/methodology/MethodologyTOC.astro";
+import ThreePillarsSection      from "@/components/methodology/ThreePillarsSection.astro";
+import EloSection               from "@/components/methodology/EloSection.astro";
+import PoissonSection           from "@/components/methodology/PoissonSection.astro";
+import MachineLearningSection   from "@/components/methodology/MachineLearningSection.astro";
+import DataSourcesSection       from "@/components/methodology/DataSourcesSection.astro";
+import LockingMechanism         from "@/components/methodology/LockingMechanism.astro";
+import WhatWeDontDo             from "@/components/methodology/WhatWeDontDo.astro";
+import LimitationsSection       from "@/components/methodology/LimitationsSection.astro";
+import MethodologyFAQ           from "@/components/methodology/MethodologyFAQ.astro";
+import MethodologyFinalCTA      from "@/components/methodology/MethodologyFinalCTA.astro";
+
+import { loadMethodologyContent } from "@/lib/methodology-page";
+
+const locale = "en" as const;
+const content = await loadMethodologyContent(locale);
+
+const SITE = "https://betsplug.com";
+const canonicalPath = "/methodology";
+
+const techArticleSchema = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: content.hero.h1,
+  description: content.meta.description,
+  author: { "@type": "Organization", name: "BetsPlug Engineering Team" },
+  datePublished: "2026-04-01",
+  dateModified: content._meta.lastUpdated,
+  articleSection: "Methodology",
+  inLanguage: locale,
+  url: `${SITE}${canonicalPath}`,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Methodology", item: `${SITE}${canonicalPath}` },
+  ],
+};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: content.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+};
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "BetsPlug prediction engine pillars",
+  itemListElement: content.pillars.items.map((item, i) => ({
+    "@type": "ListItem", position: i + 1,
+    item: { "@type": "Thing", name: item.tagline, description: item.oneLiner },
+  })),
+};
+---
+
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
+>
+  <Fragment slot="head">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(techArticleSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+  </Fragment>
+
+  <MethodologyHero locale={locale} content={content.hero} />
+
+  <Section surface="light" spacing="lg">
+    <Container size="xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+        <!-- TOC sidebar (25% on desktop) -->
+        <div class="lg:col-span-3">
+          <MethodologyTOC content={content.toc} />
+        </div>
+
+        <!-- Main long-form content -->
+        <article class="lg:col-span-9 max-w-3xl">
+          <ThreePillarsSection      content={content.pillars} />
+          <EloSection               content={content.elo} />
+          <PoissonSection           content={content.poisson} />
+          <MachineLearningSection   content={content.ml} />
+          <DataSourcesSection       content={content.data} />
+          <LockingMechanism         content={content.locking} />
+          <WhatWeDontDo             content={content.whatWeDontDo} />
+          <LimitationsSection       content={content.limitations} />
+          <MethodologyFAQ           locale={locale} content={content.faq} />
+        </article>
+      </div>
+    </Container>
+  </Section>
+
+  <MethodologyFinalCTA locale={locale} content={content.finalCta} />
+</MarketingLayout>

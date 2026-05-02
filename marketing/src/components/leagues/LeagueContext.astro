@@ -1,0 +1,93 @@
+---
+/**
+ * LeagueContext — Section 3 of /predictions/{league}.
+ * 2-column desktop: 3 unique paragraphs (left, 60%) + stats panel (right, 40%).
+ * The paragraphs come from the per-league content JSON — UNIQUE per league.
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import type { LeagueConfig } from "@/config/leagues";
+import type { LeaguePageContent } from "@/content/leagues/types";
+
+interface Props {
+  league: LeagueConfig;
+  content: LeaguePageContent["context"];
+  /** Live numbers from API. Fall back to "—" when unknown. */
+  currentMatchweek: number;
+  topScorer?: { name: string; goals: number };
+  predictionsThisSeason: number;
+  updatedIso: string;
+}
+
+const { league, content, currentMatchweek, topScorer, predictionsThisSeason, updatedIso } = Astro.props;
+const updatedDisplay = new Date(updatedIso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
+---
+
+<Section surface="light" spacing="lg" ariaLabelledby="league-context-h2">
+  <Container size="xl">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+      <!-- Body (60%) -->
+      <div class="lg:col-span-7">
+        <h2
+          id="league-context-h2"
+          class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900"
+        >
+          {content.h2}
+        </h2>
+        <div class="mt-6 space-y-5 text-base lg:text-[17px] leading-relaxed text-charcoal-700">
+          {content.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+
+      <!-- Stats panel (40%) -->
+      <div class="lg:col-span-5">
+        <div
+          class="rounded-2xl border border-stadium-white-200 bg-white p-6 lg:p-8 shadow-[var(--shadow-sm)]"
+          style={`box-shadow: 0 0 0 2px ${league.primaryColor}1a inset, var(--shadow-sm);`}
+        >
+          <h3 class="text-base font-bold text-charcoal-900">{content.statsPanel.h3}</h3>
+          <dl class="mt-5 space-y-3 text-sm">
+            <div class="flex items-center justify-between border-b border-stadium-white-200 pb-3">
+              <dt class="text-charcoal-500">{content.statsPanel.teamsLabel}</dt>
+              <dd class="font-mono font-semibold text-charcoal-900">{league.teams}</dd>
+            </div>
+            <div class="flex items-center justify-between border-b border-stadium-white-200 pb-3">
+              <dt class="text-charcoal-500">{content.statsPanel.seasonLabel}</dt>
+              <dd class="font-mono font-semibold text-charcoal-900">{league.season}</dd>
+            </div>
+            <div class="flex items-center justify-between border-b border-stadium-white-200 pb-3">
+              <dt class="text-charcoal-500">{content.statsPanel.matchweekLabel}</dt>
+              <dd class="font-mono font-semibold text-charcoal-900">{currentMatchweek}</dd>
+            </div>
+            <div class="flex items-center justify-between border-b border-stadium-white-200 pb-3">
+              <dt class="text-charcoal-500">{content.statsPanel.topScorerLabel}</dt>
+              <dd class="font-semibold text-charcoal-900 text-right">
+                {topScorer ? `${topScorer.name} (${topScorer.goals})` : "—"}
+              </dd>
+            </div>
+            <div class="flex items-center justify-between border-b border-stadium-white-200 pb-3">
+              <dt class="text-charcoal-500">{content.statsPanel.predictionsThisSeasonLabel}</dt>
+              <dd class="font-mono font-semibold text-pitch-green-600">{predictionsThisSeason}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-charcoal-500">{content.statsPanel.updatedLabel}</dt>
+              <dd class="text-xs text-charcoal-500">{updatedDisplay}</dd>
+            </div>
+          </dl>
+
+          <a
+            href={`https://app.betsplug.com/leagues/${league.slug}`}
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-pitch-green-600 hover:text-pitch-green-500 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {content.statsPanel.ctaLabel}
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>
