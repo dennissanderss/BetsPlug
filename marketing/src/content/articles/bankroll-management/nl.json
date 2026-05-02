@@ -1,0 +1,105 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json." },
+  "meta": {
+    "title": "Bankroll Management: Laat Variantie Je Niet Verwoesten | BetsPlug Leren",
+    "description": "Hoe je je inzetten doseert zodat korte-termijn variantie je lange-termijn resultaten niet vernietigt. Het unit-systeem, veelgemaakte fouten en regels die echt werken.",
+    "ogImage": "/og-images/learn-bankroll-management-nl.jpg"
+  },
+  "header": {
+    "h1": "Bankroll Management: Laat Variantie Je Niet Verwoesten",
+    "excerpt": "Hoe je het kapitaal dat je aan voorspellingen besteedt beheert zodat korte-termijn variantie geen lange-termijn resultaten verwoest.",
+    "readingTime": "8 min lezen",
+    "difficulty": "Beginner",
+    "category": "Concepten",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In Dit Artikel",
+  "breadcrumbLearn": "Leren",
+  "intro": "De grootste reden dat serieuze volgers van voorspellingen falen is niet slechte picks — het is slecht bankroll-beheer. Iemand met een 55% hit-rate en gemiddelde quotering 1,95 maakt op lange termijn winst, maar alleen als ze de korte-termijn variantie overleven. Dat \"alleen als\" doet veel werk: willekeurige verliesreeksen kunnen een hele bankroll wegvagen als de inzetten te groot zijn. Deze gids legt uit wat een bankroll is, waarom variantie meer telt dan de meeste mensen denken, en hoe het unit-systeem je tegen jezelf beschermt. Niets ervan is glamoureus. Alles ervan is essentieel.",
+  "sections": [
+    {
+      "id": "what-is-bankroll",
+      "h2": "Wat is een Bankroll?",
+      "blocks": [
+        { "type": "paragraph", "text": "Je bankroll is het toegewijde kapitaal dat je hebt besloten te besteden aan het volgen van voorspellingen. Het is niet je spaargeld, niet je salaris, geen geld dat je volgende week zou missen. Het is een specifiek, apart bedrag dat je voor dit doel hebt afgezonderd. De mentale scheiding telt evenveel als de financiële." },
+        { "type": "paragraph", "text": "Twee regels voordat je verder gaat. Eén: je bankroll moet geld zijn dat je je volledig kunt veroorloven te verliezen. Als het verliezen van het hele bedrag je leefsituatie zou veranderen, is de bankroll te groot. Twee: bijstortingen zijn een beslissing, geen reflex. Als je bankroll busts, vul je hem niet meteen aan met nieuw geld. Je stopt, evalueert wat er misging, en zet pas vers kapitaal in nadat je de oorzaak hebt geïdentificeerd." },
+        { "type": "h3", "text": "Het startbedrag bepalen" },
+        { "type": "paragraph", "text": "Er bestaat geen universeel correct getal. Veel voorkomende startpunten: €100 voor casual volgers die net beginnen, €500–€1.000 voor serieuze gebruikers die resultaten bijhouden, €5.000+ voor full-time bettors met een gedocumenteerde edge. Kies een bedrag waarbij een 30% drawdown je dagelijkse leven niet zou veranderen — want 30% drawdowns overkomen iedereen, inclusief de meest succesvolle bettors ter wereld." }
+      ]
+    },
+    {
+      "id": "why-variance",
+      "h2": "Waarom Variantie Telt",
+      "blocks": [
+        { "type": "paragraph", "text": "Zelfs een bettor met positieve verwachte waarde maakt verliesreeksen mee. De wiskunde zegt het, en de wiskunde geeft niets om hoe zelfverzekerd je je voelt. Voer een eenvoudige simulatie uit: iemand met een 55% hit-rate die 1.000 weddenschappen plaatst tegen even-money zal gemiddeld 550 winnen en 450 verliezen — maar in ongeveer 40% van de gevallen ook minstens één reeks van 8 opeenvolgende verliezen meemaken, en in ongeveer 12% van de gevallen minstens één reeks van 10 opeenvolgende verliezen." },
+        { "type": "paragraph", "text": "Een 10-verliesreeks bij 5% bankroll per inzet brengt je terug naar 60% van het startkapitaal. Een 10-verliesreeks bij 10% per inzet brengt je naar 35%. Een 10-verliesreeks bij 20% per inzet brengt je naar 11% — bijna kapot, ook al is je onderliggende edge helemaal niet veranderd. Daarom domineert inzetdosering de resultaten. Twee bettors met identieke picks kunnen op compleet verschillende financiële plekken eindigen, puur op basis van hoe ze hun inzetten hebben gedoseerd." },
+        { "type": "example", "label": "De variantie-realiteit", "body": "Een bettor met een ware 55% hit-rate die 100 inzetten plaatst tegen decimale quotering 1,95: verwacht rendement is +€7,25 op een €1.000 bankroll met 1% inzetten. Standaarddeviatie: ±€26. Er is ongeveer 25% kans dat je na 100 inzetten in de min staat ondanks een winnend systeem. Je edge is echt; de variantie is ook echt." }
+      ]
+    },
+    {
+      "id": "unit-system",
+      "h2": "Het Unit-Systeem",
+      "blocks": [
+        { "type": "paragraph", "text": "Het unit-systeem is de standaardoplossing. Je definieert één \"unit\" als een vast percentage van je huidige bankroll — meestal tussen 1% en 5%. Elke inzet wordt in units gedoseerd, niet in absolute bedragen. Dit schaalt je inzetten automatisch: als je bankroll groeit, groeien units; als hij krimpt, krimpen units. Je compoundt tijdens winstperiodes en verkleint je exposure tijdens verliesperiodes — automatisch." },
+        { "type": "h3", "text": "Conservatief: 1–2% per inzet" },
+        { "type": "paragraph", "text": "Aanbevolen voor de meeste volgers, vooral als je nieuw bent en je edge nog niet hebt bewezen. Overleeft 20+ opeenvolgende verliezen zonder kapot te gaan. Het nadeel is langzame groei, zelfs als je consistent wint. Gebruik dit als je doel gestaag leren is in plaats van snelle returns." },
+        { "type": "h3", "text": "Standaard: 2–3% per inzet" },
+        { "type": "paragraph", "text": "Het middenterrein. Behoorlijk groeitempo bij winst, hanteerbare drawdowns bij verlies. De meeste professionele bettors met bewezen edges zitten in deze range. Aanbevolen zodra je minstens 200 inzetten hebt geplaatst en resultaten hebt bijgehouden — dan heb je het recht verdiend op iets grotere units." },
+        { "type": "h3", "text": "Agressief: 3–5% per inzet" },
+        { "type": "paragraph", "text": "Alleen voor inzetten met hoog vertrouwen — meestal de top 20% van de plays in je systeem. De variantie wordt streng op dit niveau. Een reeks van 10 opeenvolgende verliezen bij 5% brengt je terug naar 60% van je kapitaal. Niet aanbevolen tenzij je een edge hebt gedocumenteerd over 1.000+ inzetten en een dikke huid hebt voor drawdown." }
+      ]
+    },
+    {
+      "id": "rebalancing",
+      "h2": "Unit-Grootte Herijken",
+      "blocks": [
+        { "type": "paragraph", "text": "Herijk niet na elke inzet — dat is overdreven en emotioneel uitputtend. Herijk na betekenisvolle bankroll-veranderingen. Een gangbare regel: herbereken unit-grootte zodra je bankroll 25% beweegt vanaf het niveau waarop hij voor het laatst was vastgesteld." },
+        { "type": "paragraph", "text": "Voorbeeld: start-bankroll €1.000, 2% unit = €20. Na een winnende maand staat de bankroll op €1.250 (+25%). Nieuwe unit = €25. Ga door met €25 totdat de bankroll óf €1.562 raakt (+25% extra) óf zakt naar €937 (−25% vanaf €1.250). Deze regel voorkomt zowel timide inzet-krimp na één slechte week als overmoedige inzet-groei na één goede." }
+      ]
+    },
+    {
+      "id": "common-mistakes",
+      "h2": "Veelgemaakte Bankroll-Fouten",
+      "blocks": [
+        { "type": "h3", "text": "Verliezen achterna" },
+        { "type": "paragraph", "text": "De dodelijkste fout. Na een reeks verliezen is de drang om \"het terug te winnen\" door je inzet te verdubbelen overweldigend en bijna altijd rampzalig. Inzetten verdubbelen tijdens een verliesreeks versterkt verliezen exponentieel. De oplossing is mechanisch: verhoog nooit de inzet midden in een sessie, ongeacht recente resultaten." },
+        { "type": "h3", "text": "All-in op \"zekerheidjes\"" },
+        { "type": "paragraph", "text": "Er bestaan geen zekerheidjes in voetbal. Een pick met 90% vertrouwen verliest nog steeds 10% van de tijd. Een bettor die één wedstrijd als zeker behandelt en 50% van zijn bankroll inzet, ervaart het 10% verlies uiteindelijk — meestal eerder dan verwacht. Houd je aan je unit-grootte, ook bij je meest zelfverzekerde picks." },
+        { "type": "h3", "text": "Bankroll mengen met dagelijks geld" },
+        { "type": "paragraph", "text": "Als je bankroll op dezelfde rekening staat als je huur en boodschappen, vervaagt de grens onvermijdelijk. Gebruik een aparte rekening, aparte kaart, of op zijn minst een spreadsheet die mentaal de bankroll afzondert. De wrijving van geld heen en weer schuiven is een feature, geen bug." },
+        { "type": "h3", "text": "Te vroeg winsten opnemen" },
+        { "type": "paragraph", "text": "Sommige bettors nemen winsten op na elke winnende maand \"om gains vast te zetten\". Dit caps je compound-groei en betekent dat je nooit de unit-groottes bereikt die echt het verschil maken. Bepaal vooraf een opnameregel — bijv. \"alleen opnemen wanneer bankroll is verdubbeld, dan 50% pakken\" — en houd je eraan." }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Belangrijkste Punten",
+    "items": [
+      "Je bankroll moet kapitaal zijn dat je je volledig kunt veroorloven te verliezen — gescheiden van levensonderhoud.",
+      "Variantie is echt: een positief-EV bettor maakt regelmatig 8–10 verliesreeksen mee. Doseren voor overleving telt meer dan doseren voor groei.",
+      "Houd je aan een unit-systeem: 1–2% conservatief, 2–3% standaard, 3–5% agressief — match aan je ervaring en edge.",
+      "Herijk unit-grootte na elke 25% bankroll-verandering, niet na elke inzet.",
+      "Ga nooit verliezen achterna door inzetten midden-sessie te verhogen. De wiskunde wint altijd; emotionele dosering verliest altijd."
+    ]
+  },
+  "faq": {
+    "h2": "Bankroll Management FAQ",
+    "questions": [
+      { "q": "Wat als ik gratis voorspellingen gebruik en geen echte edge heb?", "a": "Dan is bankroll-beheer nog steeds van toepassing — maar met kleinere absolute bedragen. Behandel de activiteit als betaalde entertainment met educatieve waarde, geen verwachte winst. Gebruik 1% units, verwacht break-even of licht verlies, en gebruik de ervaring om te leren hoe variantie en inzetdosering écht voelen voordat je groter kapitaal inzet." },
+      { "q": "Hoe houd ik mijn bankroll bij?", "a": "Een spreadsheet werkt prima. Kolommen voor datum, wedstrijd, markt, inzet (in units en absoluut), quotering, resultaat, W/V, lopende bankroll. Update na elke inzet. Dit maandelijks doornemen is de activiteit met de hoogste hefboom om als bettor beter te worden — patronen in je winsten en verliezen komen pas aan het licht als je de data hebt." },
+      { "q": "Moet ik Kelly Criterion gebruiken in plaats van vlakke units?", "a": "Kelly is wiskundig optimaal als je probability-schattingen accuraat zijn. In de praktijk zijn je schattingen zo accuraat niet — je gaat overzetten met Full Kelly. Half of Quarter Kelly is redelijk voor ervaren bettors. De meeste volgers moeten bij vlakke units blijven totdat ze 500+ inzetten aan data hebben over hun eigen probability-accuraatheid. Zie onze aparte Kelly-gids voor details." },
+      { "q": "Wat als mijn bankroll busts?", "a": "Stop. Stort minstens een week geen vers kapitaal. Review elke verliezende inzet — waren de picks slecht, of was het variantie? Als de picks slecht waren, fix de bron (betere voorspellingen, andere markten). Als variantie, reset met strakkere unit-dosering (1% in plaats van 3%). Hervatten op dezelfde inzetten na een bust leidt bijna altijd tot een tweede bust." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Gerelateerde Artikelen",
+    "slugs": ["kelly-criterion", "what-is-value-betting", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "Voorspellingen Zijn Maar De Helft Van Het Spel",
+    "body": "Zelfs de beste voorspellingen hebben gedisciplineerde dosering nodig om zich te vertalen in lange-termijn resultaten. BetsPlug levert de voorspellingen; bankroll-beheer is aan jou.",
+    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Vergelijk Plannen", "canonical": "pricing" }
+  }
+}

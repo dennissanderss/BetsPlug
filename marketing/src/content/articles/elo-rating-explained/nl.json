@@ -1,0 +1,120 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json." },
+  "meta": {
+    "title": "Elo Rating Systeem voor Voetbal Uitgelegd | BetsPlug Leren",
+    "description": "Hoe Elo-ratings teamsterkte dynamisch meten. Oorspronkelijk voor schaken, nu drijvende kracht achter moderne voetbalvoorspellingen. Formule, voorbeelden en beperkingen.",
+    "ogImage": "/og-images/learn-elo-rating-nl.jpg"
+  },
+  "header": {
+    "h1": "Het Elo Rating Systeem: Hoe Voetbalteam-Sterkte Wordt Gemeten",
+    "excerpt": "Het dynamische ranking-systeem dat teamsterkte na elke wedstrijd aanpast. Oorspronkelijk voor schaken, nu drijvende kracht achter moderne voetbalvoorspellingen.",
+    "readingTime": "10 min lezen",
+    "difficulty": "Gemiddeld",
+    "category": "Statistische Modellen",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In Dit Artikel",
+  "breadcrumbLearn": "Leren",
+  "intro": "Competitietabellen vertellen je welke teams de meeste punten hebben verzameld. Ze vertellen je niets over waarom, of of die punten daadwerkelijk huidige sterkte weerspiegelen. Een team kan vierde staan op basis van een hete start die nu wegebt. Een team kan achtste staan ondanks duidelijk sterker te zijn dan de vier ervoor. Elo-ratings snijden door deze ruis. Elk team heeft één numerieke rating die na elke wedstrijd wordt bijgewerkt — omhoog bij winst, omlaag bij verlies, met bedragen evenredig aan of het resultaat verwacht was. Deze gids legt uit hoe Elo werkt, waarom het zich zo goed aanpast aan voetbal, en waar het tekortschiet. Het systeem ligt onder de meeste moderne voorspellings-engines, inclusief die van ons.",
+  "sections": [
+    {
+      "id": "what-is-elo",
+      "h2": "Wat is Elo Rating?",
+      "blocks": [
+        { "type": "paragraph", "text": "Elo is een numerieke sterkte-rating, uitgedrukt op een open schaal die typisch loopt van rond 1200 (zeer zwak) tot 2200 (wereldklasse). De rating comprimeert duizenden historische wedstrijduitslagen tot één huidige-sterkte-schatting. Twee teams met dezelfde rating worden even sterk geacht; hoe groter het rating-gat, hoe groter de favoriet." },
+        { "type": "paragraph", "text": "Elk team start op een baseline (vaak 1500) wanneer ze voor het eerst in het systeem komen. Hun rating evolueert daarna. Winnen tegen een sterke tegenstander: veel winst. Verliezen tegen een zwakke tegenstander: veel verlies. Gelijkspel tegen gelijke tegenstander: geen verandering. De rating is een bewegende schatting die accurater wordt naarmate het team langer in het systeem zit." },
+        { "type": "h3", "text": "Waar Elo vandaan kwam" },
+        { "type": "paragraph", "text": "Arpad Elo was een Hongaars-Amerikaanse natuurkundedocent die het systeem in de jaren 1950 ontwierp voor schaakranglijsten. De US Chess Federation nam het in 1960 over; FIDE (de internationale schaakbond) volgde in 1970. Elo was nooit van plan dat zijn systeem buiten schaken zou worden gebruikt, maar de wiskundige algemeenheid maakte het natuurlijk om te adapteren. Voetbal-Elo ontstond in de jaren 1990; vandaag publiceren sites zoals clubelo.com en eloratings.net publieke Elo-ratings voor duizenden clubs en nationale teams." }
+      ]
+    },
+    {
+      "id": "how-elo-updates",
+      "h2": "Hoe Elo-Ratings Bijwerken",
+      "blocks": [
+        { "type": "paragraph", "text": "De Elo update-formule is het hart van het systeem:" },
+        { "type": "formula", "latex": "R_{\\text{new}} = R_{\\text{old}} + K \\times (S - E)", "caption": "K is de volatiliteits-constante; S is werkelijk resultaat (1 winst, 0,5 gelijk, 0 verlies); E is verwacht resultaat op basis van rating-verschil." },
+        { "type": "paragraph", "text": "S is rechttoe rechtaan: 1 voor winst, 0,5 voor gelijkspel, 0 voor verlies. E (verwacht resultaat) komt uit een logistische functie van het rating-verschil: een team met 200 punten Elo-edge heeft een verwacht resultaat van ongeveer 0,76 (76% \"aandeel\" van het resultaat). K bepaalt hoeveel één wedstrijd de rating verschuift. Voetbal-Elo gebruikt typisch K = 20 tot 40. Hogere K = meer volatiliteit, snellere adaptatie. Lagere K = meer stabiliteit, tragere adaptatie." },
+        { "type": "diagram", "name": "elo-update", "caption": "Twee teams gaan de wedstrijd in met huidige ratings; het resultaat en verwachte uitkomst combineren om beide ratings symmetrisch bij te werken." },
+        { "type": "example", "label": "Uitgewerkt voorbeeld", "body": "In december 2024 had Bayern München een Elo-rating van 2087 en speelde tegen middenmoter Augsburg met rating 1834. Rating-verschil: +253 in Bayerns voordeel, wat een verwacht resultaat geeft van ongeveer 0,81 — Bayern \"zou\" gemiddeld 81% van de punten moeten verdienen. De wedstrijd eindigde 2-3 voor Augsburg. Bayerns S was 0, E was 0,81, dus ΔR = 32 × (0 − 0,81) = −26 (met K=32). Bayern zakte naar 2061. Augsburgs S was 1, E was 0,19, dus ΔR = +26. Augsburg sprong naar 1860. Hoe groter de upset, hoe groter de rating-swing." }
+      ]
+    },
+    {
+      "id": "football-adjustments",
+      "h2": "Voetbal-Specifieke Elo-Aanpassingen",
+      "blocks": [
+        { "type": "paragraph", "text": "Pure schaak-Elo past niet helemaal op voetbal out-of-the-box. Voetbal-Elo systemen breiden de basisformule uit op drie belangrijke manieren." },
+        { "type": "h3", "text": "Doelsaldo-factor" },
+        { "type": "paragraph", "text": "Een 4-0 overwinning draagt meer informatie dan een 1-0 overwinning. De meeste voetbal-Elo systemen vermenigvuldigen de K-factor met een doelsaldo-aanpassing — typisch een logaritmische schaal zodat grote marges nog steeds tellen maar met afnemende meeropbrengst. Een 4-0 kan 1,5× de standaard rating-verschuiving toepassen; een 7-0 kan 1,75×. Dit voorkomt dat afstraffingen ratings domineren terwijl beslissende wins meer worden beloond dan nipte." },
+        { "type": "h3", "text": "Thuisvoordeel" },
+        { "type": "paragraph", "text": "Voetbal heeft consistent thuisvoordeel ter waarde van ongeveer 60-100 Elo-punten over grote competities. Voetbal-Elo verwerkt dit in de berekening van het verwachte resultaat: een team met een werkelijke rating van 1900 dat thuis speelt wordt voor die wedstrijd behandeld als een 1980-effectieve-rating-team. De Premier League heeft historisch het sterkste thuisvoordeel in groot Europees voetbal; sommige competities (met name Eredivisie) hebben lager thuisvoordeel." },
+        { "type": "h3", "text": "Wedstrijd-belang vermenigvuldiger" },
+        { "type": "paragraph", "text": "Een Champions League knock-outwedstrijd draagt meer informatie dan een vriendschappelijke. De meeste Elo-systemen wegen K hoger voor high-stakes competities: K=30 voor competitiewedstrijden, K=40 voor bekerfinales, K=50 voor grote toernooi-wedstrijden. Internationale Elo (gebruikt door FIFA's World Football Ranking, dat ruwweg Elo-gebaseerd is) gebruikt toernooi-specifieke vermenigvuldigers." }
+      ]
+    },
+    {
+      "id": "why-works",
+      "h2": "Waarom Elo Werkt voor Voorspellingen",
+      "blocks": [
+        { "type": "h3", "text": "Recency-gewogen accuraatheid" },
+        { "type": "paragraph", "text": "Elo weegt natuurlijk recente wedstrijden zwaarder dan oudere — niet door oude resultaten bewust te disconteren, maar door het structurele feit dat recentere wedstrijden meer invloed hebben op de huidige rating. De rating van een team van 18 maanden geleden is dozijnen keren overschreven door tussenliggende resultaten. Hierdoor reageert Elo goed op veranderingen in vorm, trainer of selectie zonder handmatige tuning." },
+        { "type": "h3", "text": "Zelfcorrigerend" },
+        { "type": "paragraph", "text": "Als Elo een team te hoog rated (door ze een hete-reeks-rating te geven die ze niet verdienen), verliezen ze punten op het moment dat ze tegen tegenstanders onder hen beginnen te verliezen. Het systeem corrigeert fouten automatisch — er is geen analist nodig om \"dit team is overrated\" te flaggen en handmatig aan te passen. De rating beweegt waar de resultaten dicteren." },
+        { "type": "h3", "text": "Geen willekeurige weging" },
+        { "type": "paragraph", "text": "Veel ranking-systemen omvatten subjectieve weging: hoeveel moeten thuisoverwinningen meetellen vs uit? Recent vs oud? Kwaliteit van tegenstander? Elo codeert dit allemaal in twee parameters (K en thuisvoordeel), beide empirisch tunebaar tegen historische data. Geen \"vibes\"-component." }
+      ]
+    },
+    {
+      "id": "betsplug-elo",
+      "h2": "Hoe BetsPlug Elo Gebruikt",
+      "blocks": [
+        { "type": "paragraph", "text": "Elk team in onze gedekte competities heeft een huidige Elo-rating, bijgewerkt binnen minuten na elk laatste fluitsignaal. Pre-match Elo-verschil is de sterkste enkele voorspeller in ons systeem — het vangt teamsterkte, recente vorm en thuisvoordeel in één getal." },
+        { "type": "paragraph", "text": "Maar Elo staat niet alleen. We voeren Elo-verschil in een Poisson goal-model in samen met recente xG-trend, defensieve xG van de tegenstander, opstelling-sterkte en rustdagen, wat verwachte goals (lambda) voor beide teams produceert. Vandaaruit past onze machine learning-laag de Elo-invloed aan per wedstrijd-context — Elo telt meer in stabiele competitiewedstrijden en minder in bekerwedstrijden met geroteerde opstellingen, bijvoorbeeld. De methodologie-pagina bedekt de integratie in detail." }
+      ]
+    },
+    {
+      "id": "elo-limitations",
+      "h2": "Elo Beperkingen",
+      "blocks": [
+        { "type": "paragraph", "text": "Elo is robuust maar niet onfeilbaar. Iedereen die Elo-gebaseerde voorspellingen gebruikt zou de zwakke punten moeten kennen." },
+        { "type": "h3", "text": "Trage reactie op selectie-veranderingen" },
+        { "type": "paragraph", "text": "Als de sterspits van een team drie maanden geblesseerd is, is het team meetbaar zwakker — maar de Elo-rating past zich alleen aan naarmate wedstrijdresultaten accumuleren. De eerste paar wedstrijden na de blessure overschat Elo het team. Dit is een bijzonder probleem voor bekercompetities waar selecties geroteerd worden en Elo niet \"weet\" dat de opstelling anders is." },
+        { "type": "h3", "text": "Tactische matchups onzichtbaar" },
+        { "type": "paragraph", "text": "Elo behandelt teams als monolithische sterkte-waarden. Het vangt niet dat Team A worstelt tegen hoog-pressende tegenstanders terwijl het uitblinkt tegen diepe blokken, of dat de kracht van Team B in counter-aanvallen ligt die niet werken tegen compacte verdedigingen. Moderne voorspellings-engines leggen ML bovenop Elo specifiek om deze matchup-effecten te vangen." },
+        { "type": "h3", "text": "K-factor aannames breken voor bekerwedstrijden" },
+        { "type": "paragraph", "text": "Bekerwedstrijden zijn rumoeriger dan competitiewedstrijden — geroteerde selecties, lage motivatie in vroege rondes, drama in finales. Eén K-factor kan deze variantie niet vangen. Geavanceerde systemen gebruiken wedstrijdtype-specifieke K-factoren of sluiten bepaalde bekerwedstrijden volledig uit van rating-updates." },
+        { "type": "h3", "text": "Verschillende implementaties verschillen" },
+        { "type": "paragraph", "text": "Er bestaat geen enkele canonieke \"voetbal-Elo\". Clubelo, eloratings.net, FiveThirtyEight's SPI (los Elo-gebaseerd) en onze interne Elo geven allemaal licht verschillende ratings voor dezelfde teams. De verschillen zijn meestal klein (binnen 30-50 punten) maar reëel. Kies er één en blijf erbij voor consistentie." }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Belangrijkste Punten",
+    "items": [
+      "Elo is een enkele numerieke sterkte-rating die na elke wedstrijd bijwerkt.",
+      "De update-formule gebruikt K (volatiliteit), S (werkelijk resultaat), en E (verwacht resultaat op basis van rating-verschil).",
+      "Voetbal-Elo breidt het basissysteem uit met doelsaldo, thuisvoordeel en wedstrijd-belang aanpassingen.",
+      "Elo is recency-gewogen en zelfcorrigerend — sterke baseline-voorspeller.",
+      "Beperkingen: trage reactie op selectie-veranderingen, blind voor tactische matchups, gevoelig voor K-factor keuze."
+    ]
+  },
+  "faq": {
+    "h2": "Elo Rating FAQ",
+    "questions": [
+      { "q": "Wat is de hoogste Elo-rating ooit in voetbal?", "a": "Rond 2200 — historische pieken voor het Braziliaanse nationale team in de vroege jaren 1960 en het Spaanse nationale team tijdens hun dominantie van 2008-2012. Topclubteams pieken typisch rond 2050-2100 wanneer ze op hun absolute best zijn (Pep Guardiola's Barcelona, Bayern in zijn beste jaren onder Heynckes). De meeste sterke clubteams zitten in de 1850-1980 range." },
+      { "q": "Hoe snel verandert een Elo-rating?", "a": "Hangt af van de K-factor. Met K=32 (typisch voor voetbal) verschuift een grote upset (een team van 1500 dat een team van 1900 verslaat) ratings met ongeveer 25 punten. Volgehouden goede of slechte vorm beweegt de rating van een team met 100+ punten over één seizoen. Een team dat 5W-0V-0G gaat tegen tegenstanders 50 punten sterker wint ongeveer 60-80 Elo-punten over die wedstrijden." },
+      { "q": "Kan ik Elo-ratings voor mijn team checken?", "a": "Ja. Clubelo.com en eloratings.net publiceren publieke Elo-ratings voor duizenden voetbalclubs en nationale teams. Ze gebruiken licht verschillende methodologieën, dus de getallen zullen niet exact overeenkomen tussen sites, maar ze zullen in dezelfde range zitten. BetsPlug gebruikt onze eigen Elo-implementatie afgestemd op voorspel-accuraatheid — we publiceren geen individuele teamratings, maar de onderliggende methodologie is dezelfde." },
+      { "q": "Hoe verschilt Elo van FIFA-rankings?", "a": "FIFA's World Football Ranking (gebruikt voor nationale teams) is los Elo-gebaseerd maar gebruikt verschillende K-factoren per competitie en wordt minder vaak bijgewerkt. Critici hebben lang geargumenteerd dat FIFA's systeem competitieve niet-toernooi vriendschappelijke onderwaardeert en regionale confederatie-wedstrijden overwaardeert. Pure Elo wordt over het algemeen accurater geacht als voorspeltool." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Gerelateerde Artikelen",
+    "slugs": ["expected-goals-explained", "poisson-goal-models", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "Zie Elo-Gedreven Voorspellingen",
+    "body": "Elo-verschil is het sterkste enkele signaal in onze voorspellings-engine, gecombineerd met Poisson goal-modellen en machine learning. Elke voorspelling over 30+ competities weerspiegelt deze geïntegreerde methodologie.",
+    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Lees Methodologie", "canonical": "methodology" }
+  }
+}
