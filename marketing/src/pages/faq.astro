@@ -1,0 +1,101 @@
+---
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+
+import FAQHero               from "@/components/faq/FAQHero.astro";
+import FAQSearch             from "@/components/faq/FAQSearch.astro";
+import FAQCategory           from "@/components/faq/FAQCategory.astro";
+import StillHaveQuestionsCTA from "@/components/faq/StillHaveQuestionsCTA.astro";
+
+import { loadFaqContent, filterCategoriesByQuery } from "@/lib/faq-page";
+
+const locale = "en" as const;
+const content = await loadFaqContent(locale);
+
+// No-JS fallback: if ?q= present, server-side filter; otherwise full list
+const queryParam = Astro.url.searchParams.get("q");
+const filteredCategories = filterCategoriesByQuery(content.categories, queryParam);
+
+// Deep link via URL hash — open the matching question on initial render.
+// (Astro static generation doesn't have access to client hash, so we
+// pre-render every accordion closed; client-side JS opens hash target.)
+const openQuestionId = null;
+
+const SITE = "https://betsplug.com";
+const canonicalPath = "/faq";
+
+// FAQPage schema with ALL questions (use unfiltered list — schema is for
+// search engines, must reflect full page content)
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: content.categories.flatMap((cat) =>
+    cat.questions.map((q) => ({
+      "@type": "Question",
+      name: q.question,
+      acceptedAnswer: { "@type": "Answer", text: q.answer },
+    })),
+  ),
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "FAQ",  item: `${SITE}${canonicalPath}` },
+  ],
+};
+---
+
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+
+  <FAQHero content={content.hero} />
+
+  <Section surface="light" spacing="lg">
+    <Container size="md">
+      <FAQSearch
+        content={content.search}
+        baseHref={canonicalPath}
+        initialQuery={queryParam ?? ""}
+      />
+    </Container>
+  </Section>
+
+  <Section surface="light" spacing="lg" class="!pt-0">
+    <Container size="md">
+      {filteredCategories.length === 0 ? (
+        <p class="text-center text-base text-charcoal-700 mt-8">{content.search.noResultsText}</p>
+      ) : (
+        <div>
+          {filteredCategories.map((category) => (
+            <FAQCategory category={category} openQuestionId={openQuestionId} />
+          ))}
+        </div>
+      )}
+    </Container>
+  </Section>
+
+  <StillHaveQuestionsCTA locale={locale} content={content.stillHaveQuestions} />
+</MarketingLayout>
+
+<script>
+  // Deep-link via URL hash — open accordion matching the hash on load.
+  (function () {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const target = document.getElementById(hash);
+    if (target && target.tagName.toLowerCase() === "details") {
+      (target as HTMLDetailsElement).open = true;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  })();
+</script>

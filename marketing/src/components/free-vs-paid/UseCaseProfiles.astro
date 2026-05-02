@@ -1,0 +1,63 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { FreeVsPaidContent } from "@/content/pages/free-vs-paid/types";
+
+interface Props {
+  locale: Locale;
+  content: FreeVsPaidContent["useCases"];
+}
+const { locale, content } = Astro.props;
+
+function resolveCta(cta: { label: string; canonical: string } | { label: string; href: string }) {
+  if ("canonical" in cta) return { href: getLocalizedPath(cta.canonical, locale), external: false };
+  return { href: cta.href, external: true };
+}
+---
+
+<Section surface="light" spacing="lg" ariaLabelledby="usecases-h2">
+  <Container size="xl">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2 id="usecases-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+        {content.h2}
+      </h2>
+    </header>
+
+    <ul class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6" role="list">
+      {content.profiles.map((p) => {
+        const cta = resolveCta(p.cta);
+        return (
+          <li class="rounded-xl border border-stadium-white-200 bg-white p-6 lg:p-7 shadow-[var(--shadow-sm)] flex flex-col">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-pitch-green-500/15 text-pitch-green-600 mb-4" aria-hidden="true">
+              {p.icon === "user" && (
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              )}
+              {p.icon === "trending-up" && (
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+                </svg>
+              )}
+              {p.icon === "chart" && (
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>
+                </svg>
+              )}
+            </span>
+            <h3 class="text-lg font-bold text-charcoal-900">{p.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-charcoal-700">{p.description}</p>
+            <p class="mt-4 text-sm font-semibold text-pitch-green-600">{p.recommendation}</p>
+            <div class="mt-auto pt-5">
+              <Button href={cta.href} variant="primary" size="md" surface="light" external={cta.external} class="w-full">
+                {p.cta.label}
+              </Button>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </Container>
+</Section>

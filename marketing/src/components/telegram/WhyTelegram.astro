@@ -1,0 +1,19 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import type { TelegramContent } from "@/content/pages/telegram/types";
+
+interface Props { content: TelegramContent["whyTelegram"] }
+const { content } = Astro.props;
+---
+
+<Section surface="dark" spacing="lg" ariaLabelledby="whytelegram-h2">
+  <Container size="md">
+    <h2 id="whytelegram-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-white-pure">
+      {content.h2}
+    </h2>
+    <div class="mt-6 space-y-5 text-base lg:text-[17px] leading-relaxed text-white-soft">
+      {content.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  </Container>
+</Section>

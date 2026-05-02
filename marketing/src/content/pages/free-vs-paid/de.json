@@ -1,0 +1,83 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Kostenlos vs Bezahlt: Welcher BetsPlug Plan? | BetsPlug",
+    "description": "Vergleiche kostenlose und bezahlte BetsPlug-Tarife. Gleiche KI-Engine, anderes Volumen und Tiefe. 5 tägliche Vorhersagen kostenlos, unbegrenzt bezahlt.",
+    "ogImage": "/og-images/free-vs-paid-de.jpg"
+  },
+  "hero": {
+    "h1": "Kostenlos oder Bezahlt: Welcher BetsPlug Passt Zu Dir?",
+    "subheadline": "Beide Tarife verwenden dieselbe KI-Engine und Methodik. Der Unterschied ist Volumen, Tiefe und Timing. Finde unten deine Übereinstimmung."
+  },
+  "visual": {
+    "h2": "Was Du Pro Tarif Siehst",
+    "free": {
+      "header": "Kostenlos",
+      "subheader": "Probiere die Engine, ohne Verpflichtung",
+      "useCases": [
+        "Vorhersagequalität bewerten vor dem Abonnieren",
+        "Casual-Interesse an 1-2 Top-Ligen",
+        "Methodik und Track Record testen"
+      ],
+      "limitations": [
+        "5 Vorhersagen pro Tag",
+        "Nur Top 3 Ligen",
+        "2 Stunden vor Anpfiff (vs 24h bei bezahlt)",
+        "Nur Basis-Info (kein xG, H2H, Aufstellungen)"
+      ],
+      "cta": { "label": "Kostenlos starten", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Über 2,5 Tore", "confidence": 78 }
+    },
+    "paid": {
+      "header": "Silver / Gold",
+      "subheader": "Vollständige Vorhersagen, vollständige Daten",
+      "useCases": [
+        "Tägliche Vorhersagen über mehrere Ligen",
+        "Vollständige Match-Analyse (xG, H2H, Aufstellungen, Begründung)",
+        "Vorhersagen 24h vor Anpfiff",
+        "Telegram-Benachrichtigungen für High-Confidence Picks",
+        "Alle Wett-Märkte pro Spiel"
+      ],
+      "cta": { "label": "Preise ansehen", "canonical": "pricing" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Über 2,5 Tore", "confidence": 78, "xg": "City 2,4 — Arsenal 1,6", "h2h": "Letzte 5: City 4S 1U 0N", "lineup": "Beide Erstaufstellungen" }
+    }
+  },
+  "comparison": {
+    "h2": "Funktionsvergleich",
+    "headers": { "feature": "Funktion", "free": "Kostenlos", "silver": "Silver", "gold": "Gold" },
+    "rows": [
+      { "feature": "Tägliche Vorhersagen",  "free": "5",          "silver": "Unbegrenzt", "gold": "Unbegrenzt" },
+      { "feature": "Ligen",                 "free": "Top 3",      "silver": "Alle 30+",   "gold": "Alle 30+" },
+      { "feature": "Wett-Märkte",           "free": "Nur 1X2",    "silver": "Alle",       "gold": "Alle" },
+      { "feature": "Match-Analyse",         "free": "Basis",      "silver": "Vollständig","gold": "Vollständig" },
+      { "feature": "Vorab-Zugang",          "free": "2h vor",     "silver": "24h vor",    "gold": "24h vor" },
+      { "feature": "Telegram-Benachrichtigungen", "free": "—",    "silver": "✓",          "gold": "✓ (custom)" },
+      { "feature": "Geld-zurück",           "free": "n.v.",       "silver": "7 Tage",     "gold": "7 Tage" }
+    ],
+    "cta": { "label": "Vollständigen Vergleich ansehen", "canonical": "pricing" }
+  },
+  "useCases": {
+    "h2": "Welcher Tarif Passt?",
+    "profiles": [
+      { "icon": "user", "title": "Casual Tester", "description": "Neugierig auf KI-Vorhersagen, will testen vor Bindung. Folgt nur 1-2 Top-Ligen.", "recommendation": "Kostenlos passt zu dir.", "cta": { "label": "Kostenlos starten", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual" } },
+      { "icon": "trending-up", "title": "Regelmäßiger Wetter", "description": "Wettet 2-3 mal pro Woche über mehrere Ligen. Will konsistente Vorhersagequalität, keine Last-Minute Picks.", "recommendation": "Silver ist für dich gemacht.", "cta": { "label": "Silver testen", "canonical": "pricing" } },
+      { "icon": "chart", "title": "Ernsthafter Analyst", "description": "Tägliches Vorhersagen-Verfolgen, mehrere Wett-Märkte, Datentiefe nötig. Will frühen Zugang und Benachrichtigungen.", "recommendation": "Gold gibt dir alles.", "cta": { "label": "Gold testen", "canonical": "pricing" } }
+    ]
+  },
+  "faq": {
+    "h2": "Kostenlos vs Bezahlt FAQ",
+    "questions": [
+      { "q": "Sind kostenlose Vorhersagen weniger genau als bezahlte?", "a": "Nein. Kostenlose Vorhersagen verwenden dieselbe KI-Engine und Methodik wie bezahlte. Der Unterschied ist Volumen, Tiefe, Timing und Liga-Abdeckung — nicht Genauigkeit." },
+      { "q": "Warum brauche ich eine Kreditkarte für die Probe?", "a": "Standard-SaaS-Abrechnung. Du wirst in den ersten 7 Tagen nicht belastet. Kündige vor Tag 7 und es wird nichts berechnet. Wir verlangen eine Zahlungsmethode, um Probemissbrauch zu verhindern." },
+      { "q": "Kann ich von bezahlt auf kostenlos downgraden?", "a": "Ja, jederzeit. Kündige deinen bezahlten Plan vom Konto-Dashboard. Dein Zugang läuft bis Ende des Abrechnungszeitraums und konvertiert dann automatisch zu Free." },
+      { "q": "Was wenn ich nur 1-2 spezifische Wett-Typen will?", "a": "Free zeigt unsere höchste Confidence-Auswahl pro Spiel. Bezahlte Pläne zeigen alle Märkte pro Spiel. Wenn du dich auf 1-2 spezifische Märkte konzentrierst, hilft bezahlt trotzdem weil du über mehr Spiele vergleichen kannst." },
+      { "q": "Ist die 7-tägige kostenlose Probe wirklich risikofrei?", "a": "Ja. Keine Belastung während 7 Tagen. Plus, falls du nach 7 Tagen belastet wirst und nicht zufrieden bist, deckt unsere Geld-zurück-Garantie den ersten bezahlten Monat ab." }
+    ]
+  },
+  "finalCta": {
+    "h2": "Kostenlos starten, Upgraden wenn bereit",
+    "body": "5 kostenlose Vorhersagen pro Tag. Keine Kreditkarte für kostenlos nötig.",
+    "ctaPrimary": { "label": "Kostenlos starten", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final" },
+    "ctaSecondary": { "label": "Pläne ansehen", "canonical": "pricing" }
+  }
+}

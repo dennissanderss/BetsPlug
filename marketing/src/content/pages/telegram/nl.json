@@ -1,0 +1,45 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Gratis Dagelijkse Picks via Telegram | BetsPlug",
+    "description": "Top 3 AI-voetbalvoorspellingen elke dag op Telegram. Gratis, zonder registratie, geen e-mail vereist.",
+    "ogImage": "/og-images/telegram-nl.jpg"
+  },
+  "hero": {
+    "h1": "Gratis Dagelijkse Picks via Telegram",
+    "subheadline": "Krijg onze top 3 dagelijkse AI-voetbalvoorspellingen direct op Telegram. Gratis, geen registratie, geen e-mail nodig.",
+    "telegramUrl": "https://t.me/betsplug_picks",
+    "ctaLabel": "Word lid van Telegram-kanaal",
+    "trustStrip": ["Voor altijd gratis", "Geen registratie nodig", "Dagelijkse picks 8:00 CET"]
+  },
+  "whatYouGet": {
+    "h2": "Wat Je Ontvangt",
+    "cards": [
+      { "icon": "trending-up", "title": "Top 3 Dagelijkse Picks", "body": "De voorspellingen met hoogste confidence van de dag, over grote competities. Verstuurd elke ochtend om 8:00 CET." },
+      { "icon": "info",        "title": "Wedstrijdcontext",       "body": "Korte redenering per pick: waarom onze engine deze wedstrijd en markt heeft gekozen. Niet alleen cijfers, maar inzicht." },
+      { "icon": "check-circle","title": "Resultaat-updates",      "body": "Na afgesloten wedstrijden plaatsen we resultaten: zowel winst als verlies. Volg onze kanaal-prestaties week na week." }
+    ]
+  },
+  "whyTelegram": {
+    "h2": "Waarom Telegram?",
+    "paragraphs": [
+      "Telegram is snel, veilig en werkt op elk apparaat. We leveren picks waar je je telefoon checkt, niet begraven in e-mailmappen. Notificaties verschijnen direct wanneer wedstrijden ertoe doen.",
+      "Geen spam. We sturen 3 picks per dag, plus resultaat-updates. Uitschrijven kan op elk moment door het kanaal te verlaten — geen account-verwijdering vereist."
+    ]
+  },
+  "upgradePath": {
+    "h2": "Wil Je Meer Dan 3 Picks Per Dag?",
+    "body": "Het Telegram-kanaal is onze gratis tier in messaging-vorm. Leden krijgen onbeperkte dagelijkse voorspellingen voor 30+ competities, volledige wedstrijdanalyse en gepersonaliseerde notificaties.",
+    "ctaPrimary": { "label": "Bekijk Prijzen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Liever Gratis Account", "href": "https://app.betsplug.com/register?source=telegram_landing" }
+  },
+  "faq": {
+    "h2": "Telegram-kanaal FAQ",
+    "questions": [
+      { "q": "Heb ik een BetsPlug-account nodig?", "a": "Nee. Het Telegram-kanaal staat open zonder accountregistratie. Word gewoon lid van het kanaal en je ontvangt dagelijkse picks." },
+      { "q": "Kan ik notificaties krijgen voor specifieke competities?", "a": "Het gratis Telegram-kanaal stuurt top 3 picks over alle competities. Voor competitie-specifieke of wed-type-specifieke notificaties bevatten onze betaalde plannen aanpasbare Telegram-meldingen." },
+      { "q": "Hoe nauwkeurig zijn deze picks?", "a": "Dezelfde nauwkeurigheid als onze gratis website-tier — dezelfde engine, dezelfde methodologie. Verifieer prestaties via ons publieke track record." },
+      { "q": "Waarom maar 3 picks per dag op Telegram?", "a": "Gratis tier-limiet. Leden ontvangen onbeperkte voorspellingen plus gepersonaliseerde Telegram-notificaties op basis van confidence-drempels en competitie-voorkeuren." }
+    ]
+  }
+}

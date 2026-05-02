@@ -1,0 +1,105 @@
+{
+  "_meta": { "translationStatus": "human-reviewed", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Veelgestelde Vragen | BetsPlug",
+    "description": "Alles over BetsPlug AI-voetbalvoorspellingen: methodologie, prijzen, accuraatheid, compliance en meer.",
+    "ogImage": "/og-images/faq-nl.jpg"
+  },
+  "hero": {
+    "h1": "Veelgestelde Vragen",
+    "subheadline": "Alles over BetsPlug, onze voorspellingen, methodologie en abonnementen. Zoek of blader op categorie."
+  },
+  "search": {
+    "label": "FAQ doorzoeken",
+    "placeholder": "Doorzoek de FAQ...",
+    "noResultsText": "Geen passende vragen gevonden. Probeer een ander zoekwoord of blader door de categorieën hieronder.",
+    "submitLabel": "Zoeken",
+    "filterAppliedTemplate": "Resultaten voor: \"{query}\"",
+    "clearLabel": "Zoekopdracht wissen"
+  },
+  "categories": [
+    {
+      "id": "about",
+      "name": "Over BetsPlug",
+      "description": "Wie we zijn en wat we doen.",
+      "questions": [
+        { "id": "about-1", "question": "Wat is BetsPlug?", "answer": "BetsPlug is een AI-gedreven platform voor voetbalvoorspellingen. We genereren voorspellingen voor 30+ competities met statistische modellen (Elo, Poisson) en machine learning, en publiceren elke voorspelling in een openbare track record." },
+        { "id": "about-2", "question": "Is BetsPlug een bookmaker?", "answer": "Nee. We zijn een data-analyseplatform. We accepteren geen weddenschappen, houden geen geld vast en faciliteren geen gokactiviteiten. We bieden statistische voorspellingen voor educatief en informatief gebruik." },
+        { "id": "about-3", "question": "Waar is BetsPlug gevestigd?", "answer": "BetsPlug opereert als een onafhankelijk technologiebedrijf gevestigd in Europa. Voor zakelijke vragen kun je onze contactpagina bezoeken." },
+        { "id": "about-4", "question": "Hoe lang draait BetsPlug al?", "answer": "Onze openbare track record loopt vanaf de lancering — elke voorspelling die we ooit hebben gemaakt is verifieerbaar op de track record-pagina. Het platform draait inmiddels lang genoeg om een betekenisvolle steekproef te hebben in onze gedekte competities." },
+        { "id": "about-5", "question": "Wie is eigenaar van BetsPlug?", "answer": "BetsPlug wordt geëxploiteerd door een onafhankelijk technologiebedrijf. We zijn niet in handen van of geaffilieerd met een bookmaker. Ons verdienmodel is op abonnementen gebaseerd, niet op affiliates." }
+      ]
+    },
+    {
+      "id": "predictions",
+      "name": "Voorspellingen & Methodologie",
+      "description": "Hoe onze engine werkt en wat hij voorspelt.",
+      "questions": [
+        { "id": "predictions-1", "question": "Hoe accuraat zijn AI-voetbalvoorspellingen?", "answer": "Accuraatheid varieert per competitie, markt en speeldag. We publiceren elke voorspelling — zowel winnaars als verliezers — in onze openbare track record, zodat je de prestaties zelf kunt verifiëren in plaats van op onze claims af te gaan." },
+        { "id": "predictions-2", "question": "Kunnen voorspellingen na publicatie worden aangepast?", "answer": "Nee. Elke voorspelling wordt vóór de aftrap vergrendeld met een openbare tijdsstempel. Eenmaal gepubliceerd kan deze niet meer worden bewerkt of verwijderd. Dit is verifieerbaar in onze track record. De vergrendeling is architectonisch — er is geen admin-knop die een gepubliceerde voorspelling kan wijzigen." },
+        { "id": "predictions-3", "question": "Waarom gebruiken jullie meerdere statistische modellen?", "answer": "Geen enkele statistische methode vangt alle dynamiek van voetbal. Elo werkt met teamsterkte, Poisson met doelpuntverdelingen, machine learning met context. Door ze gewogen te combineren krijgen we robuustere voorspellingen dan met één methode alleen." },
+        { "id": "predictions-4", "question": "Hoe vroeg zijn voorspellingen beschikbaar?", "answer": "Abonnees zien voorspellingen tot 24 uur vóór de aftrap. Gratis gebruikers zien ze 2 uur vóór de aftrap. Eenmaal vergrendeld kunnen voorspellingen niet meer worden gewijzigd — alleen het toegangsmoment verschilt, niet de voorspellingen zelf." },
+        { "id": "predictions-5", "question": "Voorspellen jullie ook bekerwedstrijden en internationale duels?", "answer": "We dekken Champions League, Europa League en de grote nationale bekertoernooien voor onze 10 gedekte competities. Internationale toernooien (WK, EK) worden gedekt wanneer ze plaatsvinden. Vroege kwalificatierondes en kleinere bekerwedstrijden vallen niet binnen onze standaarddekking." },
+        { "id": "predictions-6", "question": "In welke talen zijn voorspellingen beschikbaar?", "answer": "BetsPlug-voorspellingen zijn beschikbaar in het Engels, Nederlands, Duits, Frans, Spaans en Italiaans. De methodologie- en contentpagina's zijn volledig vertaald per locale; technische termen (Elo, Poisson, xG) blijven consistent in alle talen." },
+        { "id": "predictions-7", "question": "Hoe gaan jullie om met degradatie/promotie tussen seizoenen?", "answer": "Elo-ratings van teams gaan mee tussen seizoenen, maar worden gekalibreerd voor de nieuwe competitiesterkte wanneer teams van divisie wisselen. Voorspellingen aan het begin van het seizoen houden rekening met transfers en trainerwisselingen. Vroege wedstrijden hebben iets meer onzekerheid omdat het model herijkt." },
+        { "id": "predictions-8", "question": "Waarom voorspellen jullie geen specifieke doelpuntenmakers?", "answer": "Voorspellingen op spelerniveau hebben veel meer variantie dan voorspellingen op teamniveau. Onzekerheid over de opstelling, individuele vorm en tactische wijzigingen maken nauwkeurige goalscorer-voorspellingen onbetrouwbaar. We richten ons op markten op teamniveau waar accuraatheid wel haalbaar is." }
+      ]
+    },
+    {
+      "id": "pricing",
+      "name": "Prijzen & Abonnementen",
+      "description": "Plannen, betalingen en terugbetalingen.",
+      "questions": [
+        { "id": "pricing-1", "question": "Kan ik later van plan wisselen?", "answer": "Ja, op elk moment. Bij upgrade gaat het nieuwe plan direct in met pro rata facturering. Bij downgrade start het nieuwe plan in je volgende factuurcyclus." },
+        { "id": "pricing-2", "question": "Welke betaalmethoden accepteren jullie?", "answer": "Credit-/debetkaarten (Visa, Mastercard, American Express) en bankoverschrijvingen in EUR. Crypto-betalingen worden momenteel niet ondersteund, maar staan op onze roadmap." },
+        { "id": "pricing-3", "question": "Bieden jullie kortingen op jaarbasis?", "answer": "Jaarlijkse facturering bespaart 20% ten opzichte van maandelijks. De jaaroptie verschijnt bij de checkout. Je kunt op elk moment wisselen tussen maandelijks en jaarlijks zonder toegang te verliezen." },
+        { "id": "pricing-4", "question": "Is de proefperiode van 7 dagen echt gratis?", "answer": "Ja. We vragen een betaalmethode om de proefperiode te starten, maar je wordt de eerste 7 dagen niet belast. Annuleer vóór dag 7 en er wordt niets afgeschreven. Annuleer na een afschrijving en gebruik de geld-terug-garantie binnen de eerste 7 dagen." },
+        { "id": "pricing-5", "question": "Kan ik een team- of organisatieabonnement krijgen?", "answer": "We werken aan teamplannen voor analisten en kleinere organisaties. Neem contact met ons op als je specifieke wensen hebt — we kunnen mogelijk vroeg iets opzetten." },
+        { "id": "pricing-6", "question": "Zijn de prijzen inclusief btw/belastingen?", "answer": "De getoonde prijzen zijn inclusief de toepasselijke btw voor EU-klanten. Voor niet-EU-klanten is de getoonde prijs de eindprijs. Bonnetjes bevatten btw-details waar van toepassing." },
+        { "id": "pricing-7", "question": "Wat gebeurt er met mijn data als ik opzeg?", "answer": "Je accountdata (abonnementsgeschiedenis, instellingen, opgeslagen voorspellingen) blijft 90 dagen bewaard na opzegging, voor het geval je weer activeert. Na 90 dagen wordt deze permanent verwijderd, tenzij je eerder verwijdering aanvraagt." },
+        { "id": "pricing-8", "question": "Bieden jullie korting voor studenten of instellingen?", "answer": "We bieden momenteel geen aparte kortingstieren naast de jaarlijkse facturering (20% korting t.o.v. maandelijks). Jaarlijkse facturering is voor alle gebruikers tegen hetzelfde tarief beschikbaar." }
+      ]
+    },
+    {
+      "id": "account",
+      "name": "Account & Technisch",
+      "description": "Accountbeheer en technische ondersteuning.",
+      "questions": [
+        { "id": "account-1", "question": "Hoe pas ik mijn e-mailadres aan?", "answer": "Ga in je accountdashboard op app.betsplug.com/account naar Profiel en werk je e-mailadres bij. Je ontvangt een verificatiemail op het nieuwe adres voordat de wijziging actief wordt." },
+        { "id": "account-2", "question": "Ik ben mijn wachtwoord vergeten. Wat nu?", "answer": "Gebruik de link voor wachtwoord resetten op app.betsplug.com/login. Vul je e-mailadres in en je ontvangt binnen enkele minuten reset-instructies. Komt de mail niet aan, controleer dan je spam/junk; anders neem contact op met support." },
+        { "id": "account-3", "question": "Kan ik mijn accounttaal wijzigen na registratie?", "answer": "Ja. In de accountinstellingen kun je de interfacetaal op elk moment aanpassen. Je voorspellingsmeldingen schakelen ook naar de gekozen taal." },
+        { "id": "account-4", "question": "Is er een mobiele app?", "answer": "Op dit moment hebben we een responsive web-app die perfect werkt in mobiele browsers. Een native mobiele app staat op de roadmap. De web-app ondersteunt al toevoegen-aan-startscherm op iOS en Android voor app-achtig gedrag." },
+        { "id": "account-5", "question": "Welke browsers worden ondersteund?", "answer": "BetsPlug werkt op alle moderne browsers (Chrome, Firefox, Safari, Edge) die in de afgelopen 2 jaar zijn uitgebracht. Oudere browsers kunnen beperkte functionaliteit hebben." }
+      ]
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance & Juridisch",
+      "description": "Juridische positionering en gegevensbescherming.",
+      "questions": [
+        { "id": "compliance-1", "question": "Is het gebruik van BetsPlug legaal in mijn land?", "answer": "BetsPlug levert statistische analyses, geen gokdiensten. De legaliteit van voorspellingsdiensten verschilt per jurisdictie. Controleer je lokale wetten omtrent sportweddenschappen en voorspellingsdiensten. We voldoen aan EU-regelgeving voor gebruikers in EU-landen." },
+        { "id": "compliance-2", "question": "Hebben jullie een gokvergunning?", "answer": "We hebben geen gokvergunning nodig omdat we niet als bookmaker opereren. We zijn een dataservice. We voldoen aan bedrijfs- en gegevensbeschermingsregels die van toepassing zijn op softwarebedrijven." },
+        { "id": "compliance-3", "question": "Hoe gaan jullie om met verantwoord gokken?", "answer": "We onderschrijven de principes van verantwoord gokken. Lees onze pagina over Verantwoord Gokken voor details. We promoten geen gokken, vermijden gok-aanmoedigende taal in onze marketing en eisen dat gebruikers de wettelijke leeftijd voor gokken hebben in hun jurisdictie." },
+        { "id": "compliance-4", "question": "Mogen minderjarigen BetsPlug gebruiken?", "answer": "Onze gebruiksvoorwaarden vereisen dat gebruikers 18+ zijn (of de wettelijke gokleeftijd in hun jurisdictie, welke hoger is). We marketen niet aan minderjarigen en accepteren geen registraties van minderjarigen." },
+        { "id": "compliance-5", "question": "Hoe gaan jullie om met mijn persoonlijke gegevens?", "answer": "We voldoen aan de AVG en vergelijkbare regelgeving. We delen geen gebruikersdata met bookmakers. Lees ons Privacybeleid voor details over gegevensverzameling, opslag en gebruikersrechten." }
+      ]
+    },
+    {
+      "id": "track",
+      "name": "Track Record & Verificatie",
+      "description": "Hoe we onze accuraatheidsclaims onderbouwen.",
+      "questions": [
+        { "id": "track-1", "question": "Kunnen voorspellingen echt niet worden bewerkt na publicatie?", "answer": "Nee. Elke voorspelling wordt vergrendeld met een onveranderbare tijdsstempel vóór de aftrap. We hebben geen mechanisme om voorspellingen na publicatie te verwijderen of verbergen, zelfs als we dat zouden willen. Dit is architectonisch, geen beleid — het is niet aan te passen." },
+        { "id": "track-2", "question": "Hoe kan ik verifiëren dat een specifieke voorspelling vóór de aftrap is vergrendeld?", "answer": "Klik op een voorspelling in de track record. De detailpagina toont de vergrendelingstijd — het exacte moment waarop de voorspelling werd vastgelegd. Vergelijk dit met de werkelijke aftraptijd van de wedstrijd (ook getoond). De vergrendelingstijd ligt altijd vóór de aftrap." },
+        { "id": "track-3", "question": "Waarom tonen jullie geen specifieke accuraatheidspercentages?", "answer": "Accuraatheid varieert sterk per competitie, markttype en periode. Eén kop-percentage verbergt deze variantie. Wij tonen liever de ruwe data, zodat je echte prestaties in context ziet — welke competities, welke markten, welke periodes het best en slechtst presteerden." },
+        { "id": "track-4", "question": "Kan ik track record-data downloaden?", "answer": "Track record-data is beschikbaar via onze API voor betalende abonnees. De visuele track record op de track-record-pagina is openbaar toegankelijk voor verificatiedoeleinden." }
+      ]
+    }
+  ],
+  "stillHaveQuestions": {
+    "h2": "Nog Vragen?",
+    "body": "Niet gevonden wat je zocht? Stuur ons een bericht en we reageren binnen 24 uur.",
+    "ctaPrimary": { "label": "Contact Support", "canonical": "contact" },
+    "ctaSecondary": { "label": "Lees Methodologie", "canonical": "methodology" }
+  }
+}

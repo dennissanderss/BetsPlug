@@ -1,0 +1,105 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Frequently Asked Questions | BetsPlug",
+    "description": "Everything about BetsPlug AI football predictions: methodology, pricing, accuracy, compliance, and more.",
+    "ogImage": "/og-images/faq-en.jpg"
+  },
+  "hero": {
+    "h1": "Frequently Asked Questions",
+    "subheadline": "Everything about BetsPlug, our predictions, methodology, and subscriptions. Search or browse by category."
+  },
+  "search": {
+    "label": "Search FAQ",
+    "placeholder": "Search FAQ...",
+    "noResultsText": "No matching questions found. Try a different keyword or browse the categories below.",
+    "submitLabel": "Search",
+    "filterAppliedTemplate": "Showing results for: \"{query}\"",
+    "clearLabel": "Clear search"
+  },
+  "categories": [
+    {
+      "id": "about",
+      "name": "About BetsPlug",
+      "description": "Who we are and what we do.",
+      "questions": [
+        { "id": "about-1", "question": "What is BetsPlug?", "answer": "BetsPlug is an AI-driven football prediction platform. We generate predictions for 30+ leagues using statistical models (Elo, Poisson) and machine learning, publishing every prediction in a public track record." },
+        { "id": "about-2", "question": "Is BetsPlug a bookmaker?", "answer": "No. We're a data analytics platform. We don't accept bets, hold money, or facilitate gambling. We provide statistical predictions for educational and informational use." },
+        { "id": "about-3", "question": "Where is BetsPlug based?", "answer": "BetsPlug operates as an independent technology company based in Europe. For business inquiries, visit our contact page." },
+        { "id": "about-4", "question": "How long has BetsPlug been operating?", "answer": "Our public track record spans from launch — every prediction we've ever made is verifiable on the track record page. The platform has been operating long enough to have meaningful sample size across our covered leagues." },
+        { "id": "about-5", "question": "Who owns BetsPlug?", "answer": "BetsPlug is operated by an independent technology company. We're not owned by or affiliated with any bookmaker. Our revenue model is subscription-based, not affiliate-based." }
+      ]
+    },
+    {
+      "id": "predictions",
+      "name": "Predictions & Methodology",
+      "description": "How our engine works and what it predicts.",
+      "questions": [
+        { "id": "predictions-1", "question": "How accurate are AI football predictions?", "answer": "Accuracy varies per league, market and matchday. We publish every prediction — both wins and losses — in our public track record so you can verify performance yourself rather than rely on our claims." },
+        { "id": "predictions-2", "question": "Can predictions be modified after publication?", "answer": "No. Every prediction is locked before kickoff with a public timestamp. Once published, it cannot be edited or removed. This is verifiable in our track record. The lock is architectural — there's no admin button that could change a published prediction." },
+        { "id": "predictions-3", "question": "Why do you use multiple statistical models?", "answer": "No single statistical method captures all football dynamics. Elo handles team strength, Poisson handles goal distributions, machine learning handles context. Combining them with weighted integration gives more robust predictions than any one method alone." },
+        { "id": "predictions-4", "question": "How early are predictions available?", "answer": "Subscribers see predictions up to 24 hours before kickoff. Free users see them 2 hours before kickoff. Once locked, predictions cannot be modified — the timing of access changes, not the predictions themselves." },
+        { "id": "predictions-5", "question": "Do you predict cup matches and international fixtures?", "answer": "We cover Champions League, Europa League, and the major domestic cup competitions for our 10 covered leagues. International fixtures (World Cup, Euros) are covered when they occur. Earlier qualifying rounds and minor cup competitions are not in our default coverage." },
+        { "id": "predictions-6", "question": "What languages are predictions available in?", "answer": "BetsPlug predictions are available in English, Dutch, German, French, Spanish, and Italian. The methodology and content pages are fully translated for each locale; technical terms (Elo, Poisson, xG) remain consistent across all languages." },
+        { "id": "predictions-7", "question": "How do you handle relegation/promotion between seasons?", "answer": "Teams' Elo ratings carry between seasons but are calibrated for new league strength when teams move between divisions. New season predictions account for off-season transfers and managerial changes. Early-season matches have slightly higher uncertainty as the model recalibrates." },
+        { "id": "predictions-8", "question": "Why don't you predict specific player goalscorers?", "answer": "Player-level predictions have much higher variance than team-level predictions. Lineup uncertainty, individual form variance, and tactical changes make accurate goalscorer prediction unreliable. We focus on team-level markets where accuracy is achievable." }
+      ]
+    },
+    {
+      "id": "pricing",
+      "name": "Pricing & Subscriptions",
+      "description": "Plans, payments, and refunds.",
+      "questions": [
+        { "id": "pricing-1", "question": "Can I switch plans later?", "answer": "Yes, anytime. Upgrade and the new plan activates immediately with prorated billing. Downgrade and the new plan starts at your next billing cycle." },
+        { "id": "pricing-2", "question": "What payment methods do you accept?", "answer": "Credit/debit cards (Visa, Mastercard, American Express), and bank transfers in EUR. Cryptocurrency payments are not currently supported but are on our roadmap." },
+        { "id": "pricing-3", "question": "Do you offer annual discounts?", "answer": "Annual billing saves 20% versus monthly. The annual option appears at checkout. You can switch between monthly and annual anytime without losing access." },
+        { "id": "pricing-4", "question": "Is the 7-day trial really free?", "answer": "Yes. We require a payment method to start the trial, but you are not charged for the first 7 days. Cancel before day 7 and no charge occurs. Cancel after a charge and use the money-back guarantee within the first 7 days." },
+        { "id": "pricing-5", "question": "Can I get a team or organization plan?", "answer": "We're working on team plans for analysts and small organizations. Contact us if you have specific needs — we may be able to set something up early." },
+        { "id": "pricing-6", "question": "Do prices include VAT/taxes?", "answer": "Prices shown include applicable VAT for EU customers. For non-EU customers, the price you see is the final price. Receipts include VAT details where applicable." },
+        { "id": "pricing-7", "question": "What happens to my data if I cancel?", "answer": "Your account data (subscription history, settings, saved predictions) is retained for 90 days after cancellation in case you reactivate. After 90 days, it's permanently deleted unless you request earlier deletion." },
+        { "id": "pricing-8", "question": "Do you offer student or institutional discounts?", "answer": "We don't currently offer discount tiers beyond the annual billing discount (20% versus monthly). Annual billing is available to all users at the same rate." }
+      ]
+    },
+    {
+      "id": "account",
+      "name": "Account & Technical",
+      "description": "Account management and technical support.",
+      "questions": [
+        { "id": "account-1", "question": "How do I update my email?", "answer": "From your account dashboard at app.betsplug.com/account, click Profile and update email. You'll receive a verification email at the new address before the change takes effect." },
+        { "id": "account-2", "question": "I forgot my password. What now?", "answer": "Use the password reset link on app.betsplug.com/login. Enter your email, receive reset instructions within minutes. If the email doesn't arrive, check spam/junk; otherwise contact support." },
+        { "id": "account-3", "question": "Can I change my account language after signup?", "answer": "Yes. From account settings, switch interface language any time. Your prediction notifications also switch to the selected language." },
+        { "id": "account-4", "question": "Is there a mobile app?", "answer": "Currently we have a responsive web app that works perfectly on mobile browsers. A native mobile app is on our roadmap. The web app already supports add-to-home-screen on iOS and Android for app-like behavior." },
+        { "id": "account-5", "question": "What browsers do you support?", "answer": "BetsPlug works on all modern browsers (Chrome, Firefox, Safari, Edge) released in the last 2 years. Older browsers may have limited functionality." }
+      ]
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance & Legal",
+      "description": "Legal positioning and data protection.",
+      "questions": [
+        { "id": "compliance-1", "question": "Is using BetsPlug legal in my country?", "answer": "BetsPlug provides statistical analysis, not gambling services. The legality of using prediction services varies by jurisdiction. Check your local laws regarding sports betting and prediction services. We comply with EU regulations for users in EU countries." },
+        { "id": "compliance-2", "question": "Do you have a gambling license?", "answer": "We don't require a gambling license because we don't operate as a bookmaker. We're a data analytics service. We comply with business and data protection regulations applicable to software companies." },
+        { "id": "compliance-3", "question": "How do you handle responsible gambling?", "answer": "We support responsible gambling principles. Read our Responsible Gambling page for details. We don't promote gambling, avoid gambling-incentive language in our marketing, and require users to be of legal gambling age in their jurisdiction." },
+        { "id": "compliance-4", "question": "Can minors use BetsPlug?", "answer": "Our Terms of Service require users to be 18+ (or legal gambling age in their jurisdiction, whichever is higher). We don't market to or accept registrations from minors." },
+        { "id": "compliance-5", "question": "How do you handle my personal data?", "answer": "We comply with GDPR and similar regulations. We don't share user data with bookmakers. Read our Privacy Policy for details on data collection, storage, and user rights." }
+      ]
+    },
+    {
+      "id": "track",
+      "name": "Track Record & Verification",
+      "description": "How we prove our accuracy claims.",
+      "questions": [
+        { "id": "track-1", "question": "Can predictions really not be edited after publication?", "answer": "No. Every prediction is locked with an immutable timestamp before kickoff. We have no mechanism to delete or hide predictions after publication, even if we wanted to. This is architectural, not policy — it can't be changed." },
+        { "id": "track-2", "question": "How can I verify a specific prediction was locked before kickoff?", "answer": "Click any prediction in the track record. The detail page shows the lock timestamp — the exact moment the prediction was committed. Compare this with the actual match kickoff time (also shown). Lock timestamp is always before kickoff." },
+        { "id": "track-3", "question": "Why don't you show specific accuracy percentages?", "answer": "Accuracy varies dramatically by league, market type, and time period. A single headline percentage hides this variance. We prefer to show the raw data so you can see actual performance in context — which competitions, which markets, which periods we've performed best and worst." },
+        { "id": "track-4", "question": "Can I download track record data?", "answer": "Track record data is available through our API for paid subscribers. The visual track record on the track-record page is publicly accessible for verification purposes." }
+      ]
+    }
+  ],
+  "stillHaveQuestions": {
+    "h2": "Still Have Questions?",
+    "body": "Can't find what you're looking for? Send us a message and we'll respond within 24 hours.",
+    "ctaPrimary": { "label": "Contact Support", "canonical": "contact" },
+    "ctaSecondary": { "label": "Read Methodology", "canonical": "methodology" }
+  }
+}

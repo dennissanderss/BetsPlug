@@ -1,0 +1,28 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { FAQContent } from "@/content/pages/faq/types";
+
+interface Props {
+  locale: Locale;
+  content: FAQContent["stillHaveQuestions"];
+}
+const { locale, content } = Astro.props;
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+---
+
+<Section surface="dark" spacing="lg" ariaLabelledby="still-questions-h2">
+  <Container size="md" class="text-center">
+    <h2 id="still-questions-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-white-pure">
+      {content.h2}
+    </h2>
+    <p class="mt-5 text-lg leading-relaxed text-white-soft max-w-2xl mx-auto">{content.body}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">{content.ctaPrimary.label}</Button>
+      <Button href={ctaSecondaryHref} variant="secondary" size="lg" surface="dark">{content.ctaSecondary.label}</Button>
+    </div>
+  </Container>
+</Section>

@@ -1,0 +1,164 @@
+---
+/**
+ * FAQSearch — client-side search via Fuse.js with no-JS fallback.
+ *
+ * Strategy:
+ *   1. JS-disabled: form submits to /faq?q=... — server-side filter
+ *      handled by parent page on next page load (basic substring match).
+ *   2. JS-enabled: Fuse.js builds in-memory index from already-rendered
+ *      DOM (data-faq-q + data-faq-a attributes). On input, hide non-
+ *      matching items; show "no results" message when applicable.
+ *
+ * Uses progressive enhancement — works without JS, snappier with JS.
+ */
+import type { FAQContent } from "@/content/pages/faq/types";
+
+interface Props {
+  content: FAQContent["search"];
+  baseHref: string;
+  /** Query from ?q= param (used for no-JS fallback message). */
+  initialQuery: string;
+}
+const { content, baseHref, initialQuery } = Astro.props;
+---
+
+<form
+  id="faq-search-form"
+  action={baseHref}
+  method="get"
+  class="relative max-w-2xl mx-auto"
+  role="search"
+>
+  <label for="faq-search" class="sr-only">{content.label}</label>
+  <input
+    id="faq-search"
+    name="q"
+    type="search"
+    placeholder={content.placeholder}
+    value={initialQuery}
+    autocomplete="off"
+    class="w-full h-12 pl-11 pr-12 rounded-xl border border-stadium-white-200 bg-white text-base text-charcoal-900 placeholder:text-charcoal-500
+           focus-visible:outline-none focus-visible:border-pitch-green-500 focus-visible:ring-2 focus-visible:ring-pitch-green-400/40
+           transition-colors"
+  />
+  <!-- Search icon -->
+  <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-charcoal-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+
+  <!-- Submit button (visible only without JS or for keyboard submit confirmation) -->
+  <button
+    type="submit"
+    class="absolute right-2 top-1/2 -translate-y-1/2 h-9 px-4 rounded-md bg-pitch-green-500 text-deep-navy-950 text-sm font-bold
+           hover:bg-pitch-green-400 transition-colors
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-1"
+  >
+    {content.submitLabel}
+  </button>
+</form>
+
+<!-- No-JS fallback indicator: when ?q= present and JS disabled, this shows. -->
+{initialQuery && (
+  <div class="mt-4 text-center text-sm">
+    <span class="text-charcoal-700">{content.filterAppliedTemplate.replace("{query}", initialQuery)}</span>
+    {" "}
+    <a href={baseHref} class="text-pitch-green-600 hover:text-pitch-green-500 font-semibold">{content.clearLabel}</a>
+  </div>
+)}
+
+<!-- No results message — shown by JS when search yields 0 hits -->
+<p id="faq-no-results" class="hidden mt-6 text-center text-sm text-charcoal-500">
+  {content.noResultsText}
+</p>
+
+<script define:vars={{ initialQuery }}>
+  // Client-side enhancement: fuzzy filter using Fuse.js loaded from CDN.
+  // Loaded async so initial paint isn't blocked.
+  (async function () {
+    const form = document.getElementById("faq-search-form");
+    const input = document.getElementById("faq-search");
+    const noResultsEl = document.getElementById("faq-no-results");
+    if (!form || !input || !noResultsEl) return;
+
+    // Prevent form submission once JS has hijacked the input — keeps URL clean.
+    form.addEventListener("submit", (e) => {
+      // Only prevent default if user typed something AND we have JS handling
+      if (input.value.trim().length > 0) {
+        e.preventDefault();
+      }
+    });
+
+    // Build search index from DOM attributes
+    const items = Array.from(document.querySelectorAll("[data-faq-id]"));
+    const index = items.map((el) => ({
+      id: el.getAttribute("data-faq-id"),
+      question: el.getAttribute("data-faq-q") ?? "",
+      answer: el.getAttribute("data-faq-a") ?? "",
+      element: el,
+    }));
+
+    // Lazy-load Fuse.js from CDN (small package, fine for client search)
+    const FuseModule = await import("https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs").catch(() => null);
+    if (!FuseModule) return; // Fall back to native form submission
+
+    const Fuse = FuseModule.default;
+    const fuse = new Fuse(index, {
+      keys: ["question", "answer"],
+      threshold: 0.35,
+      includeScore: true,
+      minMatchCharLength: 2,
+    });
+
+    function render(query) {
+      const trimmed = query.trim();
+      const categories = document.querySelectorAll("[data-faq-category]");
+      if (!trimmed) {
+        // Reset: show all
+        for (const item of items) item.classList.remove("hidden");
+        for (const cat of categories) cat.classList.remove("hidden");
+        noResultsEl.classList.add("hidden");
+        return;
+      }
+
+      const results = fuse.search(trimmed);
+      const matchingIds = new Set(results.map((r) => r.item.id));
+
+      // Hide non-matching items
+      for (const item of items) {
+        if (matchingIds.has(item.getAttribute("data-faq-id"))) {
+          item.classList.remove("hidden");
+        } else {
+          item.classList.add("hidden");
+        }
+      }
+
+      // Hide categories where ALL items are hidden
+      for (const cat of categories) {
+        const visibleItems = cat.querySelectorAll("[data-faq-id]:not(.hidden)");
+        if (visibleItems.length === 0) cat.classList.add("hidden");
+        else cat.classList.remove("hidden");
+      }
+
+      // Show / hide "no results" message
+      if (matchingIds.size === 0) {
+        noResultsEl.classList.remove("hidden");
+      } else {
+        noResultsEl.classList.add("hidden");
+      }
+    }
+
+    // Wire input — debounced for 150ms
+    let debounce;
+    input.addEventListener("input", (e) => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => render(e.target.value), 150);
+    });
+
+    // If page loaded with ?q= present, run filter immediately so JS-enabled
+    // users see live results plus clean URL after first keystroke.
+    if (initialQuery) {
+      render(initialQuery);
+    }
+  })();
+</script>

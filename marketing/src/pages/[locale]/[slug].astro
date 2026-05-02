@@ -75,11 +75,32 @@ import BetTypesFAQ       from "@/components/bet-types/BetTypesFAQ.astro";
 import BetTypesFinalCTA  from "@/components/bet-types/BetTypesFinalCTA.astro";
 import { loadBetTypesContent } from "@/lib/bet-types-page";
 
+import FreeVsPaidHero          from "@/components/free-vs-paid/FreeVsPaidHero.astro";
+import VisualComparison        from "@/components/free-vs-paid/VisualComparison.astro";
+import DetailedComparisonTable from "@/components/free-vs-paid/DetailedComparisonTable.astro";
+import UseCaseProfiles         from "@/components/free-vs-paid/UseCaseProfiles.astro";
+import FreeVsPaidFAQ           from "@/components/free-vs-paid/FreeVsPaidFAQ.astro";
+import FreeVsPaidFinalCTA      from "@/components/free-vs-paid/FreeVsPaidFinalCTA.astro";
+import { loadFreeVsPaidContent } from "@/lib/free-vs-paid-page";
+
+import TelegramHero        from "@/components/telegram/TelegramHero.astro";
+import WhatYouGet          from "@/components/telegram/WhatYouGet.astro";
+import WhyTelegram         from "@/components/telegram/WhyTelegram.astro";
+import UpgradePathSection  from "@/components/telegram/UpgradePathSection.astro";
+import TelegramFAQ         from "@/components/telegram/TelegramFAQ.astro";
+import { loadTelegramContent } from "@/lib/telegram-page";
+
+import FAQHero               from "@/components/faq/FAQHero.astro";
+import FAQSearch             from "@/components/faq/FAQSearch.astro";
+import FAQCategoryC          from "@/components/faq/FAQCategory.astro";
+import StillHaveQuestionsCTA from "@/components/faq/StillHaveQuestionsCTA.astro";
+import { loadFaqContent, filterCategoriesByQuery } from "@/lib/faq-page";
+
 export function getStaticPaths() {
   // Astro hoists `getStaticPaths` to a separate scope, so this list
   // must live inside the function. Mirror it in `SUPPORTED_CANONICAL`
   // below for runtime branching.
-  const supported = ["predictions", "methodology", "track-record", "learn", "bet-types"];
+  const supported = ["predictions", "methodology", "track-record", "learn", "bet-types", "free-vs-paid", "telegram", "faq"];
   const out: Array<{ params: { locale: string; slug: string } }> = [];
   for (const locale of locales) {
     if (locale === defaultLocale) continue;
@@ -275,6 +296,67 @@ const btFaqSchema = btContent ? {
     "@type": "Question", name: q.q,
     acceptedAnswer: { "@type": "Answer", text: q.a },
   })),
+} : null;
+
+// ── Free vs Paid ───────────────────────────────────────────
+const fvpContent = canonical === "free-vs-paid" ? await loadFreeVsPaidContent(locale) : null;
+
+const fvpBreadcrumbSchema = fvpContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Free vs Paid", item: `${SITE}/${locale}/${slug}` },
+  ],
+} : null;
+const fvpFaqSchema = fvpContent ? {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: fvpContent.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+} : null;
+
+// ── Telegram ──────────────────────────────────────────────
+const tgContent = canonical === "telegram" ? await loadTelegramContent(locale) : null;
+
+const tgBreadcrumbSchema = tgContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "Telegram", item: `${SITE}/${locale}/${slug}` },
+  ],
+} : null;
+const tgFaqSchema = tgContent ? {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: tgContent.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+} : null;
+
+// ── FAQ ───────────────────────────────────────────────────
+const faqContent = canonical === "faq" ? await loadFaqContent(locale) : null;
+const faqQueryParam = Astro.url.searchParams.get("q");
+const faqFilteredCategories = faqContent
+  ? filterCategoriesByQuery(faqContent.categories, faqQueryParam)
+  : [];
+
+const faqPageSchema = faqContent ? {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: faqContent.categories.flatMap((cat) =>
+    cat.questions.map((q) => ({
+      "@type": "Question",
+      name: q.question,
+      acceptedAnswer: { "@type": "Answer", text: q.answer },
+    })),
+  ),
+} : null;
+const faqBreadcrumbSchema = faqContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "FAQ",  item: `${SITE}/${locale}/${slug}` },
+  ],
 } : null;
 ---
 
@@ -481,5 +563,100 @@ const btFaqSchema = btContent ? {
     </Section>
 
     <BetTypesFinalCTA locale={locale} content={btContent.finalCta} />
+  </MarketingLayout>
+)}
+
+{canonical === "free-vs-paid" && fvpContent && (
+  <MarketingLayout
+    title={fvpContent.meta.title}
+    description={fvpContent.meta.description}
+    ogImage={fvpContent.meta.ogImage}
+    canonicalPath="/free-vs-paid"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(fvpBreadcrumbSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(fvpFaqSchema)} />
+    </Fragment>
+
+    <FreeVsPaidHero          content={fvpContent.hero} />
+    <VisualComparison        locale={locale} content={fvpContent.visual} />
+    <DetailedComparisonTable locale={locale} content={fvpContent.comparison} />
+    <UseCaseProfiles         locale={locale} content={fvpContent.useCases} />
+    <FreeVsPaidFAQ           content={fvpContent.faq} />
+    <FreeVsPaidFinalCTA      locale={locale} content={fvpContent.finalCta} />
+  </MarketingLayout>
+)}
+
+{canonical === "telegram" && tgContent && (
+  <MarketingLayout
+    title={tgContent.meta.title}
+    description={tgContent.meta.description}
+    ogImage={tgContent.meta.ogImage}
+    canonicalPath="/telegram"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(tgBreadcrumbSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(tgFaqSchema)} />
+    </Fragment>
+
+    <TelegramHero        content={tgContent.hero} />
+    <WhatYouGet          content={tgContent.whatYouGet} />
+    <WhyTelegram         content={tgContent.whyTelegram} />
+    <UpgradePathSection  locale={locale} content={tgContent.upgradePath} />
+    <TelegramFAQ         content={tgContent.faq} />
+  </MarketingLayout>
+)}
+
+{canonical === "faq" && faqContent && (
+  <MarketingLayout
+    title={faqContent.meta.title}
+    description={faqContent.meta.description}
+    ogImage={faqContent.meta.ogImage}
+    canonicalPath="/faq"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(faqPageSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(faqBreadcrumbSchema)} />
+    </Fragment>
+
+    <FAQHero content={faqContent.hero} />
+
+    <Section surface="light" spacing="lg">
+      <Container size="md">
+        <FAQSearch
+          content={faqContent.search}
+          baseHref={`/${locale}/${slug}`}
+          initialQuery={faqQueryParam ?? ""}
+        />
+      </Container>
+    </Section>
+
+    <Section surface="light" spacing="lg" class="!pt-0">
+      <Container size="md">
+        {faqFilteredCategories.length === 0 ? (
+          <p class="text-center text-base text-charcoal-700 mt-8">{faqContent.search.noResultsText}</p>
+        ) : (
+          <div>
+            {faqFilteredCategories.map((category) => (
+              <FAQCategoryC category={category} openQuestionId={null} />
+            ))}
+          </div>
+        )}
+      </Container>
+    </Section>
+
+    <StillHaveQuestionsCTA locale={locale} content={faqContent.stillHaveQuestions} />
+
+    <script>
+      (function () {
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+        const target = document.getElementById(hash);
+        if (target && target.tagName.toLowerCase() === "details") {
+          (target as HTMLDetailsElement).open = true;
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      })();
+    </script>
   </MarketingLayout>
 )}

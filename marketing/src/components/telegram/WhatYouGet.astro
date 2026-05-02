@@ -1,0 +1,44 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import type { TelegramContent } from "@/content/pages/telegram/types";
+
+interface Props { content: TelegramContent["whatYouGet"] }
+const { content } = Astro.props;
+---
+
+<Section surface="light" spacing="lg" ariaLabelledby="whatyouget-h2">
+  <Container size="xl">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2 id="whatyouget-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+        {content.h2}
+      </h2>
+    </header>
+
+    <ul class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6" role="list">
+      {content.cards.map((card) => (
+        <li class="rounded-xl border border-stadium-white-200 bg-white p-6 lg:p-7 shadow-[var(--shadow-sm)]">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-pitch-green-500/15 text-pitch-green-600 mb-4" aria-hidden="true">
+            {card.icon === "trending-up" && (
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+              </svg>
+            )}
+            {card.icon === "info" && (
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            )}
+            {card.icon === "check-circle" && (
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            )}
+          </span>
+          <h3 class="text-lg font-bold text-charcoal-900">{card.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-charcoal-700">{card.body}</p>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</Section>

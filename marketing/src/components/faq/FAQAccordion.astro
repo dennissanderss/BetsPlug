@@ -1,0 +1,36 @@
+---
+/**
+ * FAQAccordion — single Q&A item with native <details> behavior + JS-
+ * augmented deep-linking via URL hash.
+ */
+import type { FAQItem } from "@/content/pages/faq/types";
+
+interface Props {
+  item: FAQItem;
+  /** Forced open (when matched from URL hash). */
+  forceOpen?: boolean;
+}
+const { item, forceOpen = false } = Astro.props;
+---
+
+<details
+  id={item.id}
+  class="group faq-item scroll-mt-24"
+  open={forceOpen ? true : undefined}
+  data-faq-id={item.id}
+  data-faq-q={item.question}
+  data-faq-a={item.answer}
+>
+  <summary class="flex items-start justify-between gap-4 cursor-pointer px-6 py-4 list-none text-left focus-visible:outline-none focus-visible:bg-stadium-white-100">
+    <span class="text-base font-semibold text-charcoal-900">{item.question}</span>
+    <svg class="h-5 w-5 shrink-0 text-charcoal-500 transition-transform duration-200 group-open:rotate-180 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+  </summary>
+  <div class="px-6 pb-4 text-sm leading-relaxed text-charcoal-700">{item.answer}</div>
+</details>
+
+<style>
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::marker { content: ""; }
+</style>

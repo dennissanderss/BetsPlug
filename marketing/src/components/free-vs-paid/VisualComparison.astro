@@ -1,0 +1,122 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { FreeVsPaidContent } from "@/content/pages/free-vs-paid/types";
+
+interface Props {
+  locale: Locale;
+  content: FreeVsPaidContent["visual"];
+}
+const { locale, content } = Astro.props;
+
+const paidHref = "canonical" in content.paid.cta
+  ? getLocalizedPath(content.paid.cta.canonical, locale)
+  : content.paid.cta.href;
+---
+
+<Section surface="light" spacing="lg" ariaLabelledby="visual-comparison-h2">
+  <Container size="xl">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2 id="visual-comparison-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+        {content.h2}
+      </h2>
+    </header>
+
+    <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+      <!-- FREE -->
+      <article class="rounded-2xl border border-stadium-white-200 bg-white p-6 lg:p-8 flex flex-col">
+        <header>
+          <h3 class="text-2xl font-bold text-charcoal-900">{content.free.header}</h3>
+          <p class="mt-1 text-sm text-charcoal-500">{content.free.subheader}</p>
+        </header>
+
+        <!-- Mock prediction card — bare -->
+        <div class="mt-6 rounded-xl border border-stadium-white-200 bg-stadium-white-50 p-5">
+          <p class="text-xs font-semibold uppercase tracking-wider text-charcoal-500">{content.free.mockMatch.league}</p>
+          <p class="mt-2 text-sm font-bold text-charcoal-900">{content.free.mockMatch.home}</p>
+          <p class="text-sm font-bold text-charcoal-900">{content.free.mockMatch.away}</p>
+          <p class="mt-4 text-base font-bold text-pitch-green-600">{content.free.mockMatch.pick}</p>
+          <div class="mt-2 flex items-center justify-between text-xs">
+            <span class="text-charcoal-500">Confidence</span>
+            <span class="font-mono font-semibold text-charcoal-900">{content.free.mockMatch.confidence}%</span>
+          </div>
+          <div class="mt-1.5 h-1.5 rounded-full bg-stadium-white-200 overflow-hidden">
+            <div class="h-full rounded-full bg-pitch-green-500" style={`width: ${content.free.mockMatch.confidence}%;`}></div>
+          </div>
+        </div>
+
+        <h4 class="mt-6 text-xs font-semibold uppercase tracking-wider text-charcoal-500">Use cases</h4>
+        <ul class="mt-2 space-y-2 text-sm text-charcoal-700">
+          {content.free.useCases.map((u) => (
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-pitch-green-600 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+              <span>{u}</span>
+            </li>
+          ))}
+        </ul>
+
+        <h4 class="mt-5 text-xs font-semibold uppercase tracking-wider text-charcoal-500">Limitations</h4>
+        <ul class="mt-2 space-y-2 text-sm text-charcoal-700">
+          {content.free.limitations.map((l) => (
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-charcoal-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+              <span>{l}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-auto pt-6">
+          <Button href={content.free.cta.href} variant="secondary" size="md" surface="light" external class="w-full">
+            {content.free.cta.label}
+          </Button>
+        </div>
+      </article>
+
+      <!-- PAID — highlighted -->
+      <article class="rounded-2xl border-2 border-pitch-green-500 bg-white p-6 lg:p-8 flex flex-col shadow-[var(--shadow-md)]">
+        <header>
+          <h3 class="text-2xl font-bold text-charcoal-900">{content.paid.header}</h3>
+          <p class="mt-1 text-sm text-charcoal-500">{content.paid.subheader}</p>
+        </header>
+
+        <!-- Mock prediction card — detailed -->
+        <div class="mt-6 rounded-xl border border-pitch-green-500/30 bg-pitch-green-500/5 p-5">
+          <p class="text-xs font-semibold uppercase tracking-wider text-charcoal-500">{content.paid.mockMatch.league}</p>
+          <p class="mt-2 text-sm font-bold text-charcoal-900">{content.paid.mockMatch.home}</p>
+          <p class="text-sm font-bold text-charcoal-900">{content.paid.mockMatch.away}</p>
+          <p class="mt-4 text-base font-bold text-pitch-green-600">{content.paid.mockMatch.pick}</p>
+          <div class="mt-2 flex items-center justify-between text-xs">
+            <span class="text-charcoal-500">Confidence</span>
+            <span class="font-mono font-semibold text-charcoal-900">{content.paid.mockMatch.confidence}%</span>
+          </div>
+          <div class="mt-1.5 h-1.5 rounded-full bg-stadium-white-200 overflow-hidden">
+            <div class="h-full rounded-full bg-pitch-green-500" style={`width: ${content.paid.mockMatch.confidence}%;`}></div>
+          </div>
+          <div class="mt-4 space-y-1 border-t border-pitch-green-500/20 pt-3 text-[11px] text-charcoal-700">
+            <p><span class="font-semibold">xG:</span> {content.paid.mockMatch.xg}</p>
+            <p><span class="font-semibold">H2H:</span> {content.paid.mockMatch.h2h}</p>
+            <p><span class="font-semibold">Lineup:</span> {content.paid.mockMatch.lineup}</p>
+          </div>
+        </div>
+
+        <h4 class="mt-6 text-xs font-semibold uppercase tracking-wider text-charcoal-500">Use cases</h4>
+        <ul class="mt-2 space-y-2 text-sm text-charcoal-700">
+          {content.paid.useCases.map((u) => (
+            <li class="flex items-start gap-2">
+              <svg class="h-4 w-4 text-pitch-green-600 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+              <span>{u}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-auto pt-6">
+          <Button href={paidHref} variant="primary" size="md" surface="light" class="w-full">
+            {content.paid.cta.label}
+          </Button>
+        </div>
+      </article>
+    </div>
+  </Container>
+</Section>

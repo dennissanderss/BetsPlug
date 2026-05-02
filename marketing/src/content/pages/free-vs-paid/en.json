@@ -1,0 +1,101 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Free vs Paid: Which BetsPlug Plan? | BetsPlug",
+    "description": "Compare free and paid BetsPlug tiers. Same AI engine, different volume and depth. 5 daily predictions free, unlimited paid.",
+    "ogImage": "/og-images/free-vs-paid-en.jpg"
+  },
+  "hero": {
+    "h1": "Free or Paid: Which BetsPlug is Right for You?",
+    "subheadline": "Both tiers use the same AI engine and methodology. The difference is volume, depth, and timing. Find your match below."
+  },
+  "visual": {
+    "h2": "What You See on Each Tier",
+    "free": {
+      "header": "Free",
+      "subheader": "Try the engine, no commitment",
+      "useCases": [
+        "Evaluating prediction quality before subscribing",
+        "Casual interest in 1-2 top leagues",
+        "Testing methodology and track record"
+      ],
+      "limitations": [
+        "5 predictions per day",
+        "Top 3 leagues only",
+        "2 hours before kickoff (vs 24h for paid)",
+        "Basic info only (no xG, H2H, lineups)"
+      ],
+      "cta": { "label": "Get Started Free", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Over 2.5 Goals", "confidence": 78 }
+    },
+    "paid": {
+      "header": "Silver / Gold",
+      "subheader": "Full predictions, full data",
+      "useCases": [
+        "Daily predictions across multiple leagues",
+        "Full match analysis (xG, H2H, lineups, reasoning)",
+        "Predictions 24h before kickoff",
+        "Telegram notifications for high-confidence picks",
+        "All bet markets per match"
+      ],
+      "cta": { "label": "View Pricing", "canonical": "pricing" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Over 2.5 Goals", "confidence": 78, "xg": "City 2.4 — Arsenal 1.6", "h2h": "Last 5: City 4W 1D 0L", "lineup": "Both first-choice XIs" }
+    }
+  },
+  "comparison": {
+    "h2": "Feature Comparison",
+    "headers": { "feature": "Feature", "free": "Free", "silver": "Silver", "gold": "Gold" },
+    "rows": [
+      { "feature": "Daily predictions", "free": "5",         "silver": "Unlimited", "gold": "Unlimited" },
+      { "feature": "Leagues",           "free": "Top 3",     "silver": "All 30+",   "gold": "All 30+" },
+      { "feature": "Bet markets",       "free": "1X2 only",  "silver": "All",       "gold": "All" },
+      { "feature": "Match analysis",    "free": "Basic",     "silver": "Full",      "gold": "Full" },
+      { "feature": "Advance access",    "free": "2h before", "silver": "24h before","gold": "24h before" },
+      { "feature": "Telegram alerts",   "free": "—",         "silver": "✓",         "gold": "✓ (custom)" },
+      { "feature": "Money-back",        "free": "N/A",       "silver": "7 days",    "gold": "7 days" }
+    ],
+    "cta": { "label": "View full comparison", "canonical": "pricing" }
+  },
+  "useCases": {
+    "h2": "Which Tier Fits You?",
+    "profiles": [
+      {
+        "icon": "user",
+        "title": "Casual Tester",
+        "description": "Curious about AI predictions, want to try before committing. Only follow 1-2 top leagues.",
+        "recommendation": "Free is right for you.",
+        "cta": { "label": "Get Started Free", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual" }
+      },
+      {
+        "icon": "trending-up",
+        "title": "Regular Bettor",
+        "description": "Bet 2-3 times per week across multiple leagues. Want consistent prediction quality, not last-minute picks.",
+        "recommendation": "Silver is built for you.",
+        "cta": { "label": "Try Silver", "canonical": "pricing" }
+      },
+      {
+        "icon": "chart",
+        "title": "Serious Analyst",
+        "description": "Daily prediction following, multiple bet markets, need data depth. Want early access and notifications.",
+        "recommendation": "Gold gives you everything.",
+        "cta": { "label": "Try Gold", "canonical": "pricing" }
+      }
+    ]
+  },
+  "faq": {
+    "h2": "Free vs Paid FAQ",
+    "questions": [
+      { "q": "Are free predictions less accurate than paid?", "a": "No. Free predictions use the same AI engine and methodology as paid. The difference is volume, depth, timing, and league coverage — not accuracy." },
+      { "q": "Why do I need a credit card for the trial?", "a": "Standard SaaS billing setup. You're not charged for the first 7 days. Cancel before day 7 and no charge occurs. We require payment method to prevent trial abuse." },
+      { "q": "Can I downgrade from paid to free?", "a": "Yes, anytime. Cancel your paid plan from the account dashboard. Your access continues until the end of the billing period, then auto-converts to free tier." },
+      { "q": "What if I only want 1-2 specific bet types?", "a": "Free tier shows our highest-confidence pick per match (varies by match). Paid plans show all markets per match. If you focus on 1-2 specific markets, paid still helps because you can compare across more matches." },
+      { "q": "Is the 7-day free trial really risk-free?", "a": "Yes. No charge during 7 days. Plus, if you do get charged after 7 days and aren't satisfied, our money-back guarantee covers the first paid month." }
+    ]
+  },
+  "finalCta": {
+    "h2": "Start Free, Upgrade When Ready",
+    "body": "5 free predictions per day. No credit card required for free.",
+    "ctaPrimary": { "label": "Start Free", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final" },
+    "ctaSecondary": { "label": "View Plans", "canonical": "pricing" }
+  }
+}

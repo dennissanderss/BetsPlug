@@ -1,0 +1,30 @@
+---
+import FAQAccordion from "@/components/faq/FAQAccordion.astro";
+import type { FAQCategory } from "@/content/pages/faq/types";
+
+interface Props {
+  category: FAQCategory;
+  /** Initial open question id from URL hash, when applicable. */
+  openQuestionId?: string | null;
+}
+const { category, openQuestionId } = Astro.props;
+---
+
+<section
+  id={category.id}
+  data-faq-category={category.id}
+  class="scroll-mt-24 mt-12 first:mt-0"
+>
+  <header>
+    <h2 class="text-2xl sm:text-3xl font-bold leading-tight tracking-tight text-charcoal-900">
+      {category.name}
+    </h2>
+    <p class="mt-2 text-sm text-charcoal-500">{category.description}</p>
+  </header>
+
+  <div class="mt-6 divide-y divide-stadium-white-200 rounded-2xl border border-stadium-white-200 bg-white shadow-[var(--shadow-sm)]">
+    {category.questions.map((item) => (
+      <FAQAccordion item={item} forceOpen={openQuestionId === item.id} />
+    ))}
+  </div>
+</section>

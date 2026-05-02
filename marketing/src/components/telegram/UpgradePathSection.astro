@@ -1,0 +1,29 @@
+---
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import type { TelegramContent } from "@/content/pages/telegram/types";
+
+interface Props {
+  locale: Locale;
+  content: TelegramContent["upgradePath"];
+}
+const { locale, content } = Astro.props;
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+---
+
+<Section surface="light" spacing="lg" ariaLabelledby="upgrade-h2">
+  <Container size="md" class="text-center">
+    <h2 id="upgrade-h2" class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
+      {content.h2}
+    </h2>
+    <p class="mt-5 text-lg leading-relaxed text-charcoal-700 max-w-2xl mx-auto">{content.body}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="light">{content.ctaPrimary.label}</Button>
+      <Button href={content.ctaSecondary.href} variant="secondary" size="lg" surface="light" external>
+        {content.ctaSecondary.label}
+      </Button>
+    </div>
+  </Container>
+</Section>

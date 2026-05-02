@@ -1,0 +1,83 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Gratis vs Betaald: Welk BetsPlug Plan? | BetsPlug",
+    "description": "Vergelijk gratis en betaalde BetsPlug-tiers. Dezelfde AI-engine, ander volume en diepte. 5 dagelijkse voorspellingen gratis, onbeperkt betaald.",
+    "ogImage": "/og-images/free-vs-paid-nl.jpg"
+  },
+  "hero": {
+    "h1": "Gratis of Betaald: Welke BetsPlug Past Bij Jou?",
+    "subheadline": "Beide tiers gebruiken dezelfde AI-engine en methodologie. Het verschil is volume, diepte en timing. Vind hieronder jouw match."
+  },
+  "visual": {
+    "h2": "Wat Zie Je Per Tier",
+    "free": {
+      "header": "Gratis",
+      "subheader": "Probeer de engine, zonder verplichting",
+      "useCases": [
+        "Voorspellingskwaliteit evalueren voordat je je abonneert",
+        "Casual interesse in 1-2 topcompetities",
+        "Methodologie en track record testen"
+      ],
+      "limitations": [
+        "5 voorspellingen per dag",
+        "Alleen top 3 competities",
+        "2 uur vóór de aftrap (vs 24u voor betaald)",
+        "Alleen basis-info (geen xG, H2H, opstellingen)"
+      ],
+      "cta": { "label": "Begin Gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Meer dan 2,5 doelpunten", "confidence": 78 }
+    },
+    "paid": {
+      "header": "Silver / Gold",
+      "subheader": "Volledige voorspellingen, volledige data",
+      "useCases": [
+        "Dagelijkse voorspellingen voor meerdere competities",
+        "Volledige wedstrijdanalyse (xG, H2H, opstellingen, redenering)",
+        "Voorspellingen 24u vóór de aftrap",
+        "Telegram-meldingen voor high-confidence picks",
+        "Alle wed-markten per wedstrijd"
+      ],
+      "cta": { "label": "Bekijk Prijzen", "canonical": "pricing" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Meer dan 2,5 doelpunten", "confidence": 78, "xg": "City 2,4 — Arsenal 1,6", "h2h": "Laatste 5: City 4W 1G 0V", "lineup": "Beide eerste-keuze opstellingen" }
+    }
+  },
+  "comparison": {
+    "h2": "Feature-vergelijking",
+    "headers": { "feature": "Feature", "free": "Gratis", "silver": "Silver", "gold": "Gold" },
+    "rows": [
+      { "feature": "Dagelijkse voorspellingen", "free": "5",         "silver": "Onbeperkt", "gold": "Onbeperkt" },
+      { "feature": "Competities",               "free": "Top 3",     "silver": "Alle 30+",  "gold": "Alle 30+" },
+      { "feature": "Wed-markten",               "free": "Alleen 1X2","silver": "Alle",      "gold": "Alle" },
+      { "feature": "Wedstrijdanalyse",          "free": "Basis",     "silver": "Volledig",  "gold": "Volledig" },
+      { "feature": "Vooraf-toegang",            "free": "2u vóór",   "silver": "24u vóór",  "gold": "24u vóór" },
+      { "feature": "Telegram-meldingen",        "free": "—",         "silver": "✓",         "gold": "✓ (custom)" },
+      { "feature": "Niet-goed-geld-terug",      "free": "n.v.t.",    "silver": "7 dagen",   "gold": "7 dagen" }
+    ],
+    "cta": { "label": "Bekijk volledige vergelijking", "canonical": "pricing" }
+  },
+  "useCases": {
+    "h2": "Welke Tier Past Bij Jou?",
+    "profiles": [
+      { "icon": "user", "title": "Casual Tester", "description": "Nieuwsgierig naar AI-voorspellingen, wil testen voor je je bindt. Volgt alleen 1-2 topcompetities.", "recommendation": "Gratis is goed voor jou.", "cta": { "label": "Begin Gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual" } },
+      { "icon": "trending-up", "title": "Reguliere Bettor", "description": "Wedt 2-3 keer per week over meerdere competities. Wil consistente voorspellingskwaliteit, geen last-minute picks.", "recommendation": "Silver is voor jou gemaakt.", "cta": { "label": "Probeer Silver", "canonical": "pricing" } },
+      { "icon": "chart", "title": "Serieuze Analist", "description": "Dagelijks voorspellingen volgen, meerdere wed-markten, data-diepte nodig. Wilt vroege toegang en notificaties.", "recommendation": "Gold geeft je alles.", "cta": { "label": "Probeer Gold", "canonical": "pricing" } }
+    ]
+  },
+  "faq": {
+    "h2": "Gratis vs Betaald FAQ",
+    "questions": [
+      { "q": "Zijn gratis voorspellingen minder accuraat dan betaalde?", "a": "Nee. Gratis voorspellingen gebruiken dezelfde AI-engine en methodologie als betaalde. Het verschil is volume, diepte, timing en competitie-dekking — niet nauwkeurigheid." },
+      { "q": "Waarom heb ik een creditcard nodig voor de proefperiode?", "a": "Standaard SaaS facturatie. Je wordt niet in rekening gebracht in de eerste 7 dagen. Annuleer voor dag 7 en er gebeurt geen betaling. We vragen om een betaalmethode om misbruik te voorkomen." },
+      { "q": "Kan ik downgraden van betaald naar gratis?", "a": "Ja, op elk moment. Annuleer je betaalde plan vanuit het account-dashboard. Je toegang loopt door tot het einde van de factureringsperiode en gaat dan automatisch naar de gratis tier." },
+      { "q": "Wat als ik alleen 1-2 specifieke wed-types wil?", "a": "Gratis tier toont onze hoogst-confidence pick per wedstrijd (varieert per wedstrijd). Betaalde plannen tonen alle markten per wedstrijd. Als je je richt op 1-2 specifieke markten helpt betaald nog steeds omdat je over meer wedstrijden kunt vergelijken." },
+      { "q": "Is de 7-daagse gratis proef echt risicoloos?", "a": "Ja. Geen kosten tijdens 7 dagen. Plus, als je na 7 dagen wel betaald bent en niet tevreden, dekt onze niet-goed-geld-terug-garantie de eerste betaalde maand." }
+    ]
+  },
+  "finalCta": {
+    "h2": "Begin Gratis, Upgrade Wanneer Klaar",
+    "body": "5 gratis voorspellingen per dag. Geen creditcard nodig voor gratis.",
+    "ctaPrimary": { "label": "Begin Gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final" },
+    "ctaSecondary": { "label": "Bekijk Plannen", "canonical": "pricing" }
+  }
+}

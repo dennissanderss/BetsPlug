@@ -1,0 +1,105 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Häufig gestellte Fragen | BetsPlug",
+    "description": "Alles über BetsPlug KI-Fußballvorhersagen: Methodik, Preise, Genauigkeit, Compliance und mehr.",
+    "ogImage": "/og-images/faq-de.jpg"
+  },
+  "hero": {
+    "h1": "Häufig gestellte Fragen",
+    "subheadline": "Alles über BetsPlug, unsere Vorhersagen, Methodik und Abonnements. Suche oder navigiere nach Kategorie."
+  },
+  "search": {
+    "label": "FAQ durchsuchen",
+    "placeholder": "FAQ durchsuchen...",
+    "noResultsText": "Keine passenden Fragen gefunden. Versuche ein anderes Schlüsselwort oder durchsuche die Kategorien unten.",
+    "submitLabel": "Suchen",
+    "filterAppliedTemplate": "Ergebnisse für: \"{query}\"",
+    "clearLabel": "Suche löschen"
+  },
+  "categories": [
+    {
+      "id": "about",
+      "name": "Über BetsPlug",
+      "description": "Wer wir sind und was wir tun.",
+      "questions": [
+        { "id": "about-1", "question": "Was ist BetsPlug?", "answer": "BetsPlug ist eine KI-gestützte Plattform für Fußballvorhersagen. Wir generieren Vorhersagen für 30+ Ligen mithilfe statistischer Modelle (Elo, Poisson) und maschinellem Lernen und veröffentlichen jede Vorhersage in einem öffentlichen Track Record." },
+        { "id": "about-2", "question": "Ist BetsPlug ein Buchmacher?", "answer": "Nein. Wir sind eine Datenanalyseplattform. Wir nehmen keine Wetten an, halten kein Geld und ermöglichen kein Glücksspiel. Wir liefern statistische Vorhersagen für Bildungs- und Informationszwecke." },
+        { "id": "about-3", "question": "Wo hat BetsPlug seinen Sitz?", "answer": "BetsPlug ist ein unabhängiges Technologieunternehmen mit Sitz in Europa. Für geschäftliche Anfragen besuche unsere Kontaktseite." },
+        { "id": "about-4", "question": "Wie lange ist BetsPlug schon aktiv?", "answer": "Unser öffentlicher Track Record reicht zurück bis zum Start — jede jemals abgegebene Vorhersage ist auf der Track-Record-Seite überprüfbar. Die Plattform ist lange genug aktiv, um über die abgedeckten Ligen eine aussagekräftige Stichprobengröße zu haben." },
+        { "id": "about-5", "question": "Wem gehört BetsPlug?", "answer": "BetsPlug wird von einem unabhängigen Technologieunternehmen betrieben. Wir gehören zu keinem Buchmacher und sind mit keinem verbunden. Unser Geschäftsmodell ist abonnementbasiert, nicht affiliate-basiert." }
+      ]
+    },
+    {
+      "id": "predictions",
+      "name": "Vorhersagen & Methodik",
+      "description": "Wie unsere Engine funktioniert und was sie vorhersagt.",
+      "questions": [
+        { "id": "predictions-1", "question": "Wie genau sind KI-Fußballvorhersagen?", "answer": "Die Genauigkeit variiert je nach Liga, Markt und Spieltag. Wir veröffentlichen jede Vorhersage — sowohl Gewinne als auch Verluste — in unserem öffentlichen Track Record, sodass du die Leistung selbst überprüfen kannst, statt unseren Behauptungen zu vertrauen." },
+        { "id": "predictions-2", "question": "Können Vorhersagen nach der Veröffentlichung geändert werden?", "answer": "Nein. Jede Vorhersage wird vor dem Anpfiff mit einem öffentlichen Zeitstempel gesperrt. Einmal veröffentlicht, kann sie nicht mehr bearbeitet oder entfernt werden. Das ist im Track Record überprüfbar. Die Sperre ist architektonisch — es gibt keinen Admin-Knopf, der eine veröffentlichte Vorhersage ändern könnte." },
+        { "id": "predictions-3", "question": "Warum verwendet ihr mehrere statistische Modelle?", "answer": "Keine einzelne statistische Methode erfasst alle Dynamiken im Fußball. Elo behandelt Teamstärke, Poisson Tor-Verteilungen, Machine Learning den Kontext. Eine gewichtete Kombination liefert robustere Vorhersagen als eine einzelne Methode." },
+        { "id": "predictions-4", "question": "Wie früh sind Vorhersagen verfügbar?", "answer": "Abonnenten sehen Vorhersagen bis zu 24 Stunden vor dem Anpfiff. Kostenlose Nutzer sehen sie 2 Stunden vor dem Anpfiff. Einmal gesperrt, können Vorhersagen nicht geändert werden — der Zugriffszeitpunkt unterscheidet sich, nicht die Vorhersagen selbst." },
+        { "id": "predictions-5", "question": "Sagt ihr auch Pokal- und internationale Spiele vorher?", "answer": "Wir decken Champions League, Europa League und die wichtigsten nationalen Pokalwettbewerbe für unsere 10 abgedeckten Ligen ab. Internationale Turniere (WM, EM) werden abgedeckt, wenn sie stattfinden. Frühe Qualifikationsrunden und kleinere Pokalwettbewerbe gehören nicht zur Standardabdeckung." },
+        { "id": "predictions-6", "question": "In welchen Sprachen sind Vorhersagen verfügbar?", "answer": "BetsPlug-Vorhersagen sind auf Englisch, Niederländisch, Deutsch, Französisch, Spanisch und Italienisch verfügbar. Die Methodik- und Inhaltsseiten sind pro Sprache vollständig übersetzt; Fachbegriffe (Elo, Poisson, xG) bleiben sprachübergreifend konsistent." },
+        { "id": "predictions-7", "question": "Wie behandelt ihr Auf- und Abstieg zwischen Saisons?", "answer": "Elo-Werte der Teams werden zwischen den Saisons übernommen, aber für die neue Ligastärke kalibriert, wenn Teams die Spielklasse wechseln. Vorhersagen zu Saisonbeginn berücksichtigen Sommer-Transfers und Trainerwechsel. Frühe Saisonspiele haben eine etwas höhere Unsicherheit, während das Modell sich neu kalibriert." },
+        { "id": "predictions-8", "question": "Warum sagt ihr keine Torschützen vorher?", "answer": "Vorhersagen auf Spielerebene haben eine viel höhere Varianz als auf Teamebene. Aufstellungsunsicherheit, individuelle Formvarianz und taktische Änderungen machen genaue Torschützen-Vorhersagen unzuverlässig. Wir konzentrieren uns auf Märkte auf Teamebene, in denen Genauigkeit erreichbar ist." }
+      ]
+    },
+    {
+      "id": "pricing",
+      "name": "Preise & Abonnements",
+      "description": "Pläne, Zahlungen und Erstattungen.",
+      "questions": [
+        { "id": "pricing-1", "question": "Kann ich später den Plan wechseln?", "answer": "Ja, jederzeit. Beim Upgrade aktiviert sich der neue Plan sofort mit anteiliger Abrechnung. Beim Downgrade beginnt der neue Plan zum nächsten Abrechnungszyklus." },
+        { "id": "pricing-2", "question": "Welche Zahlungsmethoden akzeptiert ihr?", "answer": "Kredit-/Debitkarten (Visa, Mastercard, American Express) und Banküberweisungen in EUR. Krypto-Zahlungen werden derzeit nicht unterstützt, stehen aber auf unserer Roadmap." },
+        { "id": "pricing-3", "question": "Bietet ihr Jahresrabatte an?", "answer": "Die jährliche Abrechnung spart 20% gegenüber monatlich. Die Jahresoption erscheint im Checkout. Du kannst jederzeit zwischen monatlich und jährlich wechseln, ohne den Zugriff zu verlieren." },
+        { "id": "pricing-4", "question": "Ist die 7-tägige Testphase wirklich kostenlos?", "answer": "Ja. Wir benötigen eine Zahlungsmethode, um die Testphase zu starten, aber dir wird in den ersten 7 Tagen nichts berechnet. Kündige vor Tag 7 und es erfolgt keine Abbuchung. Kündige nach einer Abbuchung und nutze die Geld-zurück-Garantie innerhalb der ersten 7 Tage." },
+        { "id": "pricing-5", "question": "Kann ich einen Team- oder Organisationsplan bekommen?", "answer": "Wir arbeiten an Teamplänen für Analysten und kleinere Organisationen. Kontaktiere uns bei spezifischem Bedarf — möglicherweise können wir frühzeitig etwas einrichten." },
+        { "id": "pricing-6", "question": "Sind die Preise inklusive Mehrwertsteuer?", "answer": "Die angezeigten Preise enthalten die jeweilige Mehrwertsteuer für EU-Kunden. Für Nicht-EU-Kunden ist der angezeigte Preis der Endpreis. Belege enthalten gegebenenfalls Mehrwertsteuerdetails." },
+        { "id": "pricing-7", "question": "Was passiert mit meinen Daten, wenn ich kündige?", "answer": "Deine Kontodaten (Abo-Historie, Einstellungen, gespeicherte Vorhersagen) werden 90 Tage nach der Kündigung aufbewahrt, falls du reaktivierst. Nach 90 Tagen werden sie endgültig gelöscht, sofern du keine frühere Löschung anforderst." },
+        { "id": "pricing-8", "question": "Bietet ihr Studenten- oder Institutionsrabatte?", "answer": "Wir bieten derzeit keine zusätzlichen Rabattstufen über die jährliche Abrechnung (20% gegenüber monatlich) hinaus. Die jährliche Abrechnung ist für alle Nutzer zum gleichen Tarif verfügbar." }
+      ]
+    },
+    {
+      "id": "account",
+      "name": "Konto & Technik",
+      "description": "Kontoverwaltung und technischer Support.",
+      "questions": [
+        { "id": "account-1", "question": "Wie aktualisiere ich meine E-Mail?", "answer": "Im Konto-Dashboard auf app.betsplug.com/account klicke auf Profil und aktualisiere die E-Mail-Adresse. Du erhältst eine Bestätigungs-E-Mail an der neuen Adresse, bevor die Änderung wirksam wird." },
+        { "id": "account-2", "question": "Ich habe mein Passwort vergessen. Was nun?", "answer": "Verwende den Passwort-Zurücksetzen-Link auf app.betsplug.com/login. Gib deine E-Mail ein und du erhältst innerhalb weniger Minuten Anweisungen. Kommt die Mail nicht an, prüfe Spam/Junk; sonst wende dich an den Support." },
+        { "id": "account-3", "question": "Kann ich die Sprache nach der Anmeldung ändern?", "answer": "Ja. In den Kontoeinstellungen kannst du die Oberflächensprache jederzeit umstellen. Auch deine Vorhersage-Benachrichtigungen wechseln in die gewählte Sprache." },
+        { "id": "account-4", "question": "Gibt es eine mobile App?", "answer": "Aktuell haben wir eine responsive Web-App, die in mobilen Browsern einwandfrei funktioniert. Eine native mobile App steht auf unserer Roadmap. Die Web-App unterstützt bereits 'Zum Startbildschirm hinzufügen' auf iOS und Android für ein App-ähnliches Verhalten." },
+        { "id": "account-5", "question": "Welche Browser werden unterstützt?", "answer": "BetsPlug funktioniert auf allen modernen Browsern (Chrome, Firefox, Safari, Edge), die in den letzten 2 Jahren veröffentlicht wurden. Ältere Browser können eingeschränkte Funktionalität haben." }
+      ]
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance & Recht",
+      "description": "Rechtliche Einordnung und Datenschutz.",
+      "questions": [
+        { "id": "compliance-1", "question": "Ist die Nutzung von BetsPlug in meinem Land legal?", "answer": "BetsPlug bietet statistische Analysen, keine Glücksspiel-Dienstleistungen. Die Legalität von Vorhersagediensten variiert nach Rechtsgebiet. Prüfe deine lokalen Gesetze zu Sportwetten und Vorhersagediensten. Wir halten EU-Vorschriften für Nutzer in EU-Ländern ein." },
+        { "id": "compliance-2", "question": "Habt ihr eine Glücksspiellizenz?", "answer": "Wir benötigen keine Glücksspiellizenz, weil wir nicht als Buchmacher tätig sind. Wir sind ein Datenanalysedienst. Wir halten Geschäfts- und Datenschutzvorschriften ein, die für Softwareunternehmen gelten." },
+        { "id": "compliance-3", "question": "Wie geht ihr mit verantwortungsvollem Spielen um?", "answer": "Wir unterstützen die Prinzipien verantwortungsvollen Spielens. Lies unsere Seite zu verantwortungsvollem Spielen für Details. Wir bewerben kein Glücksspiel, vermeiden Anreiz-Sprache in unserem Marketing und verlangen, dass Nutzer das gesetzliche Spielalter in ihrem Rechtsgebiet erreicht haben." },
+        { "id": "compliance-4", "question": "Dürfen Minderjährige BetsPlug nutzen?", "answer": "Unsere AGB verlangen, dass Nutzer mindestens 18 Jahre alt sind (oder das gesetzliche Spielalter in ihrem Rechtsgebiet, je nachdem, was höher ist). Wir vermarkten nicht an Minderjährige und akzeptieren keine Anmeldungen von ihnen." },
+        { "id": "compliance-5", "question": "Wie geht ihr mit meinen persönlichen Daten um?", "answer": "Wir halten DSGVO und ähnliche Vorschriften ein. Wir teilen keine Nutzerdaten mit Buchmachern. Lies unsere Datenschutzerklärung für Details zu Datensammlung, Speicherung und Nutzerrechten." }
+      ]
+    },
+    {
+      "id": "track",
+      "name": "Track Record & Verifizierung",
+      "description": "Wie wir unsere Genauigkeitsangaben belegen.",
+      "questions": [
+        { "id": "track-1", "question": "Können Vorhersagen wirklich nicht nach der Veröffentlichung bearbeitet werden?", "answer": "Nein. Jede Vorhersage wird mit einem unveränderbaren Zeitstempel vor dem Anpfiff gesperrt. Wir haben keinen Mechanismus, um Vorhersagen nach der Veröffentlichung zu löschen oder zu verbergen, selbst wenn wir wollten. Das ist architektonisch, nicht Politik — es kann nicht geändert werden." },
+        { "id": "track-2", "question": "Wie kann ich überprüfen, dass eine bestimmte Vorhersage vor dem Anpfiff gesperrt wurde?", "answer": "Klicke auf eine Vorhersage im Track Record. Die Detailseite zeigt den Sperrzeitstempel — den genauen Moment, in dem die Vorhersage festgehalten wurde. Vergleiche diesen mit der tatsächlichen Anpfiffszeit (ebenfalls angezeigt). Der Sperrzeitstempel liegt immer vor dem Anpfiff." },
+        { "id": "track-3", "question": "Warum zeigt ihr keine konkreten Genauigkeitsprozente?", "answer": "Die Genauigkeit variiert deutlich nach Liga, Markttyp und Zeitraum. Eine einzelne Schlagzeilen-Prozentzahl verdeckt diese Varianz. Wir zeigen lieber die Rohdaten, damit du echte Leistung im Kontext siehst — welche Wettbewerbe, welche Märkte, welche Zeiträume am besten und am schlechtesten waren." },
+        { "id": "track-4", "question": "Kann ich Track-Record-Daten herunterladen?", "answer": "Track-Record-Daten sind über unsere API für zahlende Abonnenten verfügbar. Der visuelle Track Record auf der Track-Record-Seite ist öffentlich zugänglich für Verifizierungszwecke." }
+      ]
+    }
+  ],
+  "stillHaveQuestions": {
+    "h2": "Noch Fragen?",
+    "body": "Findest du nicht, was du suchst? Schreib uns eine Nachricht, wir antworten innerhalb von 24 Stunden.",
+    "ctaPrimary": { "label": "Support kontaktieren", "canonical": "contact" },
+    "ctaSecondary": { "label": "Methodik lesen", "canonical": "methodology" }
+  }
+}

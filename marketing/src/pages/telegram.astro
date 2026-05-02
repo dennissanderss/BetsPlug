@@ -1,0 +1,48 @@
+---
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import TelegramHero        from "@/components/telegram/TelegramHero.astro";
+import WhatYouGet          from "@/components/telegram/WhatYouGet.astro";
+import WhyTelegram         from "@/components/telegram/WhyTelegram.astro";
+import UpgradePathSection  from "@/components/telegram/UpgradePathSection.astro";
+import TelegramFAQ         from "@/components/telegram/TelegramFAQ.astro";
+import { loadTelegramContent } from "@/lib/telegram-page";
+
+const locale = "en" as const;
+const content = await loadTelegramContent(locale);
+
+const SITE = "https://betsplug.com";
+const canonicalPath = "/telegram";
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home",     item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Telegram", item: `${SITE}${canonicalPath}` },
+  ],
+};
+const faqSchema = {
+  "@context": "https://schema.org", "@type": "FAQPage",
+  mainEntity: content.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
+};
+---
+
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <TelegramHero        content={content.hero} />
+  <WhatYouGet          content={content.whatYouGet} />
+  <WhyTelegram         content={content.whyTelegram} />
+  <UpgradePathSection  locale={locale} content={content.upgradePath} />
+  <TelegramFAQ         content={content.faq} />
+</MarketingLayout>

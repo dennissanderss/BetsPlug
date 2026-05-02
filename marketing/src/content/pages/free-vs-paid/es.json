@@ -1,0 +1,83 @@
+{
+  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Gratis vs Pago: ¿Qué Plan BetsPlug? | BetsPlug",
+    "description": "Compara los tiers gratis y de pago de BetsPlug. Mismo motor IA, diferente volumen y profundidad. 5 pronósticos diarios gratis, ilimitados de pago.",
+    "ogImage": "/og-images/free-vs-paid-es.jpg"
+  },
+  "hero": {
+    "h1": "Gratis o Pago: ¿Cuál BetsPlug es Para Ti?",
+    "subheadline": "Ambos tiers usan el mismo motor IA y metodología. La diferencia es volumen, profundidad y timing."
+  },
+  "visual": {
+    "h2": "Lo Que Ves En Cada Tier",
+    "free": {
+      "header": "Gratis",
+      "subheader": "Prueba el motor, sin compromiso",
+      "useCases": [
+        "Evaluar la calidad de pronósticos antes de suscribirse",
+        "Interés casual en 1-2 ligas principales",
+        "Probar metodología y track record"
+      ],
+      "limitations": [
+        "5 pronósticos por día",
+        "Solo top 3 ligas",
+        "2 horas antes del inicio (vs 24h pago)",
+        "Solo info básica (sin xG, H2H, alineaciones)"
+      ],
+      "cta": { "label": "Empezar Gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Más de 2,5 goles", "confidence": 78 }
+    },
+    "paid": {
+      "header": "Silver / Gold",
+      "subheader": "Pronósticos completos, datos completos",
+      "useCases": [
+        "Pronósticos diarios en múltiples ligas",
+        "Análisis completo (xG, H2H, alineaciones, razonamiento)",
+        "Pronósticos 24h antes del inicio",
+        "Notificaciones Telegram para picks de alta confianza",
+        "Todos los mercados por partido"
+      ],
+      "cta": { "label": "Ver Precios", "canonical": "pricing" },
+      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Más de 2,5 goles", "confidence": 78, "xg": "City 2,4 — Arsenal 1,6", "h2h": "Últimos 5: City 4V 1E 0D", "lineup": "Alineaciones titulares" }
+    }
+  },
+  "comparison": {
+    "h2": "Comparación de Funciones",
+    "headers": { "feature": "Función", "free": "Gratis", "silver": "Silver", "gold": "Gold" },
+    "rows": [
+      { "feature": "Pronósticos diarios", "free": "5",         "silver": "Ilimitados", "gold": "Ilimitados" },
+      { "feature": "Ligas",               "free": "Top 3",     "silver": "Todas 30+",  "gold": "Todas 30+" },
+      { "feature": "Mercados",            "free": "Solo 1X2",  "silver": "Todos",      "gold": "Todos" },
+      { "feature": "Análisis de partido", "free": "Básico",    "silver": "Completo",   "gold": "Completo" },
+      { "feature": "Acceso anticipado",   "free": "2h antes",  "silver": "24h antes",  "gold": "24h antes" },
+      { "feature": "Alertas Telegram",    "free": "—",         "silver": "✓",          "gold": "✓ (custom)" },
+      { "feature": "Devolución",          "free": "n/d",       "silver": "7 días",     "gold": "7 días" }
+    ],
+    "cta": { "label": "Comparación completa", "canonical": "pricing" }
+  },
+  "useCases": {
+    "h2": "¿Qué Tier Te Va?",
+    "profiles": [
+      { "icon": "user", "title": "Tester Casual", "description": "Curioso por pronósticos IA, quiere probar antes de comprometerse. Solo sigue 1-2 ligas principales.", "recommendation": "Gratis es para ti.", "cta": { "label": "Empezar Gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual" } },
+      { "icon": "trending-up", "title": "Apostador Regular", "description": "Apuesta 2-3 veces por semana en múltiples ligas. Quiere calidad consistente.", "recommendation": "Silver está hecho para ti.", "cta": { "label": "Probar Silver", "canonical": "pricing" } },
+      { "icon": "chart", "title": "Analista Serio", "description": "Seguimiento diario, múltiples mercados, necesita profundidad de datos. Quiere acceso anticipado y notificaciones.", "recommendation": "Gold te da todo.", "cta": { "label": "Probar Gold", "canonical": "pricing" } }
+    ]
+  },
+  "faq": {
+    "h2": "FAQ Gratis vs Pago",
+    "questions": [
+      { "q": "¿Los pronósticos gratis son menos precisos que los pagos?", "a": "No. Los pronósticos gratis usan el mismo motor IA y metodología que los pagos. La diferencia es volumen, profundidad, timing y cobertura de ligas — no precisión." },
+      { "q": "¿Por qué necesito tarjeta para la prueba?", "a": "Configuración SaaS estándar. No te cobramos durante los primeros 7 días. Cancela antes del día 7 y no hay cargo." },
+      { "q": "¿Puedo bajar de pago a gratis?", "a": "Sí, en cualquier momento. Cancela tu plan pago desde el panel. Tu acceso continúa hasta el fin del período de facturación y luego cambia automáticamente a gratis." },
+      { "q": "¿Y si solo quiero 1-2 tipos de apuesta específicos?", "a": "El tier gratis muestra nuestro pick de mayor confianza por partido. Los planes pagos muestran todos los mercados por partido. Incluso para mercados específicos, el pago ayuda porque comparas más partidos." },
+      { "q": "¿La prueba gratis de 7 días es realmente sin riesgo?", "a": "Sí. Sin cargo durante 7 días. Si te cobran después y no estás satisfecho, nuestra garantía de devolución cubre el primer mes pagado." }
+    ]
+  },
+  "finalCta": {
+    "h2": "Empieza Gratis, Mejora Cuando Estés Listo",
+    "body": "5 pronósticos gratis por día. No se requiere tarjeta para gratis.",
+    "ctaPrimary": { "label": "Empezar Gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final" },
+    "ctaSecondary": { "label": "Ver Planes", "canonical": "pricing" }
+  }
+}

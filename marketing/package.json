@@ -18,6 +18,7 @@
     "@sanity/client": "^7.22.0",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.2.1",
+    "fuse.js": "^7.3.0",
     "katex": "^0.16.45",
     "tailwindcss": "^4.2.4"
   },

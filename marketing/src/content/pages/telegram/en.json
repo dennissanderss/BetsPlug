@@ -1,0 +1,45 @@
+{
+  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "meta": {
+    "title": "Free Daily Picks via Telegram | BetsPlug",
+    "description": "Top 3 AI football predictions delivered to Telegram daily. Free, no signup, no email required.",
+    "ogImage": "/og-images/telegram-en.jpg"
+  },
+  "hero": {
+    "h1": "Free Daily Picks via Telegram",
+    "subheadline": "Get our top 3 daily AI football predictions delivered straight to Telegram. Free, no signup, no email required.",
+    "telegramUrl": "https://t.me/betsplug_picks",
+    "ctaLabel": "Join Telegram Channel",
+    "trustStrip": ["Free forever", "No signup required", "Daily picks 8:00 CET"]
+  },
+  "whatYouGet": {
+    "h2": "What You'll Receive",
+    "cards": [
+      { "icon": "trending-up", "title": "Top 3 Daily Picks", "body": "Our engine's highest-confidence predictions of the day, across major leagues. Sent every morning at 8:00 CET." },
+      { "icon": "info",         "title": "Match Context",    "body": "Brief reasoning per pick: why our engine selected this match and market. Not just numbers, but understanding." },
+      { "icon": "check-circle", "title": "Result Updates",   "body": "After matches conclude, we post results: wins and losses both. Track our channel performance week by week." }
+    ]
+  },
+  "whyTelegram": {
+    "h2": "Why Telegram?",
+    "paragraphs": [
+      "Telegram is fast, secure, and works on every device. We deliver picks where you check your phone, not buried in email folders. Notifications appear immediately when matches matter.",
+      "There's no spam. We send 3 picks per day, plus result updates. Unsubscribe anytime by leaving the channel — no account deletion required."
+    ]
+  },
+  "upgradePath": {
+    "h2": "Want More Than 3 Picks Per Day?",
+    "body": "Telegram channel is our free tier in messaging form. Subscribers get unlimited daily predictions across 30+ leagues, full match analysis, and personalized notifications.",
+    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Get Free Account Instead", "href": "https://app.betsplug.com/register?source=telegram_landing" }
+  },
+  "faq": {
+    "h2": "Telegram Channel FAQ",
+    "questions": [
+      { "q": "Do I need a BetsPlug account?", "a": "No. Telegram channel is open without account creation. Just join the channel and you'll receive daily picks." },
+      { "q": "Can I get notifications for specific leagues?", "a": "The free Telegram channel sends top 3 picks across all leagues. For league-specific or bet-type-specific notifications, our paid plans include customizable Telegram alerts." },
+      { "q": "How accurate are these picks?", "a": "Same accuracy as our website free tier — same engine, same methodology. Verify performance via our public track record." },
+      { "q": "Why only 3 picks per day on Telegram?", "a": "Free tier limit. Subscribers receive unlimited predictions plus customized Telegram notifications based on confidence thresholds and league preferences." }
+    ]
+  }
+}
