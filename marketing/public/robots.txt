@@ -2,4 +2,30 @@ User-agent: *
 Allow: /
 Disallow: /thank-you
 
-Sitemap: https://betsplug.com/sitemap.xml
+# Block AI training scrapers (ethical decision — content is for humans)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+# Sitemaps
+Sitemap: https://betsplug.com/sitemap-index.xml

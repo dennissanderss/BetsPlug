@@ -1,0 +1,53 @@
+---
+/**
+ * Locale-aware helpline list, rendered inside the
+ * /responsible-gambling page right after section 4 ("Where to get help").
+ */
+import type { HelplineEntry } from "@/content/pages/legal/_resources";
+
+interface Props {
+  helplines: HelplineEntry[];
+  countryLabel: string;
+}
+const { helplines, countryLabel } = Astro.props;
+---
+
+<aside
+  aria-label={`Resources — ${countryLabel}`}
+  class="rounded-lg border border-pitch-green-300 bg-pitch-green-50/50 p-5 my-4"
+>
+  <h3 class="text-sm font-semibold uppercase tracking-wider text-pitch-green-900">
+    {countryLabel}
+  </h3>
+
+  <ul class="mt-3 space-y-2.5 text-sm">
+    {helplines.map((entry) => (
+      <li class="flex flex-col sm:flex-row sm:items-baseline sm:gap-3">
+        <span class="font-medium text-charcoal-900">{entry.name}</span>
+        <span class="flex flex-wrap items-baseline gap-x-3 text-charcoal-700">
+          {entry.url && (
+            <a
+              href={entry.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-pitch-green-700 hover:text-pitch-green-800 underline-offset-2 hover:underline
+                     focus-visible:outline-none focus-visible:ring-2
+                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 rounded-sm"
+            >
+              {entry.url.replace(/^https?:\/\//, "")}
+            </a>
+          )}
+          {entry.phone && (
+            <span class="font-mono text-xs">
+              <span class="sr-only">Phone:</span>
+              {entry.phone}
+            </span>
+          )}
+          {entry.note && (
+            <span class="text-xs text-charcoal-500">— {entry.note}</span>
+          )}
+        </span>
+      </li>
+    ))}
+  </ul>
+</aside>

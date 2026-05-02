@@ -1,0 +1,98 @@
+---
+import type { LegalPageContent } from "@/content/pages/legal/types";
+
+interface Props {
+  title: string;
+  sections: LegalPageContent["sections"];
+}
+const { title, sections } = Astro.props;
+---
+
+<aside aria-label={title} class="legal-toc">
+  <details
+    class="rounded-md border border-stadium-white-200 bg-white open:bg-white lg:open:bg-transparent lg:border-0 lg:rounded-none"
+    open
+  >
+    <summary
+      class="cursor-pointer list-none p-4 lg:p-0 lg:cursor-default
+             flex items-center justify-between
+             text-sm font-semibold text-charcoal-900
+             [&::-webkit-details-marker]:hidden"
+    >
+      <span>{title}</span>
+      <svg
+        aria-hidden="true"
+        class="h-4 w-4 text-charcoal-500 transition-transform lg:hidden"
+        viewBox="0 0 20 20" fill="currentColor"
+      >
+        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.04l3.71-3.81a.75.75 0 111.08 1.04l-4.24 4.36a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+      </svg>
+    </summary>
+
+    <nav class="px-4 pb-4 lg:px-0 lg:pb-0 lg:pt-0">
+      <ol class="space-y-2 text-sm text-charcoal-700">
+        {sections.map((s) => (
+          <li>
+            <a
+              href={`#${s.id}`}
+              data-toc-link={s.id}
+              class="group flex items-baseline gap-2
+                     hover:text-pitch-green-700
+                     focus-visible:outline-none focus-visible:ring-2
+                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                     rounded-sm transition-colors"
+            >
+              {s.number !== undefined && (
+                <span class="font-mono text-xs text-charcoal-500 group-[.is-active]:text-pitch-green-700">
+                  {s.number}.
+                </span>
+              )}
+              <span class="leading-snug">{s.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </details>
+</aside>
+
+<script>
+  // Active-section highlighting via IntersectionObserver. Adds the
+  // "is-active" class to the matching TOC link as the user scrolls.
+  (function () {
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+    );
+    if (links.length === 0) return;
+
+    const sections = links
+      .map((link) => document.getElementById(link.dataset.tocLink ?? ""))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const setActive = (id: string) => {
+      links.forEach((l) => {
+        l.classList.toggle("is-active", l.dataset.tocLink === id);
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: 0 },
+    );
+
+    sections.forEach((s) => observer.observe(s));
+  })();
+</script>
+
+<style>
+  /* Active-state styling — applied by the script above. */
+  .legal-toc :global(a.is-active) {
+    color: var(--color-pitch-green-700, #047857);
+    font-weight: 600;
+  }
+</style>

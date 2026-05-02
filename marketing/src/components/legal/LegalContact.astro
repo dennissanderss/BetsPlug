@@ -1,0 +1,67 @@
+---
+import type { LegalContact, LegalPageContent } from "@/content/pages/legal/types";
+
+interface Props {
+  contact: LegalContact;
+  heading: LegalPageContent["labels"]["contactHeading"];
+}
+const { contact, heading } = Astro.props;
+---
+
+<section class="border-t border-stadium-white-200 pt-8 lg:pt-12 mt-8">
+  <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-charcoal-900">
+    {heading}
+  </h2>
+
+  <dl class="mt-4 space-y-3 text-sm text-charcoal-800">
+    <div>
+      <dt class="font-medium text-charcoal-900">Email</dt>
+      <dd>
+        <a
+          href={`mailto:${contact.email}`}
+          class="text-pitch-green-700 hover:text-pitch-green-800 underline-offset-2 hover:underline
+                 focus-visible:outline-none focus-visible:ring-2
+                 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 rounded-sm"
+        >
+          {contact.email}
+        </a>
+      </dd>
+    </div>
+
+    <div>
+      <dt class="font-medium text-charcoal-900">Postal address</dt>
+      <dd class="font-mono text-xs text-charcoal-600">{contact.postalAddressLine}</dd>
+    </div>
+
+    {contact.dpo && (
+      <div>
+        <dt class="font-medium text-charcoal-900">Data Protection Officer</dt>
+        <dd>{contact.dpo}</dd>
+      </div>
+    )}
+
+    {contact.authority && (
+      <div>
+        <dt class="font-medium text-charcoal-900">
+          Data protection authority — {contact.authority.countryLabel}
+        </dt>
+        <dd>
+          {contact.authority.url ? (
+            <a
+              href={contact.authority.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-pitch-green-700 hover:text-pitch-green-800 underline-offset-2 hover:underline
+                     focus-visible:outline-none focus-visible:ring-2
+                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 rounded-sm"
+            >
+              {contact.authority.name}
+            </a>
+          ) : (
+            <span>{contact.authority.name}</span>
+          )}
+        </dd>
+      </div>
+    )}
+  </dl>
+</section>

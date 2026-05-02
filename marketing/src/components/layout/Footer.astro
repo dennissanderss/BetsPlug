@@ -35,6 +35,7 @@ type FooterDict = {
   methodology: string; freeVsPaid: string; telegram: string;
   learn: string; about: string; faq: string; contact: string;
   privacy: string; terms: string; cookies: string; responsibleGambling: string;
+  cookieSettings: string;
   disclaimer: string;
   copyright: string;
 };
@@ -46,6 +47,7 @@ const dict: Record<Locale, FooterDict> = {
     methodology: "Methodology", freeVsPaid: "Free vs paid", telegram: "Telegram",
     learn: "Learn", about: "About", faq: "FAQ", contact: "Contact",
     privacy: "Privacy", terms: "Terms", cookies: "Cookies", responsibleGambling: "Responsible play",
+    cookieSettings: "Cookie settings",
     disclaimer: "BetsPlug provides statistical data and analysis for educational and informational purposes only. We are not a bookmaker, do not provide betting advice, do not facilitate wagering, and do not encourage betting. Any decision you make based on the information on this site is your own responsibility. Predictions are model outputs, not guarantees of future results. 18+ — play responsibly.",
     copyright: "© {year} BetsPlug. All rights reserved.",
   },
@@ -55,6 +57,7 @@ const dict: Record<Locale, FooterDict> = {
     methodology: "Methodologie", freeVsPaid: "Gratis vs betaald", telegram: "Telegram",
     learn: "Leren", about: "Over ons", faq: "Veelgestelde vragen", contact: "Contact",
     privacy: "Privacy", terms: "Voorwaarden", cookies: "Cookies", responsibleGambling: "Verantwoord spelen",
+    cookieSettings: "Cookie-instellingen",
     disclaimer: "BetsPlug biedt statistische data en analyse uitsluitend voor educatieve en informatieve doeleinden. Wij zijn geen bookmaker, geven geen gokadvies, faciliteren geen weddenschappen en moedigen gokken niet aan. Beslissingen op basis van informatie op deze site zijn je eigen verantwoordelijkheid. Voorspellingen zijn modeluitkomsten, geen garanties op toekomstige resultaten. 18+ — speel verantwoord.",
     copyright: "© {year} BetsPlug. Alle rechten voorbehouden.",
   },
@@ -64,6 +67,7 @@ const dict: Record<Locale, FooterDict> = {
     methodology: "Methodik", freeVsPaid: "Kostenlos vs. bezahlt", telegram: "Telegram",
     learn: "Lernen", about: "Über uns", faq: "Häufige Fragen", contact: "Kontakt",
     privacy: "Datenschutz", terms: "AGB", cookies: "Cookies", responsibleGambling: "Verantwortungsvolles Spielen",
+    cookieSettings: "Cookie-Einstellungen",
     disclaimer: "BetsPlug stellt statistische Daten und Analysen ausschließlich zu Bildungs- und Informationszwecken bereit. Wir sind kein Buchmacher, geben keine Wettberatung, vermitteln keine Wetten und ermutigen nicht zum Glücksspiel. Entscheidungen auf Basis dieser Informationen liegen in Ihrer eigenen Verantwortung. Vorhersagen sind Modellergebnisse, keine Garantien für zukünftige Ergebnisse. 18+ — spielen Sie verantwortungsbewusst.",
     copyright: "© {year} BetsPlug. Alle Rechte vorbehalten.",
   },
@@ -73,6 +77,7 @@ const dict: Record<Locale, FooterDict> = {
     methodology: "Méthodologie", freeVsPaid: "Gratuit vs payant", telegram: "Telegram",
     learn: "Apprendre", about: "À propos", faq: "FAQ", contact: "Contact",
     privacy: "Confidentialité", terms: "Conditions", cookies: "Cookies", responsibleGambling: "Jeu responsable",
+    cookieSettings: "Paramètres des cookies",
     disclaimer: "BetsPlug fournit des données et analyses statistiques uniquement à des fins éducatives et informatives. Nous ne sommes pas un bookmaker, ne donnons pas de conseils de pari, ne facilitons pas de mises et n'encourageons pas le jeu. Toute décision prise sur la base des informations de ce site relève de votre seule responsabilité. Les prédictions sont des résultats de modèle, pas des garanties. 18+ — jouez responsable.",
     copyright: "© {year} BetsPlug. Tous droits réservés.",
   },
@@ -82,6 +87,7 @@ const dict: Record<Locale, FooterDict> = {
     methodology: "Metodología", freeVsPaid: "Gratis vs pago", telegram: "Telegram",
     learn: "Aprender", about: "Sobre nosotros", faq: "Preguntas frecuentes", contact: "Contacto",
     privacy: "Privacidad", terms: "Términos", cookies: "Cookies", responsibleGambling: "Juego responsable",
+    cookieSettings: "Ajustes de cookies",
     disclaimer: "BetsPlug ofrece datos y análisis estadísticos únicamente con fines educativos e informativos. No somos una casa de apuestas, no damos consejos de apuestas, no facilitamos apuestas ni fomentamos el juego. Cualquier decisión basada en la información de este sitio es responsabilidad tuya. Los pronósticos son resultados de modelos, no garantías. 18+ — juega responsable.",
     copyright: "© {year} BetsPlug. Todos los derechos reservados.",
   },
@@ -91,6 +97,7 @@ const dict: Record<Locale, FooterDict> = {
     methodology: "Metodologia", freeVsPaid: "Gratis vs a pagamento", telegram: "Telegram",
     learn: "Imparare", about: "Chi siamo", faq: "FAQ", contact: "Contatti",
     privacy: "Privacy", terms: "Termini", cookies: "Cookie", responsibleGambling: "Gioco responsabile",
+    cookieSettings: "Impostazioni cookie",
     disclaimer: "BetsPlug fornisce dati e analisi statistiche solo a scopo educativo e informativo. Non siamo un bookmaker, non forniamo consigli sulle scommesse, non facilitiamo scommesse e non incoraggiamo il gioco. Qualsiasi decisione presa in base alle informazioni di questo sito è di tua esclusiva responsabilità. I pronostici sono output di modelli, non garanzie. 18+ — gioca responsabilmente.",
     copyright: "© {year} BetsPlug. Tutti i diritti riservati.",
   },
@@ -198,6 +205,19 @@ const legalLinks = [
               </a>
             </li>
           ))}
+          <li>
+            <button
+              type="button"
+              data-open-cookie-banner
+              class="text-white-muted hover:text-white-pure transition-colors duration-150
+                     focus-visible:outline-none focus-visible:ring-2
+                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                     focus-visible:ring-offset-deep-navy-950 rounded-sm
+                     bg-transparent p-0 text-left cursor-pointer"
+            >
+              {t.cookieSettings}
+            </button>
+          </li>
         </ul>
       </nav>
     </div>

@@ -1,0 +1,454 @@
+---
+/**
+ * GDPR-compliant cookie banner.
+ *
+ * - Shown on first visit (no `cookie_consent` cookie present).
+ * - 3 buttons: "Accept all" / "Reject all" / "Customize".
+ * - Per-category toggles (essential locked, functional, analytics).
+ * - Saves consent in cookie_consent (1 year, version-stamped).
+ * - Re-appears when version bumps (CONSENT_VERSION).
+ * - Re-openable via "Cookie settings" footer link (data-open-cookie-banner).
+ * - Works without JS — graceful degradation = essential cookies only.
+ * - Respects DNT (Do Not Track) header by defaulting analytics off.
+ *
+ * Spec: docs/specs/15-legal-pages.md → "COOKIE BANNER COMPLIANCE".
+ */
+import {
+  defaultLocale,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
+
+interface Props {
+  locale?: Locale;
+}
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale =
+  Astro.props.locale ?? (isLocale(localsLocale) ? localsLocale : defaultLocale);
+
+type CookieDict = {
+  title: string;
+  body: string;
+  policyLink: string;
+  acceptAll: string;
+  rejectAll: string;
+  customize: string;
+  save: string;
+  cancel: string;
+  essentialLabel: string;
+  essentialDesc: string;
+  functionalLabel: string;
+  functionalDesc: string;
+  analyticsLabel: string;
+  analyticsDesc: string;
+  required: string;
+};
+
+const dict: Record<Locale, CookieDict> = {
+  en: {
+    title: "We use cookies",
+    body: "Essential cookies keep BetsPlug working. Optional cookies help us improve. You decide.",
+    policyLink: "Cookie policy",
+    acceptAll: "Accept all", rejectAll: "Reject all", customize: "Customize",
+    save: "Save preferences", cancel: "Cancel",
+    essentialLabel: "Essential", essentialDesc: "Required for login, security, and locale. Always on.",
+    functionalLabel: "Functional", functionalDesc: "Remember your theme, layout, and notification settings.",
+    analyticsLabel: "Analytics", analyticsDesc: "Privacy-friendly aggregated stats. No cross-site tracking.",
+    required: "Required",
+  },
+  nl: {
+    title: "We gebruiken cookies",
+    body: "Essentiële cookies houden BetsPlug werkend. Optionele cookies helpen ons verbeteren. Jij beslist.",
+    policyLink: "Cookiebeleid",
+    acceptAll: "Alles accepteren", rejectAll: "Alles weigeren", customize: "Aanpassen",
+    save: "Voorkeuren opslaan", cancel: "Annuleren",
+    essentialLabel: "Essentieel", essentialDesc: "Vereist voor inloggen, beveiliging en taalinstelling. Altijd aan.",
+    functionalLabel: "Functioneel", functionalDesc: "Onthoudt je thema, layout en meldingsvoorkeuren.",
+    analyticsLabel: "Analytics", analyticsDesc: "Privacy-vriendelijke geaggregeerde statistieken. Geen cross-site tracking.",
+    required: "Verplicht",
+  },
+  de: {
+    title: "Wir verwenden Cookies",
+    body: "Essentielle Cookies halten BetsPlug am Laufen. Optionale Cookies helfen uns, besser zu werden. Sie entscheiden.",
+    policyLink: "Cookie-Richtlinie",
+    acceptAll: "Alle akzeptieren", rejectAll: "Alle ablehnen", customize: "Anpassen",
+    save: "Einstellungen speichern", cancel: "Abbrechen",
+    essentialLabel: "Essentiell", essentialDesc: "Erforderlich für Login, Sicherheit und Sprache. Immer an.",
+    functionalLabel: "Funktional", functionalDesc: "Merkt sich Theme, Layout und Benachrichtigungseinstellungen.",
+    analyticsLabel: "Analyse", analyticsDesc: "Datenschutzfreundliche aggregierte Statistiken. Kein Cross-Site-Tracking.",
+    required: "Erforderlich",
+  },
+  fr: {
+    title: "Nous utilisons des cookies",
+    body: "Les cookies essentiels font fonctionner BetsPlug. Les cookies optionnels nous aident à nous améliorer. À vous de choisir.",
+    policyLink: "Politique de cookies",
+    acceptAll: "Tout accepter", rejectAll: "Tout refuser", customize: "Personnaliser",
+    save: "Enregistrer", cancel: "Annuler",
+    essentialLabel: "Essentiels", essentialDesc: "Nécessaires pour la connexion, la sécurité et la langue. Toujours actifs.",
+    functionalLabel: "Fonctionnels", functionalDesc: "Mémorise votre thème, mise en page et préférences de notification.",
+    analyticsLabel: "Analytiques", analyticsDesc: "Statistiques agrégées respectueuses de la vie privée. Aucun suivi multi-site.",
+    required: "Requis",
+  },
+  es: {
+    title: "Usamos cookies",
+    body: "Las cookies esenciales mantienen BetsPlug funcionando. Las opcionales nos ayudan a mejorar. Tú decides.",
+    policyLink: "Política de cookies",
+    acceptAll: "Aceptar todas", rejectAll: "Rechazar todas", customize: "Personalizar",
+    save: "Guardar preferencias", cancel: "Cancelar",
+    essentialLabel: "Esenciales", essentialDesc: "Necesarias para inicio de sesión, seguridad e idioma. Siempre activas.",
+    functionalLabel: "Funcionales", functionalDesc: "Recuerdan tu tema, diseño y preferencias de notificación.",
+    analyticsLabel: "Analíticas", analyticsDesc: "Estadísticas agregadas y privadas. Sin seguimiento entre sitios.",
+    required: "Requerido",
+  },
+  it: {
+    title: "Utilizziamo i cookie",
+    body: "I cookie essenziali fanno funzionare BetsPlug. I cookie opzionali ci aiutano a migliorare. Decidi tu.",
+    policyLink: "Politica sui cookie",
+    acceptAll: "Accetta tutto", rejectAll: "Rifiuta tutto", customize: "Personalizza",
+    save: "Salva preferenze", cancel: "Annulla",
+    essentialLabel: "Essenziali", essentialDesc: "Necessari per login, sicurezza e lingua. Sempre attivi.",
+    functionalLabel: "Funzionali", functionalDesc: "Memorizza tema, layout e preferenze di notifica.",
+    analyticsLabel: "Analytics", analyticsDesc: "Statistiche aggregate rispettose della privacy. Nessun tracciamento incrociato.",
+    required: "Richiesto",
+  },
+};
+const t = dict[locale];
+
+const cookiePolicyHref =
+  locale === defaultLocale
+    ? "/cookies"
+    : `/${locale}/${
+        locale === "nl" ? "cookies" :
+        locale === "de" ? "cookies" :
+        locale === "fr" ? "cookies" :
+        locale === "es" ? "cookies" :
+        locale === "it" ? "cookie" :
+        "cookies"
+      }`;
+
+// Bumped whenever the cookie policy materially changes — forces all
+// users to re-consent.
+const CONSENT_VERSION = "1.0";
+---
+
+<div
+  id="cookie-banner"
+  class="cookie-banner"
+  role="dialog"
+  aria-labelledby="cookie-banner-title"
+  aria-describedby="cookie-banner-body"
+  aria-hidden="true"
+  data-version={CONSENT_VERSION}
+  hidden
+>
+  <div class="cookie-banner__panel">
+    <h2 id="cookie-banner-title" class="cookie-banner__title">{t.title}</h2>
+
+    <p id="cookie-banner-body" class="cookie-banner__body">
+      {t.body}{" "}
+      <a href={cookiePolicyHref} class="cookie-banner__policy-link">{t.policyLink}</a>
+    </p>
+
+    <!-- Customize panel: hidden by default, toggled by .is-customizing -->
+    <fieldset class="cookie-banner__categories" data-categories>
+      <legend class="sr-only">Cookie categories</legend>
+
+      <label class="cookie-banner__row">
+        <input type="checkbox" checked disabled aria-describedby="cb-essential-desc" />
+        <span class="cookie-banner__row-text">
+          <span class="cookie-banner__row-title">
+            {t.essentialLabel}
+            <span class="cookie-banner__pill">{t.required}</span>
+          </span>
+          <span id="cb-essential-desc" class="cookie-banner__row-desc">{t.essentialDesc}</span>
+        </span>
+      </label>
+
+      <label class="cookie-banner__row">
+        <input type="checkbox" data-consent="functional" aria-describedby="cb-functional-desc" />
+        <span class="cookie-banner__row-text">
+          <span class="cookie-banner__row-title">{t.functionalLabel}</span>
+          <span id="cb-functional-desc" class="cookie-banner__row-desc">{t.functionalDesc}</span>
+        </span>
+      </label>
+
+      <label class="cookie-banner__row">
+        <input type="checkbox" data-consent="analytics" aria-describedby="cb-analytics-desc" />
+        <span class="cookie-banner__row-text">
+          <span class="cookie-banner__row-title">{t.analyticsLabel}</span>
+          <span id="cb-analytics-desc" class="cookie-banner__row-desc">{t.analyticsDesc}</span>
+        </span>
+      </label>
+    </fieldset>
+
+    <div class="cookie-banner__buttons">
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--ghost" data-action="customize">
+        {t.customize}
+      </button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--ghost" data-action="reject-all">
+        {t.rejectAll}
+      </button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--primary" data-action="accept-all">
+        {t.acceptAll}
+      </button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--primary cookie-banner__save" data-action="save">
+        {t.save}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Hidden by default; revealed via JS when there's no stored consent
+     for the current version. Server-rendered with `hidden` so that
+     no-JS visitors don't see the banner — they get essential cookies
+     only by default, which is GDPR-compliant. */
+  .cookie-banner[hidden] { display: none; }
+
+  .cookie-banner {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 60;
+    padding: 1rem;
+    background: rgba(10, 14, 31, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .cookie-banner__panel {
+    max-width: 64rem;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .cookie-banner__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-charcoal-900, #0f172a);
+  }
+
+  .cookie-banner__body {
+    margin-top: 0.375rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-charcoal-700, #334155);
+  }
+
+  .cookie-banner__policy-link {
+    color: var(--color-pitch-green-700, #047857);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .cookie-banner__categories {
+    display: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+  .cookie-banner.is-customizing .cookie-banner__categories { display: block; }
+
+  .cookie-banner__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    border-top: 1px solid #e5e7eb;
+    cursor: pointer;
+  }
+  .cookie-banner__row:first-of-type { border-top: 0; }
+
+  .cookie-banner__row input[type="checkbox"] {
+    margin-top: 0.25rem;
+    height: 18px; width: 18px;
+    accent-color: var(--color-pitch-green-600, #059669);
+  }
+
+  .cookie-banner__row-text { display: flex; flex-direction: column; }
+  .cookie-banner__row-title {
+    font-weight: 600;
+    color: var(--color-charcoal-900, #0f172a);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .cookie-banner__row-desc {
+    margin-top: 0.125rem;
+    font-size: 0.8125rem;
+    color: var(--color-charcoal-600, #4b5563);
+  }
+
+  .cookie-banner__pill {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.0625rem 0.375rem;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .cookie-banner__buttons {
+    margin-top: 1rem;
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .cookie-banner__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0.5rem 1rem;
+    font-size: 0.875rem; font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 150ms, color 150ms, border-color 150ms;
+  }
+  .cookie-banner__btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--color-pitch-green-500, #10b981);
+  }
+
+  .cookie-banner__btn--ghost {
+    background: transparent;
+    color: var(--color-charcoal-800, #1e293b);
+    border-color: #e2e8f0;
+  }
+  .cookie-banner__btn--ghost:hover { background: #f8fafc; }
+
+  .cookie-banner__btn--primary {
+    background: var(--color-pitch-green-600, #059669);
+    color: white;
+  }
+  .cookie-banner__btn--primary:hover { background: var(--color-pitch-green-700, #047857); }
+
+  /* Save button only visible while customizing. */
+  .cookie-banner__save { display: none; }
+  .cookie-banner.is-customizing .cookie-banner__save { display: inline-flex; }
+</style>
+
+<script is:inline define:vars={{ CONSENT_VERSION }}>
+  // ── Cookie consent runtime ─────────────────────────────────────
+  // Run inline (is:inline) so the banner state resolves before the
+  // browser paints — avoids a flash of un-consented banner.
+  (function () {
+    var COOKIE = "cookie_consent";
+    var ONE_YEAR = 60 * 60 * 24 * 365;
+
+    function readCookie(name) {
+      var pairs = document.cookie ? document.cookie.split(";") : [];
+      for (var i = 0; i < pairs.length; i++) {
+        var p = pairs[i].trim();
+        if (p.indexOf(name + "=") === 0) return decodeURIComponent(p.slice(name.length + 1));
+      }
+      return null;
+    }
+    function writeCookie(name, value, maxAgeSec) {
+      var secure = location.protocol === "https:" ? "; secure" : "";
+      document.cookie =
+        name + "=" + encodeURIComponent(value) +
+        "; path=/; max-age=" + maxAgeSec +
+        "; samesite=lax" + secure;
+    }
+
+    function getStoredConsent() {
+      var raw = readCookie(COOKIE);
+      if (!raw) return null;
+      try {
+        var parsed = JSON.parse(raw);
+        if (!parsed || parsed.version !== CONSENT_VERSION) return null;
+        return parsed;
+      } catch (e) { return null; }
+    }
+    function saveConsent(consents) {
+      var record = {
+        version: CONSENT_VERSION,
+        timestamp: new Date().toISOString(),
+        consents: {
+          essential: true,
+          functional: !!consents.functional,
+          analytics: !!consents.analytics,
+        },
+      };
+      writeCookie(COOKIE, JSON.stringify(record), ONE_YEAR);
+      // Expose to listeners (analytics loader, etc.)
+      window.__bpCookieConsent = record;
+      window.dispatchEvent(new CustomEvent("bp:consent-change", { detail: record }));
+    }
+
+    // Honour Do Not Track: default analytics off.
+    var DNT = navigator.doNotTrack === "1" || window.doNotTrack === "1";
+
+    var banner = document.getElementById("cookie-banner");
+    if (!banner) return;
+
+    var inputFunctional = banner.querySelector('[data-consent="functional"]');
+    var inputAnalytics  = banner.querySelector('[data-consent="analytics"]');
+
+    function showBanner(prefill) {
+      if (prefill) {
+        if (inputFunctional) inputFunctional.checked = !!prefill.consents.functional;
+        if (inputAnalytics)  inputAnalytics.checked  = !!prefill.consents.analytics && !DNT;
+      } else {
+        if (inputFunctional) inputFunctional.checked = false;
+        if (inputAnalytics)  inputAnalytics.checked  = false;
+      }
+      banner.hidden = false;
+      banner.setAttribute("aria-hidden", "false");
+    }
+    function hideBanner() {
+      banner.hidden = true;
+      banner.setAttribute("aria-hidden", "true");
+      banner.classList.remove("is-customizing");
+    }
+
+    // Initial render: show only when no valid stored consent.
+    var stored = getStoredConsent();
+    if (stored) {
+      window.__bpCookieConsent = stored;
+    } else {
+      showBanner(null);
+    }
+
+    // Footer / settings link can re-open the banner.
+    document.querySelectorAll("[data-open-cookie-banner]").forEach(function (el) {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        showBanner(getStoredConsent());
+        banner.classList.add("is-customizing");
+      });
+    });
+
+    banner.addEventListener("click", function (e) {
+      var t = e.target;
+      if (!(t instanceof HTMLElement)) return;
+      var action = t.getAttribute("data-action");
+      if (!action) return;
+
+      if (action === "customize") {
+        banner.classList.toggle("is-customizing");
+        return;
+      }
+      if (action === "accept-all") {
+        saveConsent({ functional: true, analytics: !DNT });
+        hideBanner();
+        return;
+      }
+      if (action === "reject-all") {
+        saveConsent({ functional: false, analytics: false });
+        hideBanner();
+        return;
+      }
+      if (action === "save") {
+        saveConsent({
+          functional: inputFunctional ? inputFunctional.checked : false,
+          analytics:  inputAnalytics  ? inputAnalytics.checked  : false,
+        });
+        hideBanner();
+        return;
+      }
+    });
+  })();
+</script>

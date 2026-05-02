@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="AI football predictions">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0A0E1F"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.15" r="0.6">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(80,120)">
+    <text x="0" y="0" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="36" fill="#10B981" letter-spacing="2">BETSPLUG</text>
+    <text x="0" y="120" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="84" fill="#FFFFFF" letter-spacing="-1.5">AI football predictions</text>
+    <text x="0" y="200" font-family="Inter,system-ui,sans-serif" font-weight="500" font-size="36" fill="#94A3B8">Statistical analysis. Public track record. Not a bookmaker.</text>
+  </g>
+  <g transform="translate(1040,540)">
+    <rect x="-60" y="-30" width="120" height="50" rx="25" fill="none" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="2"/>
+    <text x="0" y="3" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="20" fill="#FFFFFF">18+</text>
+  </g>
+</svg>

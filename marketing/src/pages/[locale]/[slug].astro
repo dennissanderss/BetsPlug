@@ -96,11 +96,23 @@ import FAQCategoryC          from "@/components/faq/FAQCategory.astro";
 import StillHaveQuestionsCTA from "@/components/faq/StillHaveQuestionsCTA.astro";
 import { loadFaqContent, filterCategoriesByQuery } from "@/lib/faq-page";
 
+import LegalLayout    from "@/layouts/LegalLayout.astro";
+import HelplineList   from "@/components/legal/HelplineList.astro";
+import {
+  loadLegalContent,
+  getResponsibleGamblingHelplines,
+  type LegalSlug,
+} from "@/lib/legal-page";
+
 export function getStaticPaths() {
   // Astro hoists `getStaticPaths` to a separate scope, so this list
   // must live inside the function. Mirror it in `SUPPORTED_CANONICAL`
   // below for runtime branching.
-  const supported = ["predictions", "methodology", "track-record", "learn", "bet-types", "free-vs-paid", "telegram", "faq"];
+  const supported = [
+    "predictions", "methodology", "track-record", "learn", "bet-types",
+    "free-vs-paid", "telegram", "faq",
+    "privacy", "terms", "cookies", "responsible-gambling",
+  ];
   const out: Array<{ params: { locale: string; slug: string } }> = [];
   for (const locale of locales) {
     if (locale === defaultLocale) continue;
@@ -332,6 +344,43 @@ const tgFaqSchema = tgContent ? {
     "@type": "Question", name: q.q,
     acceptedAnswer: { "@type": "Answer", text: q.a },
   })),
+} : null;
+
+// ── Legal ─────────────────────────────────────────────────
+const isLegal = (
+  ["privacy", "terms", "cookies", "responsible-gambling"] as const
+).includes(canonical as LegalSlug);
+const legalContent = isLegal ? loadLegalContent(canonical as LegalSlug, locale) : null;
+const legalHelplines = canonical === "responsible-gambling"
+  ? getResponsibleGamblingHelplines(locale)
+  : [];
+const legalCanonicalPath = legalContent ? `/${canonical}` : "/";
+const legalLocaleCountryLabel = (() => {
+  if (!legalContent) return "";
+  const labels: Record<string, string> = {
+    en: "International / English-speaking resources",
+    nl: "Nederland",
+    de: "Deutschland",
+    fr: "France",
+    es: "España",
+    it: "Italia",
+  };
+  return labels[locale] ?? labels.en;
+})();
+
+const legalWebPageSchema = legalContent ? {
+  "@context": "https://schema.org", "@type": "WebPage",
+  name: legalContent.meta.title, description: legalContent.meta.description,
+  inLanguage: locale, url: `${SITE}/${locale}/${slug}`,
+  dateModified: legalContent._meta.lastUpdated,
+  datePublished: legalContent._meta.effectiveDate,
+} : null;
+const legalBreadcrumbSchema = legalContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: legalContent.hero.h1, item: `${SITE}/${locale}/${slug}` },
+  ],
 } : null;
 
 // ── FAQ ───────────────────────────────────────────────────
@@ -659,4 +708,28 @@ const faqBreadcrumbSchema = faqContent ? {
       })();
     </script>
   </MarketingLayout>
+)}
+
+{isLegal && legalContent && canonical !== "responsible-gambling" && (
+  <LegalLayout content={legalContent} canonicalPath={legalCanonicalPath}>
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(legalWebPageSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(legalBreadcrumbSchema)} />
+    </Fragment>
+  </LegalLayout>
+)}
+
+{canonical === "responsible-gambling" && legalContent && (
+  <LegalLayout
+    content={legalContent}
+    canonicalPath={legalCanonicalPath}
+    injectAfterSectionId="where-to-get-help"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(legalWebPageSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(legalBreadcrumbSchema)} />
+    </Fragment>
+
+    <HelplineList helplines={legalHelplines} countryLabel={legalLocaleCountryLabel} />
+  </LegalLayout>
 )}

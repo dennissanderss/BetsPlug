@@ -1,0 +1,89 @@
+---
+import type { LegalSectionContent, LegalParagraph } from "@/content/pages/legal/types";
+
+interface Props {
+  section: LegalSectionContent;
+}
+const { section } = Astro.props;
+
+function isString(p: LegalParagraph): p is string {
+  return typeof p === "string";
+}
+---
+
+<section
+  id={section.id}
+  class="scroll-mt-24 py-8 lg:py-12 first:pt-0 border-t border-stadium-white-200 first:border-t-0"
+>
+  <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-charcoal-900 leading-tight">
+    {section.number !== undefined && (
+      <span class="font-mono text-base text-charcoal-500 mr-2">{section.number}.</span>
+    )}
+    <span>{section.title}</span>
+  </h2>
+
+  <div class="mt-5 space-y-4 text-base leading-7 text-charcoal-800">
+    {section.body.map((p) => {
+      if (isString(p)) {
+        return <p>{p}</p>;
+      }
+      if (p.kind === "p") {
+        return <p>{p.text}</p>;
+      }
+      if (p.kind === "ul") {
+        return (
+          <ul class="list-disc pl-6 space-y-1.5 marker:text-charcoal-400">
+            {p.items.map((it) => <li>{it}</li>)}
+          </ul>
+        );
+      }
+      if (p.kind === "ol") {
+        return (
+          <ol class="list-decimal pl-6 space-y-1.5 marker:text-charcoal-500 marker:font-medium">
+            {p.items.map((it) => <li>{it}</li>)}
+          </ol>
+        );
+      }
+      if (p.kind === "callout") {
+        const tone = p.tone === "warn"
+          ? "border-amber-300 bg-amber-50 text-amber-900"
+          : "border-pitch-green-300 bg-pitch-green-50 text-pitch-green-900";
+        return (
+          <div class={`rounded-md border px-4 py-3 text-sm leading-relaxed ${tone}`} role="note">
+            {p.text}
+          </div>
+        );
+      }
+      if (p.kind === "table") {
+        return (
+          <div class="overflow-x-auto rounded-md border border-stadium-white-200">
+            <table class="w-full text-sm">
+              {p.caption && <caption class="sr-only">{p.caption}</caption>}
+              <thead class="bg-stadium-white-50">
+                <tr>
+                  {p.headers.map((h) => (
+                    <th scope="col" class="px-4 py-2.5 text-left font-semibold text-charcoal-900">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stadium-white-200">
+                {p.rows.map((row) => (
+                  <tr>
+                    {row.map((cell, i) => (
+                      i === 0
+                        ? <th scope="row" class="px-4 py-2.5 font-mono text-xs text-charcoal-700 align-top">{cell}</th>
+                        : <td class="px-4 py-2.5 text-charcoal-700 align-top">{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      return null;
+    })}
+  </div>
+</section>

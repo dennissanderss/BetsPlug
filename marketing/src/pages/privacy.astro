@@ -1,134 +1,31 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
-import PageHeader from "../components/PageHeader.astro";
-import Prose from "../components/Prose.astro";
+import LegalLayout from "@/layouts/LegalLayout.astro";
+import { loadLegalContent } from "@/lib/legal-page";
 
-const lastUpdated = "30 April 2026";
+const locale = "en" as const;
+const content = loadLegalContent("privacy", locale);
+
+const SITE = "https://betsplug.com";
+const canonicalPath = "/privacy";
+
+const webPageSchema = {
+  "@context": "https://schema.org", "@type": "WebPage",
+  name: content.meta.title, description: content.meta.description,
+  inLanguage: locale, url: `${SITE}${canonicalPath}`,
+  dateModified: content._meta.lastUpdated, datePublished: content._meta.effectiveDate,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Privacy", item: `${SITE}${canonicalPath}` },
+  ],
+};
 ---
 
-<Layout
-  title="Privacy Policy — BetsPlug"
-  description="How BetsPlug collects, uses and protects your personal data. GDPR-compliant, plain-English."
->
-  <SiteNav />
-
-  <main>
-    <PageHeader
-      kicker="Legal"
-      title="Privacy Policy"
-      subtitle={`Last updated: ${lastUpdated}`}
-    />
-
-    <Prose>
-      <h2>1. Who is responsible</h2>
-      <p>
-        BetsPlug, established in the Netherlands, is the data controller
-        for the personal data described below. Reach us at <a
-          href="mailto:privacy@betsplug.com">privacy@betsplug.com</a>.
-      </p>
-
-      <h2>2. What we collect</h2>
-      <ul>
-        <li>
-          <strong>Account data</strong> — email address, hashed password,
-          chosen username, language preference.
-        </li>
-        <li>
-          <strong>Subscription data</strong> — Stripe customer ID,
-          subscription tier and billing cycle. Card details stay with
-          Stripe; we never see them.
-        </li>
-        <li>
-          <strong>Usage data</strong> — pages viewed, predictions opened,
-          IP-derived country, browser and device type. Used for product
-          improvement and abuse detection.
-        </li>
-        <li>
-          <strong>Communication data</strong> — emails you send us, support
-          tickets, Telegram channel membership status (Platinum tier).
-        </li>
-      </ul>
-
-      <h2>3. Why we use it</h2>
-      <ul>
-        <li>To run your account and deliver the predictions you subscribed to.</li>
-        <li>To process payments via Stripe and prevent fraud.</li>
-        <li>To improve the engine and the user interface based on aggregate usage patterns.</li>
-        <li>To answer your support requests.</li>
-        <li>To comply with legal obligations (tax, AML, consumer-protection law).</li>
-      </ul>
-
-      <h2>4. Legal basis (GDPR)</h2>
-      <p>
-        We process personal data on the basis of (a) the contract you enter
-        into when you sign up, (b) your consent for non-essential cookies
-        and marketing emails, and (c) our legitimate interest in keeping
-        the platform secure and improving it. You can withdraw consent at
-        any time without affecting prior processing.
-      </p>
-
-      <h2>5. Sharing</h2>
-      <p>
-        We share data with a small number of processors:
-      </p>
-      <ul>
-        <li><strong>Stripe</strong> — payment processing.</li>
-        <li><strong>Vercel + Railway</strong> — hosting infrastructure.</li>
-        <li><strong>Sanity</strong> — content management for the blog.</li>
-        <li><strong>Resend / Postmark</strong> — transactional email.</li>
-      </ul>
-      <p>
-        We do not sell your data and we do not share it with advertising
-        networks.
-      </p>
-
-      <h2>6. International transfers</h2>
-      <p>
-        Some processors operate outside the EU/EEA. Where that's the case
-        we rely on Standard Contractual Clauses approved by the European
-        Commission to safeguard the transfer.
-      </p>
-
-      <h2>7. Retention</h2>
-      <p>
-        Account data is kept for as long as your account is active and for
-        12 months after deletion (legal hold). Anonymous prediction-history
-        data is kept indefinitely as part of the public track record.
-      </p>
-
-      <h2>8. Your rights</h2>
-      <ul>
-        <li>Access — request a copy of the data we hold about you.</li>
-        <li>Rectification — correct inaccurate data.</li>
-        <li>Erasure — delete your account and personal data ("right to be forgotten").</li>
-        <li>Portability — get your data in a machine-readable format.</li>
-        <li>Objection — object to processing based on legitimate interest.</li>
-        <li>Complaint — file with your national supervisory authority (in NL: Autoriteit Persoonsgegevens).</li>
-      </ul>
-
-      <h2>9. Security</h2>
-      <p>
-        Passwords are stored hashed. Connections are TLS-encrypted. Access
-        to production data is restricted to a small team under audit
-        logging. We run automated security scans and patch dependencies
-        weekly.
-      </p>
-
-      <h2>10. Cookies</h2>
-      <p>
-        See our <a href="/cookies">cookie page</a> for the full breakdown.
-      </p>
-
-      <h2>11. Contact</h2>
-      <p>
-        Privacy questions or data-rights requests: <a
-          href="mailto:privacy@betsplug.com">privacy@betsplug.com</a>. We
-        respond within 30 days.
-      </p>
-    </Prose>
-
-    <Footer />
-  </main>
-</Layout>
+<LegalLayout content={content} canonicalPath={canonicalPath}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+</LegalLayout>

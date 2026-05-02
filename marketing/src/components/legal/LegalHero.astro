@@ -1,0 +1,53 @@
+---
+import type { LegalPageContent } from "@/content/pages/legal/types";
+
+interface Props {
+  hero: LegalPageContent["hero"];
+  meta: {
+    lastUpdated: string;
+    version: string;
+    effectiveDate: string;
+  };
+  labels: LegalPageContent["labels"];
+}
+const { hero, meta, labels } = Astro.props;
+---
+
+<section class="bg-stadium-white-50 border-b border-stadium-white-200">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div
+      role="note"
+      class="mb-6 rounded-md border border-amber-300/70 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-900"
+    >
+      <strong class="font-semibold">⚠️ Template notice:</strong>{" "}
+      {labels.lawyerReviewWarning}
+    </div>
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-charcoal-900">
+      {hero.h1}
+    </h1>
+
+    <dl class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-charcoal-600">
+      <div class="flex items-center gap-1.5">
+        <dt class="font-medium">{labels.lastUpdatedLabel}:</dt>
+        <dd>
+          <time datetime={meta.lastUpdated}>{meta.lastUpdated}</time>
+        </dd>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <dt class="font-medium">{labels.versionLabel}:</dt>
+        <dd>{meta.version}</dd>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <dt class="font-medium">{labels.effectiveDateLabel}:</dt>
+        <dd>
+          <time datetime={meta.effectiveDate}>{meta.effectiveDate}</time>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="mt-6 text-base sm:text-lg leading-relaxed text-charcoal-700">
+      {hero.intro}
+    </p>
+  </div>
+</section>

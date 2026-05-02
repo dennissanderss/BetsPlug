@@ -1,128 +1,31 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
-import PageHeader from "../components/PageHeader.astro";
-import Prose from "../components/Prose.astro";
+import LegalLayout from "@/layouts/LegalLayout.astro";
+import { loadLegalContent } from "@/lib/legal-page";
 
-const lastUpdated = "30 April 2026";
+const locale = "en" as const;
+const content = loadLegalContent("cookies", locale);
 
-interface CookieRow {
-  name: string;
-  purpose: string;
-  duration: string;
-  category: "Strictly necessary" | "Analytics" | "Functional";
-}
+const SITE = "https://betsplug.com";
+const canonicalPath = "/cookies";
 
-const cookies: CookieRow[] = [
-  {
-    name: "betsplug_session",
-    purpose: "Keeps you logged in across page loads.",
-    duration: "30 days",
-    category: "Strictly necessary",
-  },
-  {
-    name: "NEXT_LOCALE",
-    purpose: "Remembers your chosen language so SSR renders the right content.",
-    duration: "1 year",
-    category: "Functional",
-  },
-  {
-    name: "stripe_session_id",
-    purpose: "Set by Stripe during checkout to prevent duplicate charges.",
-    duration: "Session",
-    category: "Strictly necessary",
-  },
-  {
-    name: "_va_*",
-    purpose:
-      "Vercel Analytics — anonymous, aggregate page-view counts. No tracking across sites.",
-    duration: "1 year",
-    category: "Analytics",
-  },
-];
+const webPageSchema = {
+  "@context": "https://schema.org", "@type": "WebPage",
+  name: content.meta.title, description: content.meta.description,
+  inLanguage: locale, url: `${SITE}${canonicalPath}`,
+  dateModified: content._meta.lastUpdated, datePublished: content._meta.effectiveDate,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Cookies", item: `${SITE}${canonicalPath}` },
+  ],
+};
 ---
 
-<Layout
-  title="Cookies — BetsPlug"
-  description="Plain-English breakdown of the cookies BetsPlug uses, why we set them, and how to opt out."
->
-  <SiteNav />
-
-  <main>
-    <PageHeader
-      kicker="Legal"
-      title="Cookie policy"
-      subtitle={`Last updated: ${lastUpdated}`}
-    />
-
-    <Prose>
-      <h2>What cookies are</h2>
-      <p>
-        A cookie is a small text file your browser stores so a website can
-        recognise you on a return visit. We use them sparingly and only
-        where they make BetsPlug work properly or help us understand
-        aggregate usage.
-      </p>
-
-      <h2>What we set</h2>
-    </Prose>
-
-    <div class="mx-auto mb-10 max-w-3xl px-4 sm:px-6 lg:px-8">
-      <div class="card-neon overflow-hidden">
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="border-b border-white/[0.06] text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
-              <th class="px-4 py-3 font-semibold">Cookie</th>
-              <th class="px-4 py-3 font-semibold">Purpose</th>
-              <th class="px-4 py-3 font-semibold">Duration</th>
-              <th class="px-4 py-3 font-semibold">Category</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              cookies.map((c) => (
-                <tr class="border-b border-white/[0.04] last:border-b-0">
-                  <td class="px-4 py-3 font-mono text-[12px] text-white">
-                    {c.name}
-                  </td>
-                  <td class="px-4 py-3 text-[var(--color-text-muted)]">
-                    {c.purpose}
-                  </td>
-                  <td class="px-4 py-3 text-[var(--color-text-muted)]">
-                    {c.duration}
-                  </td>
-                  <td class="px-4 py-3 text-[var(--color-accent-green-bright)]">
-                    {c.category}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <Prose>
-      <h2>How to opt out</h2>
-      <p>
-        Strictly-necessary cookies can't be disabled — without them you
-        can't stay logged in or check out. Analytics and functional
-        cookies can be blocked in your browser settings without breaking
-        the site.
-      </p>
-      <p>
-        We do <strong>not</strong> use third-party advertising cookies or
-        cross-site trackers.
-      </p>
-
-      <h2>Contact</h2>
-      <p>
-        Questions about our cookie use: <a href="mailto:privacy@betsplug.com"
-          >privacy@betsplug.com</a>.
-      </p>
-    </Prose>
-
-    <Footer />
-  </main>
-</Layout>
+<LegalLayout content={content} canonicalPath={canonicalPath}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+</LegalLayout>

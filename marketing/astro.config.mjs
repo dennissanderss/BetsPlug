@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,6 +22,44 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
+
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: "en",
+        locales: { en: "en", nl: "nl", de: "de", fr: "fr", es: "es", it: "it" },
+      },
+      filter: (page) => {
+        // Skip Vercel-only safety-net redirects + the foundation page.
+        if (page.includes("/foundation-test")) return false;
+        if (page.includes("/thank-you")) return false;
+        return true;
+      },
+      serialize(item) {
+        const url = item.url;
+        if (url.match(/\/predictions(\/[^/]+)?\/?$/)) {
+          item.changefreq = "daily";
+          item.priority = url.endsWith("/predictions/") || /\/predictions$/.test(url) ? 0.9 : 0.8;
+        } else if (url === "https://betsplug.com/" || /^https:\/\/betsplug\.com\/(nl|de|fr|es|it)\/?$/.test(url)) {
+          item.changefreq = "daily";
+          item.priority = 1.0;
+        } else if (url.includes("/learn")) {
+          item.changefreq = "monthly";
+          item.priority = 0.7;
+        } else if (url.match(/(privacy|terms|cookies?|datenschutz|agb|conditions|terminos|termini|verantwoord|verantwortungs|jeu-responsable|juego-responsable|gioco-responsabile|preguntas|veelgestelde|haeufig|cookie)/i)) {
+          item.changefreq = "yearly";
+          item.priority = 0.3;
+        } else if (url.includes("/track-record") || url.includes("/methodology") || url.includes("/methodik") || url.includes("/methodologie") || url.includes("/metodologia")) {
+          item.changefreq = "weekly";
+          item.priority = 0.8;
+        } else {
+          item.changefreq = "weekly";
+          item.priority = 0.7;
+        }
+        return item;
+      },
+    }),
+  ],
 
   // Safety-net redirects — paths that belong on the authed surface
   // (app.betsplug.com) but might still be hit on the marketing

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/about-us", "destination": "/about", "permanent": true },
+    { "source": "/match-predictions", "destination": "/predictions", "permanent": true },
+    { "source": "/match-predictions/premier-league", "destination": "/predictions/premier-league", "permanent": true },
+    { "source": "/match-predictions/la-liga", "destination": "/predictions/la-liga", "permanent": true },
+    { "source": "/match-predictions/bundesliga", "destination": "/predictions/bundesliga", "permanent": true },
+    { "source": "/match-predictions/serie-a", "destination": "/predictions/serie-a", "permanent": true },
+    { "source": "/match-predictions/ligue-1", "destination": "/predictions/ligue-1", "permanent": true },
+    { "source": "/match-predictions/champions-league", "destination": "/predictions/champions-league", "permanent": true },
+    { "source": "/match-predictions/eredivisie", "destination": "/predictions/eredivisie", "permanent": true },
+    { "source": "/b2b", "destination": "/contact", "permanent": true },
+    { "source": "/engine", "destination": "/methodology", "permanent": true },
+    { "source": "/bet-types/both-teams-to-score", "destination": "/bet-types#btts", "permanent": true },
+    { "source": "/bet-types/double-chance", "destination": "/bet-types#double-chance", "permanent": true },
+    { "source": "/bet-types/draw-no-bet", "destination": "/bet-types#draw-no-bet", "permanent": true },
+    { "source": "/bet-types/over-2-5-goals", "destination": "/bet-types#over-25", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' data: https://cdn.jsdelivr.net; img-src 'self' data: https://cdn.sanity.io; connect-src 'self' https://app.betsplug.com https://api.betsplug.com https://plausible.io; frame-ancestors 'none';" }
+      ]
+    },
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

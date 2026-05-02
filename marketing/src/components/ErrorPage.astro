@@ -1,0 +1,194 @@
+---
+/**
+ * Branded 404 / 500 layout. Locale-aware via `Astro.locals.locale`
+ * (or explicit prop). Static — no JS.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import {
+  defaultLocale,
+  getLocalizedPath,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
+
+interface Props {
+  kind: "404" | "500";
+  locale?: Locale;
+}
+const { kind } = Astro.props;
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale =
+  Astro.props.locale ?? (isLocale(localsLocale) ? localsLocale : defaultLocale);
+
+type Dict = {
+  metaTitle: string;
+  h1: string;
+  body: string;
+  searchPlaceholder: string;
+  searchSubmit: string;
+  popularLinks: string;
+  links: { home: string; predictions: string; pricing: string; faq: string; contact: string };
+  status: { title: string; body: string };
+};
+
+const dict404: Record<Locale, Dict> = {
+  en: {
+    metaTitle: "Page not found · BetsPlug",
+    h1: "Page not found",
+    body: "We couldn't find what you were looking for. Try one of the popular pages below or search the FAQ.",
+    searchPlaceholder: "Search the FAQ…",
+    searchSubmit: "Search",
+    popularLinks: "Popular pages",
+    links: { home: "Home", predictions: "Predictions", pricing: "Pricing", faq: "FAQ", contact: "Contact" },
+    status: { title: "", body: "" },
+  },
+  nl: {
+    metaTitle: "Pagina niet gevonden · BetsPlug",
+    h1: "Pagina niet gevonden",
+    body: "We konden niet vinden wat je zocht. Probeer een van de populaire pagina's hieronder of doorzoek de FAQ.",
+    searchPlaceholder: "Doorzoek de FAQ…",
+    searchSubmit: "Zoeken",
+    popularLinks: "Populaire pagina's",
+    links: { home: "Home", predictions: "Voorspellingen", pricing: "Prijzen", faq: "FAQ", contact: "Contact" },
+    status: { title: "", body: "" },
+  },
+  de: {
+    metaTitle: "Seite nicht gefunden · BetsPlug",
+    h1: "Seite nicht gefunden",
+    body: "Wir konnten nicht finden, wonach Sie gesucht haben. Probieren Sie eine der beliebten Seiten unten oder durchsuchen Sie die FAQ.",
+    searchPlaceholder: "FAQ durchsuchen…",
+    searchSubmit: "Suchen",
+    popularLinks: "Beliebte Seiten",
+    links: { home: "Startseite", predictions: "Vorhersagen", pricing: "Preise", faq: "FAQ", contact: "Kontakt" },
+    status: { title: "", body: "" },
+  },
+  fr: {
+    metaTitle: "Page introuvable · BetsPlug",
+    h1: "Page introuvable",
+    body: "Nous n'avons pas trouvé ce que vous cherchiez. Essayez une des pages populaires ci-dessous ou cherchez dans la FAQ.",
+    searchPlaceholder: "Rechercher dans la FAQ…",
+    searchSubmit: "Rechercher",
+    popularLinks: "Pages populaires",
+    links: { home: "Accueil", predictions: "Pronostics", pricing: "Tarifs", faq: "FAQ", contact: "Contact" },
+    status: { title: "", body: "" },
+  },
+  es: {
+    metaTitle: "Página no encontrada · BetsPlug",
+    h1: "Página no encontrada",
+    body: "No pudimos encontrar lo que buscabas. Prueba una de las páginas populares de abajo o busca en la FAQ.",
+    searchPlaceholder: "Buscar en la FAQ…",
+    searchSubmit: "Buscar",
+    popularLinks: "Páginas populares",
+    links: { home: "Inicio", predictions: "Pronósticos", pricing: "Precios", faq: "Preguntas frecuentes", contact: "Contacto" },
+    status: { title: "", body: "" },
+  },
+  it: {
+    metaTitle: "Pagina non trovata · BetsPlug",
+    h1: "Pagina non trovata",
+    body: "Non siamo riusciti a trovare quello che cercavi. Prova una delle pagine popolari qui sotto o cerca nelle FAQ.",
+    searchPlaceholder: "Cerca nelle FAQ…",
+    searchSubmit: "Cerca",
+    popularLinks: "Pagine popolari",
+    links: { home: "Home", predictions: "Pronostici", pricing: "Prezzi", faq: "FAQ", contact: "Contatti" },
+    status: { title: "", body: "" },
+  },
+};
+
+const dict500: Record<Locale, Dict> = {
+  en: { ...dict404.en, metaTitle: "Something went wrong · BetsPlug", h1: "Something went wrong", body: "An unexpected error occurred on our end. Please try again or come back in a moment.", popularLinks: "Try one of these instead", status: { title: "Status", body: "Check our status page for ongoing incidents" } },
+  nl: { ...dict404.nl, metaTitle: "Er ging iets mis · BetsPlug", h1: "Er ging iets mis", body: "Er trad een onverwachte fout op aan onze kant. Probeer het opnieuw of kom over een moment terug.", popularLinks: "Probeer een van deze", status: { title: "Status", body: "Controleer onze statuspagina voor lopende incidenten" } },
+  de: { ...dict404.de, metaTitle: "Etwas ist schiefgelaufen · BetsPlug", h1: "Etwas ist schiefgelaufen", body: "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut oder kommen Sie in einem Moment zurück.", popularLinks: "Probieren Sie eines davon", status: { title: "Status", body: "Sehen Sie auf unserer Statusseite nach laufenden Vorfällen" } },
+  fr: { ...dict404.fr, metaTitle: "Une erreur s'est produite · BetsPlug", h1: "Une erreur s'est produite", body: "Une erreur inattendue s'est produite de notre côté. Veuillez réessayer ou revenir dans un instant.", popularLinks: "Essayez une de ces pages", status: { title: "Statut", body: "Consultez notre page de statut pour les incidents en cours" } },
+  es: { ...dict404.es, metaTitle: "Algo salió mal · BetsPlug", h1: "Algo salió mal", body: "Ocurrió un error inesperado por nuestra parte. Inténtalo de nuevo o vuelve en un momento.", popularLinks: "Prueba alguna de estas", status: { title: "Estado", body: "Consulta nuestra página de estado para incidentes en curso" } },
+  it: { ...dict404.it, metaTitle: "Qualcosa è andato storto · BetsPlug", h1: "Qualcosa è andato storto", body: "Si è verificato un errore imprevisto. Riprova o torna tra un momento.", popularLinks: "Prova una di queste", status: { title: "Stato", body: "Controlla la nostra pagina di stato per incidenti in corso" } },
+};
+
+const t = kind === "404" ? dict404[locale] : dict500[locale];
+const faqHref = getLocalizedPath("faq", locale);
+---
+
+<MarketingLayout
+  title={t.metaTitle}
+  description={t.body}
+  canonicalPath={kind === "404" ? "/404" : "/500"}
+  noIndex={true}
+>
+  <Section surface="light" spacing="lg">
+    <Container size="md">
+      <div class="text-center max-w-2xl mx-auto py-12">
+        <p class="text-7xl sm:text-9xl font-mono font-black tracking-tight text-pitch-green-600/20">
+          {kind}
+        </p>
+
+        <h1 class="mt-2 text-4xl sm:text-5xl font-bold tracking-tight text-charcoal-900">
+          {t.h1}
+        </h1>
+
+        <p class="mt-4 text-lg leading-relaxed text-charcoal-700">
+          {t.body}
+        </p>
+
+        {kind === "404" && (
+          <form action={faqHref} method="get" class="mt-8 flex gap-2 max-w-md mx-auto">
+            <label for="error-search" class="sr-only">{t.searchPlaceholder}</label>
+            <input
+              type="search"
+              id="error-search"
+              name="q"
+              placeholder={t.searchPlaceholder}
+              class="flex-1 rounded-md border border-stadium-white-200 bg-white px-4 py-2.5 text-base
+                     text-charcoal-900 placeholder:text-charcoal-400
+                     focus-visible:outline-none focus-visible:ring-2
+                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2"
+            />
+            <button
+              type="submit"
+              class="rounded-md bg-pitch-green-600 px-5 py-2.5 text-base font-semibold text-white
+                     hover:bg-pitch-green-700 transition-colors
+                     focus-visible:outline-none focus-visible:ring-2
+                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2"
+            >
+              {t.searchSubmit}
+            </button>
+          </form>
+        )}
+
+        <h2 class="mt-12 text-sm font-semibold uppercase tracking-wider text-charcoal-500">
+          {t.popularLinks}
+        </h2>
+
+        <ul class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
+          <li><a href={getLocalizedPath("/", locale)} class="link-pill">{t.links.home}</a></li>
+          <li><a href={getLocalizedPath("predictions", locale)} class="link-pill">{t.links.predictions}</a></li>
+          <li><a href={getLocalizedPath("pricing", locale)} class="link-pill">{t.links.pricing}</a></li>
+          <li><a href={faqHref} class="link-pill">{t.links.faq}</a></li>
+          <li><a href={getLocalizedPath("contact", locale)} class="link-pill">{t.links.contact}</a></li>
+        </ul>
+      </div>
+    </Container>
+  </Section>
+</MarketingLayout>
+
+<style>
+  :global(.link-pill) {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-stadium-white-200, #e2e8f0);
+    background: white;
+    color: var(--color-charcoal-800, #1e293b);
+    font-weight: 600;
+    transition: all 150ms;
+  }
+  :global(.link-pill:hover) {
+    border-color: var(--color-pitch-green-400, #34d399);
+    color: var(--color-pitch-green-700, #047857);
+  }
+  :global(.link-pill:focus-visible) {
+    outline: none;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--color-pitch-green-400, #34d399);
+  }
+</style>

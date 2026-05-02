@@ -1,118 +1,31 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
-import PageHeader from "../components/PageHeader.astro";
-import Prose from "../components/Prose.astro";
+import LegalLayout from "@/layouts/LegalLayout.astro";
+import { loadLegalContent } from "@/lib/legal-page";
 
-const lastUpdated = "30 April 2026";
+const locale = "en" as const;
+const content = loadLegalContent("terms", locale);
+
+const SITE = "https://betsplug.com";
+const canonicalPath = "/terms";
+
+const webPageSchema = {
+  "@context": "https://schema.org", "@type": "WebPage",
+  name: content.meta.title, description: content.meta.description,
+  inLanguage: locale, url: `${SITE}${canonicalPath}`,
+  dateModified: content._meta.lastUpdated, datePublished: content._meta.effectiveDate,
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name: "Terms", item: `${SITE}${canonicalPath}` },
+  ],
+};
 ---
 
-<Layout
-  title="Terms of Service — BetsPlug"
-  description="The legal terms governing your use of BetsPlug. Educational simulation only — 18+, no financial or betting advice."
->
-  <SiteNav />
-
-  <main>
-    <PageHeader
-      kicker="Legal"
-      title="Terms of Service"
-      subtitle={`Last updated: ${lastUpdated}`}
-    />
-
-    <Prose>
-      <h2>1. Who we are</h2>
-      <p>
-        BetsPlug ("we", "us", "our") is a Dutch service that publishes
-        statistical football forecasts for educational and research
-        purposes. By using our website, mobile-friendly site, or any
-        BetsPlug API you ("you") agree to these Terms of Service.
-      </p>
-
-      <h2>2. Educational simulation only</h2>
-      <p>
-        BetsPlug is <strong>not</strong> a bookmaker, broker, or financial
-        adviser. Every probability, confidence score, ROI figure, and
-        "Pick of the Day" we publish is the output of a statistical model
-        for educational and research purposes only. None of it
-        constitutes financial, investment, or betting advice. Past model
-        performance is not indicative of future results.
-      </p>
-
-      <h2>3. 18+ and responsible play</h2>
-      <p>
-        You must be at least 18 years old to use BetsPlug. Gambling can be
-        addictive — please play responsibly and within applicable laws.
-        See our <a href="/responsible-gambling">responsible-play page</a>{" "}
-        for support resources.
-      </p>
-
-      <h2>4. Account and subscription</h2>
-      <p>
-        A Free account is available without payment. Paid plans (Silver,
-        Gold, Platinum) renew automatically each billing cycle through
-        Stripe until you cancel. Cancellation takes effect at the end of
-        the current period — no pro-rated refunds for unused days unless
-        required by applicable consumer law.
-      </p>
-
-      <h2>5. Acceptable use</h2>
-      <ul>
-        <li>
-          Don't scrape, mirror, or republish BetsPlug content without
-          written permission.
-        </li>
-        <li>Don't reverse-engineer the engine or attempt to bypass tier gates.</li>
-        <li>Don't share paid-tier picks publicly while your subscription is active.</li>
-        <li>Don't use our API in a way that imposes unreasonable load on our infrastructure.</li>
-      </ul>
-
-      <h2>6. Intellectual property</h2>
-      <p>
-        All model outputs, prediction histories, accuracy aggregates, and
-        UI components are © BetsPlug. Public free picks may be quoted
-        with attribution. The dataset itself remains our property.
-      </p>
-
-      <h2>7. Disclaimer of warranties</h2>
-      <p>
-        BetsPlug is provided "as is". We work hard to keep the engine
-        accurate but make no warranty about uptime, prediction
-        correctness, or fitness for any particular purpose. Your decisions
-        are your own.
-      </p>
-
-      <h2>8. Limitation of liability</h2>
-      <p>
-        To the fullest extent permitted by law, BetsPlug's total
-        liability arising out of your use of the service is limited to
-        the amount you paid us in the twelve months prior to the claim.
-        We are not liable for indirect, incidental, or consequential
-        losses including (but not limited to) gambling losses.
-      </p>
-
-      <h2>9. Governing law</h2>
-      <p>
-        These Terms are governed by Dutch law. Disputes go before the
-        competent courts of the Netherlands, except where overriding
-        consumer-protection law of your country of residence applies.
-      </p>
-
-      <h2>10. Changes to these terms</h2>
-      <p>
-        We may revise these Terms from time to time. Material changes
-        will be notified via the dashboard or by email. Continued use
-        after the effective date counts as acceptance.
-      </p>
-
-      <h2>11. Contact</h2>
-      <p>
-        Questions about these Terms? Email <a href="mailto:hello@betsplug.com"
-          >hello@betsplug.com</a>.
-      </p>
-    </Prose>
-
-    <Footer />
-  </main>
-</Layout>
+<LegalLayout content={content} canonicalPath={canonicalPath}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
+</LegalLayout>

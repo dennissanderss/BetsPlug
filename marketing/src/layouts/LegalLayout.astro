@@ -1,0 +1,78 @@
+---
+/**
+ * LegalLayout — composition for /privacy, /terms, /cookies,
+ * /responsible-gambling. Wraps MarketingLayout (header + footer +
+ * disclaimer) with sticky-sidebar TOC + readable long-form body.
+ *
+ * Slots:
+ *   default  — extra content rendered AFTER section 4 of body, before
+ *              the rest of sections (e.g. helpline list on /responsible-
+ *              gambling). Use the `injectAfterSectionId` prop to
+ *              choose where in the section list the slot is rendered.
+ *   head     — extra <head> entries (schema.org JSON-LD).
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import LegalHero from "@/components/legal/LegalHero.astro";
+import LegalTOC from "@/components/legal/LegalTOC.astro";
+import LegalSection from "@/components/legal/LegalSection.astro";
+import LegalContact from "@/components/legal/LegalContact.astro";
+import type { LegalPageContent } from "@/content/pages/legal/types";
+
+interface Props {
+  content: LegalPageContent;
+  canonicalPath: string;
+  /** Optional id of a section after which to render the `default` slot. */
+  injectAfterSectionId?: string;
+}
+const { content, canonicalPath, injectAfterSectionId } = Astro.props;
+
+const beforeIndex = injectAfterSectionId
+  ? content.sections.findIndex((s) => s.id === injectAfterSectionId)
+  : -1;
+
+const sectionsBefore =
+  beforeIndex >= 0 ? content.sections.slice(0, beforeIndex + 1) : content.sections;
+const sectionsAfter =
+  beforeIndex >= 0 ? content.sections.slice(beforeIndex + 1) : [];
+---
+
+<MarketingLayout
+  title={content.meta.title}
+  description={content.meta.description}
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
+>
+  <Fragment slot="head">
+    <slot name="head" />
+  </Fragment>
+
+  <LegalHero
+    hero={content.hero}
+    meta={{
+      lastUpdated: content._meta.lastUpdated,
+      version: content._meta.version,
+      effectiveDate: content._meta.effectiveDate,
+    }}
+    labels={content.labels}
+  />
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+      <!-- Sticky TOC sidebar (desktop) — collapsible inline (mobile) -->
+      <div class="lg:col-span-3 lg:sticky lg:top-24 lg:self-start">
+        <LegalTOC title={content.labels.tocTitle} sections={content.sections} />
+      </div>
+
+      <!-- Body -->
+      <article class="lg:col-span-9 max-w-3xl text-charcoal-900">
+        {sectionsBefore.map((s) => <LegalSection section={s} />)}
+
+        <slot />
+
+        {sectionsAfter.map((s) => <LegalSection section={s} />)}
+
+        <LegalContact contact={content.contact} heading={content.labels.contactHeading} />
+      </article>
+    </div>
+  </div>
+</MarketingLayout>
