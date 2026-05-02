@@ -1,0 +1,56 @@
+{
+  "_meta": { "translationStatus": "ai-stub-bodies-untranslated", "needsReview": true, "bodyTranslationPending": true, "lastUpdated": "2026-05-02", "_note": "TODO: Body sections still EN. SEO meta, header, intro, keyTakeaways and FAQ localized for hreflang/discovery. Full body translation pending native review." },
+  "meta": {
+    "title": "Bankroll-Management: Lass Varianz Dich Nicht Zerstören | BetsPlug Lernen",
+    "description": "Wie du deine Einsätze dimensionierst, damit kurzfristige Varianz deine langfristigen Ergebnisse nicht zerstört. Das Unit-System, häufige Fehler und Regeln, die wirklich funktionieren.",
+    "ogImage": "/og-images/learn-bankroll-management-de.jpg"
+  },
+  "header": {
+    "h1": "Bankroll-Management: Lass Varianz Dich Nicht Zerstören",
+    "excerpt": "Wie du das Kapital, das du Vorhersagen widmest, verwaltest, damit kurzfristige Varianz keine langfristigen Ergebnisse zerstört.",
+    "readingTime": "8 min Lesezeit",
+    "difficulty": "Anfänger",
+    "category": "Konzepte",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "In Diesem Artikel",
+  "breadcrumbLearn": "Lernen",
+  "intro": "Der größte Grund, warum ernsthafte Vorhersage-Follower scheitern, sind nicht schlechte Picks — es ist schlechtes Bankroll-Management. Jemand mit 55% Trefferquote und durchschnittlicher Quote 1,95 macht langfristig Gewinn, aber nur, wenn er die kurzfristige Varianz überlebt. Dieser Leitfaden erklärt, was eine Bankroll ist, warum Varianz mehr zählt, als die meisten denken, und wie das Unit-System dich vor dir selbst schützt.",
+  "sections": [
+    { "id": "what-is-bankroll", "h2": "Was ist eine Bankroll?", "blocks": [{ "type": "paragraph", "text": "Your bankroll is the dedicated capital you've decided to commit to following predictions. It is not your savings, not your salary, not money you'd miss next week. It is a specific, separate amount of money you've ring-fenced for this purpose. The mental separation matters as much as the financial one." }, { "type": "paragraph", "text": "Two rules before you go further. First, your bankroll must be money you can afford to lose entirely. If losing the whole amount would change your living situation, the bankroll is too large. Second, top-ups are a decision, not a reflex. If your bankroll busts, you don't replenish it instantly with new money. You stop, evaluate what went wrong, and only redeploy fresh capital after you've identified the cause." }, { "type": "h3", "text": "Setting the initial amount" }, { "type": "paragraph", "text": "There's no universal correct number. Common starting points: €100 for casual followers learning the ropes, €500–€1,000 for serious users tracking results, €5,000+ for full-time bettors with a documented edge. Choose an amount where a 30% drawdown wouldn't change your daily life — because 30% drawdowns happen to everyone, including the most successful bettors in the world." }] },
+    { "id": "why-variance", "h2": "Warum Varianz Zählt", "blocks": [{ "type": "paragraph", "text": "Even a positive-expected-value bettor experiences losing streaks. The math says so, and the math doesn't care about how confident you feel. Run a simple simulation: a bettor with a 55% win rate placing 1,000 bets at even money will, on average, win 550 and lose 450 — but they'll also experience at least one streak of 8 consecutive losses about 40% of the time, and at least one streak of 10 consecutive losses about 12% of the time." }, { "type": "paragraph", "text": "A 10-loss streak at 5% bankroll per bet drops you to 60% of starting capital. A 10-loss streak at 10% per bet drops you to 35%. A 10-loss streak at 20% per bet drops you to 11% — close to busted, even though your underlying edge hasn't changed at all. This is why stake sizing dominates results." }] },
+    { "id": "unit-system", "h2": "Das Unit-System", "blocks": [{ "type": "paragraph", "text": "The unit system is the standard solution. You define one \"unit\" as a fixed percentage of your current bankroll — typically between 1% and 5%. Every bet is sized in units, not in absolute money. This auto-scales your stakes: as your bankroll grows, units grow; as it shrinks, units shrink." }, { "type": "h3", "text": "Conservative: 1–2% per bet" }, { "type": "paragraph", "text": "Recommended for most followers, especially when you're new and haven't proven your edge yet. Survives 20+ consecutive losses without busting." }, { "type": "h3", "text": "Standard: 2–3% per bet" }, { "type": "paragraph", "text": "The middle ground. Decent growth rate when winning, manageable drawdowns when losing." }, { "type": "h3", "text": "Aggressive: 3–5% per bet" }, { "type": "paragraph", "text": "Reserved for high-confidence bets only — typically the top 20% of plays in your system. Variance becomes severe at this level." }] },
+    { "id": "rebalancing", "h2": "Unit-Größe Neujustieren", "blocks": [{ "type": "paragraph", "text": "Don't rebalance after every bet — that's overkill and emotionally exhausting. Rebalance after meaningful bankroll changes. A common rule: recalculate unit size whenever your bankroll moves by 25% from the level at which it was last set." }] },
+    { "id": "common-mistakes", "h2": "Häufige Bankroll-Fehler", "blocks": [{ "type": "h3", "text": "Chasing losses" }, { "type": "paragraph", "text": "The single deadliest mistake. After a string of losses, the urge to \"win it back\" by doubling your stake is overwhelming and almost always disastrous." }, { "type": "h3", "text": "Going all-in on \"sure things\"" }, { "type": "paragraph", "text": "There are no sure things in football. A 90%-confidence pick still loses 10% of the time." }, { "type": "h3", "text": "Mixing your bankroll with everyday money" }, { "type": "paragraph", "text": "If your bankroll lives in the same account as your rent and groceries, you'll inevitably blur the line. Use a separate account or tracked spreadsheet." }, { "type": "h3", "text": "Withdrawing winnings too early" }, { "type": "paragraph", "text": "Some bettors withdraw profits after every winning month. This caps your compounding growth." }] }
+  ],
+  "keyTakeaways": {
+    "h3": "Wichtigste Punkte",
+    "items": [
+      "Deine Bankroll muss Kapital sein, das du dir leisten kannst, vollständig zu verlieren — getrennt von Lebenshaltungskosten.",
+      "Varianz ist real: ein positiver-EV Bettor erlebt regelmäßig 8–10 Verlustserien. Dimensionierung für Überleben zählt mehr als für Wachstum.",
+      "Halte dich an ein Unit-System: 1–2% konservativ, 2–3% Standard, 3–5% aggressiv — passe es an deine Erfahrung und Edge an.",
+      "Justiere die Unit-Größe nach jeder 25%-Bankroll-Änderung neu, nicht nach jeder Wette.",
+      "Jage niemals Verlusten nach, indem du Einsätze mitten in einer Session erhöhst. Die Mathematik gewinnt immer; emotionale Dimensionierung verliert immer."
+    ]
+  },
+  "faq": {
+    "h2": "Bankroll-Management FAQ",
+    "questions": [
+      { "q": "Was, wenn ich kostenlose Vorhersagen nutze und keine echte Edge habe?", "a": "Dann gilt Bankroll-Management trotzdem — aber mit kleineren absoluten Beträgen. Behandle die Aktivität als bezahlte Unterhaltung mit Bildungswert statt erwarteter Gewinne. Verwende 1%-Units, erwarte Break-even oder leichte Verluste." },
+      { "q": "Wie verfolge ich meine Bankroll?", "a": "Eine Tabellenkalkulation funktioniert gut. Spalten für Datum, Spiel, Markt, Einsatz (in Units und absolut), Quote, Ergebnis, G/V, laufende Bankroll. Aktualisiere nach jeder Wette." },
+      { "q": "Sollte ich Kelly Criterion statt flacher Units verwenden?", "a": "Kelly ist mathematisch optimal, wenn deine Wahrscheinlichkeitsschätzungen genau sind. In der Praxis sind Schätzungen nicht so genau — Full Kelly überdimensioniert. Half oder Quarter Kelly ist vernünftig für erfahrene Bettors." },
+      { "q": "Was, wenn meine Bankroll bricht?", "a": "Stopp. Zahle für mindestens eine Woche kein frisches Kapital ein. Überprüfe jede Verlustwette — waren die Picks schlecht oder war es Varianz? Wenn Picks schlecht waren, behebe die Quelle. Wenn Varianz, setze mit strikterer Unit-Dimensionierung zurück." }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Verwandte Artikel",
+    "slugs": ["kelly-criterion", "what-is-value-betting", "ai-vs-tipsters"]
+  },
+  "applyThis": {
+    "h2": "Vorhersagen Sind Nur Die Hälfte des Spiels",
+    "body": "Selbst die besten Vorhersagen brauchen disziplinierte Dimensionierung, um sich in langfristige Ergebnisse zu übersetzen. BetsPlug liefert die Vorhersagen; Bankroll-Management liegt bei dir.",
+    "ctaPrimary": { "label": "Heutige Vorhersagen Ansehen", "canonical": "predictions" },
+    "ctaSecondary": { "label": "Pläne Vergleichen", "canonical": "pricing" }
+  }
+}
