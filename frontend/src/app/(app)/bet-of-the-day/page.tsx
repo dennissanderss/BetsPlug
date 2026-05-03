@@ -680,8 +680,10 @@ export default function BetOfTheDayPage() {
             </div>
           )}
 
-          {/* The Pick */}
-          <div className="card-neon card-neon-green halo-green">
+          {/* The Pick — hero card uses the new welcome-card token
+              for a brighter green halo and 24px radius matching the
+              dashboard hero. */}
+          <div className="welcome-card relative overflow-hidden">
             <div className="relative p-8 sm:p-12">
               {/* League + Time */}
               <div className="mb-6 flex items-center justify-center gap-4">

@@ -104,16 +104,16 @@ function KpiCard({ title, value, subtitle, icon: Icon, accent = "blue", highligh
 
   return (
     <div className={cn(
-      "glass-card-hover p-5 space-y-3",
-      highlight && "ring-1 ring-yellow-500/30 border-yellow-500/20"
+      "kpi-card space-y-3",
+      highlight && "!border-[hsl(var(--accent-green)/0.40)]"
     )}>
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">{title}</p>
+        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{title}</p>
         <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg ring-1", a.bg, a.ring)}>
           <Icon className={cn("h-4 w-4", a.icon)} />
         </div>
       </div>
-      <p className="text-2xl font-bold gradient-text tabular-nums">{value}</p>
+      <p className="text-2xl font-bold text-white tabular-nums">{value}</p>
       {subtitle && (
         <p className="text-[11px] text-slate-500 leading-relaxed">{subtitle}</p>
       )}
