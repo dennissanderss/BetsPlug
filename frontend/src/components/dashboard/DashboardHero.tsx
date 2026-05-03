@@ -81,20 +81,17 @@ export function DashboardHero({ tier, todayPickCount }: DashboardHeroProps) {
   const ctaResolved = cta === "dashHero.cta" ? "Explore today's picks" : cta;
 
   return (
-    <div className="card-neon card-neon-green halo-green relative overflow-hidden">
-      {/* Ambient glow blobs — playful, brand-coloured */}
+    <div className="welcome-card relative overflow-hidden">
+      {/* Ambient glow blobs — single soft green wash, no purple
+          accent now (post-2026-05 dashboard redesign keeps the
+          welcome banner monochromatic green). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-20 -left-10 h-72 w-72 rounded-full opacity-50 blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.22), transparent 70%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-16 right-0 h-56 w-56 rounded-full opacity-40 blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.20), transparent 70%)" }}
+        className="pointer-events-none absolute -top-24 -left-16 h-80 w-80 rounded-full opacity-60 blur-3xl"
+        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.28), transparent 70%)" }}
       />
 
-      <div className="relative flex flex-col gap-5 p-5 sm:p-7 md:flex-row md:items-center md:justify-between md:gap-6">
+      <div className="relative flex flex-col gap-5 p-6 sm:p-8 md:flex-row md:items-center md:justify-between md:gap-6">
         <div className="flex items-start gap-4 min-w-0">
           <HexBadge variant="green" size="lg">
             {slot === "morning" ? (

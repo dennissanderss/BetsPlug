@@ -187,7 +187,7 @@ export default function DashboardPage() {
               else lives in the sidebar already. */}
           <Link
             href={lHref("/trackrecord")}
-            className="glass-panel-lifted group flex items-center gap-3 px-4 py-3 transition-all"
+            className="strip-card strip-card-green group"
           >
             <HexBadge variant="green" size="sm" noGlow>
               <ClipboardList className="h-3.5 w-3.5" />
