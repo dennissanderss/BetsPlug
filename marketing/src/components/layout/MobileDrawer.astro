@@ -85,7 +85,6 @@ const groups = mobileNavGroups.map((group) => ({
     class="drawer-panel absolute top-0 right-0 bottom-0 flex flex-col
            w-[min(360px,90vw)] bg-deep-navy-900
            border-l border-white-pure/10 shadow-2xl
-           translate-x-full transition-transform duration-300 ease-out
            overflow-y-auto"
     aria-labelledby="mobile-drawer-title"
   >
@@ -230,6 +229,11 @@ const groups = mobileNavGroups.map((group) => ({
 </div>
 
 <style>
+  .drawer-panel {
+    translate: 100% 0;
+    transition: translate 300ms ease-out;
+  }
+
   .mobile-drawer[data-state="open"] {
     visibility: visible;
     pointer-events: auto;
@@ -238,7 +242,7 @@ const groups = mobileNavGroups.map((group) => ({
     opacity: 1;
   }
   .mobile-drawer[data-state="open"] .drawer-panel {
-    transform: translateX(0);
+    translate: 0 0;
   }
 
   /* Body lock helper — set by the script. */
