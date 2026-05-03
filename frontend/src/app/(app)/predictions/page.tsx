@@ -1583,15 +1583,17 @@ export default function PredictionsPage() {
       </div>
 
       {/* ── View Mode Tabs — Upcoming · Live · Results ──
-           Live is in-page (queries /fixtures/live); Results still redirects
-           to the dedicated /results screen. */}
-      <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
+           Pill-style segmented control with brand-green active state
+           (post-2026-05 redesign). Live tab keeps a red pulse dot
+           because that's the universal "in-play" signal regardless
+           of brand colour. */}
+      <div className="inline-flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1">
         <button
           type="button"
           onClick={() => setViewMode("upcoming")}
-          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+          className={`flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
             viewMode === "upcoming"
-              ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+              ? "bg-[hsl(var(--accent-green))] text-[hsl(234_25%_5%)] shadow-[0_4px_16px_rgba(74,222,128,0.30)]"
               : "text-slate-400 hover:text-slate-200"
           }`}
           aria-pressed={viewMode === "upcoming"}
@@ -1602,25 +1604,25 @@ export default function PredictionsPage() {
         <button
           type="button"
           onClick={() => setViewMode("live")}
-          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+          className={`flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
             viewMode === "live"
-              ? "bg-red-600 text-white shadow-md shadow-red-500/20"
+              ? "bg-[hsl(var(--accent-green))] text-[hsl(234_25%_5%)] shadow-[0_4px_16px_rgba(74,222,128,0.30)]"
               : "text-slate-400 hover:text-slate-200"
           }`}
           aria-pressed={viewMode === "live"}
         >
           <span className="relative flex h-2 w-2">
-            <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${viewMode === "live" ? "bg-white animate-ping" : "bg-red-400 animate-ping"}`} />
-            <span className={`relative inline-flex h-2 w-2 rounded-full ${viewMode === "live" ? "bg-white" : "bg-red-400"}`} />
+            <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 animate-ping" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
           </span>
           <span>{t("pred.live")}</span>
         </button>
         <button
           type="button"
           onClick={() => setViewMode("results")}
-          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+          className={`flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
             viewMode === "results"
-              ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
+              ? "bg-[hsl(var(--accent-green))] text-[hsl(234_25%_5%)] shadow-[0_4px_16px_rgba(74,222,128,0.30)]"
               : "text-slate-400 hover:text-slate-200"
           }`}
           aria-pressed={viewMode === "results"}
