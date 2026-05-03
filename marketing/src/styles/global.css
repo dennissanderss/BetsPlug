@@ -61,12 +61,25 @@ body {
 
 /* ──────────────────────────────────────────────────────────────
    Default focus ring — WCAG 2.1 AA
+   Show focus ring only on keyboard focus (:focus-visible). On
+   mobile, tap-triggered :focus would otherwise leave a sticky
+   green outline since touch devices have no mouseleave.
    ────────────────────────────────────────────────────────────── */
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
 
 *:focus-visible {
   outline: 2px solid var(--color-pitch-green-500);
   outline-offset: var(--focus-ring-offset);
   border-radius: 2px;
+}
+
+/* Suppress the grey iOS/Android tap-flash on every interactive
+   element. Component hover/active styles already convey feedback. */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ──────────────────────────────────────────────────────────────

@@ -1,0 +1,312 @@
+---
+/**
+ * AnnouncementBar — slim, action-oriented strip above the header.
+ *
+ * Behaviour:
+ *   - Whole bar links to /predictions (locale-aware via getLocalizedPath).
+ *   - Dismiss "X" hides the bar for the current browser session
+ *     (sessionStorage, keyed by data-announcement-id).
+ *   - Not sticky — scrolls away with the page so the sticky Header
+ *     becomes the chrome on scroll.
+ *
+ * Copy is intentionally short (mobile shows a 4-word version), and
+ * the strings are scoped to this component because they're not
+ * shared with Header / Footer / Drawer like navLabels are.
+ *
+ * Bump `data-announcement-id` whenever the copy changes — that
+ * resets dismissals so a new message reaches users who dismissed
+ * the previous one.
+ */
+import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
+import { getLocalizedPath } from "@/i18n/slug-mappings";
+import Icon from "@/components/ui/Icon.astro";
+
+interface Props {
+  locale?: Locale;
+}
+
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale =
+  Astro.props.locale ?? (isLocale(localsLocale) ? localsLocale : defaultLocale);
+
+interface Strings {
+  desktop: string;
+  mobile: string;
+  cta: string;
+  dismiss: string;
+}
+
+const strings: Record<Locale, Strings> = {
+  en: {
+    desktop:
+      "Today's free picks: 5 predictions across Premier League, La Liga & Bundesliga",
+    mobile: "5 free picks today",
+    cta: "View now",
+    dismiss: "Dismiss announcement",
+  },
+  nl: {
+    desktop:
+      "Gratis picks vandaag: 5 voorspellingen voor Premier League, La Liga & Bundesliga",
+    mobile: "5 gratis picks vandaag",
+    cta: "Bekijk nu",
+    dismiss: "Melding sluiten",
+  },
+  de: {
+    desktop:
+      "Heutige kostenlose Picks: 5 Vorhersagen für Premier League, La Liga & Bundesliga",
+    mobile: "5 kostenlose Picks heute",
+    cta: "Jetzt ansehen",
+    dismiss: "Hinweis schließen",
+  },
+  fr: {
+    desktop:
+      "Picks gratuits du jour : 5 pronostics Premier League, La Liga & Bundesliga",
+    mobile: "5 picks gratuits aujourd'hui",
+    cta: "Voir maintenant",
+    dismiss: "Fermer l'annonce",
+  },
+  es: {
+    desktop:
+      "Picks gratis de hoy: 5 pronósticos de Premier League, La Liga y Bundesliga",
+    mobile: "5 picks gratis hoy",
+    cta: "Ver ahora",
+    dismiss: "Cerrar aviso",
+  },
+  it: {
+    desktop:
+      "Pick gratuiti di oggi: 5 pronostici Premier League, La Liga & Bundesliga",
+    mobile: "5 pick gratuiti oggi",
+    cta: "Vedi ora",
+    dismiss: "Chiudi annuncio",
+  },
+};
+
+const t = strings[locale];
+const predictionsHref = getLocalizedPath("predictions", locale);
+---
+
+<div
+  class="announcement-bar"
+  data-announcement-bar
+  data-announcement-id="free-picks-v1"
+>
+  <div class="announcement-content">
+    <a href={predictionsHref} class="announcement-link-wrap">
+      <span class="announcement-icon" aria-hidden="true">
+        <Icon name="zap" size={14} />
+      </span>
+
+      <span class="announcement-text announcement-text--desktop">
+        {t.desktop}
+      </span>
+      <span class="announcement-text announcement-text--mobile">
+        {t.mobile}
+      </span>
+
+      <span class="announcement-cta">
+        <span class="announcement-cta-text">{t.cta}</span>
+        <Icon name="chevron-right" size={14} />
+      </span>
+    </a>
+
+    <button
+      type="button"
+      class="announcement-dismiss"
+      aria-label={t.dismiss}
+      data-announcement-dismiss
+    >
+      <Icon name="x" size={14} />
+    </button>
+  </div>
+</div>
+
+<style>
+  .announcement-bar {
+    position: relative;
+    z-index: 41;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(0, 210, 106, 0.12),
+        rgba(0, 210, 106, 0.06),
+        rgba(0, 210, 106, 0.12)
+      );
+    border-bottom: 1px solid rgba(0, 210, 106, 0.16);
+    color: var(--color-white-soft);
+    font-size: 0.8125rem;
+    overflow: hidden;
+  }
+
+  .announcement-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 36px;
+  }
+
+  .announcement-link-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 150ms;
+    min-width: 0;
+  }
+
+  .announcement-link-wrap:hover {
+    color: var(--color-white-pure);
+  }
+
+  .announcement-link-wrap:hover .announcement-cta {
+    color: var(--color-pitch-green-400);
+    gap: 0.375rem;
+  }
+
+  .announcement-link-wrap:focus-visible {
+    outline: 2px solid var(--color-pitch-green-400);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .announcement-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-pitch-green-500);
+    flex-shrink: 0;
+  }
+
+  .announcement-text {
+    color: var(--color-white-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .announcement-text--mobile {
+    display: none;
+  }
+
+  .announcement-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-pitch-green-500);
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 150ms ease-out;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+  }
+
+  .announcement-cta-text {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(0, 210, 106, 0.3);
+  }
+
+  .announcement-link-wrap:hover .announcement-cta-text {
+    text-decoration-color: var(--color-pitch-green-400);
+  }
+
+  .announcement-dismiss {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    color: var(--color-white-muted);
+    cursor: pointer;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 150ms;
+  }
+
+  .announcement-dismiss:hover {
+    color: var(--color-white-pure);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .announcement-dismiss:focus-visible {
+    outline: 2px solid var(--color-pitch-green-400);
+    outline-offset: 2px;
+  }
+
+  /* Mobile: switch to short text + tighter padding */
+  @media (max-width: 768px) {
+    .announcement-bar {
+      font-size: 0.75rem;
+    }
+
+    .announcement-content {
+      padding: 0.5rem 0.75rem;
+      min-height: 32px;
+    }
+
+    .announcement-text--desktop {
+      display: none;
+    }
+
+    .announcement-text--mobile {
+      display: inline;
+    }
+
+    .announcement-link-wrap {
+      gap: 0.375rem;
+    }
+
+    .announcement-cta {
+      margin-left: 0.25rem;
+    }
+  }
+
+  /* Hidden state — set by the dismiss script */
+  .announcement-bar[data-state="dismissed"] {
+    display: none;
+  }
+</style>
+
+<script>
+  (() => {
+    const bar = document.querySelector<HTMLElement>("[data-announcement-bar]");
+    if (!bar) return;
+
+    const dismissBtn = bar.querySelector<HTMLButtonElement>(
+      "[data-announcement-dismiss]",
+    );
+    const announcementId = bar.getAttribute("data-announcement-id") ?? "v1";
+    const storageKey = `announcement-dismissed-${announcementId}`;
+
+    // Restore dismissed state for this session before paint where
+    // possible. Wrapped in try/catch — sessionStorage can throw in
+    // private-mode Safari.
+    try {
+      if (sessionStorage.getItem(storageKey) === "true") {
+        bar.setAttribute("data-state", "dismissed");
+      }
+    } catch {
+      /* sessionStorage unavailable — render the bar normally */
+    }
+
+    dismissBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      bar.setAttribute("data-state", "dismissed");
+      try {
+        sessionStorage.setItem(storageKey, "true");
+      } catch {
+        /* ignore — fallback is in-memory only for this page view */
+      }
+    });
+  })();
+</script>
