@@ -52,15 +52,13 @@ const EMPTY_HUB: HubResponse = {
   lastUpdated: new Date().toISOString(),
 };
 
-export async function loadHubData(siteOrigin: URL | undefined): Promise<HubResponse> {
-  try {
-    const url = new URL("/api/predictions/hub.json", siteOrigin ?? "http://localhost:4321");
-    const res = await fetch(url);
-    if (!res.ok) return EMPTY_HUB;
-    return (await res.json()) as HubResponse;
-  } catch {
-    return EMPTY_HUB;
-  }
+export async function loadHubData(_siteOrigin: URL | undefined): Promise<HubResponse> {
+  // Direct import keeps SSG deterministic — fetching `Astro.site` at
+  // build time silently resolved to the live origin and used the
+  // previous deploy's shape. The `_siteOrigin` arg is kept so
+  // callers don't need to change.
+  const { HUB_RESPONSE } = await import("./hub-mock");
+  return HUB_RESPONSE;
 }
 
 /** Format today's date in the locale's BCP-47. */

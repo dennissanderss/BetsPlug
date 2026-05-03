@@ -22,6 +22,78 @@ DEFAULT MODE: MIXED LIGHT/DARK
 - Conversion sections: DARK
 - Final CTA strips: DARK
 
+SECTION VARIANTS (visual rhythm)
+
+To break the monotony of strict light/dark alternation, the
+`<Section>` component supports gradient + pattern variants on top of
+the base surfaces. They live in `--gradient-section-*` tokens
+(tokens.css) and only ever combine existing colours; no new palette
+entries.
+
+Dark family:
+- `dark`               base deep-navy-900
+- `dark-glow`          subtle pitch-green radial glow on a navy gradient
+- `dark-corner-accent` pitch-green corner radial in the top-right
+- `dark-charcoal`      vertical charcoal-700 → deep-navy-900 gradient
+- `hero` / `conversion` (existing — radial / linear navy gradients)
+
+Light family:
+- `light`              base stadium-white-50
+- `light-soft`         vertical stadium-white-50 → -100 gradient
+- `light-grid`         white surface with a 40px charcoal-3% grid
+
+Apply 4-5 different variants per page so consecutive sections never
+share the same surface. Choose the variant by section purpose, not
+decoration: `dark-glow` for live data (live predictions, FAQ on dark
+pages), `dark-corner-accent` for proof / authority sections,
+`dark-charcoal` for pricing / methodology preview, `light-grid` for
+data-dense surfaces (track-record, league grids), `light-soft` for
+narrative / FAQ surfaces.
+
+ICON SYSTEM
+
+`<Icon name="…">` renders inline Lucide-style SVGs without an npm
+dependency. Icon names live in `src/components/ui/icon-types.ts`;
+paths in `Icon.astro`'s `ICONS` map. Default 24×24 viewBox, stroke 2,
+round caps, colour from `currentColor`.
+
+`<USPItem>` is the canonical replacement for raw ✓/✗ checkmarks in
+hero trust strips, feature lists, and comparison tables. Variants:
+`positive` (pitch-green tint), `negative` (danger tint), `neutral`
+(charcoal). Pass `surface="dark"` inside dark sections so the label
+contrast inverts.
+
+Recommended USP → icon mapping:
+- Locked / before-kickoff       → lock
+- Public / track record         → eye
+- Not a bookmaker               → shield-check
+- Live updates / real-time      → zap
+- 30+ leagues                   → globe
+- 40+ variables / data ingest   → database
+- Methodology / open source     → book-open
+- Reproducible / branching      → git-compare / git-branch
+- Cancel anytime                → settings
+- No hidden fees                → receipt
+- 7-day money-back              → badge-check
+- Telegram alerts               → send / message-circle
+- Email digest                  → mail
+- High-confidence picks         → award
+
+CLUB LOGOS (match cards)
+
+`<TeamLogo team={…} size="sm|md|lg">` renders the real club crest
+when `team.logoUrl` is set, otherwise falls back to a coloured
+`<PlaceholderShield>` monogram. Colours come from
+`src/config/teams.ts`; unknown teams resolve to a charcoal fallback.
+
+The PredictionCard's left edge picks up the home team's primary
+colour as a 3px border accent — strong visual tie to the team
+without overpowering the dark surface palette.
+
+TODO: real `logoUrl` values arrive once the API-Football integration
+on app.betsplug.com is wired up. The component contract doesn't
+change; flipping logos is a pure data update.
+
 ═══════════════════════════════════════════════════════
 COLOR TOKENS
 ═══════════════════════════════════════════════════════

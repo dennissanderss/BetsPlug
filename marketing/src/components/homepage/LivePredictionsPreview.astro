@@ -6,11 +6,16 @@
  * Server-side fetch of 5 mock predictions at build/request time, plus
  * client-side polling every 30s to refresh in-place. ISR target is
  * revalidate=60 (TODO once moved to SSR/hybrid output mode).
+ *
+ * Cards are rendered through the shared PredictionCard so the
+ * homepage and the predictions hub stay visually identical.
  */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
+import PredictionCard from "@/components/predictions/PredictionCard.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { HOMEPAGE_SAMPLE } from "@/lib/predictions-mock";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
 interface Props {
@@ -20,44 +25,34 @@ interface Props {
 
 const { locale, content } = Astro.props;
 
-// Server-side fetch — relative URL works because Astro resolves
-// against the current site origin during SSG/SSR.
-// TODO: replace with real API call to app.betsplug.com/api/predictions/today
-type Prediction = {
-  id: string;
-  league: string;
-  leagueLogo: string;
-  kickoff: string;
-  homeTeam: { name: string; logo: string };
-  awayTeam: { name: string; logo: string };
-  prediction: string;
-  confidence: number;
-  locked: boolean;
-  matchUrl: string;
-};
-
-let initialPredictions: Prediction[] = [];
-try {
-  // Inline import keeps SSG static — at runtime in dev/build, Astro
-  // resolves /api/* endpoints from the same origin.
-  const res = await fetch(new URL("/api/predictions/homepage-sample.json", Astro.site ?? "http://localhost:4321"));
-  if (res.ok) {
-    initialPredictions = (await res.json()) as Prediction[];
-  }
-} catch {
-  // Fallback handled at render time via skeleton
-}
+// Direct import (no fetch) keeps SSG deterministic. The 30s client
+// polling loop below still hits /api/predictions/homepage-sample.json
+// for runtime updates once the real backend is wired up.
+const initialPredictions = HOMEPAGE_SAMPLE;
 
 const ctaPrimaryHref = getLocalizedPath(content.ctaSection.ctaPrimary.canonical, locale);
 
-// Render-time helpers — keep ternary in template free of inline comments
-// or Array.from() (Astro's JSX parser dislikes both inside expressions).
 const skeletonSlots = [0, 1, 2, 3, 4];
 const visiblePredictions = initialPredictions.slice(0, 5);
 const showSkeleton = visiblePredictions.length === 0;
+
+// Localised labels for the shared PredictionCard. The homepage content
+// JSON only has a subset of the predictions-hub label set, so we pad
+// with sensible English defaults — translators can override per-locale
+// once these strings move into homepage content.
+const cardLabels = {
+  locked: content.lockedLabel,
+  freePick: "Free pick",
+  unlock: "Unlock prediction",
+  subscribeToView: "Subscribe to view prediction",
+  viewAnalysis: "View match analysis",
+  confidence: "Confidence",
+  lockedBeforeKickoff: "Locked before kickoff",
+  viewPricing: "View pricing",
+};
 ---
 
-<Section surface="dark" spacing="lg" ariaLabelledby="live-predictions-h2" glow>
+<Section surface="dark-glow" spacing="lg" ariaLabelledby="live-predictions-h2">
   <Container size="xl">
     <header class="max-w-2xl">
       <div class="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-pitch-green-400">
@@ -79,7 +74,6 @@ const showSkeleton = visiblePredictions.length === 0;
       </p>
     </header>
 
-    <!-- Card grid: horizontal scroll on mobile, equal grid on desktop -->
     <div
       id="live-predictions-grid"
       class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
@@ -88,75 +82,26 @@ const showSkeleton = visiblePredictions.length === 0;
       data-error-label={content.errorLabel}
     >
       {showSkeleton && skeletonSlots.map(() => (
-        <div class="rounded-xl border border-deep-navy-600 bg-charcoal-700/50 p-5 animate-pulse h-[260px]">
-          <div class="h-3 w-20 rounded bg-charcoal-700"></div>
-          <div class="mt-6 space-y-3">
-            <div class="h-4 w-3/4 rounded bg-charcoal-700"></div>
-            <div class="h-4 w-2/3 rounded bg-charcoal-700"></div>
-          </div>
-          <div class="mt-8 h-2 w-full rounded bg-charcoal-700"></div>
-        </div>
+        <PredictionCard variant="skeleton" locale={locale} labels={cardLabels} />
       ))}
       {!showSkeleton && visiblePredictions.map((p) => (
-          <article
-            class="group relative rounded-xl border border-deep-navy-600 bg-charcoal-700
-                   p-5 transition-all duration-200 hover:border-pitch-green-500/40
-                   hover:shadow-[var(--shadow-lg)] hover:-translate-y-0.5"
-            data-prediction-id={p.id}
-          >
-            <a
-              href={p.matchUrl}
-              class="absolute inset-0 rounded-xl
-                     focus-visible:outline-none focus-visible:ring-2
-                     focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
-                     focus-visible:ring-offset-deep-navy-900"
-              aria-label={`${p.homeTeam.name} vs ${p.awayTeam.name} prediction`}
-            ></a>
-
-            <!-- League badge -->
-            <div class="flex items-center justify-between text-xs">
-              <span class="inline-flex items-center gap-1.5 font-semibold text-white-soft">
-                <span class="h-1.5 w-1.5 rounded-full bg-pitch-green-500"></span>
-                {p.league}
-              </span>
-              <span class="font-mono text-white-muted">{p.kickoff}</span>
-            </div>
-
-            <!-- Teams -->
-            <div class="mt-4 space-y-2">
-              <p class="text-sm font-semibold text-white-pure truncate">{p.homeTeam.name}</p>
-              <p class="text-sm font-semibold text-white-pure truncate">{p.awayTeam.name}</p>
-            </div>
-
-            <!-- Prediction -->
-            <p class="mt-5 text-base font-bold text-pitch-green-400">{p.prediction}</p>
-
-            <!-- Confidence bar -->
-            <div class="mt-3">
-              <div class="flex items-center justify-between text-xs">
-                <span class="text-white-muted">Confidence</span>
-                <span class="font-mono font-semibold text-white-pure">{p.confidence}%</span>
-              </div>
-              <div class="mt-1.5 h-1.5 rounded-full bg-deep-navy-900 overflow-hidden">
-                <div
-                  class="h-full rounded-full bg-pitch-green-500"
-                  style={`width: ${Math.min(100, Math.max(0, p.confidence))}%;`}
-                ></div>
-              </div>
-            </div>
-
-            <!-- Lock indicator -->
-            <div class="mt-4 inline-flex items-center gap-1 text-xs text-white-muted">
-              <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M10 1a4 4 0 00-4 4v3H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zm2 7V5a2 2 0 10-4 0v3h4z" clip-rule="evenodd" />
-              </svg>
-              {content.lockedLabel}
-            </div>
-          </article>
+        <PredictionCard
+          variant="free"
+          locale={locale}
+          league={p.league}
+          kickoff={p.kickoff}
+          homeTeam={p.homeTeam}
+          awayTeam={p.awayTeam}
+          prediction={p.prediction}
+          market={p.market}
+          confidence={p.confidence}
+          matchUrl={p.matchUrl}
+          labels={cardLabels}
+        />
       ))}
     </div>
 
-    <!-- CTA strip below cards -->
+    {/* CTA strip below cards */}
     <div class="mt-12 rounded-2xl border border-deep-navy-600 bg-deep-navy-800 p-8 lg:p-10 text-center">
       <h3 class="text-2xl sm:text-3xl font-bold text-white-pure">
         {content.ctaSection.h3}
@@ -189,7 +134,6 @@ const showSkeleton = visiblePredictions.length === 0;
 
 <script>
   // Client-side polling — refresh predictions every 30s.
-  // Vanilla JS, no framework runtime.
   (function () {
     const grid = document.getElementById("live-predictions-grid");
     const liveSecondsEl = document.querySelector("[data-live-seconds]");
@@ -197,7 +141,6 @@ const showSkeleton = visiblePredictions.length === 0;
 
     let lastFetch = Date.now();
 
-    // Update "Xs ago" counter every second
     setInterval(() => {
       const seconds = Math.floor((Date.now() - lastFetch) / 1000);
       liveSecondsEl.textContent = String(seconds);
@@ -213,10 +156,6 @@ const showSkeleton = visiblePredictions.length === 0;
         const data = await res.json();
         if (!Array.isArray(data) || data.length === 0) return;
         lastFetch = Date.now();
-        // Best-effort DOM probe: confirm the prediction-id is still
-        // mounted. Full rerender skipped to avoid layout shift —
-        // polling here is informational, the homepage is a marketing
-        // surface, not a live trading screen.
         for (const p of data) {
           grid.querySelector(`[data-prediction-id="${p.id}"]`);
         }
@@ -225,7 +164,6 @@ const showSkeleton = visiblePredictions.length === 0;
       }
     }
 
-    // Poll every 30s
     setInterval(refresh, 30_000);
   })();
 </script>

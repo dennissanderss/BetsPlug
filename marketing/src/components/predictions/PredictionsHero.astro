@@ -6,9 +6,13 @@
  */
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
+import USPItem from "@/components/ui/USPItem.astro";
+import type { IconName } from "@/components/ui/icon-types";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { localeBcp47 } from "@/i18n/locales";
 import type { PredictionsHubContent } from "@/content/pages/predictions/types";
+
+const TRUST_ICONS: IconName[] = ["zap", "lock", "eye"];
 
 interface Props {
   locale: Locale;
@@ -86,13 +90,15 @@ const colorMap: Record<number, string> = {
           {content.subheadline}
         </p>
 
-        <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white-soft">
-          {content.trustStrip.map((item) => (
-            <li class="inline-flex items-center gap-2">
-              <svg class="h-4 w-4 text-pitch-green-400 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-              </svg>
-              {item}
+        <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+          {content.trustStrip.map((item, i) => (
+            <li>
+              <USPItem
+                icon={TRUST_ICONS[i] ?? "check"}
+                text={item}
+                size="sm"
+                surface="dark"
+              />
             </li>
           ))}
         </ul>

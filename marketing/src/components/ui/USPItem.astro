@@ -1,0 +1,56 @@
+---
+/**
+ * USPItem — labelled icon row, used everywhere a checkmark used to
+ * sit (hero trust strips, feature lists, comparison tables).
+ *
+ * Variants:
+ *   - "positive"   pitch-green tint   (default — affirmative claim)
+ *   - "negative"   danger red tint    (negative claim, e.g. "no hidden fees")
+ *   - "neutral"    charcoal tint      (informational, no value judgment)
+ *
+ * Surface (light/dark) toggles the text colour so the same row reads
+ * on either background. Pass `surface="dark"` inside dark sections.
+ */
+import Icon from "@/components/ui/Icon.astro";
+import type { IconName } from "@/components/ui/icon-types";
+
+interface Props {
+  icon: IconName;
+  text: string;
+  variant?: "positive" | "negative" | "neutral";
+  size?: "sm" | "md" | "lg";
+  surface?: "light" | "dark";
+  class?: string;
+}
+
+const {
+  icon,
+  text,
+  variant = "positive",
+  size = "md",
+  surface = "light",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const sizeMap = {
+  sm: { wrap: "h-7 w-7 rounded-md",  iconPx: 14, text: "text-sm" },
+  md: { wrap: "h-8 w-8 rounded-lg",  iconPx: 16, text: "text-base" },
+  lg: { wrap: "h-10 w-10 rounded-xl", iconPx: 20, text: "text-lg" },
+} as const;
+
+const variantWrap = {
+  positive: "bg-pitch-green-500/15 text-pitch-green-500",
+  negative: "bg-[rgba(220,38,38,0.12)] text-[#dc2626]",
+  neutral:  "bg-[rgba(91,100,120,0.15)] text-charcoal-700",
+} as const;
+
+const textColour = surface === "dark" ? "text-white-soft" : "text-charcoal-900";
+const { wrap, iconPx, text: textSize } = sizeMap[size];
+---
+
+<div class={`inline-flex items-center gap-2.5 ${textSize} ${textColour} ${extraClass}`}>
+  <span class={`inline-flex items-center justify-center shrink-0 ${wrap} ${variantWrap[variant]}`}>
+    <Icon name={icon} size={iconPx} />
+  </span>
+  <span class="font-medium">{text}</span>
+</div>

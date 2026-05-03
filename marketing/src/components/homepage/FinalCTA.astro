@@ -9,8 +9,12 @@
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
+import USPItem from "@/components/ui/USPItem.astro";
+import type { IconName } from "@/components/ui/icon-types";
 import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
+
+const TRUST_ICONS: IconName[] = ["receipt", "settings", "badge-check"];
 
 interface Props {
   content: HomepageContent["finalCta"];
@@ -63,13 +67,15 @@ const { content } = Astro.props;
         </Button>
       </div>
 
-      <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white-soft">
-        {content.trustSignals.map((signal) => (
-          <li class="inline-flex items-center gap-2">
-            <svg class="h-4 w-4 text-pitch-green-400 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            {signal}
+      <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm">
+        {content.trustSignals.map((signal, i) => (
+          <li>
+            <USPItem
+              icon={TRUST_ICONS[i] ?? "check"}
+              text={signal}
+              size="sm"
+              surface="dark"
+            />
           </li>
         ))}
       </ul>

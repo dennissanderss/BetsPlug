@@ -4,14 +4,19 @@
  * surface, optional ambient glow blob, and consistent vertical
  * spacing. Wrap content in a <Container> for max-width control.
  *
- * See docs/specs/04-design-system.md → "DEFAULT MODE: MIXED LIGHT/DARK"
- * and "SPACING SYSTEM".
+ * See docs/specs/04-design-system.md → "DEFAULT MODE: MIXED LIGHT/DARK",
+ * "SECTION VARIANTS" and "SPACING SYSTEM".
  *
- * @prop {"dark"|"light"|"hero"|"conversion"=}  surface  Default "light".
- *   - "light"      → stadium-white-50 + charcoal-900 text
- *   - "dark"       → deep-navy-900 + white-soft text
- *   - "hero"       → radial gradient (deep-navy-700 → deep-navy-950)
- *   - "conversion" → linear gradient (deep-navy-800 → deep-navy-950)
+ * @prop {Surface=}  surface  Default "light".
+ *   - "light"               → stadium-white-50 + charcoal-900 text
+ *   - "light-soft"          → soft white-on-white gradient
+ *   - "light-grid"          → white with subtle 40px grid overlay
+ *   - "dark"                → deep-navy-900 + white-soft text
+ *   - "dark-glow"           → dark gradient with low-intensity green glow
+ *   - "dark-corner-accent"  → deep-navy with pitch-green corner radial
+ *   - "dark-charcoal"       → vertical charcoal gradient (varied dark)
+ *   - "hero"                → radial gradient (deep-navy-700 → deep-navy-950)
+ *   - "conversion"          → linear gradient (deep-navy-800 → deep-navy-950)
  * @prop {"sm"|"md"|"lg"|"xl"=}  spacing  Vertical padding. Default "lg".
  * @prop {boolean=}              glow     Adds a pitch-green ambient blob in the top-right.
  * @prop {"section"|"div"|"article"|"aside"=} as  Default "section".
@@ -20,7 +25,16 @@
  *
  * Slot: default — section content.
  */
-type Surface = "light" | "dark" | "hero" | "conversion";
+type Surface =
+  | "light"
+  | "light-soft"
+  | "light-grid"
+  | "dark"
+  | "dark-glow"
+  | "dark-corner-accent"
+  | "dark-charcoal"
+  | "hero"
+  | "conversion";
 type Spacing = "sm" | "md" | "lg" | "xl";
 type Tag     = "section" | "div" | "article" | "aside";
 
@@ -42,15 +56,19 @@ const {
   ariaLabelledby,
 } = Astro.props as Props;
 
+// Light/dark text colour comes with the surface; gradient surfaces
+// rely on the same colour group (light family vs dark family) so
+// children that use text-charcoal-* / text-white-* keep working.
 const surfaceClasses: Record<Surface, string> = {
-  light:
-    "bg-stadium-white-50 text-charcoal-900",
-  dark:
-    "bg-deep-navy-900 text-white-soft",
-  hero:
-    "text-white-soft [background:var(--gradient-hero-dark)]",
-  conversion:
-    "text-white-soft [background:var(--gradient-conversion)]",
+  light:               "bg-stadium-white-50 text-charcoal-900",
+  "light-soft":        "section-light-soft text-charcoal-900",
+  "light-grid":        "section-light-grid text-charcoal-900",
+  dark:                "bg-deep-navy-900 text-white-soft",
+  "dark-glow":         "section-dark-glow text-white-soft",
+  "dark-corner-accent":"section-dark-corner-accent text-white-soft",
+  "dark-charcoal":     "section-dark-charcoal text-white-soft",
+  hero:                "text-white-soft [background:var(--gradient-hero-dark)]",
+  conversion:          "text-white-soft [background:var(--gradient-conversion)]",
 };
 
 // 04-design-system → SPACING (mobile-first):
@@ -82,3 +100,23 @@ const cls = [
     <slot />
   </div>
 </Tag>
+
+<style>
+  .section-light-soft {
+    background: var(--gradient-section-soft);
+  }
+  .section-light-grid {
+    background-color: var(--gradient-section-grid-light);
+    background-image: var(--pattern-section-grid-light);
+    background-size: 40px 40px;
+  }
+  .section-dark-glow {
+    background: var(--gradient-section-glow);
+  }
+  .section-dark-corner-accent {
+    background: var(--gradient-section-corner-accent);
+  }
+  .section-dark-charcoal {
+    background: var(--gradient-section-charcoal);
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+/**
+ * PlaceholderShield — SVG monogram shield used as the team-logo
+ * fallback whenever a real logo URL isn't yet wired up via the
+ * API-Football integration. Picks a 1- or 2-letter monogram from the
+ * team name (skipping noise tokens like "FC", "AC", "RB").
+ */
+interface Props {
+  teamName: string;
+  primaryColor: string;
+  secondaryColor?: string;
+  size?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const {
+  teamName,
+  primaryColor,
+  secondaryColor = "#FFFFFF",
+  size = "md",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+// Tokens that are noise rather than name; "Munich"/"City"/"United" are
+// kept because they're part of the recognisable monogram (MC, MU).
+const NOISE = new Set(["FC", "AC", "RB", "AS", "AFC", "CF", "VfB", "FK"]);
+
+const monogram =
+  teamName
+    .split(/\s+/)
+    .filter((word) => !NOISE.has(word) && word.length > 1)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase() || teamName.slice(0, 2).toUpperCase();
+
+const dimensions: Record<NonNullable<Props["size"]>, { box: number; font: number }> = {
+  sm: { box: 32, font: 11 },
+  md: { box: 48, font: 16 },
+  lg: { box: 64, font: 22 },
+};
+
+const { box, font } = dimensions[size];
+---
+
+<svg
+  width={box}
+  height={box}
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label={`${teamName} placeholder logo`}
+  class={extraClass}
+>
+  <path
+    d="M32 4 L56 14 L56 36 Q56 50 32 60 Q8 50 8 36 L8 14 Z"
+    fill={primaryColor}
+    stroke={secondaryColor}
+    stroke-width="2"
+  />
+  <text
+    x="32"
+    y="40"
+    text-anchor="middle"
+    font-family="Geist Variable, Geist, system-ui, sans-serif"
+    font-weight="700"
+    font-size={font}
+    fill={secondaryColor}
+  >
+    {monogram}
+  </text>
+</svg>

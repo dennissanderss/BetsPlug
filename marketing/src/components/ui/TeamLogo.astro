@@ -1,0 +1,58 @@
+---
+/**
+ * TeamLogo — render the real club crest when we have a logoUrl, else
+ * fall back to a coloured PlaceholderShield monogram.
+ *
+ * Real logos arrive once the API-Football integration on
+ * app.betsplug.com is wired up — until then every render uses the
+ * placeholder. The component is API-shape-stable, so flipping in real
+ * URLs is a pure data change.
+ *
+ * Pass either a full team object (preferred — gives colours) or a
+ * minimal `{ name, slug, logoUrl }`. We resolve colours from the
+ * teams config when slug or name matches; otherwise charcoal fallback.
+ */
+import PlaceholderShield from "@/components/ui/PlaceholderShield.astro";
+import { getTeamColors } from "@/config/teams";
+
+interface TeamProp {
+  name: string;
+  slug?: string;
+  logoUrl?: string;
+  colors?: { primary: string; secondary: string };
+}
+
+interface Props {
+  team: TeamProp;
+  size?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const { team, size = "md", class: extraClass = "" } = Astro.props as Props;
+
+const dimensions = { sm: 32, md: 48, lg: 64 } as const;
+const px = dimensions[size];
+
+const colors = team.colors ?? getTeamColors(team.slug, team.name);
+---
+
+{team.logoUrl ? (
+  <img
+    src={team.logoUrl}
+    alt={`${team.name} logo`}
+    width={px}
+    height={px}
+    loading="lazy"
+    decoding="async"
+    class={`object-contain ${extraClass}`}
+    style={`width:${px}px;height:${px}px;`}
+  />
+) : (
+  <PlaceholderShield
+    teamName={team.name}
+    primaryColor={colors.primary}
+    secondaryColor={colors.secondary}
+    size={size}
+    class={extraClass}
+  />
+)}
