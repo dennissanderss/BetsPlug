@@ -42,19 +42,24 @@ body {
 
 .skip-to-content {
   position: absolute;
-  top: -40px;
+  top: 16px;
   left: 16px;
+  /* Hide above the viewport using a transform so the box is always
+     100% above itself, regardless of computed line-height. A fixed
+     `top: -40px` left a 1-4px green sliver visible at the page top
+     because the rendered box was taller than 40px. */
+  transform: translateY(calc(-100% - 16px));
   background: var(--color-pitch-green-500);
   color: var(--color-deep-navy-950);
   padding: 0.5rem 1rem;
   border-radius: var(--radius-md);
   font-weight: 600;
   z-index: 100;
-  transition: top var(--motion-fast) var(--ease-out);
+  transition: transform var(--motion-fast, 150ms) var(--ease-out, ease-out);
 }
 
 .skip-to-content:focus {
-  top: 16px;
+  transform: translateY(0);
   outline: 2px solid var(--color-white-pure);
   outline-offset: 2px;
 }
