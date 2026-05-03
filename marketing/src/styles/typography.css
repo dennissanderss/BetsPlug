@@ -8,10 +8,9 @@
    font-display: optional so it never blocks first paint — it's
    only used for stat blocks.
 
-   Geist renders ~1 weight-step heavier than Inter at the same
-   numeric weight, so headings drop from 700 → 600 to keep the
-   visual rhythm consistent. Letter-spacing is tightened slightly
-   to match Geist's wider glyphs.
+   Headings (H1-H3) are 700 for prominence; H4 stays at 600 as a
+   subhead step. Letter-spacing is tightened slightly to match
+   Geist's wider glyphs.
    ────────────────────────────────────────────────────────────── */
 
 @import "@fontsource-variable/geist/index.css";
@@ -34,7 +33,7 @@ html {
 h1 {
   font-size: 36px;
   line-height: 1.1;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.025em;
 }
 @media (min-width: 768px) {
@@ -48,7 +47,7 @@ h1 {
 h2 {
   font-size: 28px;
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 @media (min-width: 768px) {
@@ -62,7 +61,7 @@ h2 {
 h3 {
   font-size: 22px;
   line-height: 1.3;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.015em;
 }
 @media (min-width: 768px) {

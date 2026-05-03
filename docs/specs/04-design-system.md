@@ -168,8 +168,8 @@ WEIGHTS
 
 - 400: body text
 - 500: labels, small UI
-- 600: subheadings, CTAs, headings (Geist renders ~1 step heavier
-  than Inter at the same numeric weight, so headings are 600, not 700)
+- 600: H4 subheads, CTAs
+- 700: H1 / H2 / H3 headings (prominence over the body baseline)
 
 CASING — sentence case across the board
 
@@ -203,17 +203,17 @@ H2's, or every section H2 — that turns the accent into decoration.
 TYPE SCALE
 
 H1 (hero):
-- Mobile: 36px / line-height 1.1 / weight 600 / letter-spacing -0.025em
+- Mobile: 36px / line-height 1.1 / weight 700 / letter-spacing -0.025em
 - Tablet: 48px / line-height 1.05
 - Desktop: 64px / line-height 1.0
 
 H2 (section):
-- Mobile: 28px / line-height 1.2 / weight 600 / letter-spacing -0.02em
+- Mobile: 28px / line-height 1.2 / weight 700 / letter-spacing -0.02em
 - Tablet: 36px
 - Desktop: 44px
 
 H3 (subsection):
-- Mobile: 22px / line-height 1.3 / weight 600 / letter-spacing -0.015em
+- Mobile: 22px / line-height 1.3 / weight 700 / letter-spacing -0.015em
 - Tablet: 26px
 - Desktop: 28px
 
