@@ -100,12 +100,13 @@ const homeHref = locale === defaultLocale ? "/" : `/${locale}/`;
 
     <!-- Right cluster ───────────────────────────────────────── -->
     <div class="flex items-center gap-2">
-      <LocaleSwitcher
-        currentLocale={locale}
-        versions={localeVersions}
-        surface="dark"
-        class="hidden lg:block"
-      />
+      <div class="hidden lg:block">
+        <LocaleSwitcher
+          currentLocale={locale}
+          versions={localeVersions}
+          surface="dark"
+        />
+      </div>
 
       <a
         href={headerActions.login.href}
@@ -126,7 +127,6 @@ const homeHref = locale === defaultLocale ? "/" : `/${locale}/`;
         size="sm"
         surface="dark"
         external
-        class="hidden lg:inline-flex"
       >
         {t.getFreePicks}
       </Button>
