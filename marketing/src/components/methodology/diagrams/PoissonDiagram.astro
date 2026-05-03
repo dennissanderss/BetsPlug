@@ -55,7 +55,7 @@ const yScale = (p: number) => padT + plotH - (p / yMax) * plotH;
       {[0, 0.1, 0.2, 0.3, 0.4].map((p) => (
         <g>
           <line x1={padL} y1={yScale(p)} x2={padL + plotW} y2={yScale(p)} stroke={muted} stroke-opacity="0.15"/>
-          <text x={padL - 8} y={yScale(p) + 4} font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end" fill={muted}>{p.toFixed(1)}</text>
+          <text x={padL - 8} y={yScale(p) + 4} font-family="Geist Mono, ui-monospace, monospace" font-size="10" text-anchor="end" fill={muted}>{p.toFixed(1)}</text>
         </g>
       ))}
       <text x={padL - 30} y={padT + plotH / 2} font-family="Inter, sans-serif" font-size="11" font-weight="600" fill={muted} transform={`rotate(-90 ${padL - 30} ${padT + plotH / 2})`}>P(goals)</text>
@@ -63,7 +63,7 @@ const yScale = (p: number) => padT + plotH - (p / yMax) * plotH;
       <!-- X axis -->
       <line x1={padL} y1={padT + plotH} x2={padL + plotW} y2={padT + plotH} stroke={muted} stroke-width="1"/>
       {homePoints.map(({ k }) => (
-        <text x={xScale(k)} y={padT + plotH + 18} font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" fill={muted}>{k}</text>
+        <text x={xScale(k)} y={padT + plotH + 18} font-family="Geist Mono, ui-monospace, monospace" font-size="11" text-anchor="middle" fill={muted}>{k}</text>
       ))}
       <text x={padL + plotW / 2} y={padT + plotH + 42} font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" fill={muted}>Goals scored</text>
 

@@ -1,14 +1,21 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Pronostici Eredivisie Oggi | IA | BetsPlug",
+    "title": "Pronostici Eredivisie oggi | IA | BetsPlug",
     "description": "Pronostici IA Eredivisie per ogni partita. Ajax, PSV, Feyenoord e il resto — analizzati con Elo + Poisson + ML.",
     "ogImage": "/og-images/league-eredivisie-it.jpg"
   },
   "hero": {
     "h1": "Pronostici Eredivisie",
     "subheadline": "Pronostici IA per ogni partita di Eredivisie. Generati con classifiche Elo, modelli Poisson e machine learning. Bloccati prima del calcio d'inizio.",
-    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Come funziona",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "Sui pronostici Eredivisie",
@@ -17,32 +24,67 @@
       "L'Eredivisie è uno dei campionati più ricchi di gol d'Europa — ben oltre 3,0 gol per partita di media — paragonabile alla Bundesliga. L'enfasi sul calcio offensivo rende i mercati gol (Over 2,5, BTTS) portatori di forti segnali predittivi. Il nostro layer Poisson è calibrato sull'ambiente di scoring elevato del calcio olandese.",
       "Ogni pronostico Eredivisie viene bloccato con un timestamp pubblico prima del calcio d'inizio. I pronostici Eredivisie sono parte di tutti i piani a pagamento."
     ],
-    "statsPanel": { "h3": "Eredivisie a colpo d'occhio", "ctaLabel": "Vedi Eredivisie nell'app" }
+    "statsPanel": {
+      "h3": "Eredivisie a colpo d'occhio",
+      "ctaLabel": "Vedi Eredivisie nell'app"
+    }
   },
-  "topTeams": { "h2": "Top squadre Eredivisie" },
+  "topTeams": {
+    "h2": "Top squadre Eredivisie"
+  },
   "methodology": {
     "h2": "Come vengono creati i pronostici Eredivisie",
     "body": "I pronostici Eredivisie usano lo stesso motore, con modelli Poisson calibrati sull'alto tasso di scoring.",
-    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+    "cta": {
+      "label": "Leggi metodologia completa",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Pronostici Eredivisie",
+    "h2": "FAQ pronostici Eredivisie",
     "questions": [
-      { "q": "Quanto sono accurati i pronostici IA Eredivisie?", "a": "L'accuratezza varia. Pubblichiamo ogni pronostico nel nostro track record pubblico." },
-      { "q": "Perché i pronostici Eredivisie sono solo a pagamento?", "a": "I pronostici gratuiti sono limitati ai 3 campionati top." },
-      { "q": "Quali tipi di pronostici per l'Eredivisie?", "a": "Mercati multipli con enfasi sui mercati gol dato l'alto scoring." },
-      { "q": "Quando sono disponibili i pronostici?", "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio." },
-      { "q": "Coprite la KNVB Beker?", "a": "Copriamo tutte le partite di Eredivisie. KNVB Beker non è nella nostra copertura standard." },
-      { "q": "Pronostici Eredivisie via Telegram?", "a": "Sì, per gli abbonati paganti." }
+      {
+        "q": "Quanto sono accurati i pronostici IA Eredivisie?",
+        "a": "L'accuratezza varia. Pubblichiamo ogni pronostico nel nostro track record pubblico."
+      },
+      {
+        "q": "Perché i pronostici Eredivisie sono solo a pagamento?",
+        "a": "I pronostici gratuiti sono limitati ai 3 campionati top."
+      },
+      {
+        "q": "Quali tipi di pronostici per l'Eredivisie?",
+        "a": "Mercati multipli con enfasi sui mercati gol dato l'alto scoring."
+      },
+      {
+        "q": "Quando sono disponibili i pronostici?",
+        "a": "Gli abbonati vedono i pronostici fino a 24h prima del calcio d'inizio."
+      },
+      {
+        "q": "Coprite la KNVB-beker?",
+        "a": "Copriamo tutte le partite di Eredivisie. KNVB Beker non è nella nostra copertura standard."
+      },
+      {
+        "q": "Pronostici Eredivisie via Telegram?",
+        "a": "Sì, per gli abbonati paganti."
+      }
     ],
-    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+    "cta": {
+      "label": "Tutte le FAQ",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Vuoi tutti i pronostici Eredivisie?",
     "h2Gated": "Sblocca i pronostici Eredivisie",
     "bodyFree": "Gli abbonati hanno ogni partita con analisi completa.",
     "bodyGated": "I pronostici Eredivisie sono inclusi in tutti i piani a pagamento.",
-    "ctaPrimary": { "label": "Vedi Prezzi", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Prova Gratis", "href": "https://app.betsplug.com/register?source=league_eredivisie" }
+    "ctaPrimary": {
+      "label": "Vedi Prezzi",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Prova Gratis",
+      "href": "https://app.betsplug.com/register?source=league_eredivisie"
+    }
   }
 }

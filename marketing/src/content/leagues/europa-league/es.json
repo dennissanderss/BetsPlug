@@ -1,5 +1,9 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
     "title": "Pronósticos Europa League | IA | BetsPlug",
     "description": "Pronósticos IA UEFA Europa League para cada partido. Fase de liga hasta eliminatorias — analizados con Elo + Poisson + ML.",
@@ -8,7 +12,10 @@
   "hero": {
     "h1": "Pronósticos Europa League",
     "subheadline": "Pronósticos IA para cada partido de la UEFA Europa League. Generados con puntuaciones Elo, modelos Poisson y machine learning. Bloqueados antes del inicio.",
-    "ctaSecondary": { "label": "Cómo funciona", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Cómo funciona",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "Sobre los pronósticos de Europa League",
@@ -17,32 +24,67 @@
       "Los pronósticos de Europa League presentan un desafío diferente al de Champions League: la brecha competitiva es a menudo más pequeña, pero la volatilidad de alineaciones es más alta. Muchos participantes tratan la Europa League como prioridad secundaria. Nuestro modelo tiene en cuenta la ponderación de forma nacional y la probabilidad de rotación esperada.",
       "Cada pronóstico de Europa League se bloquea con marca de tiempo pública antes del inicio. Los pronósticos de Europa League son parte de todos los planes de pago."
     ],
-    "statsPanel": { "h3": "Europa League de un vistazo", "ctaLabel": "Ver Europa League en la app" }
+    "statsPanel": {
+      "h3": "Europa League de un vistazo",
+      "ctaLabel": "Ver Europa League en la app"
+    }
   },
-  "topTeams": { "h2": "Mejores clubes Europa League" },
+  "topTeams": {
+    "h2": "Mejores clubes Europa League"
+  },
   "methodology": {
     "h2": "Cómo se crean los pronósticos de Europa League",
     "body": "Los pronósticos de Europa League utilizan el mismo motor principal, con calibración para tasas de rotación más altas y niveles competitivos variados.",
-    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+    "cta": {
+      "label": "Leer metodología completa",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Pronósticos Europa League",
+    "h2": "FAQ pronósticos Europa League",
     "questions": [
-      { "q": "¿Qué tan precisos son los pronósticos IA Europa League?", "a": "La precisión varía con los patrones de rotación. Publicamos cada pronóstico en nuestro historial público." },
-      { "q": "¿Por qué los pronósticos Europa League son solo de pago?", "a": "Los pronósticos gratuitos están limitados a las 3 ligas nacionales principales." },
-      { "q": "¿Cómo gestiona el modelo los clubes que rotan fuertemente?", "a": "Nuestra capa ML pondera la posición en tabla nacional para estimar las alineaciones probables." },
-      { "q": "¿Cuándo están disponibles los pronósticos?", "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio." },
-      { "q": "¿Cubren la Conference League?", "a": "Cubrimos Champions League y Europa League. Conference League no está en nuestra cobertura estándar." },
-      { "q": "¿Pronósticos Europa League vía Telegram?", "a": "Sí, para suscriptores de pago." }
+      {
+        "q": "¿Qué tan precisos son los pronósticos IA Europa League?",
+        "a": "La precisión varía con los patrones de rotación. Publicamos cada pronóstico en nuestro historial público."
+      },
+      {
+        "q": "¿Por qué los pronósticos Europa League son solo de pago?",
+        "a": "Los pronósticos gratuitos están limitados a las 3 ligas nacionales principales."
+      },
+      {
+        "q": "¿Cómo gestiona el modelo los clubes que rotan fuertemente?",
+        "a": "Nuestra capa ML pondera la posición en tabla nacional para estimar las alineaciones probables."
+      },
+      {
+        "q": "¿Cuándo están disponibles los pronósticos?",
+        "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio."
+      },
+      {
+        "q": "¿Cubren la conference League?",
+        "a": "Cubrimos Champions League y Europa League. Conference League no está en nuestra cobertura estándar."
+      },
+      {
+        "q": "¿Pronósticos Europa League vía Telegram?",
+        "a": "Sí, para suscriptores de pago."
+      }
     ],
-    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Todas las FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "¿Quieres todos los pronósticos Europa League?",
     "h2Gated": "Desbloquea los pronósticos Europa League",
     "bodyFree": "Los suscriptores tienen cada partido con análisis completo.",
     "bodyGated": "Los pronósticos de Europa League están incluidos en todos los planes de pago.",
-    "ctaPrimary": { "label": "Ver Precios", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Probar Gratis", "href": "https://app.betsplug.com/register?source=league_europa-league" }
+    "ctaPrimary": {
+      "label": "Ver Precios",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Probar Gratis",
+      "href": "https://app.betsplug.com/register?source=league_europa-league"
+    }
   }
 }

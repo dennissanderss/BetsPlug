@@ -19,6 +19,7 @@ import BetTypesFAQ       from "@/components/bet-types/BetTypesFAQ.astro";
 import BetTypesFinalCTA  from "@/components/bet-types/BetTypesFinalCTA.astro";
 
 import { loadBetTypesContent } from "@/lib/bet-types-page";
+import { stripAccent } from "@/lib/parseAccent";
 
 const locale = "en" as const;
 const content = await loadBetTypesContent(locale);
@@ -28,7 +29,7 @@ const canonicalPath = "/bet-types";
 
 const techArticleSchema = {
   "@context": "https://schema.org", "@type": "TechArticle",
-  headline: content.hero.h1, description: content.meta.description,
+  headline: stripAccent(content.hero.h1), description: content.meta.description,
   author: { "@type": "Organization", name: "BetsPlug" },
   publisher: { "@type": "Organization", name: "BetsPlug", logo: { "@type": "ImageObject", url: `${SITE}/logo.webp` } },
   datePublished: "2026-04-15", dateModified: content._meta.lastUpdated,

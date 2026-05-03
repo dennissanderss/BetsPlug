@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
-    "@fontsource-variable/inter": "^5.2.8",
-    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.7",
     "@portabletext/to-html": "^5.0.2",
     "@sanity/client": "^7.22.0",
     "@tailwindcss/vite": "^4.2.4",

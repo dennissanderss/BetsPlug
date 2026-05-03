@@ -1,5 +1,9 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
     "title": "Europa League Vorhersagen | KI-Gestützt | BetsPlug",
     "description": "KI-gestützte UEFA Europa League-Vorhersagen für jedes Spiel. Liga-Phase bis K.-o. — analysiert mit Elo + Poisson + ML.",
@@ -8,7 +12,10 @@
   "hero": {
     "h1": "Europa League Vorhersagen",
     "subheadline": "KI-gestützte Vorhersagen für jedes UEFA Europa League-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
-    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "So funktioniert's",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "Über Europa League Vorhersagen",
@@ -17,32 +24,67 @@
       "Europa League-Vorhersagen stellen eine andere Herausforderung dar als Champions League: Die Wettbewerbslücke zwischen Liga-Phasen-Gegnern ist oft kleiner, aber Aufstellungs-Volatilität ist höher. Viele Teilnehmer behandeln Europa League als sekundäre Priorität — Clubs mit starken nationalen Saisons rotieren häufig stark für europäische Wochen. Unser Modell berücksichtigt nationale Form-Gewichtung, erwartete Rotations-Wahrscheinlichkeit und Donnerstag-Abend-Spiel-Müdigkeitsmuster.",
       "Jede Europa League-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Europa League-Vorhersagen sind Teil aller bezahlten Pläne."
     ],
-    "statsPanel": { "h3": "Europa League auf einen Blick", "ctaLabel": "Europa League in App ansehen" }
+    "statsPanel": {
+      "h3": "Europa League auf einen Blick",
+      "ctaLabel": "Europa League in App ansehen"
+    }
   },
-  "topTeams": { "h2": "Top Europa League Clubs" },
+  "topTeams": {
+    "h2": "Top Europa League Clubs"
+  },
   "methodology": {
-    "h2": "Wie Europa League Vorhersagen Erstellt Werden",
+    "h2": "Wie Europa League Vorhersagen erstellt werden",
     "body": "Europa League-Vorhersagen verwenden dieselbe Kern-Engine wie unsere nationalen Vorhersagen, mit Kalibrierung für höhere Rotationsraten und gemischte Wettbewerbsstärken.",
-    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+    "cta": {
+      "label": "Vollständige Methodik lesen",
+      "canonical": "methodology"
+    }
   },
   "faq": {
     "h2": "Europa League Vorhersagen FAQ",
     "questions": [
-      { "q": "Wie genau sind KI-Vorhersagen für die Europa League?", "a": "Genauigkeit variiert mit Rotationsmustern als Varianzquelle. Wir veröffentlichen jede Vorhersage in unserem öffentlichen Track Record." },
-      { "q": "Warum sind Europa League-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf die nationalen Top-3-Ligen beschränkt." },
-      { "q": "Wie behandelt das Modell stark rotierende Clubs?", "a": "Unsere ML-Schicht gewichtet nationale Tabellenposition und aktuelle Rotationsmuster, um wahrscheinliche Startaufstellungen zu schätzen." },
-      { "q": "Wie früh sind Europa League-Vorhersagen verfügbar?", "a": "Abonnenten sehen Europa League-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
-      { "q": "Deckt ihr Conference League-Spiele ab?", "a": "Derzeit decken wir Champions League und Europa League ab. Conference League ist nicht in unserer Standard-Abdeckung." },
-      { "q": "Kann ich Europa League-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Vorhersagen." }
+      {
+        "q": "Wie genau sind KI-Vorhersagen für die Europa League?",
+        "a": "Genauigkeit variiert mit Rotationsmustern als Varianzquelle. Wir veröffentlichen jede Vorhersage in unserem öffentlichen Track Record."
+      },
+      {
+        "q": "Warum sind Europa League-Vorhersagen nur kostenpflichtig?",
+        "a": "Kostenlose Vorhersagen sind auf die nationalen Top-3-Ligen beschränkt."
+      },
+      {
+        "q": "Wie behandelt das Modell stark rotierende Clubs?",
+        "a": "Unsere ML-Schicht gewichtet nationale Tabellenposition und aktuelle Rotationsmuster, um wahrscheinliche Startaufstellungen zu schätzen."
+      },
+      {
+        "q": "Wie früh sind Europa League-Vorhersagen verfügbar?",
+        "a": "Abonnenten sehen Europa League-Vorhersagen bis zu 24 Stunden vor Anpfiff."
+      },
+      {
+        "q": "Deckt ihr Conference League-Spiele ab?",
+        "a": "Derzeit decken wir Champions League und Europa League ab. Conference League ist nicht in unserer Standard-Abdeckung."
+      },
+      {
+        "q": "Kann ich Europa League-Vorhersagen über Telegram erhalten?",
+        "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Vorhersagen."
+      }
     ],
-    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Alle FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Willst du alle Europa League Vorhersagen?",
     "h2Gated": "Europa League Vorhersagen Freischalten",
     "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
     "bodyGated": "Europa League-Vorhersagen sind Teil aller bezahlten Pläne.",
-    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_europa-league" }
+    "ctaPrimary": {
+      "label": "Preise ansehen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Kostenlos testen",
+      "href": "https://app.betsplug.com/register?source=league_europa-league"
+    }
   }
 }

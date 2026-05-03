@@ -1,12 +1,17 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json." },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json."
+  },
   "meta": {
-    "title": "Poisson Goal-Modellen voor Voetbalvoorspellingen | BetsPlug Leren",
+    "title": "Poisson goal-modellen voor voetbalvoorspellingen | BetsPlug leren",
     "description": "Hoe Poisson-distributies wiskundig voetbalscores voorspellen. Lambda-berekening, score-waarschijnlijkheidsmatrix, Dixon-Coles aanpassing en beperkingen.",
     "ogImage": "/og-images/learn-poisson-nl.jpg"
   },
   "header": {
-    "h1": "Poisson Goal-Modellen: Voetbalscores Wiskundig Voorspellen",
+    "h1": "Poisson goal-modellen: voetbalscores wiskundig voorspellen",
     "excerpt": "De wiskundige distributie die de waarschijnlijkheid van specifieke wedstrijdscores voorspelt op basis van aanvallende en verdedigende ratios.",
     "readingTime": "12 min lezen",
     "difficulty": "Gemiddeld",
@@ -20,97 +25,190 @@
   "sections": [
     {
       "id": "what-is-poisson",
-      "h2": "Wat is de Poisson-Distributie?",
+      "h2": "Wat is de Poisson-distributie?",
       "blocks": [
-        { "type": "paragraph", "text": "De Poisson-distributie beschrijft de waarschijnlijkheid van een gegeven aantal onafhankelijke gebeurtenissen die in een vast interval voorkomen, wanneer die gebeurtenissen plaatsvinden bij een bekend constant gemiddeld tempo. Oorspronkelijk afgeleid door Siméon Denis Poisson in 1837 om jury-uitspraken te modelleren, vond het praktisch gebruik in alles van radioactief verval tot call-center aankomsten tot honkbal home runs." },
-        { "type": "paragraph", "text": "De formule gebruikt één parameter, lambda (λ), die het verwachte aantal gebeurtenissen in het interval representeert. Voer lambda en een doelaantal k in, en je krijgt de waarschijnlijkheid van precies k gebeurtenissen." },
-        { "type": "formula", "latex": "P(k) = \\dfrac{\\lambda^{k} e^{-\\lambda}}{k!}", "caption": "Poisson kansmassa-functie: waarschijnlijkheid van precies k gebeurtenissen gegeven verwachte rate lambda." },
-        { "type": "paragraph", "text": "Wat Poisson nuttig maakt voor voetbal: het geeft je de waarschijnlijkheid van elke score-uitkomst, niet alleen het verwachte totaal. Lambda 1,5 voorspelt niet alleen \"ongeveer 1,5 goals\" — het geeft je P(0 goals), P(1 goal), P(2 goals), enzovoort, optellend tot 100%. Die gedetailleerde distributie is wat elke Poisson-gebaseerde voorspelling aandrijft." }
+        {
+          "type": "paragraph",
+          "text": "De Poisson-distributie beschrijft de waarschijnlijkheid van een gegeven aantal onafhankelijke gebeurtenissen die in een vast interval voorkomen, wanneer die gebeurtenissen plaatsvinden bij een bekend constant gemiddeld tempo. Oorspronkelijk afgeleid door Siméon Denis Poisson in 1837 om jury-uitspraken te modelleren, vond het praktisch gebruik in alles van radioactief verval tot call-center aankomsten tot honkbal home runs."
+        },
+        {
+          "type": "paragraph",
+          "text": "De formule gebruikt één parameter, lambda (λ), die het verwachte aantal gebeurtenissen in het interval representeert. Voer lambda en een doelaantal k in, en je krijgt de waarschijnlijkheid van precies k gebeurtenissen."
+        },
+        {
+          "type": "formula",
+          "latex": "P(k) = \\dfrac{\\lambda^{k} e^{-\\lambda}}{k!}",
+          "caption": "Poisson kansmassa-functie: waarschijnlijkheid van precies k gebeurtenissen gegeven verwachte rate lambda."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wat Poisson nuttig maakt voor voetbal: het geeft je de waarschijnlijkheid van elke score-uitkomst, niet alleen het verwachte totaal. Lambda 1,5 voorspelt niet alleen \"ongeveer 1,5 goals\" — het geeft je P(0 goals), P(1 goal), P(2 goals), enzovoort, optellend tot 100%. Die gedetailleerde distributie is wat elke Poisson-gebaseerde voorspelling aandrijft."
+        }
       ]
     },
     {
       "id": "applying-football",
-      "h2": "Poisson Toepassen op Voetbal",
+      "h2": "Poisson toepassen op voetbal",
       "blocks": [
-        { "type": "paragraph", "text": "Om een voetbalwedstrijd te voorspellen met Poisson heb je twee lambdas nodig: thuisteams verwachte goals (λH) en uitteams verwachte goals (λA). Elk is een functie van aanvalskracht, defensieve zwakte van tegenstander, thuisvoordeel, recente vorm en context-factoren." },
-        { "type": "h3", "text": "Lambda berekenen" },
-        { "type": "paragraph", "text": "De simpelste versie: λH = thuis_aanval × uit_defensie × thuisvoordeel. \"Thuis-aanval\" is het gemiddelde aantal goals dat het team thuis scoort, genormaliseerd tegen competitiegemiddelde. \"Uit-defensie\" is het gemiddelde aantal goals dat de tegenstander uit toelaat, soortgelijk genormaliseerd. Thuisvoordeel voegt een kleine vermenigvuldiger toe (typisch 1,1–1,3) die de consistente edge weerspiegelt die thuisteams hebben." },
-        { "type": "paragraph", "text": "Meer geavanceerde versies voeden Elo-ratings, recente xG-trends, opstelling-sterkte schattingen en rustdag-aanpassingen in de lambda-berekening. Moderne engines mengen veel bronnen om één lambda per kant te produceren." },
-        { "type": "diagram", "name": "poisson-distribution", "caption": "Twee Poisson-distributies: thuisteam met λ=2,4 (groen) en uitteam met λ=0,9 (blauw)." }
+        {
+          "type": "paragraph",
+          "text": "Om een voetbalwedstrijd te voorspellen met Poisson heb je twee lambdas nodig: thuisteams verwachte goals (λH) en uitteams verwachte goals (λA). Elk is een functie van aanvalskracht, defensieve zwakte van tegenstander, thuisvoordeel, recente vorm en context-factoren."
+        },
+        {
+          "type": "h3",
+          "text": "Lambda berekenen"
+        },
+        {
+          "type": "paragraph",
+          "text": "De simpelste versie: λH = thuis_aanval × uit_defensie × thuisvoordeel. \"Thuis-aanval\" is het gemiddelde aantal goals dat het team thuis scoort, genormaliseerd tegen competitiegemiddelde. \"Uit-defensie\" is het gemiddelde aantal goals dat de tegenstander uit toelaat, soortgelijk genormaliseerd. Thuisvoordeel voegt een kleine vermenigvuldiger toe (typisch 1,1–1,3) die de consistente edge weerspiegelt die thuisteams hebben."
+        },
+        {
+          "type": "paragraph",
+          "text": "Meer geavanceerde versies voeden Elo-ratings, recente xG-trends, opstelling-sterkte schattingen en rustdag-aanpassingen in de lambda-berekening. Moderne engines mengen veel bronnen om één lambda per kant te produceren."
+        },
+        {
+          "type": "diagram",
+          "name": "poisson-distribution",
+          "caption": "Twee Poisson-distributies: thuisteam met λ=2,4 (groen) en uitteam met λ=0,9 (blauw)."
+        }
       ]
     },
     {
       "id": "score-probabilities",
-      "h2": "Score-Waarschijnlijkheden Berekenen",
+      "h2": "Score-waarschijnlijkheden berekenen",
       "blocks": [
-        { "type": "paragraph", "text": "Eenmaal je λH en λA hebt, is de gezamenlijke waarschijnlijkheid van een specifieke score (h goals thuis, a goals uit) het product van de twee individuele Poisson-waarschijnlijkheden — uitgaande van onafhankelijkheid tussen thuis en uit scoren (een vereenvoudiging die we zullen herbezoeken)." },
-        { "type": "h3", "text": "De waarschijnlijkheidsmatrix" },
-        { "type": "paragraph", "text": "Bereken P(h) voor h = 0, 1, 2, 3, 4, 5+ met λH. Bereken P(a) voor a = 0, 1, 2, 3, 4, 5+ met λA. Vermenigvuldig elke combinatie om de gezamenlijke waarschijnlijkheid voor elke score te krijgen. Het resultaat is een 6×6 matrix (of groter), waarbij elke cel de waarschijnlijkheid van die exacte eindstand toont." },
-        { "type": "example", "label": "Uitgewerkt voorbeeld", "body": "Bayern München (λH = 2,4) vs Eintracht Frankfurt (λA = 0,9). Pure Poisson geeft: P(2-1) = (e^-2,4 × 2,4²/2!) × (e^-0,9 × 0,9¹/1!) = 0,2613 × 0,3659 = 0,0956 (~9,6%). Meest waarschijnlijke individuele scores: 2-1 (~9,6%), 2-0 (~10,6%), 1-0 (~5,3%), 3-0 (~7,0%). Sommeer de thuiswinst-cellen voor P(thuiswinst); sommeer cellen waar thuis + uit ≥ 3 voor P(Over 2,5); sommeer cellen waar zowel thuis > 0 EN uit > 0 voor P(BTTS Ja)." }
+        {
+          "type": "paragraph",
+          "text": "Eenmaal je λH en λA hebt, is de gezamenlijke waarschijnlijkheid van een specifieke score (h goals thuis, a goals uit) het product van de twee individuele Poisson-waarschijnlijkheden — uitgaande van onafhankelijkheid tussen thuis en uit scoren (een vereenvoudiging die we zullen herbezoeken)."
+        },
+        {
+          "type": "h3",
+          "text": "De waarschijnlijkheidsmatrix"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bereken P(h) voor h = 0, 1, 2, 3, 4, 5+ met λH. Bereken P(a) voor a = 0, 1, 2, 3, 4, 5+ met λA. Vermenigvuldig elke combinatie om de gezamenlijke waarschijnlijkheid voor elke score te krijgen. Het resultaat is een 6×6 matrix (of groter), waarbij elke cel de waarschijnlijkheid van die exacte eindstand toont."
+        },
+        {
+          "type": "example",
+          "label": "Uitgewerkt voorbeeld",
+          "body": "Bayern München (λH = 2,4) vs Eintracht Frankfurt (λA = 0,9). Pure Poisson geeft: P(2-1) = (e^-2,4 × 2,4²/2!) × (e^-0,9 × 0,9¹/1!) = 0,2613 × 0,3659 = 0,0956 (~9,6%). Meest waarschijnlijke individuele scores: 2-1 (~9,6%), 2-0 (~10,6%), 1-0 (~5,3%), 3-0 (~7,0%). Sommeer de thuiswinst-cellen voor P(thuiswinst); sommeer cellen waar thuis + uit ≥ 3 voor P(Over 2,5); sommeer cellen waar zowel thuis > 0 EN uit > 0 voor P(BTTS Ja)."
+        }
       ]
     },
     {
       "id": "deriving-markets",
-      "h2": "Markt-Waarschijnlijkheden Afleiden",
+      "h2": "Markt-waarschijnlijkheden afleiden",
       "blocks": [
-        { "type": "paragraph", "text": "Eenmaal de waarschijnlijkheidsmatrix is opgebouwd, reduceert elke voetbalmarkt tot het sommeren van de juiste cellen." },
-        { "type": "h3", "text": "1X2 (wedstrijdresultaat)" },
-        { "type": "paragraph", "text": "P(thuiswinst) = som van alle cellen waar h > a. P(gelijk) = som van cellen waar h = a. P(uitwinst) = som van cellen waar h < a. De drie waarden moeten optellen tot 100%, wat een sanity-check op de berekening biedt." },
-        { "type": "h3", "text": "Over/Under goals" },
-        { "type": "paragraph", "text": "P(Over 2,5) = som van alle cellen waar h + a > 2 (d.w.z. totaal goals = 3, 4, 5, ...). P(Under 2,5) is het complement. Dezelfde logica werkt voor 1,5, 3,5 of elke drempel." },
-        { "type": "h3", "text": "Beide Teams Scoren" },
-        { "type": "paragraph", "text": "P(BTTS Ja) = som van alle cellen waar h ≥ 1 EN a ≥ 1. P(BTTS Nee) is het complement. Deze markt hangt gevoelig af van hoe dicht bij nul elke lambda is — een wedstrijd met één sterk team en één zeer defensief team heeft lage BTTS-waarschijnlijkheid zelfs als totaalgoals hoog zijn." },
-        { "type": "h3", "text": "Exacte score" },
-        { "type": "paragraph", "text": "De Poisson-matrix geeft je de waarschijnlijkheid van elke exacte score direct. Meest waarschijnlijke score is de cel met de hoogste waarschijnlijkheid (typisch 1-1 in evenwichtige wedstrijden, 1-0 of 2-1 met één favoriet). Maar \"meest waarschijnlijk\" is zelden boven 12% — exacte scores zijn intrinsiek lage-waarschijnlijkheid gebeurtenissen." }
+        {
+          "type": "paragraph",
+          "text": "Eenmaal de waarschijnlijkheidsmatrix is opgebouwd, reduceert elke voetbalmarkt tot het sommeren van de juiste cellen."
+        },
+        {
+          "type": "h3",
+          "text": "1X2 (wedstrijdresultaat)"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(thuiswinst) = som van alle cellen waar h > a. P(gelijk) = som van cellen waar h = a. P(uitwinst) = som van cellen waar h < a. De drie waarden moeten optellen tot 100%, wat een sanity-check op de berekening biedt."
+        },
+        {
+          "type": "h3",
+          "text": "Over/Under goals"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(Over 2,5) = som van alle cellen waar h + a > 2 (d.w.z. totaal goals = 3, 4, 5, ...). P(Under 2,5) is het complement. Dezelfde logica werkt voor 1,5, 3,5 of elke drempel."
+        },
+        {
+          "type": "h3",
+          "text": "Beide Teams Scoren"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(BTTS Ja) = som van alle cellen waar h ≥ 1 EN a ≥ 1. P(BTTS Nee) is het complement. Deze markt hangt gevoelig af van hoe dicht bij nul elke lambda is — een wedstrijd met één sterk team en één zeer defensief team heeft lage BTTS-waarschijnlijkheid zelfs als totaalgoals hoog zijn."
+        },
+        {
+          "type": "h3",
+          "text": "Exacte score"
+        },
+        {
+          "type": "paragraph",
+          "text": "De Poisson-matrix geeft je de waarschijnlijkheid van elke exacte score direct. Meest waarschijnlijke score is de cel met de hoogste waarschijnlijkheid (typisch 1-1 in evenwichtige wedstrijden, 1-0 of 2-1 met één favoriet). Maar \"meest waarschijnlijk\" is zelden boven 12% — exacte scores zijn intrinsiek lage-waarschijnlijkheid gebeurtenissen."
+        }
       ]
     },
     {
       "id": "dixon-coles",
-      "h2": "De Dixon-Coles Aanpassing",
+      "h2": "De dixon-coles aanpassing",
       "blocks": [
-        { "type": "paragraph", "text": "Pure Poisson heeft een bekende zwakte in voetbal: het onderschat de waarschijnlijkheid van laagscorende gelijke spellen en overschat 0-0 vs 1-0 ratio's. Echte voetbaldata toont meer 0-0, 1-1 gelijke spellen, en iets minder 1-0 / 0-1 resultaten dan pure Poisson voorspelt. De reden is dat goal-gebeurtenissen niet perfect onafhankelijk zijn — wanneer één team nipt voorstaat, neigen beide teams conservatiever te spelen, wat verdere goals onderdrukt." },
-        { "type": "paragraph", "text": "Mark Dixon en Stuart Coles publiceerden een fix in 1997 — nu bekend als de Dixon-Coles aanpassing. Ze voegden een parameter (tau) toe die expliciet de waarschijnlijkheid van 0-0, 1-0, 0-1 en 1-1 resultaten opblaast, gekalibreerd tegen echte wedstrijduitkomsten. Moderne Poisson-gebaseerde voorspellings-systemen gebruiken Dixon-Coles of soortgelijke verfijningen als standaard." },
-        { "type": "paragraph", "text": "De Dixon-Coles correctie verzwakt ook iets als er een grote favoriet is (een 4,0-vs-0,4 lambda-matchup gedraagt zich meer als pure Poisson omdat het leidende team niet gemotiveerd is om een 1-0 voorsprong te verdedigen — ze jagen op meer goals). Geavanceerde implementaties mengen tau dynamisch op basis van lambda-waarden." }
+        {
+          "type": "paragraph",
+          "text": "Pure Poisson heeft een bekende zwakte in voetbal: het onderschat de waarschijnlijkheid van laagscorende gelijke spellen en overschat 0-0 vs 1-0 ratio's. Echte voetbaldata toont meer 0-0, 1-1 gelijke spellen, en iets minder 1-0 / 0-1 resultaten dan pure Poisson voorspelt. De reden is dat goal-gebeurtenissen niet perfect onafhankelijk zijn — wanneer één team nipt voorstaat, neigen beide teams conservatiever te spelen, wat verdere goals onderdrukt."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mark Dixon en Stuart Coles publiceerden een fix in 1997 — nu bekend als de Dixon-Coles aanpassing. Ze voegden een parameter (tau) toe die expliciet de waarschijnlijkheid van 0-0, 1-0, 0-1 en 1-1 resultaten opblaast, gekalibreerd tegen echte wedstrijduitkomsten. Moderne Poisson-gebaseerde voorspellings-systemen gebruiken Dixon-Coles of soortgelijke verfijningen als standaard."
+        },
+        {
+          "type": "paragraph",
+          "text": "De Dixon-Coles correctie verzwakt ook iets als er een grote favoriet is (een 4,0-vs-0,4 lambda-matchup gedraagt zich meer als pure Poisson omdat het leidende team niet gemotiveerd is om een 1-0 voorsprong te verdedigen — ze jagen op meer goals). Geavanceerde implementaties mengen tau dynamisch op basis van lambda-waarden."
+        }
       ]
     },
     {
       "id": "what-poisson-predicts-well",
-      "h2": "Wat Poisson Goed Voorspelt",
+      "h2": "Wat Poisson goed voorspelt",
       "blocks": [
-        { "type": "list", "items": [
-          "Over/Under goal-markten — meest directe toepassing; Poisson levert letterlijk goal-distributie waarschijnlijkheden.",
-          "Beide Teams Scoren (BTTS) — leidt schoon af van de matrix.",
-          "Meest waarschijnlijke score en 1X2 uitkomsten — sterke baseline, vooral gepaard met Elo voor lambda-kalibratie.",
-          "Lange-termijn goal-totalen per team — over een vol seizoen geeft Poisson betrouwbare verwachte goal-totalen.",
-          "Cross-markt consistentie — afgeleide waarschijnlijkheden tellen allemaal correct op, geen interne tegenspraken."
-        ]}
+        {
+          "type": "list",
+          "items": [
+            "Over/Under goal-markten — meest directe toepassing; Poisson levert letterlijk goal-distributie waarschijnlijkheden.",
+            "Beide Teams Scoren (BTTS) — leidt schoon af van de matrix.",
+            "Meest waarschijnlijke score en 1X2 uitkomsten — sterke baseline, vooral gepaard met Elo voor lambda-kalibratie.",
+            "Lange-termijn goal-totalen per team — over een vol seizoen geeft Poisson betrouwbare verwachte goal-totalen.",
+            "Cross-markt consistentie — afgeleide waarschijnlijkheden tellen allemaal correct op, geen interne tegenspraken."
+          ]
+        }
       ]
     },
     {
       "id": "what-poisson-doesnt",
-      "h2": "Wat Poisson Niet Voorspelt",
+      "h2": "Wat Poisson niet voorspelt",
       "blocks": [
-        { "type": "list", "items": [
-          "Specifieke doelpuntmakers — Poisson is alleen op teamniveau.",
-          "Wedstrijd-gebeurtenissen — rode kaarten, strafschoppen, formatiewijzigingen, blessures tijdens de wedstrijd.",
-          "Tactische verschuivingen — het model gaat uit van 90 minuten constante scoringsrate, wat niet is hoe wedstrijden werkelijk verlopen.",
-          "Extreme lage-waarschijnlijkheid uitkomsten — exacte scores als 4-3 zijn individueel zeldzaam, dus Poisson-voorspellingen ervoor zijn rumoerig.",
-          "Tijd-gecorreleerde gebeurtenissen — een goal in de 10e minuut verandert beide teams' tactiek, maar Poisson behandelt elke minuut als identiek."
-        ]},
-        { "type": "paragraph", "text": "De standaardoplossing is om machine learning bovenop Poisson te leggen. Het Poisson-model produceert een baseline waarschijnlijkheidsmatrix; de ML-laag past aan op basis van factoren die Poisson niet kan vangen (tactische matchup, opstellingswijzigingen, weer). Deze hybride aanpak is wat moderne engines, inclusief de onze, gebruiken." }
+        {
+          "type": "list",
+          "items": [
+            "Specifieke doelpuntmakers — Poisson is alleen op teamniveau.",
+            "Wedstrijd-gebeurtenissen — rode kaarten, strafschoppen, formatiewijzigingen, blessures tijdens de wedstrijd.",
+            "Tactische verschuivingen — het model gaat uit van 90 minuten constante scoringsrate, wat niet is hoe wedstrijden werkelijk verlopen.",
+            "Extreme lage-waarschijnlijkheid uitkomsten — exacte scores als 4-3 zijn individueel zeldzaam, dus Poisson-voorspellingen ervoor zijn rumoerig.",
+            "Tijd-gecorreleerde gebeurtenissen — een goal in de 10e minuut verandert beide teams' tactiek, maar Poisson behandelt elke minuut als identiek."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "De standaardoplossing is om machine learning bovenop Poisson te leggen. Het Poisson-model produceert een baseline waarschijnlijkheidsmatrix; de ML-laag past aan op basis van factoren die Poisson niet kan vangen (tactische matchup, opstellingswijzigingen, weer). Deze hybride aanpak is wat moderne engines, inclusief de onze, gebruiken."
+        }
       ]
     },
     {
       "id": "betsplug-poisson",
-      "h2": "Hoe BetsPlug Poisson Gebruikt",
+      "h2": "Hoe BetsPlug Poisson gebruikt",
       "blocks": [
-        { "type": "paragraph", "text": "Lambda voor elk team wordt berekend uit huidige Elo, recente xG-trend (gewogen naar laatste 6-10 wedstrijden), defensieve xG van tegenstander, opstelling-sterkte, dagen rust en competitie-context. Thuis/uit-voordeel is ingebouwd. Het resultaat is een Dixon-Coles-aangepaste waarschijnlijkheidsmatrix voor elke wedstrijd in onze 30+ gedekte competities." },
-        { "type": "paragraph", "text": "Vanuit de matrix leiden we waarschijnlijkheden af voor elke markt die we publiceren: 1X2, Over/Under op meerdere drempels, BTTS, Asian Handicap, Correct Score (met de matrix direct getoond aan abonnees), Halftime / Eindstand. De ML-laag past dan deze baseline-waarschijnlijkheden aan voor context die het Poisson-model niet kan zien — trainerswisselingen, fixture-congestie, knock-out-ronde dynamiek. De finale voorspelling is de ML-aangepaste waarschijnlijkheid." }
+        {
+          "type": "paragraph",
+          "text": "Lambda voor elk team wordt berekend uit huidige Elo, recente xG-trend (gewogen naar laatste 6-10 wedstrijden), defensieve xG van tegenstander, opstelling-sterkte, dagen rust en competitie-context. Thuis/uit-voordeel is ingebouwd. Het resultaat is een Dixon-Coles-aangepaste waarschijnlijkheidsmatrix voor elke wedstrijd in onze 30+ gedekte competities."
+        },
+        {
+          "type": "paragraph",
+          "text": "Vanuit de matrix leiden we waarschijnlijkheden af voor elke markt die we publiceren: 1X2, Over/Under op meerdere drempels, BTTS, Asian Handicap, Correct Score (met de matrix direct getoond aan abonnees), Halftime / Eindstand. De ML-laag past dan deze baseline-waarschijnlijkheden aan voor context die het Poisson-model niet kan zien — trainerswisselingen, fixture-congestie, knock-out-ronde dynamiek. De finale voorspelling is de ML-aangepaste waarschijnlijkheid."
+        }
       ]
     }
   ],
   "keyTakeaways": {
-    "h3": "Belangrijkste Punten",
+    "h3": "Belangrijkste punten",
     "items": [
       "Poisson-distributie modelleert voetbal-scoren met één parameter per team: lambda (verwachte goals).",
       "Vanuit twee lambdas leid je een waarschijnlijkheidsmatrix af voor elke mogelijke exacte score, en sommeer cellen voor elke markt-waarschijnlijkheid.",
@@ -120,22 +218,44 @@
     ]
   },
   "faq": {
-    "h2": "Poisson Modellen FAQ",
+    "h2": "Poisson modellen FAQ",
     "questions": [
-      { "q": "Waarom Poisson en niet normale distributie?", "a": "Goals zijn discreet (je kunt 0, 1, 2 scoren — niet 1,5) en zeldzaam relatief aan het tijdvenster. Beide eigenschappen matchen Poisson-aannames exact. Normale distributies zijn continu en modelleren niet natuurlijk zeldzame-gebeurtenis tellingen. Andere discrete distributies (negatieve binomiaal, zero-inflated Poisson) passen soms beter bij voetbaldata, vooral voor zeer laagscorende competities, maar Poisson is het standaard startpunt omdat het hanteerbaar en accuraat genoeg is." },
-      { "q": "Welke lambda-waarden zijn typisch?", "a": "Premier League thuisteams hebben gemiddeld rond 1,5-1,7 lambda; uitteams rond 1,1-1,3. Sterke teams die zwakke teams spelen kunnen lambda 2,5-3,0 raken. Onderkant van de tabel produceert vaak lambdas van 0,6-0,9. De Bundesliga en Eredivisie skewen hoger (meer aanvallende competities); Serie A skewde historisch lager (meer defensief). Competitie-specifieke kalibratie telt." },
-      { "q": "Verantwoordt Poisson tactieken in de wedstrijd zoals een voorsprong beschermen?", "a": "Pure Poisson niet. Dixon-Coles deels (de tau-aanpassing vangt het gemiddelde effect van teams die nipte voorsprongen beschermen). Geavanceerde tijd-reeks Poisson-modellen splitsen de wedstrijd in twee helften met verschillende lambdas, of gebruiken \"in-running\" lambdas die updaten op basis van de huidige score. Deze uitbreidingen verbeteren accuraatheid maar voegen complexiteit toe. De meeste gepubliceerde Poisson-modellen stoppen bij Dixon-Coles." },
-      { "q": "Is Poisson beter dan xG-gebaseerde voorspellingen?", "a": "Ze zijn complementair, niet concurrerend. xG meet schotkwaliteit op teamniveau. Poisson gebruikt xG-afgeleide verwachte goal-rates als input lambdas, en zet die dan om in score-waarschijnlijkheidsdistributies. Je hebt beide nodig: xG voor de rate, Poisson voor de distributie. Samen geven ze je markt-niveau waarschijnlijkheden; elk alleen is incompleet." }
+      {
+        "q": "Waarom Poisson en niet normale distributie?",
+        "a": "Goals zijn discreet (je kunt 0, 1, 2 scoren — niet 1,5) en zeldzaam relatief aan het tijdvenster. Beide eigenschappen matchen Poisson-aannames exact. Normale distributies zijn continu en modelleren niet natuurlijk zeldzame-gebeurtenis tellingen. Andere discrete distributies (negatieve binomiaal, zero-inflated Poisson) passen soms beter bij voetbaldata, vooral voor zeer laagscorende competities, maar Poisson is het standaard startpunt omdat het hanteerbaar en accuraat genoeg is."
+      },
+      {
+        "q": "Welke lambda-waarden zijn typisch?",
+        "a": "Premier League thuisteams hebben gemiddeld rond 1,5-1,7 lambda; uitteams rond 1,1-1,3. Sterke teams die zwakke teams spelen kunnen lambda 2,5-3,0 raken. Onderkant van de tabel produceert vaak lambdas van 0,6-0,9. De Bundesliga en Eredivisie skewen hoger (meer aanvallende competities); Serie A skewde historisch lager (meer defensief). Competitie-specifieke kalibratie telt."
+      },
+      {
+        "q": "Verantwoordt Poisson tactieken in de wedstrijd zoals een voorsprong beschermen?",
+        "a": "Pure Poisson niet. Dixon-Coles deels (de tau-aanpassing vangt het gemiddelde effect van teams die nipte voorsprongen beschermen). Geavanceerde tijd-reeks Poisson-modellen splitsen de wedstrijd in twee helften met verschillende lambdas, of gebruiken \"in-running\" lambdas die updaten op basis van de huidige score. Deze uitbreidingen verbeteren accuraatheid maar voegen complexiteit toe. De meeste gepubliceerde Poisson-modellen stoppen bij Dixon-Coles."
+      },
+      {
+        "q": "Is Poisson beter dan xG-gebaseerde voorspellingen?",
+        "a": "Ze zijn complementair, niet concurrerend. xG meet schotkwaliteit op teamniveau. Poisson gebruikt xG-afgeleide verwachte goal-rates als input lambdas, en zet die dan om in score-waarschijnlijkheidsdistributies. Je hebt beide nodig: xG voor de rate, Poisson voor de distributie. Samen geven ze je markt-niveau waarschijnlijkheden; elk alleen is incompleet."
+      }
     ]
   },
   "relatedArticles": {
-    "h2": "Gerelateerde Artikelen",
-    "slugs": ["expected-goals-explained", "elo-rating-explained", "ai-vs-tipsters"]
+    "h2": "Gerelateerde artikelen",
+    "slugs": [
+      "expected-goals-explained",
+      "elo-rating-explained",
+      "ai-vs-tipsters"
+    ]
   },
   "applyThis": {
-    "h2": "Zie Poisson-Waarschijnlijkheden in Actie",
+    "h2": "Zie Poisson-waarschijnlijkheden in actie",
     "body": "Elke BetsPlug-voorspelling baseert op een Dixon-Coles-aangepaste Poisson-matrix. Abonnees zien de volledige waarschijnlijkheidsdistributie per wedstrijd — Correct Score, BTTS, Over/Under allemaal gerenderd vanuit hetzelfde model.",
-    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Lees Methodologie", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Bekijk Voorspellingen Vandaag",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Lees Methodologie",
+      "canonical": "methodology"
+    }
   }
 }

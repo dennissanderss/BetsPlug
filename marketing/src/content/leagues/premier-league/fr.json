@@ -1,14 +1,21 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Pronostics Premier League Aujourd'hui | IA | BetsPlug",
+    "title": "Pronostics Premier League aujourd'hui | IA | BetsPlug",
     "description": "Pronostics IA Premier League pour chaque match. Verrouillés avant le coup d'envoi, historique public.",
     "ogImage": "/og-images/league-premier-league-fr.jpg"
   },
   "hero": {
     "h1": "Pronostics Premier League",
     "subheadline": "Pronostics IA pour chaque match de Premier League. Générés avec classements Elo, modèles de Poisson et machine learning. Verrouillés avant le coup d'envoi.",
-    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Comment ça marche",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "À propos des pronostics Premier League",
@@ -17,32 +24,67 @@
       "Les pronostics Premier League sont particulièrement difficiles en raison de la profondeur compétitive. Les six grands clubs affrontent régulièrement des défis imprévisibles des équipes de milieu de tableau, et les fixtures de fin de saison impliquent souvent des différences motivationnelles importantes. Notre modèle pondère fortement la forme récente — particulièrement les 6-10 derniers matchs — combinée aux performances domicile/extérieur, où l'avantage du domicile en Premier League est historiquement parmi les plus forts d'Europe.",
       "Chaque pronostic Premier League est verrouillé avec un horodatage public avant le coup d'envoi. Victoires et défaites sont toutes deux dans notre historique public. Les utilisateurs gratuits voient 2-3 pronostics quotidiens; les abonnés reçoivent chaque match avec analyse statistique complète."
     ],
-    "statsPanel": { "h3": "Premier League en bref", "ctaLabel": "Voir Premier League sur l'app" }
+    "statsPanel": {
+      "h3": "Premier League en bref",
+      "ctaLabel": "Voir Premier League sur l'app"
+    }
   },
-  "topTeams": { "h2": "Top équipes Premier League" },
+  "topTeams": {
+    "h2": "Top équipes Premier League"
+  },
   "methodology": {
     "h2": "Comment les pronostics Premier League sont créés",
     "body": "Les pronostics Premier League utilisent le même moteur que tous nos pronostics : classements Elo, modèles de Poisson, machine learning. Le modèle est entraîné sur les données historiques de Premier League et mis à jour en continu.",
-    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+    "cta": {
+      "label": "Lire la méthodologie complète",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Pronostics Premier League",
+    "h2": "FAQ pronostics Premier League",
     "questions": [
-      { "q": "Quelle précision pour les pronostics IA Premier League ?", "a": "La précision varie. Nous publions chaque pronostic dans notre historique public." },
-      { "q": "Pourquoi des pronostics Premier League gratuits ?", "a": "La Premier League est l'une des trois ligues principales avec 2-3 pronostics gratuits quotidiens." },
-      { "q": "Quels types de pronostics pour la Premier League ?", "a": "1X2, Plus/Moins de buts, Les Deux Équipes Marquent, Double Chance." },
-      { "q": "Quand les pronostics Premier League sont-ils disponibles ?", "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi." },
-      { "q": "Couvrez-vous la FA Cup et les fixtures européennes ?", "a": "Nous couvrons tous les matchs de Premier League. Coupes et compétitions européennes séparément." },
-      { "q": "Pronostics Premier League via Telegram ?", "a": "Oui, pour les abonnés payants." }
+      {
+        "q": "Quelle précision pour les pronostics IA Premier League ?",
+        "a": "La précision varie. Nous publions chaque pronostic dans notre historique public."
+      },
+      {
+        "q": "Pourquoi des pronostics Premier League gratuits ?",
+        "a": "La Premier League est l'une des trois ligues principales avec 2-3 pronostics gratuits quotidiens."
+      },
+      {
+        "q": "Quels types de pronostics pour la Premier League ?",
+        "a": "1X2, Plus/Moins de buts, Les Deux Équipes Marquent, Double Chance."
+      },
+      {
+        "q": "Quand les pronostics Premier League sont-ils disponibles ?",
+        "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi."
+      },
+      {
+        "q": "Couvrez-vous la FA Cup et les fixtures européennes ?",
+        "a": "Nous couvrons tous les matchs de Premier League. Coupes et compétitions européennes séparément."
+      },
+      {
+        "q": "Pronostics Premier League via Telegram ?",
+        "a": "Oui, pour les abonnés payants."
+      }
     ],
-    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Toutes les FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Voulez-vous tous les pronostics Premier League ?",
     "h2Gated": "Débloquez les pronostics Premier League",
     "bodyFree": "Les utilisateurs gratuits voient 2-3 picks quotidiens. Les abonnés ont chaque match avec analyse complète.",
     "bodyGated": "Les pronostics Premier League sont inclus dans tous les plans payants.",
-    "ctaPrimary": { "label": "Voir les Plans", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Compte Gratuit", "href": "https://app.betsplug.com/register?source=league_premier-league" }
+    "ctaPrimary": {
+      "label": "Voir les Plans",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Compte Gratuit",
+      "href": "https://app.betsplug.com/register?source=league_premier-league"
+    }
   }
 }

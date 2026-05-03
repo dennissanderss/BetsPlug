@@ -1,5 +1,6 @@
 ---
 import Container from "@/components/ui/Container.astro";
+import { parseAccent } from "@/lib/parseAccent";
 import type { FreeVsPaidContent } from "@/content/pages/free-vs-paid/types";
 
 interface Props { content: FreeVsPaidContent["hero"] }
@@ -11,9 +12,7 @@ const { content } = Astro.props;
   <div aria-hidden="true" class="pointer-events-none absolute -top-20 right-[-10%] h-[420px] w-[420px] rounded-full opacity-30 blur-[100px]" style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"></div>
 
   <Container size="md" class="relative text-center">
-    <h1 id="fvp-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white-pure">
-      {content.h1}
-    </h1>
+    <h1 id="fvp-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white-pure" set:html={parseAccent(content.h1)}></h1>
     <p class="mt-5 text-lg leading-relaxed text-white-soft max-w-2xl mx-auto">{content.subheadline}</p>
   </Container>
 </section>

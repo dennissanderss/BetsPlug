@@ -2,6 +2,7 @@
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
 import type { MethodologyContent } from "@/content/pages/methodology/types";
 
 interface Props {
@@ -18,9 +19,7 @@ const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale
   <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-[-10%] h-[480px] w-[480px] rounded-full opacity-40 blur-[100px]" style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"></div>
 
   <Container size="md" class="relative text-center">
-    <h1 id="methodology-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl xl:text-[56px] font-bold leading-[1.05] tracking-tight text-white-pure">
-      {content.h1}
-    </h1>
+    <h1 id="methodology-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl xl:text-[56px] font-bold leading-[1.05] tracking-tight text-white-pure" set:html={parseAccent(content.h1)}></h1>
     <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white-soft max-w-2xl mx-auto">
       {content.subheadline}
     </p>

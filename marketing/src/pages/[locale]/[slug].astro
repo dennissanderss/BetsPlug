@@ -95,6 +95,7 @@ import FAQSearch             from "@/components/faq/FAQSearch.astro";
 import FAQCategoryC          from "@/components/faq/FAQCategory.astro";
 import StillHaveQuestionsCTA from "@/components/faq/StillHaveQuestionsCTA.astro";
 import { loadFaqContent, filterCategoriesByQuery } from "@/lib/faq-page";
+import { stripAccent } from "@/lib/parseAccent";
 
 import LegalLayout    from "@/layouts/LegalLayout.astro";
 import HelplineList   from "@/components/legal/HelplineList.astro";
@@ -192,7 +193,7 @@ const methodologyContent = canonical === "methodology" ? await loadMethodologyCo
 const methodologyTechSchema = methodologyContent ? {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  headline: methodologyContent.hero.h1,
+  headline: stripAccent(methodologyContent.hero.h1),
   description: methodologyContent.meta.description,
   author: { "@type": "Organization", name: "BetsPlug Engineering Team" },
   datePublished: "2026-04-01",
@@ -288,7 +289,7 @@ const btContent = canonical === "bet-types" ? await loadBetTypesContent(locale) 
 
 const btTechArticleSchema = btContent ? {
   "@context": "https://schema.org", "@type": "TechArticle",
-  headline: btContent.hero.h1, description: btContent.meta.description,
+  headline: stripAccent(btContent.hero.h1), description: btContent.meta.description,
   author: { "@type": "Organization", name: "BetsPlug" },
   publisher: { "@type": "Organization", name: "BetsPlug", logo: { "@type": "ImageObject", url: `${SITE}/logo.webp` } },
   datePublished: "2026-04-15", dateModified: btContent._meta.lastUpdated,

@@ -9,6 +9,7 @@
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
 interface Props {
@@ -29,9 +30,8 @@ const ctaHref = getLocalizedPath(content.cta.canonical, locale);
         <h2
           id="methodology-h2"
           class="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight tracking-tight text-white-pure"
-        >
-          {content.h2}
-        </h2>
+          set:html={parseAccent(content.h2)}
+        ></h2>
 
         <div class="mt-6 space-y-5 text-base lg:text-[17px] leading-relaxed text-white-soft">
           {content.paragraphs.map((p) => (

@@ -5,13 +5,13 @@
     "lastUpdated": "2026-05-02"
   },
   "meta": {
-    "title": "AI Football Predictions Built on Real Data | BetsPlug",
+    "title": "AI football predictions built on real data | BetsPlug",
     "description": "AI football predictions for 30+ leagues using Elo ratings, Poisson models and machine learning. Every prediction locked before kickoff. Public track record.",
     "ogImage": "/og-images/homepage-en.jpg"
   },
   "hero": {
     "kicker": "AI football intelligence",
-    "h1": "AI Football Predictions Built on Real Data",
+    "h1": "AI football predictions built on {{accent}}real data{{/accent}}",
     "subheadline": "Predictions for 30+ leagues using Elo ratings, Poisson models and machine learning. Every prediction locked before kickoff. Full track record public.",
     "trustStrip": [
       "Locked before kickoff",
@@ -38,27 +38,27 @@
     }
   },
   "howItWorks": {
-    "h2": "How BetsPlug Works",
+    "h2": "How BetsPlug {{accent}}works{{/accent}}",
     "subhead": "From data to prediction in three steps. Transparent. Reproducible. Locked.",
     "steps": [
       {
         "number": "01",
         "icon": "database",
-        "h3": "Data Collection",
+        "h3": "Data collection",
         "body": "We aggregate match results, xG, possession, lineups, transfers and weather data from licensed providers across 30+ leagues.",
         "microDetail": "Updated every minute"
       },
       {
         "number": "02",
         "icon": "cpu",
-        "h3": "AI Engine Analysis",
+        "h3": "AI engine analysis",
         "body": "Our engine combines Elo ratings, Poisson goal models and machine learning to evaluate every match across 40+ variables.",
         "microDetail": "No human bias, no editorial picks"
       },
       {
         "number": "03",
         "icon": "lock",
-        "h3": "Locked Prediction",
+        "h3": "Locked prediction",
         "body": "Each prediction is generated and locked before kickoff. Once published, it cannot be modified — verifiable in our public track record.",
         "microDetail": "Track record publicly accessible"
       }
@@ -69,7 +69,7 @@
     }
   },
   "livePredictions": {
-    "h2": "Today's Free AI Predictions",
+    "h2": "Today's free AI predictions",
     "subhead": "Five free predictions, refreshed every minute. Locked before kickoff, exactly as our paid subscribers receive them.",
     "liveLabel": "Updated",
     "liveSecondsAgo": "{seconds}s ago",
@@ -79,27 +79,53 @@
     "ctaSection": {
       "h3": "Want unlimited predictions?",
       "body": "Get all daily predictions across 30+ leagues, full statistics, and the same AI used by our paid subscribers.",
-      "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
-      "ctaSecondary": { "label": "Get Free Account", "href": "https://app.betsplug.com/register?source=homepage_live" }
+      "ctaPrimary": {
+        "label": "View Pricing",
+        "canonical": "pricing"
+      },
+      "ctaSecondary": {
+        "label": "Get Free Account",
+        "href": "https://app.betsplug.com/register?source=homepage_live"
+      }
     }
   },
   "methodology": {
-    "h2": "Built on Mathematics, Not Hunches",
+    "h2": "Built on {{accent}}mathematics{{/accent}}, not hunches",
     "paragraphs": [
       "BetsPlug combines three statistical disciplines into one prediction engine. Elo ratings rank team strength based on every match played. Poisson goal models calculate the probability of specific score outcomes. Machine learning identifies patterns across thousands of historical matches that humans miss.",
       "The engine processes 40+ variables per match: recent form, head-to-head history, lineups, injuries, expected goals, possession trends, weather conditions, and more. No editorial input. No emotional bias. Just mathematics.",
       "Every prediction is generated and locked before kickoff. We publish both wins and losses. The full track record is publicly accessible — because transparency is the only proof that matters."
     ],
     "stats": [
-      { "value": "30+", "label": "Leagues covered" },
-      { "value": "40+", "label": "Variables per match" },
-      { "value": "3", "label": "Statistical models" },
-      { "value": "100%", "label": "Predictions locked" }
+      {
+        "value": "30+",
+        "label": "Leagues covered"
+      },
+      {
+        "value": "40+",
+        "label": "Variables per match"
+      },
+      {
+        "value": "3",
+        "label": "Statistical models"
+      },
+      {
+        "value": "100%",
+        "label": "Predictions locked"
+      }
     ],
     "diagram": {
       "input": "Input Layer",
-      "inputItems": ["Match Stats", "Team Form", "External Data"],
-      "models": ["Elo Ratings", "Poisson Goals", "Machine Learning"],
+      "inputItems": [
+        "Match Stats",
+        "Team Form",
+        "External Data"
+      ],
+      "models": [
+        "Elo Ratings",
+        "Poisson Goals",
+        "Machine Learning"
+      ],
       "output": "Locked Prediction"
     },
     "cta": {
@@ -108,7 +134,7 @@
     }
   },
   "trackRecord": {
-    "h2": "Every Prediction. Public. Forever.",
+    "h2": "Every prediction. {{accent}}Public. Forever.{{/accent}}",
     "body": "Most prediction sites only show their winners. We publish everything — wins, losses, exact predictions and timestamps. Verify our track record yourself.",
     "topLineLabel": "Last 30 days",
     "topLineValue": "All predictions published — public ledger",
@@ -124,7 +150,7 @@
     }
   },
   "comparison": {
-    "h2": "Why AI Beats Traditional Tipsters",
+    "h2": "Why AI beats traditional tipsters",
     "headers": {
       "criterion": "Criterion",
       "tipster": "Traditional Tipsters",
@@ -179,7 +205,7 @@
     }
   },
   "pricing": {
-    "h2": "Start Free. Upgrade When Ready.",
+    "h2": "Start free. Upgrade when ready.",
     "subhead": "Three plans. No hidden fees. Cancel anytime.",
     "tiers": [
       {
@@ -193,7 +219,10 @@
           "Top 3 leagues only",
           "Basic track record access"
         ],
-        "cta": { "label": "Get Started", "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing" },
+        "cta": {
+          "label": "Get Started",
+          "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing"
+        },
         "highlighted": false
       },
       {
@@ -210,7 +239,10 @@
           "Telegram notifications",
           "Priority support"
         ],
-        "cta": { "label": "Start Free Trial", "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing" },
+        "cta": {
+          "label": "Start Free Trial",
+          "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
+        },
         "highlighted": true
       },
       {
@@ -226,15 +258,21 @@
           "API access (coming soon)",
           "VIP support"
         ],
-        "cta": { "label": "Start Free Trial", "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing" },
+        "cta": {
+          "label": "Start Free Trial",
+          "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
+        },
         "highlighted": false
       }
     ],
     "guaranteeMicro": "All plans: 7-day money-back guarantee on paid tiers",
-    "compareLink": { "label": "Compare plans in detail", "canonical": "pricing" }
+    "compareLink": {
+      "label": "Compare plans in detail",
+      "canonical": "pricing"
+    }
   },
   "faq": {
-    "h2": "Common Questions",
+    "h2": "Common questions",
     "questions": [
       {
         "q": "Is BetsPlug a bookmaker?",
@@ -267,7 +305,7 @@
     }
   },
   "finalCta": {
-    "h2": "Ready to Try AI Football Predictions?",
+    "h2": "Ready to try {{accent}}AI football predictions{{/accent}}?",
     "body": "Get 5 free predictions today. No credit card required.",
     "ctaPrimary": {
       "label": "Get Free Picks",

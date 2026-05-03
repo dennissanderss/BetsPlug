@@ -1,16 +1,20 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Gratis vs Pagamento: Quale Piano BetsPlug? | BetsPlug",
+    "title": "Gratis vs pagamento: quale piano BetsPlug? | BetsPlug",
     "description": "Confronta i tier gratuiti e a pagamento di BetsPlug. Stesso motore IA, volume e profondità diversi. 5 pronostici giornalieri gratis, illimitati a pagamento.",
     "ogImage": "/og-images/free-vs-paid-it.jpg"
   },
   "hero": {
-    "h1": "Gratis o Pagamento: Quale BetsPlug Fa Per Te?",
+    "h1": "Gratis o pagamento: {{accent}}quale BetsPlug{{/accent}} fa per te?",
     "subheadline": "Entrambi i tier usano lo stesso motore IA e la stessa metodologia. La differenza è volume, profondità e timing."
   },
   "visual": {
-    "h2": "Cosa Vedi Per Tier",
+    "h2": "Cosa vedi per tier",
     "free": {
       "header": "Gratis",
       "subheader": "Prova il motore, senza impegno",
@@ -25,8 +29,17 @@
         "2 ore prima del calcio d'inizio (vs 24h pagamento)",
         "Solo info di base (no xG, H2H, formazioni)"
       ],
-      "cta": { "label": "Inizia gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid" },
-      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Più di 2,5 gol", "confidence": 78 }
+      "cta": {
+        "label": "Inizia gratis",
+        "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid"
+      },
+      "mockMatch": {
+        "home": "Manchester City",
+        "away": "Arsenal",
+        "league": "Premier League",
+        "pick": "Più di 2,5 gol",
+        "confidence": 78
+      }
     },
     "paid": {
       "header": "Silver / Gold",
@@ -38,46 +51,149 @@
         "Notifiche Telegram per pick ad alta confidenza",
         "Tutti i mercati per partita"
       ],
-      "cta": { "label": "Vedi Prezzi", "canonical": "pricing" },
-      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Più di 2,5 gol", "confidence": 78, "xg": "City 2,4 — Arsenal 1,6", "h2h": "Ultime 5: City 4V 1P 0S", "lineup": "Formazioni titolari" }
+      "cta": {
+        "label": "Vedi Prezzi",
+        "canonical": "pricing"
+      },
+      "mockMatch": {
+        "home": "Manchester City",
+        "away": "Arsenal",
+        "league": "Premier League",
+        "pick": "Più di 2,5 gol",
+        "confidence": 78,
+        "xg": "City 2,4 — Arsenal 1,6",
+        "h2h": "Ultime 5: City 4V 1P 0S",
+        "lineup": "Formazioni titolari"
+      }
     }
   },
   "comparison": {
-    "h2": "Confronto Funzionalità",
-    "headers": { "feature": "Funzionalità", "free": "Gratis", "silver": "Silver", "gold": "Gold" },
+    "h2": "Confronto funzionalità",
+    "headers": {
+      "feature": "Funzionalità",
+      "free": "Gratis",
+      "silver": "Silver",
+      "gold": "Gold"
+    },
     "rows": [
-      { "feature": "Pronostici giornalieri","free": "5",         "silver": "Illimitati", "gold": "Illimitati" },
-      { "feature": "Campionati",            "free": "Top 3",     "silver": "Tutti 30+",  "gold": "Tutti 30+" },
-      { "feature": "Mercati",               "free": "Solo 1X2",  "silver": "Tutti",      "gold": "Tutti" },
-      { "feature": "Analisi partita",       "free": "Base",      "silver": "Completa",   "gold": "Completa" },
-      { "feature": "Accesso anticipato",    "free": "2h prima",  "silver": "24h prima",  "gold": "24h prima" },
-      { "feature": "Notifiche Telegram",    "free": "—",         "silver": "✓",          "gold": "✓ (custom)" },
-      { "feature": "Rimborso",              "free": "n/d",       "silver": "7 giorni",   "gold": "7 giorni" }
+      {
+        "feature": "Pronostici giornalieri",
+        "free": "5",
+        "silver": "Illimitati",
+        "gold": "Illimitati"
+      },
+      {
+        "feature": "Campionati",
+        "free": "Top 3",
+        "silver": "Tutti 30+",
+        "gold": "Tutti 30+"
+      },
+      {
+        "feature": "Mercati",
+        "free": "Solo 1X2",
+        "silver": "Tutti",
+        "gold": "Tutti"
+      },
+      {
+        "feature": "Analisi partita",
+        "free": "Base",
+        "silver": "Completa",
+        "gold": "Completa"
+      },
+      {
+        "feature": "Accesso anticipato",
+        "free": "2h prima",
+        "silver": "24h prima",
+        "gold": "24h prima"
+      },
+      {
+        "feature": "Notifiche Telegram",
+        "free": "—",
+        "silver": "✓",
+        "gold": "✓ (custom)"
+      },
+      {
+        "feature": "Rimborso",
+        "free": "n/d",
+        "silver": "7 giorni",
+        "gold": "7 giorni"
+      }
     ],
-    "cta": { "label": "Confronto completo", "canonical": "pricing" }
+    "cta": {
+      "label": "Confronto completo",
+      "canonical": "pricing"
+    }
   },
   "useCases": {
-    "h2": "Quale Tier Per Te?",
+    "h2": "Quale tier per te?",
     "profiles": [
-      { "icon": "user", "title": "Tester Casuale", "description": "Curioso dei pronostici IA, vuole provare prima di impegnarsi. Segue solo 1-2 campionati top.", "recommendation": "Gratis va bene per te.", "cta": { "label": "Inizia gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual" } },
-      { "icon": "trending-up", "title": "Scommettitore Regolare", "description": "Scommette 2-3 volte a settimana su più campionati. Vuole qualità di pronostico costante.", "recommendation": "Silver è fatto per te.", "cta": { "label": "Prova Silver", "canonical": "pricing" } },
-      { "icon": "chart", "title": "Analista Serio", "description": "Seguito giornaliero, mercati multipli, profondità dati necessaria. Vuole accesso anticipato e notifiche.", "recommendation": "Gold ti dà tutto.", "cta": { "label": "Prova Gold", "canonical": "pricing" } }
+      {
+        "icon": "user",
+        "title": "Tester casuale",
+        "description": "Curioso dei pronostici IA, vuole provare prima di impegnarsi. Segue solo 1-2 campionati top.",
+        "recommendation": "Gratis va bene per te.",
+        "cta": {
+          "label": "Inizia gratis",
+          "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual"
+        }
+      },
+      {
+        "icon": "trending-up",
+        "title": "Scommettitore regolare",
+        "description": "Scommette 2-3 volte a settimana su più campionati. Vuole qualità di pronostico costante.",
+        "recommendation": "Silver è fatto per te.",
+        "cta": {
+          "label": "Prova Silver",
+          "canonical": "pricing"
+        }
+      },
+      {
+        "icon": "chart",
+        "title": "Analista serio",
+        "description": "Seguito giornaliero, mercati multipli, profondità dati necessaria. Vuole accesso anticipato e notifiche.",
+        "recommendation": "Gold ti dà tutto.",
+        "cta": {
+          "label": "Prova Gold",
+          "canonical": "pricing"
+        }
+      }
     ]
   },
   "faq": {
-    "h2": "FAQ Gratis vs Pagamento",
+    "h2": "FAQ gratis vs pagamento",
     "questions": [
-      { "q": "I pronostici gratis sono meno accurati di quelli a pagamento?", "a": "No. I pronostici gratis usano lo stesso motore IA e metodologia. La differenza è volume, profondità, timing e copertura — non accuratezza." },
-      { "q": "Perché serve carta per la prova?", "a": "Configurazione SaaS standard. Non vieni addebitato nei primi 7 giorni. Annulla prima del giorno 7 e nessun addebito." },
-      { "q": "Posso retrocedere da pagamento a gratis?", "a": "Sì, in qualsiasi momento. Annulla il piano pagato dal dashboard. L'accesso continua fino a fine periodo, poi torna automaticamente a gratis." },
-      { "q": "E se voglio solo 1-2 tipi di scommessa specifici?", "a": "Il tier gratis mostra il pick di massima confidenza per partita. I piani pagati mostrano tutti i mercati per partita. Anche per mercati specifici, il pagamento aiuta perché confronti più partite." },
-      { "q": "La prova gratis di 7 giorni è davvero senza rischio?", "a": "Sì. Nessun addebito durante 7 giorni. Inoltre, se vieni addebitato dopo 7 giorni e non sei soddisfatto, la nostra garanzia rimborso copre il primo mese pagato." }
+      {
+        "q": "I pronostici gratis sono meno accurati di quelli a pagamento?",
+        "a": "No. I pronostici gratis usano lo stesso motore IA e metodologia. La differenza è volume, profondità, timing e copertura — non accuratezza."
+      },
+      {
+        "q": "Perché serve carta per la prova?",
+        "a": "Configurazione SaaS standard. Non vieni addebitato nei primi 7 giorni. Annulla prima del giorno 7 e nessun addebito."
+      },
+      {
+        "q": "Posso retrocedere da pagamento a gratis?",
+        "a": "Sì, in qualsiasi momento. Annulla il piano pagato dal dashboard. L'accesso continua fino a fine periodo, poi torna automaticamente a gratis."
+      },
+      {
+        "q": "E se voglio solo 1-2 tipi di scommessa specifici?",
+        "a": "Il tier gratis mostra il pick di massima confidenza per partita. I piani pagati mostrano tutti i mercati per partita. Anche per mercati specifici, il pagamento aiuta perché confronti più partite."
+      },
+      {
+        "q": "La prova gratis di 7 giorni è davvero senza rischio?",
+        "a": "Sì. Nessun addebito durante 7 giorni. Inoltre, se vieni addebitato dopo 7 giorni e non sei soddisfatto, la nostra garanzia rimborso copre il primo mese pagato."
+      }
     ]
   },
   "finalCta": {
-    "h2": "Inizia Gratis, Migliora Quando Pronto",
+    "h2": "Inizia gratis, migliora quando pronto",
     "body": "5 pronostici gratis al giorno. Nessuna carta richiesta per gratis.",
-    "ctaPrimary": { "label": "Inizia gratis", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final" },
-    "ctaSecondary": { "label": "Vedi i Piani", "canonical": "pricing" }
+    "ctaPrimary": {
+      "label": "Inizia gratis",
+      "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final"
+    },
+    "ctaSecondary": {
+      "label": "Vedi i Piani",
+      "canonical": "pricing"
+    }
   }
 }

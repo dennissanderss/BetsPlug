@@ -9,6 +9,7 @@
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
+import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
 interface Props {
@@ -31,9 +32,8 @@ const { content } = Astro.props;
       <h2
         id="final-cta-h2"
         class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white-pure"
-      >
-        {content.h2}
-      </h2>
+        set:html={parseAccent(content.h2)}
+      ></h2>
       <p class="mt-5 text-lg lg:text-xl leading-relaxed text-white-soft">
         {content.body}
       </p>

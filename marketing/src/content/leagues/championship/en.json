@@ -1,30 +1,45 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Championship Predictions Today | AI-Powered | BetsPlug",
+    "title": "Championship predictions today | AI-powered | BetsPlug",
     "description": "AI-powered EFL Championship predictions for every match. England's second tier — analyzed with Elo + Poisson + ML. Available with any paid plan.",
     "ogImage": "/og-images/league-championship-en.jpg"
   },
   "hero": {
-    "h1": "Championship Predictions",
+    "h1": "Championship predictions",
     "subheadline": "AI-powered predictions for every Championship match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
     "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
     "trustStripUpdated": "Updated every minute",
     "trustStripLocked": "Locked before kickoff",
     "ctaPrimaryFreeLabel": "View Free Predictions",
     "ctaPrimaryGatedLabel": "Unlock Championship Predictions",
-    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "ctaSecondary": {
+      "label": "How it works",
+      "canonical": "methodology"
+    },
     "statsTeams": "Teams",
     "statsMatchweek": "Current matchweek",
     "statsThisWeek": "Predictions this week"
   },
   "cards": {
-    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
-    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
-    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "locked": "Locked",
+    "freePick": "Free pick",
+    "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction",
+    "viewAnalysis": "View match analysis",
+    "confidence": "Confidence",
+    "lockedBeforeKickoff": "Locked before kickoff",
     "viewPricing": "View Pricing"
   },
-  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "filter": {
+    "today": "Today",
+    "thisWeek": "This Week",
+    "allUpcoming": "All Upcoming"
+  },
   "cardsSection": {
     "moreTodayPaid": "{count} more predictions today — paid only",
     "unlockAll": "Subscribe to view all Championship predictions",
@@ -32,7 +47,7 @@
     "fixturesEmpty": "No upcoming fixtures in this window."
   },
   "context": {
-    "h2": "About Championship Predictions",
+    "h2": "About Championship predictions",
     "paragraphs": [
       "The EFL Championship is England's second football division — the most demanding 'second tier' in world football, contested by 24 clubs across 46 matchdays plus a four-team play-off mini-tournament for the final promotion spot. Recently relegated Premier League clubs (with parachute payments) compete alongside long-established Championship sides and promoted League One clubs, producing one of football's most unpredictable competitive environments. Promotion to the Premier League is worth an estimated £170 million in revenue. Our AI engine analyzes every Championship match using current form, head-to-head history, expected goals and 40+ other variables.",
       "Championship predictions are statistically distinct from top-flight European leagues in several ways. Match volume is exceptionally high (46 league matches plus cup commitments) which produces injury accumulation and squad-rotation dynamics not seen in 38-match leagues. The end-of-season play-off race introduces motivation distortions in the final 10-15 matchdays — clubs in 7th place have very different incentives than 8th. Our model accounts for fixture congestion, parachute-payment squad-quality differentials, and end-of-season play-off positioning context.",
@@ -40,43 +55,88 @@
     ],
     "statsPanel": {
       "h3": "Championship at a glance",
-      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
-      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
-      "updatedLabel": "Updated", "ctaLabel": "View Championship on app"
+      "teamsLabel": "Teams",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated",
+      "ctaLabel": "View Championship on app"
     }
   },
   "topTeams": {
-    "h2": "Top Championship Teams",
-    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+    "h2": "Top Championship teams",
+    "positionLabel": "Position",
+    "formLabel": "Form",
+    "viewTeamLabel": "View team"
   },
   "methodology": {
-    "h2": "How Championship Predictions Are Made",
+    "h2": "How Championship predictions are made",
     "body": "Championship predictions use the same engine as all our football predictions: Elo ratings, Poisson models, and machine learning. The model is specifically tuned for the league's high match volume and fixture-congestion impact, plus the parachute-payment squad-quality dynamic between recently relegated clubs and the rest.",
     "pillars": [
-      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine learning with congestion modeling" },
-      { "icon": "lock", "label": "Locked & timestamped" }
+      {
+        "icon": "calc",
+        "label": "Mathematical models (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning with congestion modeling"
+      },
+      {
+        "icon": "lock",
+        "label": "Locked & timestamped"
+      }
     ],
-    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+    "cta": {
+      "label": "Read full methodology",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Championship Predictions FAQ",
+    "h2": "Championship predictions FAQ",
     "questions": [
-      { "q": "How accurate are AI predictions for the Championship?", "a": "Accuracy varies, with the league's high competitive volatility producing wider confidence ranges than top-flight leagues. We publish every Championship prediction in our public track record." },
-      { "q": "Why are Championship predictions paid only?", "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Championship predictions are part of all paid plans." },
-      { "q": "How does the model handle the high match volume of the Championship?", "a": "Our ML layer applies fixture-congestion adjustments based on rest days, midweek match frequency, and squad rotation patterns. Form metrics weight more recent matches heavier when teams are in congested fixture stretches." },
-      { "q": "How early are Championship predictions available?", "a": "Subscribers see Championship predictions up to 24 hours before kickoff." },
-      { "q": "Do you cover FA Cup and EFL Cup fixtures involving Championship clubs?", "a": "We cover all Championship league matches. FA Cup and EFL Cup fixtures are not in our default coverage." },
-      { "q": "Can I get Championship predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Championship predictions." }
+      {
+        "q": "How accurate are AI predictions for the Championship?",
+        "a": "Accuracy varies, with the league's high competitive volatility producing wider confidence ranges than top-flight leagues. We publish every Championship prediction in our public track record."
+      },
+      {
+        "q": "Why are Championship predictions paid only?",
+        "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Championship predictions are part of all paid plans."
+      },
+      {
+        "q": "How does the model handle the high match volume of the Championship?",
+        "a": "Our ML layer applies fixture-congestion adjustments based on rest days, midweek match frequency, and squad rotation patterns. Form metrics weight more recent matches heavier when teams are in congested fixture stretches."
+      },
+      {
+        "q": "How early are Championship predictions available?",
+        "a": "Subscribers see Championship predictions up to 24 hours before kickoff."
+      },
+      {
+        "q": "Do you cover FA Cup and EFL Cup fixtures involving Championship clubs?",
+        "a": "We cover all Championship league matches. FA Cup and EFL Cup fixtures are not in our default coverage."
+      },
+      {
+        "q": "Can I get Championship predictions via Telegram?",
+        "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Championship predictions."
+      }
     ],
-    "cta": { "label": "All FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "All FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Want All Championship Predictions?",
     "h2Gated": "Unlock Championship Predictions",
     "bodyFree": "Subscribers get every match with full statistical analysis.",
     "bodyGated": "Championship predictions are part of all paid plans.",
-    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_championship" }
+    "ctaPrimary": {
+      "label": "View Pricing",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Try Free",
+      "href": "https://app.betsplug.com/register?source=league_championship"
+    }
   }
 }

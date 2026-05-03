@@ -1,30 +1,45 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Serie A Predictions Today | AI-Powered | BetsPlug",
+    "title": "Serie A predictions today | AI-powered | BetsPlug",
     "description": "AI-powered Serie A predictions for every match. Tactical Italian football analysis with Elo + Poisson + ML. Available with any paid plan.",
     "ogImage": "/og-images/league-serie-a-en.jpg"
   },
   "hero": {
-    "h1": "Serie A Predictions",
+    "h1": "Serie A predictions",
     "subheadline": "AI-powered predictions for every Serie A match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
     "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
     "trustStripUpdated": "Updated every minute",
     "trustStripLocked": "Locked before kickoff",
     "ctaPrimaryFreeLabel": "View Free Predictions",
     "ctaPrimaryGatedLabel": "Unlock Serie A Predictions",
-    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "ctaSecondary": {
+      "label": "How it works",
+      "canonical": "methodology"
+    },
     "statsTeams": "Teams",
     "statsMatchweek": "Current matchweek",
     "statsThisWeek": "Predictions this week"
   },
   "cards": {
-    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
-    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
-    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "locked": "Locked",
+    "freePick": "Free pick",
+    "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction",
+    "viewAnalysis": "View match analysis",
+    "confidence": "Confidence",
+    "lockedBeforeKickoff": "Locked before kickoff",
     "viewPricing": "View Pricing"
   },
-  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "filter": {
+    "today": "Today",
+    "thisWeek": "This Week",
+    "allUpcoming": "All Upcoming"
+  },
   "cardsSection": {
     "moreTodayPaid": "{count} more predictions today — paid only",
     "unlockAll": "Subscribe to view all Serie A predictions",
@@ -32,7 +47,7 @@
     "fixturesEmpty": "No upcoming fixtures in this window."
   },
   "context": {
-    "h2": "About Serie A Predictions",
+    "h2": "About Serie A predictions",
     "paragraphs": [
       "Serie A is Italy's top football division, contested by 20 clubs across 38 matchdays from August to May. The league has historically been characterized by tactical sophistication and defensive organization — terms like 'catenaccio' originated here — though the modern Serie A has shifted toward a more open, possession-based game while retaining strong defensive structures. Inter, Juventus, AC Milan and Napoli are the historical powers, with Atalanta, Roma and Lazio as established challengers. Our AI engine analyzes every Serie A match using current form, head-to-head history, expected goals and 40+ other variables.",
       "Serie A predictions require special weighting on tactical matchups. The league has the strongest correlation between manager-tenure stability and match outcomes among Europe's big five, and tactical-system changes mid-season produce significant predictive shifts. Our model factors in coaching tenure, expected formation changes due to injuries, and historical performance against specific tactical setups (high press vs deep block) for each team.",
@@ -40,43 +55,88 @@
     ],
     "statsPanel": {
       "h3": "Serie A at a glance",
-      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
-      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
-      "updatedLabel": "Updated", "ctaLabel": "View Serie A on app"
+      "teamsLabel": "Teams",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated",
+      "ctaLabel": "View Serie A on app"
     }
   },
   "topTeams": {
-    "h2": "Top Serie A Teams",
-    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+    "h2": "Top Serie A teams",
+    "positionLabel": "Position",
+    "formLabel": "Form",
+    "viewTeamLabel": "View team"
   },
   "methodology": {
-    "h2": "How Serie A Predictions Are Made",
+    "h2": "How Serie A predictions are made",
     "body": "Serie A predictions use the same engine as all our football predictions: Elo ratings for team strength, Poisson models for goal probability, and machine learning for pattern recognition. The model is tuned for Italian football's tactical patterns, particularly the predictive value of formation matchups and coaching stability.",
     "pillars": [
-      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine learning trained on Serie A data" },
-      { "icon": "lock", "label": "Locked & timestamped" }
+      {
+        "icon": "calc",
+        "label": "Mathematical models (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning trained on Serie A data"
+      },
+      {
+        "icon": "lock",
+        "label": "Locked & timestamped"
+      }
     ],
-    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+    "cta": {
+      "label": "Read full methodology",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Serie A Predictions FAQ",
+    "h2": "Serie A predictions FAQ",
     "questions": [
-      { "q": "How accurate are AI predictions for Serie A?", "a": "Accuracy varies per matchday and prediction type. We publish every Serie A prediction in our public track record so you can verify performance yourself." },
-      { "q": "Why are Serie A predictions paid only?", "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Serie A predictions are part of all paid plans, with full match analysis included." },
-      { "q": "What types of predictions do you publish for Serie A?", "a": "For every Serie A match we publish predictions across multiple markets: 1X2, Over/Under goals, Both Teams to Score, and Double Chance — with tactical-matchup context informing the recommendations." },
-      { "q": "How early are Serie A predictions available?", "a": "Subscribers see Serie A predictions up to 24 hours before kickoff." },
-      { "q": "Do you cover Coppa Italia and European fixtures involving Serie A clubs?", "a": "We cover all Serie A league matches. Coppa Italia, Champions League and Europa League fixtures involving Serie A clubs are covered separately under their own competition pages." },
-      { "q": "Can I get Serie A predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Serie A predictions." }
+      {
+        "q": "How accurate are AI predictions for Serie A?",
+        "a": "Accuracy varies per matchday and prediction type. We publish every Serie A prediction in our public track record so you can verify performance yourself."
+      },
+      {
+        "q": "Why are Serie A predictions paid only?",
+        "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Serie A predictions are part of all paid plans, with full match analysis included."
+      },
+      {
+        "q": "What types of predictions do you publish for Serie A?",
+        "a": "For every Serie A match we publish predictions across multiple markets: 1X2, Over/Under goals, Both Teams to Score, and Double Chance — with tactical-matchup context informing the recommendations."
+      },
+      {
+        "q": "How early are Serie A predictions available?",
+        "a": "Subscribers see Serie A predictions up to 24 hours before kickoff."
+      },
+      {
+        "q": "Do you cover Coppa Italia and European fixtures involving Serie A clubs?",
+        "a": "We cover all Serie A league matches. Coppa Italia, Champions League and Europa League fixtures involving Serie A clubs are covered separately under their own competition pages."
+      },
+      {
+        "q": "Can I get Serie A predictions via Telegram?",
+        "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Serie A predictions."
+      }
     ],
-    "cta": { "label": "All FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "All FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Want All Serie A Predictions?",
     "h2Gated": "Unlock Serie A Predictions",
     "bodyFree": "Subscribers get every match with full statistical analysis.",
     "bodyGated": "Serie A predictions are part of all paid plans.",
-    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_serie-a" }
+    "ctaPrimary": {
+      "label": "View Pricing",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Try Free",
+      "href": "https://app.betsplug.com/register?source=league_serie-a"
+    }
   }
 }

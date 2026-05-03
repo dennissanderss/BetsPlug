@@ -10,6 +10,7 @@
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
 interface Props {
@@ -45,9 +46,8 @@ const colorMap: Record<number, string> = {
       <h2
         id="track-record-h2"
         class="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight tracking-tight text-charcoal-900"
-      >
-        {content.h2}
-      </h2>
+        set:html={parseAccent(content.h2)}
+      ></h2>
       <p class="mt-5 text-lg leading-relaxed text-charcoal-700 max-w-2xl mx-auto">
         {content.body}
       </p>

@@ -1,26 +1,57 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Voetbal Weddenschap Types Uitgelegd: Complete Gids | BetsPlug",
+    "title": "Voetbal weddenschap types uitgelegd: complete gids | BetsPlug",
     "description": "Complete gids over voetbal weddenschap types: 1X2, BTTS, Over/Under, Asian Handicap, Correct Score en meer. Hoe AI elke markt voorspelt.",
     "ogImage": "/og-images/bet-types-nl.jpg"
   },
   "hero": {
-    "h1": "Voetbal Weddenschap Types: Complete Gids",
+    "h1": "Voetbal weddenschap types: {{accent}}complete gids{{/accent}}",
     "subheadline": "Elke grote voetbal-markt uitgelegd: hoe het werkt, wanneer voorspelbaar, en hoe BetsPlug AI voorspellingen genereert voor elk type. Geen fluff."
   },
   "toc": {
     "label": "Op Deze Pagina",
     "items": [
-      { "id": "match-result",  "label": "Wedstrijduitslag (1X2)" },
-      { "id": "double-chance", "label": "Dubbele Kans" },
-      { "id": "btts",          "label": "Beide Teams Scoren (BTTS)" },
-      { "id": "over-under",    "label": "Over/Under Doelpunten" },
-      { "id": "asian-handicap","label": "Asian Handicap" },
-      { "id": "correct-score", "label": "Juiste Eindstand" },
-      { "id": "ht-ft",         "label": "Rust / Eind" },
-      { "id": "draw-no-bet",   "label": "Draw No Bet" },
-      { "id": "coverage",      "label": "Dekking per tier" }
+      {
+        "id": "match-result",
+        "label": "Wedstrijduitslag (1X2)"
+      },
+      {
+        "id": "double-chance",
+        "label": "Dubbele Kans"
+      },
+      {
+        "id": "btts",
+        "label": "Beide Teams Scoren (BTTS)"
+      },
+      {
+        "id": "over-under",
+        "label": "Over/Under Doelpunten"
+      },
+      {
+        "id": "asian-handicap",
+        "label": "Asian Handicap"
+      },
+      {
+        "id": "correct-score",
+        "label": "Juiste Eindstand"
+      },
+      {
+        "id": "ht-ft",
+        "label": "Rust / Eind"
+      },
+      {
+        "id": "draw-no-bet",
+        "label": "Draw No Bet"
+      },
+      {
+        "id": "coverage",
+        "label": "Dekking per tier"
+      }
     ]
   },
   "sectionLabels": {
@@ -33,7 +64,7 @@
   "betTypes": [
     {
       "id": "match-result",
-      "h2": "Wedstrijduitslag (1X2)",
+      "h2": "Wedstrijduitslag (1x2)",
       "definition": "Voorspellen of het thuisteam wint (1), de wedstrijd in een gelijkspel eindigt (X), of het uitteam wint (2).",
       "howItWorks": [
         "1X2 is de meest fundamentele voetbalmarkt. Drie mogelijke uitkomsten per wedstrijd, met odds aangeboden voor elk. De markt wordt afgewikkeld op basis van de uitslag na 90 minuten plus blessuretijd. Verlenging en strafschoppen tellen niet — die scenario's gelden alleen voor specifieke beker-knock-out markten.",
@@ -53,11 +84,17 @@
         "1X2 is moeilijker te voorspellen dan Over/Under — de drie-uitkomst structuur verspreidt waarschijnlijkheid anders.",
         "Volg je nauwkeurigheid per competitie. Sommige competities (Bundesliga, Premier League) hebben rijkere historische data."
       ],
-      "example": { "homeTeam": "Ajax", "awayTeam": "Heracles", "league": "Eredivisie", "prediction": "Thuiswinst", "confidence": 73 }
+      "example": {
+        "homeTeam": "Ajax",
+        "awayTeam": "Heracles",
+        "league": "Eredivisie",
+        "prediction": "Thuiswinst",
+        "confidence": 73
+      }
     },
     {
       "id": "double-chance",
-      "h2": "Dubbele Kans",
+      "h2": "Dubbele kans",
       "definition": "Twee van de drie 1X2-uitkomsten dekken met één weddenschap. Varianten: 1X (thuis of gelijk), X2 (gelijk of uit), 12 (thuis of uit — geen gelijkspel).",
       "howItWorks": [
         "Dubbele Kans is in essentie 1X2 met een ingebouwde veiligheidsmarge. Door twee uitkomsten te dekken accepteer je lagere odds in ruil voor een hogere winstwaarschijnlijkheid. Veelgebruikt: een sterker team backen zonder blootstelling aan gelijkspel.",
@@ -77,11 +114,17 @@
         "Nuttig voor risicobeheer wanneer je een tipster volgt die je nog niet volledig vertrouwt.",
         "Gebruik Dubbele Kans niet om zwakke picks te maskeren."
       ],
-      "example": { "homeTeam": "PSV", "awayTeam": "Sparta", "league": "Eredivisie", "prediction": "1X (Thuis of Gelijk)", "confidence": 88 }
+      "example": {
+        "homeTeam": "PSV",
+        "awayTeam": "Sparta",
+        "league": "Eredivisie",
+        "prediction": "1X (Thuis of Gelijk)",
+        "confidence": 88
+      }
     },
     {
       "id": "btts",
-      "h2": "Beide Teams Scoren (BTTS)",
+      "h2": "Beide teams scoren (BTTS)",
       "definition": "Voorspelt of beide teams ten minste één doelpunt scoren tijdens reguliere speeltijd. Twee uitkomsten: Ja (beide scoren) of Nee (één of beide scoren niet).",
       "howItWorks": [
         "BTTS is een binaire markt eenvoudiger dan 1X2 — slechts twee uitkomsten. De markt wordt afgewikkeld op basis van of zowel thuis- als uitteam minstens één keer scoren tijdens reguliere speeltijd. Verlenging en strafschoppen tellen niet. Eigen doelpunten tellen voor het team dat het doelpunt krijgt toegewezen.",
@@ -101,11 +144,17 @@
         "BTTS Ja correleert met hoge-druk tactiek; check de verwachte formaties.",
         "Wees voorzichtig met BTTS-markten in wedstrijden met grote verdedigingsblessures."
       ],
-      "example": { "homeTeam": "Feyenoord", "awayTeam": "AZ", "league": "Eredivisie", "prediction": "BTTS Ja", "confidence": 76 }
+      "example": {
+        "homeTeam": "Feyenoord",
+        "awayTeam": "AZ",
+        "league": "Eredivisie",
+        "prediction": "BTTS Ja",
+        "confidence": 76
+      }
     },
     {
       "id": "over-under",
-      "h2": "Over/Under Doelpunten",
+      "h2": "Over/Under doelpunten",
       "definition": "Voorspelt of het totaal aantal doelpunten boven of onder een bepaalde drempel komt. Meest gangbare lijnen: 0,5, 1,5, 2,5, 3,5, 4,5.",
       "howItWorks": [
         "De bookmaker zet een doelpunt-drempel (bijv. 2,5). Over wint als de wedstrijd 3 of meer totale doelpunten heeft; Under wint als 2 of minder. De 0,5 fractionele drempel garandeert een winnaar — er is geen 'push' uitkomst.",
@@ -125,11 +174,17 @@
         "Bekerwedstrijden zijn moeilijker te voorspellen — rotatie en motivatie veroorzaken afwijking.",
         "Vermijd Over/Under markten waar weer een grote factor is."
       ],
-      "example": { "homeTeam": "Ajax", "awayTeam": "PSV", "league": "Eredivisie", "prediction": "Over 2,5 Doelpunten", "confidence": 71 }
+      "example": {
+        "homeTeam": "Ajax",
+        "awayTeam": "PSV",
+        "league": "Eredivisie",
+        "prediction": "Over 2,5 Doelpunten",
+        "confidence": 71
+      }
     },
     {
       "id": "asian-handicap",
-      "h2": "Asian Handicap",
+      "h2": "Asian handicap",
       "definition": "Elimineert de gelijkspel-uitkomst door één team een virtuele voorsprong (handicap) te geven. Heel-getal handicaps kunnen in een push (terugbetaling) resulteren; halve-lijn handicaps garanderen een winnaar.",
       "howItWorks": [
         "Asian Handicap werd ontwikkeld in Aziatische wed-markten en is wereldwijd verspreid vanwege zijn precisie. Veelgebruikte handicaps: -0,5 (favoriet moet winnen), -1,0 (favoriet moet met 2+ winnen; 1-doelpunt winst is push), -1,5 (favoriet moet met 2+ winnen).",
@@ -149,11 +204,17 @@
         "Vermijd Asian Handicap in derbies en emotioneel-geladen wedstrijden.",
         "Scherpere bookmakers bieden betere Asian Handicap lijnen."
       ],
-      "example": { "homeTeam": "PSV", "awayTeam": "RKC", "league": "Eredivisie", "prediction": "PSV -1,5", "confidence": 64 }
+      "example": {
+        "homeTeam": "PSV",
+        "awayTeam": "RKC",
+        "league": "Eredivisie",
+        "prediction": "PSV -1,5",
+        "confidence": 64
+      }
     },
     {
       "id": "correct-score",
-      "h2": "Juiste Eindstand",
+      "h2": "Juiste eindstand",
       "definition": "Voorspel de exacte eindstand van de wedstrijd. Hoogste variantie, hoogste odds onder veelgebruikte markten.",
       "howItWorks": [
         "Juiste Eindstand biedt odds op elke plausibele eindstand (typisch 0-0 tot 5-4, soms hoger). Elke uitkomst heeft individueel lage waarschijnlijkheid — zelfs de meest waarschijnlijke score in een wedstrijd overschrijdt zelden 12% — dus odds zijn dienovereenkomstig lang.",
@@ -173,11 +234,17 @@
         "Volg welke Juiste Eindstand-lijnen bookmakers het meest beïnvloeden.",
         "Vermijd Juiste Eindstand in wedstrijden met hoge variantie."
       ],
-      "example": { "homeTeam": "Ajax", "awayTeam": "Vitesse", "league": "Eredivisie", "prediction": "2-1 Ajax", "confidence": 13 }
+      "example": {
+        "homeTeam": "Ajax",
+        "awayTeam": "Vitesse",
+        "league": "Eredivisie",
+        "prediction": "2-1 Ajax",
+        "confidence": 13
+      }
     },
     {
       "id": "ht-ft",
-      "h2": "Rust / Eind",
+      "h2": "Rust / eind",
       "definition": "Voorspel het resultaat bij rust EN bij volledige tijd. Negen mogelijke uitkomstcombinaties.",
       "howItWorks": [
         "RT/ET vereist correct voorspellen van zowel de rust-leider als de full-time leider. Notatie: TW/TW betekent thuis leidend bij rust en eind.",
@@ -197,11 +264,17 @@
         "Vermijd G/TW of G/UW (comeback-voorspellingen).",
         "Nuttig voor emotionele bettors die simpelere narratief-bets willen."
       ],
-      "example": { "homeTeam": "PSV", "awayTeam": "Excelsior", "league": "Eredivisie", "prediction": "PSV/PSV", "confidence": 41 }
+      "example": {
+        "homeTeam": "PSV",
+        "awayTeam": "Excelsior",
+        "league": "Eredivisie",
+        "prediction": "PSV/PSV",
+        "confidence": 41
+      }
     },
     {
       "id": "draw-no-bet",
-      "h2": "Draw No Bet",
+      "h2": "Draw no bet",
       "definition": "Elimineert de gelijkspel-uitkomst van 1X2. Bij een gelijkspel wordt je inzet teruggestort. Anders wordt het afgewikkeld als een normale 1X2 winnaar-pick.",
       "howItWorks": [
         "Draw No Bet (DNB) is in essentie Asian Handicap met een 0-lijn, maar intuïtiever gepresenteerd. Twee uitkomsten betalen: thuiswinst of uitwinst. Een gelijkspel restitueert de inzet.",
@@ -221,42 +294,115 @@
         "Nuttig voor het backen van bescheiden favorieten in strakke uitwedstrijden.",
         "Gebruik DNB niet om slechte picks te repareren."
       ],
-      "example": { "homeTeam": "Feyenoord", "awayTeam": "Ajax", "league": "Eredivisie", "prediction": "Feyenoord DNB", "confidence": 58 }
+      "example": {
+        "homeTeam": "Feyenoord",
+        "awayTeam": "Ajax",
+        "league": "Eredivisie",
+        "prediction": "Feyenoord DNB",
+        "confidence": 58
+      }
     }
   ],
   "coverage": {
-    "h2": "Welke Weddenschap Types BetsPlug Dekt",
+    "h2": "Welke weddenschap types BetsPlug dekt",
     "body": "Gratis tier toont de hoogst-confidence pick per wedstrijd — typisch 1X2. Betalende leden zien alle markttypes met volledige analyse.",
-    "headers": { "betType": "Weddenschap Type", "freeTier": "Gratis Tier", "paidTier": "Betalende Tier" },
+    "headers": {
+      "betType": "Weddenschap Type",
+      "freeTier": "Gratis Tier",
+      "paidTier": "Betalende Tier"
+    },
     "rows": [
-      { "betType": "1X2",                "free": true,  "paid": true },
-      { "betType": "Dubbele Kans",       "free": false, "paid": true },
-      { "betType": "BTTS",               "free": false, "paid": true },
-      { "betType": "Over/Under 2,5",     "free": false, "paid": true },
-      { "betType": "Over/Under 1,5/3,5", "free": false, "paid": true },
-      { "betType": "Asian Handicap",     "free": false, "paid": true },
-      { "betType": "Juiste Eindstand",   "free": false, "paid": "matrix" },
-      { "betType": "RT/ET",              "free": false, "paid": true },
-      { "betType": "Draw No Bet",        "free": false, "paid": true }
+      {
+        "betType": "1X2",
+        "free": true,
+        "paid": true
+      },
+      {
+        "betType": "Dubbele Kans",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "BTTS",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Over/Under 2,5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Over/Under 1,5/3,5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Asian Handicap",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Juiste Eindstand",
+        "free": false,
+        "paid": "matrix"
+      },
+      {
+        "betType": "RT/ET",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Draw No Bet",
+        "free": false,
+        "paid": true
+      }
     ],
     "note": "Gratis tier toont de hoogst-confidence pick per wedstrijd (typisch 1X2). Betalende leden zien alle markttypes met volledige analyse.",
-    "cta": { "label": "Bekijk Prijzen", "canonical": "pricing" }
+    "cta": {
+      "label": "Bekijk Prijzen",
+      "canonical": "pricing"
+    }
   },
   "faq": {
-    "h2": "Weddenschap Types FAQ",
+    "h2": "Weddenschap types FAQ",
     "questions": [
-      { "q": "Welk weddenschap type is het meest voorspelbaar?", "a": "Statistisch zijn Over/Under 2,5 doelpunten en BTTS-markten het meest voorspelbaar met Poisson-modellen. Ze hebben goed-gedefinieerde waarschijnlijkheidsdistributies en grote historische sample sizes." },
-      { "q": "Waarom raadt BetsPlug specifieke weddenschap types aan per wedstrijd?", "a": "Onze engine identificeert de hoogst-confidence voorspelling voor elke wedstrijd — de markt waar het statistische signaal het sterkst is." },
-      { "q": "Kan ik alle weddenschap-type voorspellingen voor één wedstrijd zien?", "a": "Betalende leden zien alle marktvoorspellingen per wedstrijd. Gratis gebruikers zien de hoogst-confidence pick van de engine." },
-      { "q": "Waarom voorspellen jullie geen specifieke spelers-doelpuntenmakers?", "a": "Speler-niveau voorspellingen hebben veel hogere variantie dan team-niveau voorspellingen." },
-      { "q": "Wat is het verschil tussen waarschijnlijkheid en confidence?", "a": "Waarschijnlijkheid is de wiskundige kans die we berekenen. Confidence is onze zekerheid in die waarschijnlijkheid." },
-      { "q": "Waarom zijn sommige weddenschap types alleen beschikbaar op betaalde plannen?", "a": "Gratis tier toont onze hoogst-confidence pick per wedstrijd. Andere markten vereisen leden-toegang. Dit balanceert gratis waarde met een duurzaam abonnementsmodel." }
+      {
+        "q": "Welk weddenschap type is het meest voorspelbaar?",
+        "a": "Statistisch zijn Over/Under 2,5 doelpunten en BTTS-markten het meest voorspelbaar met Poisson-modellen. Ze hebben goed-gedefinieerde waarschijnlijkheidsdistributies en grote historische sample sizes."
+      },
+      {
+        "q": "Waarom raadt BetsPlug specifieke weddenschap types aan per wedstrijd?",
+        "a": "Onze engine identificeert de hoogst-confidence voorspelling voor elke wedstrijd — de markt waar het statistische signaal het sterkst is."
+      },
+      {
+        "q": "Kan ik alle weddenschap-type voorspellingen voor één wedstrijd zien?",
+        "a": "Betalende leden zien alle marktvoorspellingen per wedstrijd. Gratis gebruikers zien de hoogst-confidence pick van de engine."
+      },
+      {
+        "q": "Waarom voorspellen jullie geen specifieke spelers-doelpuntenmakers?",
+        "a": "Speler-niveau voorspellingen hebben veel hogere variantie dan team-niveau voorspellingen."
+      },
+      {
+        "q": "Wat is het verschil tussen waarschijnlijkheid en confidence?",
+        "a": "Waarschijnlijkheid is de wiskundige kans die we berekenen. Confidence is onze zekerheid in die waarschijnlijkheid."
+      },
+      {
+        "q": "Waarom zijn sommige weddenschap types alleen beschikbaar op betaalde plannen?",
+        "a": "Gratis tier toont onze hoogst-confidence pick per wedstrijd. Andere markten vereisen leden-toegang. Dit balanceert gratis waarde met een duurzaam abonnementsmodel."
+      }
     ]
   },
   "finalCta": {
-    "h2": "Zie Weddenschap Type Voorspellingen in Actie",
+    "h2": "Zie weddenschap type voorspellingen in actie",
     "body": "Elke voorspelling over 30+ competities. Multi-markt analyse. Vergrendeld vóór de aftrap. Publiek track record.",
-    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Hoe Voorspellingen Werken", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Bekijk Voorspellingen Vandaag",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Hoe Voorspellingen Werken",
+      "canonical": "methodology"
+    }
   }
 }

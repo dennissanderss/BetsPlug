@@ -27,6 +27,7 @@ import MethodologyFAQ           from "@/components/methodology/MethodologyFAQ.as
 import MethodologyFinalCTA      from "@/components/methodology/MethodologyFinalCTA.astro";
 
 import { loadMethodologyContent } from "@/lib/methodology-page";
+import { stripAccent } from "@/lib/parseAccent";
 
 const locale = "en" as const;
 const content = await loadMethodologyContent(locale);
@@ -37,7 +38,7 @@ const canonicalPath = "/methodology";
 const techArticleSchema = {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  headline: content.hero.h1,
+  headline: stripAccent(content.hero.h1),
   description: content.meta.description,
   author: { "@type": "Organization", name: "BetsPlug Engineering Team" },
   datePublished: "2026-04-01",

@@ -1,12 +1,17 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json." },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json."
+  },
   "meta": {
-    "title": "Wat is Value Betting? De Wiskunde van Lange-Termijn Winst | BetsPlug Leren",
+    "title": "Wat is value betting? De wiskunde van lange-termijn winst | BetsPlug leren",
     "description": "Value betting is de enige wiskundig solide lange-termijn strategie. Leer hoe verwachte waarde te berekenen, positieve-EV inzetten te identificeren, en de bookmaker-marge te vermijden.",
     "ogImage": "/og-images/learn-value-betting-nl.jpg"
   },
   "header": {
-    "h1": "Wat is Value Betting? De Wiskunde van Lange-Termijn Winst",
+    "h1": "Wat is value betting? De wiskunde van lange-termijn winst",
     "excerpt": "Waarom inzetten met positieve verwachte waarde vinden de enige wiskundig solide lange-termijn strategie is. Het verschil tussen voorspellen en winnen.",
     "readingTime": "9 min lezen",
     "difficulty": "Beginner",
@@ -20,71 +25,157 @@
   "sections": [
     {
       "id": "what-is-value",
-      "h2": "Wat is Value?",
+      "h2": "Wat is value?",
       "blocks": [
-        { "type": "paragraph", "text": "Een inzet heeft \"value\" wanneer de winstwaarschijnlijkheid hoger is dan de waarschijnlijkheid die geïmpliceerd wordt door de quotering. Dat is de hele definitie. Let op wat ontbreekt: niets over vertrouwen, niets over wie je denkt dat zal winnen, niets over \"zekerheidjes\". Value gaat puur over of de quotering de werkelijke waarschijnlijkheid onderwaardeert." },
-        { "type": "h3", "text": "Verwachte waarde, formeel" },
-        { "type": "paragraph", "text": "Verwachte waarde (EV) is wat je gemiddeld zou verwachten te winnen of verliezen, per ingezette eenheid, als dezelfde inzet oneindig vaak werd geplaatst. De formule:" },
-        { "type": "formula", "latex": "\\text{EV} = (P_{\\text{win}} \\times \\text{Profit}) - (P_{\\text{loss}} \\times \\text{Stake})", "caption": "Positieve EV betekent dat je gemiddeld winst maakt; negatieve EV betekent dat je gemiddeld verliest." },
-        { "type": "example", "label": "Uitgewerkt voorbeeld", "body": "Je schat dat Real Madrid 50% kans heeft om thuis te winnen. De bookmaker biedt decimale quotering 2,20 (potentiële winst van €1,20 op een €1 inzet). EV = (0,5 × €1,20) − (0,5 × €1,00) = +€0,10 per €1 ingezet. Dit is een positieve-EV inzet: gemiddelde winst van 10 cent per euro. Dezelfde wedstrijd, dezelfde probability-schatting, maar quotering 1,80 in plaats: EV = (0,5 × €0,80) − (0,5 × €1,00) = −€0,10. Identieke pick, tegengestelde uitkomst over de lange termijn." }
+        {
+          "type": "paragraph",
+          "text": "Een inzet heeft \"value\" wanneer de winstwaarschijnlijkheid hoger is dan de waarschijnlijkheid die geïmpliceerd wordt door de quotering. Dat is de hele definitie. Let op wat ontbreekt: niets over vertrouwen, niets over wie je denkt dat zal winnen, niets over \"zekerheidjes\". Value gaat puur over of de quotering de werkelijke waarschijnlijkheid onderwaardeert."
+        },
+        {
+          "type": "h3",
+          "text": "Verwachte waarde, formeel"
+        },
+        {
+          "type": "paragraph",
+          "text": "Verwachte waarde (EV) is wat je gemiddeld zou verwachten te winnen of verliezen, per ingezette eenheid, als dezelfde inzet oneindig vaak werd geplaatst. De formule:"
+        },
+        {
+          "type": "formula",
+          "latex": "\\text{EV} = (P_{\\text{win}} \\times \\text{Profit}) - (P_{\\text{loss}} \\times \\text{Stake})",
+          "caption": "Positieve EV betekent dat je gemiddeld winst maakt; negatieve EV betekent dat je gemiddeld verliest."
+        },
+        {
+          "type": "example",
+          "label": "Uitgewerkt voorbeeld",
+          "body": "Je schat dat Real Madrid 50% kans heeft om thuis te winnen. De bookmaker biedt decimale quotering 2,20 (potentiële winst van €1,20 op een €1 inzet). EV = (0,5 × €1,20) − (0,5 × €1,00) = +€0,10 per €1 ingezet. Dit is een positieve-EV inzet: gemiddelde winst van 10 cent per euro. Dezelfde wedstrijd, dezelfde probability-schatting, maar quotering 1,80 in plaats: EV = (0,5 × €0,80) − (0,5 × €1,00) = −€0,10. Identieke pick, tegengestelde uitkomst over de lange termijn."
+        }
       ]
     },
     {
       "id": "value-vs-winners",
-      "h2": "Waarom Value Het Kiezen van Winnaars Verslaat",
+      "h2": "Waarom value het kiezen van winnaars verslaat",
       "blocks": [
-        { "type": "paragraph", "text": "Stel je twee bettors voor. Bettor A pikt 65% winnaars maar alleen bij quoteringen waar de impliciete waarschijnlijkheid 70% is. Bettor B pikt 45% winnaars maar consistent bij quoteringen waar de impliciete waarschijnlijkheid 40% is. Bettor A gaat failliet; Bettor B wordt rijk. Tegen-intuïtief? Ren de cijfers." },
-        { "type": "paragraph", "text": "Bettor A's verwachte waarde per €1 inzet bij 65% wins / 70% impliciete waarschijnlijkheid (decimale quotering 1,43): EV = (0,65 × €0,43) − (0,35 × €1,00) = −€0,07. Negatief — Bettor A verliest gemiddeld 7 cent per euro. Bettor B bij 45% wins / 40% impliciet (decimale quotering 2,50): EV = (0,45 × €1,50) − (0,55 × €1,00) = +€0,13. Positief — Bettor B wint gemiddeld 13 cent per euro." },
-        { "type": "paragraph", "text": "Winnaars kiezen is noodzakelijk maar niet voldoende. De quoteringen moeten in jouw voordeel verkeerd zijn. Daarom is \"wie denk je dat zal winnen?\" de verkeerde vraag — de juiste vraag is \"welke quoteringen zijn verkeerd geprijsd?\"." }
+        {
+          "type": "paragraph",
+          "text": "Stel je twee bettors voor. Bettor A pikt 65% winnaars maar alleen bij quoteringen waar de impliciete waarschijnlijkheid 70% is. Bettor B pikt 45% winnaars maar consistent bij quoteringen waar de impliciete waarschijnlijkheid 40% is. Bettor A gaat failliet; Bettor B wordt rijk. Tegen-intuïtief? Ren de cijfers."
+        },
+        {
+          "type": "paragraph",
+          "text": "Bettor A's verwachte waarde per €1 inzet bij 65% wins / 70% impliciete waarschijnlijkheid (decimale quotering 1,43): EV = (0,65 × €0,43) − (0,35 × €1,00) = −€0,07. Negatief — Bettor A verliest gemiddeld 7 cent per euro. Bettor B bij 45% wins / 40% impliciet (decimale quotering 2,50): EV = (0,45 × €1,50) − (0,55 × €1,00) = +€0,13. Positief — Bettor B wint gemiddeld 13 cent per euro."
+        },
+        {
+          "type": "paragraph",
+          "text": "Winnaars kiezen is noodzakelijk maar niet voldoende. De quoteringen moeten in jouw voordeel verkeerd zijn. Daarom is \"wie denk je dat zal winnen?\" de verkeerde vraag — de juiste vraag is \"welke quoteringen zijn verkeerd geprijsd?\"."
+        }
       ]
     },
     {
       "id": "identifying-value",
-      "h2": "Hoe Value Te Identificeren",
+      "h2": "Hoe value te identificeren",
       "blocks": [
-        { "type": "h3", "text": "Stap 1: Schat ware waarschijnlijkheid" },
-        { "type": "paragraph", "text": "Dit is het moeilijke deel. Je hebt een probability-schatting nodig voor de uitkomst die je overweegt — bijvoorbeeld 58% kans op Over 2,5 goals. Je schatting moet ergens verdedigbaars vandaan komen: een statistisch model, een track record van accurate voorspellingen, of rigoureuze analyse van de matchup. Buikgevoel telt niet, omdat buikgevoelens systematisch bevooroordeeld zijn." },
-        { "type": "h3", "text": "Stap 2: Converteer quoteringen naar impliciete waarschijnlijkheid" },
-        { "type": "paragraph", "text": "Impliciete waarschijnlijkheid = 1 / decimale quotering. Quotering 1,85 impliceert 1/1,85 = 54% waarschijnlijkheid. Quotering 3,50 impliceert 29%. Quotering 2,00 impliceert exact 50%. Let op dat de impliciete waarschijnlijkheden over alle uitkomsten van een markt optellen tot meer dan 100% — het overschot is de marge van de bookmaker." },
-        { "type": "h3", "text": "Stap 3: Vergelijk en zet alleen het gat in" },
-        { "type": "paragraph", "text": "Als jouw schatting hoger is dan impliciet: dat is een positieve-EV inzet. Als jouw schatting lager of gelijk is: skip het. De grootte van het gat telt — een 2% edge (jouw 60% vs impliciet 58%) is technisch positief-EV maar dekt nauwelijks je schattingsruis. De meeste professionele bettors eisen een 5%+ edge voordat ze inzetten. Onder die drempel is de EV echt maar variantie domineert." }
+        {
+          "type": "h3",
+          "text": "Stap 1: Schat ware waarschijnlijkheid"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dit is het moeilijke deel. Je hebt een probability-schatting nodig voor de uitkomst die je overweegt — bijvoorbeeld 58% kans op Over 2,5 goals. Je schatting moet ergens verdedigbaars vandaan komen: een statistisch model, een track record van accurate voorspellingen, of rigoureuze analyse van de matchup. Buikgevoel telt niet, omdat buikgevoelens systematisch bevooroordeeld zijn."
+        },
+        {
+          "type": "h3",
+          "text": "Stap 2: Converteer quoteringen naar impliciete waarschijnlijkheid"
+        },
+        {
+          "type": "paragraph",
+          "text": "Impliciete waarschijnlijkheid = 1 / decimale quotering. Quotering 1,85 impliceert 1/1,85 = 54% waarschijnlijkheid. Quotering 3,50 impliceert 29%. Quotering 2,00 impliceert exact 50%. Let op dat de impliciete waarschijnlijkheden over alle uitkomsten van een markt optellen tot meer dan 100% — het overschot is de marge van de bookmaker."
+        },
+        {
+          "type": "h3",
+          "text": "Stap 3: Vergelijk en zet alleen het gat in"
+        },
+        {
+          "type": "paragraph",
+          "text": "Als jouw schatting hoger is dan impliciet: dat is een positieve-EV inzet. Als jouw schatting lager of gelijk is: skip het. De grootte van het gat telt — een 2% edge (jouw 60% vs impliciet 58%) is technisch positief-EV maar dekt nauwelijks je schattingsruis. De meeste professionele bettors eisen een 5%+ edge voordat ze inzetten. Onder die drempel is de EV echt maar variantie domineert."
+        }
       ]
     },
     {
       "id": "bookmaker-edge",
-      "h2": "De Marge van de Bookmaker",
+      "h2": "De marge van de bookmaker",
       "blocks": [
-        { "type": "paragraph", "text": "Bookmakers prijzen markten niet op \"ware\" waarschijnlijkheid. Ze prijzen ze op ware waarschijnlijkheid plus een marge — typisch 5–10% op voetbal 1X2-markten, 3–5% op Over/Under, soms hoger op niche-markten als correct-score of Asian handicap op lagere competities. Deze marge is waarom de impliciete waarschijnlijkheden optellen tot meer dan 100%." },
-        { "type": "paragraph", "text": "Concreet voorbeeld: een perfect uitgebalanceerde wedstrijd waar elke uitkomst 33,3% ware waarschijnlijkheid heeft. Een bookmaker met 5% marge biedt quoteringen rond 2,85 / 2,85 / 2,85 (elk impliceert 35,1% waarschijnlijkheid — som is 105,3%). De 5,3% overschot is de marge. Om deze markt over tijd te verslaan moeten je probability-schattingen accuraat genoeg zijn om de 5,3% ingebouwde achterstand te overwinnen. De meeste bettors weten niet eens dat deze marge bestaat." },
-        { "type": "h3", "text": "Waarom de meeste bettors verliezen" },
-        { "type": "paragraph", "text": "Als je willekeurig inzet over alle bookmaker-markten verlies je ruwweg de marge per inzet — zeg 5%. Zelfs als je willekeurig 50% van de tijd winnaars pikt, malen de cijfers je nog steeds plat omdat de quoteringen tegen je vertekend zijn. De bookmaker verslaan vereist consistent verkeerd-geprijsde markten identificeren. De meeste bettors doen dit niet systematisch — ze zetten in op hunches, recency bias, of fan-loyaliteit, allemaal producerend neutrale-tot-negatieve selectie-bias." }
+        {
+          "type": "paragraph",
+          "text": "Bookmakers prijzen markten niet op \"ware\" waarschijnlijkheid. Ze prijzen ze op ware waarschijnlijkheid plus een marge — typisch 5–10% op voetbal 1X2-markten, 3–5% op Over/Under, soms hoger op niche-markten als correct-score of Asian handicap op lagere competities. Deze marge is waarom de impliciete waarschijnlijkheden optellen tot meer dan 100%."
+        },
+        {
+          "type": "paragraph",
+          "text": "Concreet voorbeeld: een perfect uitgebalanceerde wedstrijd waar elke uitkomst 33,3% ware waarschijnlijkheid heeft. Een bookmaker met 5% marge biedt quoteringen rond 2,85 / 2,85 / 2,85 (elk impliceert 35,1% waarschijnlijkheid — som is 105,3%). De 5,3% overschot is de marge. Om deze markt over tijd te verslaan moeten je probability-schattingen accuraat genoeg zijn om de 5,3% ingebouwde achterstand te overwinnen. De meeste bettors weten niet eens dat deze marge bestaat."
+        },
+        {
+          "type": "h3",
+          "text": "Waarom de meeste bettors verliezen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Als je willekeurig inzet over alle bookmaker-markten verlies je ruwweg de marge per inzet — zeg 5%. Zelfs als je willekeurig 50% van de tijd winnaars pikt, malen de cijfers je nog steeds plat omdat de quoteringen tegen je vertekend zijn. De bookmaker verslaan vereist consistent verkeerd-geprijsde markten identificeren. De meeste bettors doen dit niet systematisch — ze zetten in op hunches, recency bias, of fan-loyaliteit, allemaal producerend neutrale-tot-negatieve selectie-bias."
+        }
       ]
     },
     {
       "id": "common-mistakes",
-      "h2": "Value Betting Fouten",
+      "h2": "Value betting fouten",
       "blocks": [
-        { "type": "h3", "text": "Vertrouwen verwarren met value" },
-        { "type": "paragraph", "text": "Een 90%-vertrouwen pick bij quotering 1,10 is een negatieve-EV inzet (impliciete waarschijnlijkheid 91%, jouw schatting 90%). Een 25%-vertrouwen pick bij quotering 5,00 is een positieve-EV inzet (impliciet 20%, jouw schatting 25%). Vertrouwen en value zijn verschillend. Het eerste gaat over hoe waarschijnlijk; het tweede over hoe verkeerd-geprijsd." },
-        { "type": "h3", "text": "Overmoed in je probability-schattingen" },
-        { "type": "paragraph", "text": "De meeste amateur-bettors denken dat ze accurater zijn dan ze zijn. Als je \"80% waarschijnlijkheid\" schat maar slechts 65% van die inzetten wint, zijn je schattingen systematisch over-optimistisch en heb je geld verloren op \"value\"-inzetten die geen echte value waren. Tracking van je accuraatheid over honderden inzetten is de enige manier om te kalibreren." },
-        { "type": "h3", "text": "Achter grote quoteringen aanjagen" },
-        { "type": "paragraph", "text": "Long-shot value-inzetten (quotering 5,00+) zijn echt maar hoog-variant. Je hebt een veel groter sample nodig om een edge te bevestigen — de natuurlijke rate van het verkeerd inschatten van long-shot waarschijnlijkheid is hoog. De meeste ervaren value-bettors focussen op 1,5–3,5 quoteringen waar probability-schattingen het meest betrouwbaar zijn." },
-        { "type": "h3", "text": "Sample-grootte negeren" },
-        { "type": "paragraph", "text": "100 inzetten is niet genoeg om te weten of je een edge hebt. Variantie domineert die range. 500-1.000 inzetten is de minimum sample om confident statements te maken over je value-betting accuraatheid. De meeste bettors stoppen bij 50-100 inzetten — winnend of verliezend — zonder ooit hun ware edge te kennen." }
+        {
+          "type": "h3",
+          "text": "Vertrouwen verwarren met value"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een 90%-vertrouwen pick bij quotering 1,10 is een negatieve-EV inzet (impliciete waarschijnlijkheid 91%, jouw schatting 90%). Een 25%-vertrouwen pick bij quotering 5,00 is een positieve-EV inzet (impliciet 20%, jouw schatting 25%). Vertrouwen en value zijn verschillend. Het eerste gaat over hoe waarschijnlijk; het tweede over hoe verkeerd-geprijsd."
+        },
+        {
+          "type": "h3",
+          "text": "Overmoed in je probability-schattingen"
+        },
+        {
+          "type": "paragraph",
+          "text": "De meeste amateur-bettors denken dat ze accurater zijn dan ze zijn. Als je \"80% waarschijnlijkheid\" schat maar slechts 65% van die inzetten wint, zijn je schattingen systematisch over-optimistisch en heb je geld verloren op \"value\"-inzetten die geen echte value waren. Tracking van je accuraatheid over honderden inzetten is de enige manier om te kalibreren."
+        },
+        {
+          "type": "h3",
+          "text": "Achter grote quoteringen aanjagen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Long-shot value-inzetten (quotering 5,00+) zijn echt maar hoog-variant. Je hebt een veel groter sample nodig om een edge te bevestigen — de natuurlijke rate van het verkeerd inschatten van long-shot waarschijnlijkheid is hoog. De meeste ervaren value-bettors focussen op 1,5–3,5 quoteringen waar probability-schattingen het meest betrouwbaar zijn."
+        },
+        {
+          "type": "h3",
+          "text": "Sample-grootte negeren"
+        },
+        {
+          "type": "paragraph",
+          "text": "100 inzetten is niet genoeg om te weten of je een edge hebt. Variantie domineert die range. 500-1.000 inzetten is de minimum sample om confident statements te maken over je value-betting accuraatheid. De meeste bettors stoppen bij 50-100 inzetten — winnend of verliezend — zonder ooit hun ware edge te kennen."
+        }
       ]
     },
     {
       "id": "betsplug-help",
-      "h2": "Hoe BetsPlug Helpt Value Te Vinden",
+      "h2": "Hoe BetsPlug helpt value te vinden",
       "blocks": [
-        { "type": "paragraph", "text": "Onze voorspellings-engine levert probability-schattingen voor elke wedstrijd — wat we confidence-percentages noemen. Deze zijn gekalibreerd tegen historische wedstrijddata: wanneer onze engine 70% zegt, hebben ruwweg 70% van die voorspellingen correct opgelost over onze publieke track record. Die kalibratie is de basis van value-identificatie: een eerlijke probability-schatting is de input die value betting vereist." },
-        { "type": "paragraph", "text": "Abonnees zien impliciete waarschijnlijkheid naast onze schatting, wat de value-berekening expliciet maakt. Gratis gebruikers zien onze top-confidence pick per wedstrijd — nuttig, maar mist de vergelijkingsdata nodig voor systematisch value betting. Hoe dan ook: wat BetsPlug levert is één input — je bankroll-management, inzetdosering en uitvoerings-discipline blijven jouw verantwoordelijkheid." }
+        {
+          "type": "paragraph",
+          "text": "Onze voorspellings-engine levert probability-schattingen voor elke wedstrijd — wat we confidence-percentages noemen. Deze zijn gekalibreerd tegen historische wedstrijddata: wanneer onze engine 70% zegt, hebben ruwweg 70% van die voorspellingen correct opgelost over onze publieke track record. Die kalibratie is de basis van value-identificatie: een eerlijke probability-schatting is de input die value betting vereist."
+        },
+        {
+          "type": "paragraph",
+          "text": "Abonnees zien impliciete waarschijnlijkheid naast onze schatting, wat de value-berekening expliciet maakt. Gratis gebruikers zien onze top-confidence pick per wedstrijd — nuttig, maar mist de vergelijkingsdata nodig voor systematisch value betting. Hoe dan ook: wat BetsPlug levert is één input — je bankroll-management, inzetdosering en uitvoerings-discipline blijven jouw verantwoordelijkheid."
+        }
       ]
     }
   ],
   "keyTakeaways": {
-    "h3": "Belangrijkste Punten",
+    "h3": "Belangrijkste punten",
     "items": [
       "Value = jouw probability-schatting hoger dan de impliciete waarschijnlijkheid van de quotering.",
       "Positieve verwachte waarde (EV) is de enige wiskundig solide lange-termijn strategie.",
@@ -94,22 +185,44 @@
     ]
   },
   "faq": {
-    "h2": "Value Betting FAQ",
+    "h2": "Value betting FAQ",
     "questions": [
-      { "q": "Kan value betting echt bookmakers verslaan op lange termijn?", "a": "Ja, maar zelden. Misschien 1-2% van bettors bereikt consistent lange-termijn winst via value betting. Het vereist accurate probability-schatting, grote sample-groottes, gedisciplineerde inzetdosering, en het geduld om variantie uit te zitten. De meeste bettors die value betting proberen geven óf op voordat de sample-grootte betekenisvol is, óf overschatten hun probability-accuraatheid." },
-      { "q": "Wat is een 'goede' edge om naar te streven?", "a": "5%+ is de conventionele drempel voor inzet-waardige value-inzetten. Onder 5% is je edge fragiel tegen schattingsfout en bookmaker-lijn beweging. Boven 15% moet je je probability-schatting in twijfel trekken — markten bieden zelden zoveel edge tenzij er iets serieus mis is met de lijn, in welk geval bookmakers het meestal corrigeren voordat je kan profiteren." },
-      { "q": "Limiteren bookmakers succesvolle value-bettors?", "a": "Ja. De meeste bookmakers identificeren en limiteren accounts die consistent winnen — soms door inzetten te plafonneren, soms door accounts volledig te sluiten. Dit is een echte beperking op de value-betting strategie op schaal. Scherpere bookmakers (Pinnacle, Betfair Exchange) tolereren winnaars; recreatieve bookmakers niet." },
-      { "q": "Hoe verschilt dit van arbitrage?", "a": "Arbitrage exploiteert prijsverschillen over meerdere bookmakers — alle uitkomsten van een markt afdekken bij quoteringen die winst garanderen ongeacht het resultaat. Value betting neemt één kant van één markt omdat je gelooft dat de quoteringen de waarschijnlijkheid onderwaarderen. Arbitrage heeft bijna-nul variantie; value betting heeft hoge variantie. Beide zijn echte strategieën; ze beantwoorden verschillende vragen." }
+      {
+        "q": "Kan value betting echt bookmakers verslaan op lange termijn?",
+        "a": "Ja, maar zelden. Misschien 1-2% van bettors bereikt consistent lange-termijn winst via value betting. Het vereist accurate probability-schatting, grote sample-groottes, gedisciplineerde inzetdosering, en het geduld om variantie uit te zitten. De meeste bettors die value betting proberen geven óf op voordat de sample-grootte betekenisvol is, óf overschatten hun probability-accuraatheid."
+      },
+      {
+        "q": "Wat is een 'goede' edge om naar te streven?",
+        "a": "5%+ is de conventionele drempel voor inzet-waardige value-inzetten. Onder 5% is je edge fragiel tegen schattingsfout en bookmaker-lijn beweging. Boven 15% moet je je probability-schatting in twijfel trekken — markten bieden zelden zoveel edge tenzij er iets serieus mis is met de lijn, in welk geval bookmakers het meestal corrigeren voordat je kan profiteren."
+      },
+      {
+        "q": "Limiteren bookmakers succesvolle value-bettors?",
+        "a": "Ja. De meeste bookmakers identificeren en limiteren accounts die consistent winnen — soms door inzetten te plafonneren, soms door accounts volledig te sluiten. Dit is een echte beperking op de value-betting strategie op schaal. Scherpere bookmakers (Pinnacle, Betfair Exchange) tolereren winnaars; recreatieve bookmakers niet."
+      },
+      {
+        "q": "Hoe verschilt dit van arbitrage?",
+        "a": "Arbitrage exploiteert prijsverschillen over meerdere bookmakers — alle uitkomsten van een markt afdekken bij quoteringen die winst garanderen ongeacht het resultaat. Value betting neemt één kant van één markt omdat je gelooft dat de quoteringen de waarschijnlijkheid onderwaarderen. Arbitrage heeft bijna-nul variantie; value betting heeft hoge variantie. Beide zijn echte strategieën; ze beantwoorden verschillende vragen."
+      }
     ]
   },
   "relatedArticles": {
-    "h2": "Gerelateerde Artikelen",
-    "slugs": ["kelly-criterion", "bankroll-management", "ai-vs-tipsters"]
+    "h2": "Gerelateerde artikelen",
+    "slugs": [
+      "kelly-criterion",
+      "bankroll-management",
+      "ai-vs-tipsters"
+    ]
   },
   "applyThis": {
-    "h2": "Zie Probability-Schattingen Die Value Kunnen Onthullen",
+    "h2": "Zie probability-schattingen die value kunnen onthullen",
     "body": "Elke BetsPlug-voorspelling toont onze gekalibreerde probability-schatting. Vergelijk met je bookmaker-quoteringen om potentiële value-inzetten te identificeren — of laat onze engine de sterkste kansen flaggen.",
-    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Bekijk Track Record", "canonical": "track-record" }
+    "ctaPrimary": {
+      "label": "Bekijk Voorspellingen Vandaag",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Bekijk Track Record",
+      "canonical": "track-record"
+    }
   }
 }

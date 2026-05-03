@@ -1,26 +1,58 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native speaker review needed for de. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md." },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for de. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
+  },
   "meta": {
-    "title": "Fußball-Wettarten erklärt: Vollständiger Leitfaden | BetsPlug",
+    "title": "Fußball-Wettarten erklärt: vollständiger Leitfaden | BetsPlug",
     "description": "Kompletter Leitfaden zu Fußball-Wettarten: 1X2, BTTS, Über/Unter, Asian Handicap, Endstand und mehr. Wie KI jeden Markttyp vorhersagt.",
     "ogImage": "/og-images/bet-types-de.jpg"
   },
   "hero": {
-    "h1": "Fußball-Wettarten: Ein Vollständiger Leitfaden",
+    "h1": "Fußball-Wettarten: {{accent}}ein vollständiger Leitfaden{{/accent}}",
     "subheadline": "Jeder wichtige Fußballmarkt erklärt: wie er funktioniert, wann er vorhersagbar ist und wie die BetsPlug-KI Vorhersagen für jeden Typ erstellt. Keine Floskeln."
   },
   "toc": {
     "label": "Auf Dieser Seite",
     "items": [
-      { "id": "match-result",  "label": "Spielergebnis (1X2)" },
-      { "id": "double-chance", "label": "Doppelte Chance" },
-      { "id": "btts",          "label": "Beide Teams Treffen (BTTS)" },
-      { "id": "over-under",    "label": "Über/Unter Tore" },
-      { "id": "asian-handicap","label": "Asian Handicap" },
-      { "id": "correct-score", "label": "Endstand" },
-      { "id": "ht-ft",         "label": "Halbzeit / Endstand" },
-      { "id": "draw-no-bet",   "label": "Draw No Bet" },
-      { "id": "coverage",      "label": "Abdeckung pro Tarif" }
+      {
+        "id": "match-result",
+        "label": "Spielergebnis (1X2)"
+      },
+      {
+        "id": "double-chance",
+        "label": "Doppelte Chance"
+      },
+      {
+        "id": "btts",
+        "label": "Beide Teams Treffen (BTTS)"
+      },
+      {
+        "id": "over-under",
+        "label": "Über/Unter Tore"
+      },
+      {
+        "id": "asian-handicap",
+        "label": "Asian Handicap"
+      },
+      {
+        "id": "correct-score",
+        "label": "Endstand"
+      },
+      {
+        "id": "ht-ft",
+        "label": "Halbzeit / Endstand"
+      },
+      {
+        "id": "draw-no-bet",
+        "label": "Draw No Bet"
+      },
+      {
+        "id": "coverage",
+        "label": "Abdeckung pro Tarif"
+      }
     ]
   },
   "sectionLabels": {
@@ -53,7 +85,13 @@
         "1X2 ist schwerer vorherzusagen als Über/Unter — die Drei-Ausgang-Struktur verteilt Wahrscheinlichkeiten anders als Zwei-Ausgang-Märkte.",
         "Verfolge deine Genauigkeit pro Liga. Einige Ligen (Bundesliga, Premier League) haben reichere historische Daten und produzieren genauere Modellausgaben als andere."
       ],
-      "example": { "homeTeam": "Manchester City", "awayTeam": "Crystal Palace", "league": "Premier League", "prediction": "Heimsieg", "confidence": 71 }
+      "example": {
+        "homeTeam": "Manchester City",
+        "awayTeam": "Crystal Palace",
+        "league": "Premier League",
+        "prediction": "Heimsieg",
+        "confidence": 71
+      }
     },
     {
       "id": "double-chance",
@@ -77,7 +115,13 @@
         "Nützlich für Risikomanagement, wenn du einem Tipster folgst, dem du nicht voll vertraust — das Abdecken des Unentschiedens schützt vor dem Optimismus-Bias des Tipsters.",
         "Verwende Doppelte Chance nicht, um schwache Picks zu kaschieren. Reduzierte Quoten spiegeln reduziertes Risiko wider; schlechte Analyse wird durch Hedging nicht repariert."
       ],
-      "example": { "homeTeam": "Bayern München", "awayTeam": "Augsburg", "league": "Bundesliga", "prediction": "1X (Heim oder Unentschieden)", "confidence": 86 }
+      "example": {
+        "homeTeam": "Bayern München",
+        "awayTeam": "Augsburg",
+        "league": "Bundesliga",
+        "prediction": "1X (Heim oder Unentschieden)",
+        "confidence": 86
+      }
     },
     {
       "id": "btts",
@@ -101,7 +145,13 @@
         "BTTS Ja korreliert mit hochintensiver Spielweise; prüfe erwartete Formationen.",
         "Sei vorsichtig bei BTTS-Märkten in Spielen mit großen Defensiv-Verletzungen — die Stichprobengröße für dieses spezifische Szenario ist klein, die Modellgenauigkeit ist niedriger."
       ],
-      "example": { "homeTeam": "Borussia Dortmund", "awayTeam": "Bayer Leverkusen", "league": "Bundesliga", "prediction": "BTTS Ja", "confidence": 74 }
+      "example": {
+        "homeTeam": "Borussia Dortmund",
+        "awayTeam": "Bayer Leverkusen",
+        "league": "Bundesliga",
+        "prediction": "BTTS Ja",
+        "confidence": 74
+      }
     },
     {
       "id": "over-under",
@@ -126,7 +176,13 @@
         "Pokalspiele sind schwerer vorherzusagen — Rotation und Motivation lassen Über/Unter-Verteilungen von Liga-Normen abweichen.",
         "Vermeide Über/Unter-Märkte, wo Wetter ein wichtiger Faktor ist. Starker Regen oder Wind reduziert die Schussverwertung auf Weisen, die die meisten Modelle nicht voll erfassen."
       ],
-      "example": { "homeTeam": "Real Madrid", "awayTeam": "Sevilla", "league": "La Liga", "prediction": "Über 2,5 Tore", "confidence": 68 }
+      "example": {
+        "homeTeam": "Real Madrid",
+        "awayTeam": "Sevilla",
+        "league": "La Liga",
+        "prediction": "Über 2,5 Tore",
+        "confidence": 68
+      }
     },
     {
       "id": "asian-handicap",
@@ -151,7 +207,13 @@
         "Vermeide Asian Handicap in Derbys und emotional aufgeladenen Spielen, wo die Margen-Varianz am höchsten ist.",
         "Schärfere Buchmacher (Pinnacle, Börsen) bieten bessere Asian-Handicap-Linien als Freizeit-Buchmacher — die engeren Margen zählen in diesem Markt mehr als bei 1X2."
       ],
-      "example": { "homeTeam": "Manchester City", "awayTeam": "Brentford", "league": "Premier League", "prediction": "Man City -1,5", "confidence": 62 }
+      "example": {
+        "homeTeam": "Manchester City",
+        "awayTeam": "Brentford",
+        "league": "Premier League",
+        "prediction": "Man City -1,5",
+        "confidence": 62
+      }
     },
     {
       "id": "correct-score",
@@ -176,7 +238,13 @@
         "Verfolge, welche Endstand-Linien Buchmacher am meisten schattieren. Übliche Ergebnisse (1-1, 2-1) sind oft kürzer als ihre Modellwahrscheinlichkeit; weniger üblich anmutende Ergebnisse (2-2, 3-2) sind oft länger.",
         "Vermeide Endstand in Spielen mit hoher Varianz: Pokalspiele, rotationsbeeinflusste Spiele, tote Spiele am Saisonende."
       ],
-      "example": { "homeTeam": "Bayern München", "awayTeam": "Eintracht Frankfurt", "league": "Bundesliga", "prediction": "2-1 Bayern", "confidence": 12 }
+      "example": {
+        "homeTeam": "Bayern München",
+        "awayTeam": "Eintracht Frankfurt",
+        "league": "Bundesliga",
+        "prediction": "2-1 Bayern",
+        "confidence": 12
+      }
     },
     {
       "id": "ht-ft",
@@ -201,7 +269,13 @@
         "Vermeide U/HS oder U/AS (Aufholjagd-Vorhersagen) — Aufholjagden sind inhärent unvorhersehbar.",
         "Nützlich für emotionale Spieler, die einfachere Erzählungs-Vorhersagen wollen — aber die Varianz ist real."
       ],
-      "example": { "homeTeam": "Real Madrid", "awayTeam": "Almería", "league": "La Liga", "prediction": "Madrid HZ/FZ", "confidence": 38 }
+      "example": {
+        "homeTeam": "Real Madrid",
+        "awayTeam": "Almería",
+        "league": "La Liga",
+        "prediction": "Madrid HZ/FZ",
+        "confidence": 38
+      }
     },
     {
       "id": "draw-no-bet",
@@ -226,42 +300,115 @@
         "Nützlich, um bescheidene Favoriten in engen Auswärtsspielen zu unterstützen — Schutz gegen das Unentschieden, ohne zu viel potenzielle Auszahlung zu opfern.",
         "Verwende DNB nicht, um schlechte Picks zu reparieren. Die Unentschieden-Erstattung kompensiert keine schlechte Analyse."
       ],
-      "example": { "homeTeam": "Arsenal", "awayTeam": "Tottenham", "league": "Premier League", "prediction": "Arsenal DNB", "confidence": 56 }
+      "example": {
+        "homeTeam": "Arsenal",
+        "awayTeam": "Tottenham",
+        "league": "Premier League",
+        "prediction": "Arsenal DNB",
+        "confidence": 56
+      }
     }
   ],
   "coverage": {
     "h2": "Welche Wettarten BetsPlug Abdeckt",
     "body": "Der kostenlose Tarif zeigt die höchstkonfidente Auswahl pro Spiel — typisch 1X2. Bezahlte Abonnenten sehen alle Markttypen mit voller Analyse.",
-    "headers": { "betType": "Wettart", "freeTier": "Kostenloser Tarif", "paidTier": "Bezahlter Tarif" },
+    "headers": {
+      "betType": "Wettart",
+      "freeTier": "Kostenloser Tarif",
+      "paidTier": "Bezahlter Tarif"
+    },
     "rows": [
-      { "betType": "1X2",                "free": true,  "paid": true },
-      { "betType": "Doppelte Chance",    "free": false, "paid": true },
-      { "betType": "BTTS",               "free": false, "paid": true },
-      { "betType": "Über/Unter 2,5",     "free": false, "paid": true },
-      { "betType": "Über/Unter 1,5/3,5", "free": false, "paid": true },
-      { "betType": "Asian Handicap",     "free": false, "paid": true },
-      { "betType": "Endstand",           "free": false, "paid": "matrix" },
-      { "betType": "HZ/FZ",              "free": false, "paid": true },
-      { "betType": "Draw No Bet",        "free": false, "paid": true }
+      {
+        "betType": "1X2",
+        "free": true,
+        "paid": true
+      },
+      {
+        "betType": "Doppelte Chance",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "BTTS",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Über/Unter 2,5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Über/Unter 1,5/3,5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Asian Handicap",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Endstand",
+        "free": false,
+        "paid": "matrix"
+      },
+      {
+        "betType": "HZ/FZ",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Draw No Bet",
+        "free": false,
+        "paid": true
+      }
     ],
     "note": "Der kostenlose Tarif zeigt die höchstkonfidente Auswahl pro Spiel (typisch 1X2). Bezahlte Abonnenten sehen alle Markttypen mit voller Analyse.",
-    "cta": { "label": "Preise Ansehen", "canonical": "pricing" }
+    "cta": {
+      "label": "Preise Ansehen",
+      "canonical": "pricing"
+    }
   },
   "faq": {
     "h2": "Wettarten FAQ",
     "questions": [
-      { "q": "Welche Wettart ist am vorhersagbarsten?", "a": "Statistisch sind Über/Unter-2,5-Tore und BTTS-Märkte mit Poisson-Modellen am vorhersagbarsten. Sie haben gut definierte Wahrscheinlichkeitsverteilungen und große historische Stichprobengrößen. Asian Handicap ist auch sehr vorhersagbar in klaren Favoriten-Spielen, aber weniger in engen Spielen. 1X2 liegt in der Mitte — vorhersagbar, aber mit der inhärenten Unsicherheit von Drei-Ausgang-Märkten." },
-      { "q": "Warum empfiehlt BetsPlug spezifische Wettarten pro Spiel?", "a": "Unsere Engine identifiziert die höchstkonfidente Vorhersage für jedes Spiel — den Markt, in dem das statistische Signal am stärksten ist. Dies variiert pro Spiel: manchmal hat 1X2 das klarste Signal, manchmal Über/Unter, manchmal BTTS. Wir veröffentlichen das stärkste Signal, statt einen einzelnen Markt über alle Spiele zu erzwingen." },
-      { "q": "Kann ich alle Wettart-Vorhersagen für ein einzelnes Spiel sehen?", "a": "Bezahlte Abonnenten sehen alle Marktvorhersagen pro Spiel — jede Vorhersage, die wir generieren, einschließlich der Wahrscheinlichkeitsmatrix für den Endstand. Kostenlose Nutzer sehen die höchstkonfidente Auswahl der Engine pro Spiel (typisch 1X2 oder Über/Unter 2,5)." },
-      { "q": "Warum sagt ihr keine spezifischen Torschützen voraus?", "a": "Spielerebene-Vorhersagen haben viel höhere Varianz als Teamebene-Vorhersagen. Aufstellungsunsicherheit, individuelle Form-Varianz und taktische Änderungen machen genaue Torschützen-Vorhersage unzuverlässig. Wir konzentrieren uns auf Teamebene-Märkte, in denen Genauigkeit erreichbar ist. Spieler-Prop-Märkte sind auch bei den meisten Buchmachern weniger effizient, was die Daten schwerer modellierbar macht." },
-      { "q": "Was ist der Unterschied zwischen Wahrscheinlichkeit und Konfidenz?", "a": "Wahrscheinlichkeit ist die mathematische Wahrscheinlichkeit, die wir berechnen (z. B. 78% Chance auf Über 2,5). Konfidenz ist unsere Sicherheit in dieser Wahrscheinlichkeit — beeinflusst durch Datenqualität, Stichprobengröße und passende Spiel-Charakteristiken. Wir zeigen Wahrscheinlichkeitszahlen; hochkonfidente Vorhersagen werden in der Abonnenten-UI separat markiert." },
-      { "q": "Warum sind einige Wettarten nur in bezahlten Tarifen verfügbar?", "a": "Der kostenlose Tarif zeigt unsere höchstkonfidente Auswahl pro Spiel — typisch 1X2. Andere Märkte (Über/Unter, BTTS, Asian Handicap, Endstand, HZ/FZ, DNB) erfordern Abonnenten-Zugang. Dies balanciert kostenlosen Mehrwert mit nachhaltigem Abonnement-Modell. Abonnenten sehen auch die zugrunde liegende Wahrscheinlichkeitsmatrix und können eigene Multi-Markt-Strategien aufbauen." }
+      {
+        "q": "Welche Wettart ist am vorhersagbarsten?",
+        "a": "Statistisch sind Über/Unter-2,5-Tore und BTTS-Märkte mit Poisson-Modellen am vorhersagbarsten. Sie haben gut definierte Wahrscheinlichkeitsverteilungen und große historische Stichprobengrößen. Asian Handicap ist auch sehr vorhersagbar in klaren Favoriten-Spielen, aber weniger in engen Spielen. 1X2 liegt in der Mitte — vorhersagbar, aber mit der inhärenten Unsicherheit von Drei-Ausgang-Märkten."
+      },
+      {
+        "q": "Warum empfiehlt BetsPlug spezifische Wettarten pro Spiel?",
+        "a": "Unsere Engine identifiziert die höchstkonfidente Vorhersage für jedes Spiel — den Markt, in dem das statistische Signal am stärksten ist. Dies variiert pro Spiel: manchmal hat 1X2 das klarste Signal, manchmal Über/Unter, manchmal BTTS. Wir veröffentlichen das stärkste Signal, statt einen einzelnen Markt über alle Spiele zu erzwingen."
+      },
+      {
+        "q": "Kann ich alle Wettart-Vorhersagen für ein einzelnes Spiel sehen?",
+        "a": "Bezahlte Abonnenten sehen alle Marktvorhersagen pro Spiel — jede Vorhersage, die wir generieren, einschließlich der Wahrscheinlichkeitsmatrix für den Endstand. Kostenlose Nutzer sehen die höchstkonfidente Auswahl der Engine pro Spiel (typisch 1X2 oder Über/Unter 2,5)."
+      },
+      {
+        "q": "Warum sagt ihr keine spezifischen Torschützen voraus?",
+        "a": "Spielerebene-Vorhersagen haben viel höhere Varianz als Teamebene-Vorhersagen. Aufstellungsunsicherheit, individuelle Form-Varianz und taktische Änderungen machen genaue Torschützen-Vorhersage unzuverlässig. Wir konzentrieren uns auf Teamebene-Märkte, in denen Genauigkeit erreichbar ist. Spieler-Prop-Märkte sind auch bei den meisten Buchmachern weniger effizient, was die Daten schwerer modellierbar macht."
+      },
+      {
+        "q": "Was ist der Unterschied zwischen Wahrscheinlichkeit und Konfidenz?",
+        "a": "Wahrscheinlichkeit ist die mathematische Wahrscheinlichkeit, die wir berechnen (z. B. 78% Chance auf Über 2,5). Konfidenz ist unsere Sicherheit in dieser Wahrscheinlichkeit — beeinflusst durch Datenqualität, Stichprobengröße und passende Spiel-Charakteristiken. Wir zeigen Wahrscheinlichkeitszahlen; hochkonfidente Vorhersagen werden in der Abonnenten-UI separat markiert."
+      },
+      {
+        "q": "Warum sind einige Wettarten nur in bezahlten Tarifen verfügbar?",
+        "a": "Der kostenlose Tarif zeigt unsere höchstkonfidente Auswahl pro Spiel — typisch 1X2. Andere Märkte (Über/Unter, BTTS, Asian Handicap, Endstand, HZ/FZ, DNB) erfordern Abonnenten-Zugang. Dies balanciert kostenlosen Mehrwert mit nachhaltigem Abonnement-Modell. Abonnenten sehen auch die zugrunde liegende Wahrscheinlichkeitsmatrix und können eigene Multi-Markt-Strategien aufbauen."
+      }
     ]
   },
   "finalCta": {
-    "h2": "Sieh Dir Wettart-Vorhersagen In Aktion An",
+    "h2": "Sieh dir Wettart-Vorhersagen in Aktion an",
     "body": "Jede Vorhersage über 30+ Ligen. Multi-Markt-Analyse. Vor dem Anpfiff gesperrt. Öffentlicher Track Record.",
-    "ctaPrimary": { "label": "Heutige Vorhersagen Ansehen", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Wie Vorhersagen Funktionieren", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Heutige Vorhersagen Ansehen",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Wie Vorhersagen Funktionieren",
+      "canonical": "methodology"
+    }
   }
 }

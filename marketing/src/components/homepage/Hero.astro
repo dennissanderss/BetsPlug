@@ -10,6 +10,7 @@
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
 interface Props {
@@ -70,9 +71,8 @@ const confidenceWidth = `${Math.max(0, Math.min(100, content.visual.confidence))
           id="hero-h1"
           class="mt-4 text-4xl sm:text-5xl lg:text-6xl xl:text-[64px]
                  font-bold leading-[1.05] tracking-tight text-white-pure"
-        >
-          {content.h1}
-        </h1>
+          set:html={parseAccent(content.h1)}
+        ></h1>
 
         <p class="mt-6 max-w-2xl text-lg sm:text-xl leading-relaxed text-white-soft">
           {content.subheadline}

@@ -1,19 +1,33 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "BetsPlug Track Record — Elke Voorspelling Publiek | BetsPlug",
+    "title": "BetsPlug track record — elke voorspelling publiek | BetsPlug",
     "description": "Bekijk elke BetsPlug AI-voorspelling ooit gepubliceerd — winst en verlies. Live track record dagelijks bijgewerkt. Vergrendel-tijdstempels bewijzen transparantie.",
     "ogImage": "/og-images/track-record-nl.jpg"
   },
   "hero": {
-    "h1": "Elke Voorspelling. Publiek. Voor Altijd.",
+    "h1": "Elke voorspelling. {{accent}}Publiek. Voor altijd.{{/accent}}",
     "subheadline": "De meeste voorspellingssites tonen alleen hun winnaars. Wij publiceren alles — winst, verlies, exacte voorspellingen en tijdstempels. Verifieer elke voorspelling die we ooit hebben gemaakt.",
-    "trustStrip": ["Vergrendeld vóór de aftrap", "Kan niet bewerkt worden", "Winst én verlies"],
-    "ctaPrimary": { "label": "Hoe het werkt", "canonical": "methodology" },
-    "ctaSecondary": { "label": "Bekijk Voorspellingen", "canonical": "predictions" }
+    "trustStrip": [
+      "Vergrendeld vóór de aftrap",
+      "Kan niet bewerkt worden",
+      "Winst én verlies"
+    ],
+    "ctaPrimary": {
+      "label": "Hoe het werkt",
+      "canonical": "methodology"
+    },
+    "ctaSecondary": {
+      "label": "Bekijk Voorspellingen",
+      "canonical": "predictions"
+    }
   },
   "widget": {
-    "h2": "Live Track Record",
+    "h2": "Live track record",
     "subhead": "Automatisch bijgewerkt zodra wedstrijden eindigen. Klik op een voorspelling voor volledige details.",
     "rangeLabel": "Periode",
     "range30": "Laatste 30 dagen",
@@ -35,7 +49,7 @@
     "tooltipPattern": "{result}: {home} vs {away}, {prediction}, vergrendeld {date}"
   },
   "whyPublishLosses": {
-    "h2": "Waarom We Ook Verliezen Publiceren",
+    "h2": "Waarom we ook verliezen publiceren",
     "paragraphs": [
       "De voorspellingsindustrie heeft een integriteitsprobleem. De meeste sites tonen selectief winnende voorspellingen terwijl ze stilletjes verliezen verwijderen, waardoor hun nauwkeurigheidsclaims betekenisloos zijn. We hebben deze aanpak vanaf dag één afgewezen.",
       "Elke BetsPlug-voorspelling wordt vergrendeld met een publiek tijdstempel vóór de aftrap. Eenmaal gepubliceerd kan deze niet worden bewerkt, verwijderd of verborgen. Winst of verlies, de voorspelling blijft voor altijd in ons publieke register. Dit is de enige manier om nauwkeurigheidsclaims verifieerbaar te maken.",
@@ -50,24 +64,48 @@
     }
   },
   "methodologyLink": {
-    "h2": "De Methodologie Achter Deze Cijfers",
+    "h2": "De methodologie achter deze cijfers",
     "body": "Elke voorspelling in ons track record werd gegenereerd door dezelfde AI-engine: Elo-ratings, Poisson-doelpuntmodellen en machine learning gecombineerd. Geen redactionele keuzes, geen handmatige overrides.",
-    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" }
+    "cta": {
+      "label": "Lees volledige methodologie",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Track Record FAQ",
+    "h2": "Track record FAQ",
     "questions": [
-      { "q": "Kunnen voorspellingen uit het track record worden verwijderd?", "a": "Nee. Elke voorspelling wordt vergrendeld met een onveranderlijk tijdstempel vóór de aftrap. We hebben geen mechanisme om voorspellingen na publicatie te verwijderen of verbergen. Dit is architectonisch, niet beleid — het kan niet worden veranderd." },
-      { "q": "Wat betekent 'ongeldig' in het track record?", "a": "Ongeldige status geldt voor voorspellingen waar de wedstrijd werd uitgesteld, geannuleerd of anderszins geen normale conclusie bereikte. We tellen deze niet als winst of verlies omdat de voorspelling niet kon worden geëvalueerd." },
-      { "q": "Waarom tonen jullie geen specifieke nauwkeurigheidspercentages prominent?", "a": "Nauwkeurigheid varieert dramatisch per competitie, markttype en periode. Een enkel headline-percentage verbergt deze variantie. We tonen liever ruwe data zodat je werkelijke prestaties in context kunt zien." },
-      { "q": "Kan ik de track record-data downloaden?", "a": "Track record-data is beschikbaar via onze API voor betalende abonnees. Het visuele track record op deze pagina is publiek toegankelijk voor verificatiedoeleinden." },
-      { "q": "Hoe verifieer ik dat een specifieke voorspelling vergrendeld werd vóór de aftrap?", "a": "Klik op een voorspelling in het track record. De detailpagina toont het vergrendel-tijdstempel — het exacte moment waarop de voorspelling werd vastgelegd. Vergelijk dit met de werkelijke aftraptijd. Vergrendel-tijdstempel is altijd vóór de aftrap." }
+      {
+        "q": "Kunnen voorspellingen uit het track record worden verwijderd?",
+        "a": "Nee. Elke voorspelling wordt vergrendeld met een onveranderlijk tijdstempel vóór de aftrap. We hebben geen mechanisme om voorspellingen na publicatie te verwijderen of verbergen. Dit is architectonisch, niet beleid — het kan niet worden veranderd."
+      },
+      {
+        "q": "Wat betekent 'ongeldig' in het track record?",
+        "a": "Ongeldige status geldt voor voorspellingen waar de wedstrijd werd uitgesteld, geannuleerd of anderszins geen normale conclusie bereikte. We tellen deze niet als winst of verlies omdat de voorspelling niet kon worden geëvalueerd."
+      },
+      {
+        "q": "Waarom tonen jullie geen specifieke nauwkeurigheidspercentages prominent?",
+        "a": "Nauwkeurigheid varieert dramatisch per competitie, markttype en periode. Een enkel headline-percentage verbergt deze variantie. We tonen liever ruwe data zodat je werkelijke prestaties in context kunt zien."
+      },
+      {
+        "q": "Kan ik de track record-data downloaden?",
+        "a": "Track record-data is beschikbaar via onze API voor betalende abonnees. Het visuele track record op deze pagina is publiek toegankelijk voor verificatiedoeleinden."
+      },
+      {
+        "q": "Hoe verifieer ik dat een specifieke voorspelling vergrendeld werd vóór de aftrap?",
+        "a": "Klik op een voorspelling in het track record. De detailpagina toont het vergrendel-tijdstempel — het exacte moment waarop de voorspelling werd vastgelegd. Vergelijk dit met de werkelijke aftraptijd. Vergrendel-tijdstempel is altijd vóór de aftrap."
+      }
     ]
   },
   "finalCta": {
-    "h2": "Klaar om de Voorspellingen van Vandaag te Zien?",
+    "h2": "Klaar om de voorspellingen van vandaag te zien?",
     "body": "Dezelfde engine, dezelfde transparantie. Probeer onze gratis voorspellingen vandaag.",
-    "ctaPrimary": { "label": "Krijg Gratis Picks", "href": "https://app.betsplug.com/register?source=track_record_final" },
-    "ctaSecondary": { "label": "Vergelijk Plannen", "canonical": "pricing" }
+    "ctaPrimary": {
+      "label": "Krijg Gratis Picks",
+      "href": "https://app.betsplug.com/register?source=track_record_final"
+    },
+    "ctaSecondary": {
+      "label": "Vergelijk Plannen",
+      "canonical": "pricing"
+    }
   }
 }

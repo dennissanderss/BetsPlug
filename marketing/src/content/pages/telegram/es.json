@@ -1,45 +1,83 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Picks Gratis Diarios vía Telegram | BetsPlug",
+    "title": "Picks gratis diarios vía Telegram | BetsPlug",
     "description": "Top 3 pronósticos IA fútbol diarios en Telegram. Gratis, sin registro, sin email requerido.",
     "ogImage": "/og-images/telegram-es.jpg"
   },
   "hero": {
-    "h1": "Picks Gratis Diarios vía Telegram",
+    "h1": "Picks gratis diarios vía Telegram",
     "subheadline": "Recibe nuestros top 3 pronósticos IA de fútbol diarios directamente en Telegram. Gratis, sin registro, sin email.",
     "telegramUrl": "https://t.me/betsplug_picks",
     "ctaLabel": "Únete al canal Telegram",
-    "trustStrip": ["Gratis para siempre", "Sin registro", "Picks diarios 8:00 CET"]
+    "trustStrip": [
+      "Gratis para siempre",
+      "Sin registro",
+      "Picks diarios 8:00 CET"
+    ]
   },
   "whatYouGet": {
-    "h2": "Lo Que Recibirás",
+    "h2": "Lo que recibirás",
     "cards": [
-      { "icon": "trending-up", "title": "Top 3 Picks Diarios", "body": "Los pronósticos de mayor confianza de nuestro motor del día, en ligas principales. Enviados cada mañana a las 8:00 CET." },
-      { "icon": "info",        "title": "Contexto de Partido", "body": "Razonamiento breve por pick: por qué nuestro motor seleccionó este partido y mercado. No solo números, sino comprensión." },
-      { "icon": "check-circle","title": "Actualizaciones de Resultados", "body": "Después de los partidos, publicamos resultados: aciertos y fallos. Sigue el rendimiento del canal semana tras semana." }
+      {
+        "icon": "trending-up",
+        "title": "Top 3 picks diarios",
+        "body": "Los pronósticos de mayor confianza de nuestro motor del día, en ligas principales. Enviados cada mañana a las 8:00 CET."
+      },
+      {
+        "icon": "info",
+        "title": "Contexto de partido",
+        "body": "Razonamiento breve por pick: por qué nuestro motor seleccionó este partido y mercado. No solo números, sino comprensión."
+      },
+      {
+        "icon": "check-circle",
+        "title": "Actualizaciones de resultados",
+        "body": "Después de los partidos, publicamos resultados: aciertos y fallos. Sigue el rendimiento del canal semana tras semana."
+      }
     ]
   },
   "whyTelegram": {
-    "h2": "¿Por Qué Telegram?",
+    "h2": "¿Por qué Telegram?",
     "paragraphs": [
       "Telegram es rápido, seguro y funciona en cualquier dispositivo. Entregamos picks donde miras tu móvil, no enterrados en carpetas de email. Las notificaciones aparecen inmediatamente.",
       "Sin spam. Enviamos 3 picks por día, más actualizaciones de resultados. Cancela suscripción en cualquier momento dejando el canal — no se requiere eliminación de cuenta."
     ]
   },
   "upgradePath": {
-    "h2": "¿Quieres Más De 3 Picks Por Día?",
+    "h2": "¿Quieres más de 3 picks por día?",
     "body": "El canal de Telegram es nuestro tier gratis en formato mensajería. Los suscriptores obtienen pronósticos diarios ilimitados en 30+ ligas, análisis completo y notificaciones personalizadas.",
-    "ctaPrimary": { "label": "Ver Precios", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Mejor Cuenta Gratuita", "href": "https://app.betsplug.com/register?source=telegram_landing" }
+    "ctaPrimary": {
+      "label": "Ver Precios",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Mejor Cuenta Gratuita",
+      "href": "https://app.betsplug.com/register?source=telegram_landing"
+    }
   },
   "faq": {
-    "h2": "FAQ Canal Telegram",
+    "h2": "FAQ canal Telegram",
     "questions": [
-      { "q": "¿Necesito una cuenta BetsPlug?", "a": "No. El canal de Telegram está abierto sin crear cuenta. Solo únete al canal y recibirás picks diarios." },
-      { "q": "¿Puedo recibir notificaciones para ligas específicas?", "a": "El canal gratuito de Telegram envía top 3 picks en todas las ligas. Para notificaciones específicas por liga o tipo de apuesta, nuestros planes pagos incluyen alertas Telegram personalizables." },
-      { "q": "¿Qué tan precisos son estos picks?", "a": "Misma precisión que nuestro tier gratis web — mismo motor, misma metodología. Verifica el rendimiento vía nuestro historial público." },
-      { "q": "¿Por qué solo 3 picks por día en Telegram?", "a": "Límite del tier gratis. Los suscriptores reciben pronósticos ilimitados más notificaciones Telegram personalizadas según umbrales de confianza y preferencias de liga." }
+      {
+        "q": "¿Necesito una cuenta BetsPlug?",
+        "a": "No. El canal de Telegram está abierto sin crear cuenta. Solo únete al canal y recibirás picks diarios."
+      },
+      {
+        "q": "¿Puedo recibir notificaciones para ligas específicas?",
+        "a": "El canal gratuito de Telegram envía top 3 picks en todas las ligas. Para notificaciones específicas por liga o tipo de apuesta, nuestros planes pagos incluyen alertas Telegram personalizables."
+      },
+      {
+        "q": "¿Qué tan precisos son estos picks?",
+        "a": "Misma precisión que nuestro tier gratis web — mismo motor, misma metodología. Verifica el rendimiento vía nuestro historial público."
+      },
+      {
+        "q": "¿Por qué solo 3 picks por día en Telegram?",
+        "a": "Límite del tier gratis. Los suscriptores reciben pronósticos ilimitados más notificaciones Telegram personalizadas según umbrales de confianza y preferencias de liga."
+      }
     ]
   }
 }

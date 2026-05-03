@@ -1,12 +1,16 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Poisson Goal Models for Football Predictions | BetsPlug Learn",
+    "title": "Poisson goal models for football predictions | BetsPlug learn",
     "description": "How Poisson distributions predict football scores mathematically. Lambda calculation, score probability matrix, Dixon-Coles adjustment, and limitations.",
     "ogImage": "/og-images/learn-poisson-en.jpg"
   },
   "header": {
-    "h1": "Poisson Goal Models: Predicting Football Scores Mathematically",
+    "h1": "Poisson goal models: predicting football scores mathematically",
     "excerpt": "The mathematical distribution that predicts the probability of specific match scores based on attacking and defensive rates.",
     "readingTime": "12 min read",
     "difficulty": "Intermediate",
@@ -20,97 +24,190 @@
   "sections": [
     {
       "id": "what-is-poisson",
-      "h2": "What is the Poisson Distribution?",
+      "h2": "What is the Poisson distribution?",
       "blocks": [
-        { "type": "paragraph", "text": "The Poisson distribution describes the probability of a given number of independent events occurring in a fixed interval, when those events happen at a known constant average rate. Originally derived by Siméon Denis Poisson in 1837 to model jury verdicts, it found practical use in everything from radioactive decay counts to call-centre arrivals to baseball home runs." },
-        { "type": "paragraph", "text": "The formula uses one parameter, lambda (λ), which represents the expected number of events in the interval. Plug in lambda and a target count k, and you get the probability of exactly k events occurring." },
-        { "type": "formula", "latex": "P(k) = \\dfrac{\\lambda^{k} e^{-\\lambda}}{k!}", "caption": "Poisson probability mass function: probability of exactly k events given expected rate lambda." },
-        { "type": "paragraph", "text": "What makes Poisson useful for football: it gives you the probability of every score outcome, not just the expected total. Lambda 1.5 doesn't just predict \"about 1.5 goals\" — it gives you P(0 goals), P(1 goal), P(2 goals), and so on, summing to 100%. That detailed distribution is what powers every Poisson-based prediction." }
+        {
+          "type": "paragraph",
+          "text": "The Poisson distribution describes the probability of a given number of independent events occurring in a fixed interval, when those events happen at a known constant average rate. Originally derived by Siméon Denis Poisson in 1837 to model jury verdicts, it found practical use in everything from radioactive decay counts to call-centre arrivals to baseball home runs."
+        },
+        {
+          "type": "paragraph",
+          "text": "The formula uses one parameter, lambda (λ), which represents the expected number of events in the interval. Plug in lambda and a target count k, and you get the probability of exactly k events occurring."
+        },
+        {
+          "type": "formula",
+          "latex": "P(k) = \\dfrac{\\lambda^{k} e^{-\\lambda}}{k!}",
+          "caption": "Poisson probability mass function: probability of exactly k events given expected rate lambda."
+        },
+        {
+          "type": "paragraph",
+          "text": "What makes Poisson useful for football: it gives you the probability of every score outcome, not just the expected total. Lambda 1.5 doesn't just predict \"about 1.5 goals\" — it gives you P(0 goals), P(1 goal), P(2 goals), and so on, summing to 100%. That detailed distribution is what powers every Poisson-based prediction."
+        }
       ]
     },
     {
       "id": "applying-football",
-      "h2": "Applying Poisson to Football",
+      "h2": "Applying Poisson to football",
       "blocks": [
-        { "type": "paragraph", "text": "To predict a football match with Poisson, you need two lambdas: home team's expected goals (λH) and away team's expected goals (λA). Each is a function of attacking strength, opponent defensive weakness, home advantage, recent form, and contextual factors." },
-        { "type": "h3", "text": "Calculating lambda" },
-        { "type": "paragraph", "text": "The simplest version: λH = home_attack × away_defence × home_advantage. \"Home attack\" is the team's average goals scored when at home, normalised against league average. \"Away defence\" is the opponent's average goals conceded when away, normalised similarly. Home advantage adds a small multiplier (typically 1.1–1.3) reflecting the consistent edge home teams hold." },
-        { "type": "paragraph", "text": "More sophisticated versions feed Elo ratings, recent xG trends, lineup-strength estimates, and rest-day adjustments into the lambda calculation. Modern engines blend many sources to produce a single lambda per side." },
-        { "type": "diagram", "name": "poisson-distribution", "caption": "Two Poisson distributions: home team with λ=2.4 (green) and away team with λ=0.9 (blue)." }
+        {
+          "type": "paragraph",
+          "text": "To predict a football match with Poisson, you need two lambdas: home team's expected goals (λH) and away team's expected goals (λA). Each is a function of attacking strength, opponent defensive weakness, home advantage, recent form, and contextual factors."
+        },
+        {
+          "type": "h3",
+          "text": "Calculating lambda"
+        },
+        {
+          "type": "paragraph",
+          "text": "The simplest version: λH = home_attack × away_defence × home_advantage. \"Home attack\" is the team's average goals scored when at home, normalised against league average. \"Away defence\" is the opponent's average goals conceded when away, normalised similarly. Home advantage adds a small multiplier (typically 1.1–1.3) reflecting the consistent edge home teams hold."
+        },
+        {
+          "type": "paragraph",
+          "text": "More sophisticated versions feed Elo ratings, recent xG trends, lineup-strength estimates, and rest-day adjustments into the lambda calculation. Modern engines blend many sources to produce a single lambda per side."
+        },
+        {
+          "type": "diagram",
+          "name": "poisson-distribution",
+          "caption": "Two Poisson distributions: home team with λ=2.4 (green) and away team with λ=0.9 (blue)."
+        }
       ]
     },
     {
       "id": "score-probabilities",
-      "h2": "Calculating Score Probabilities",
+      "h2": "Calculating score probabilities",
       "blocks": [
-        { "type": "paragraph", "text": "Once you have λH and λA, the joint probability of a specific score (h goals home, a goals away) is the product of the two individual Poisson probabilities — assuming independence between home and away scoring (a simplification we'll revisit)." },
-        { "type": "h3", "text": "The probability matrix" },
-        { "type": "paragraph", "text": "Calculate P(h) for h = 0, 1, 2, 3, 4, 5+ using λH. Calculate P(a) for a = 0, 1, 2, 3, 4, 5+ using λA. Multiply each combination to get the joint probability for every score. The result is a 6×6 matrix (or larger if you want), with each cell showing the probability of that exact final score." },
-        { "type": "example", "label": "Worked example", "body": "Bayern Munich (λH = 2.4) vs Eintracht Frankfurt (λA = 0.9). Pure Poisson gives: P(2-1) = (e^-2.4 × 2.4²/2!) × (e^-0.9 × 0.9¹/1!) = 0.2613 × 0.3659 = 0.0956 (~9.6%). Most likely individual scores: 2-1 (~9.6%), 2-0 (~10.6%), 1-0 (~5.3%), 3-0 (~7.0%). Sum the home-win cells to get P(home win); sum the cells where home + away ≥ 3 for P(Over 2.5); sum cells where both home > 0 AND away > 0 for P(BTTS Yes)." }
+        {
+          "type": "paragraph",
+          "text": "Once you have λH and λA, the joint probability of a specific score (h goals home, a goals away) is the product of the two individual Poisson probabilities — assuming independence between home and away scoring (a simplification we'll revisit)."
+        },
+        {
+          "type": "h3",
+          "text": "The probability matrix"
+        },
+        {
+          "type": "paragraph",
+          "text": "Calculate P(h) for h = 0, 1, 2, 3, 4, 5+ using λH. Calculate P(a) for a = 0, 1, 2, 3, 4, 5+ using λA. Multiply each combination to get the joint probability for every score. The result is a 6×6 matrix (or larger if you want), with each cell showing the probability of that exact final score."
+        },
+        {
+          "type": "example",
+          "label": "Worked example",
+          "body": "Bayern Munich (λH = 2.4) vs Eintracht Frankfurt (λA = 0.9). Pure Poisson gives: P(2-1) = (e^-2.4 × 2.4²/2!) × (e^-0.9 × 0.9¹/1!) = 0.2613 × 0.3659 = 0.0956 (~9.6%). Most likely individual scores: 2-1 (~9.6%), 2-0 (~10.6%), 1-0 (~5.3%), 3-0 (~7.0%). Sum the home-win cells to get P(home win); sum the cells where home + away ≥ 3 for P(Over 2.5); sum cells where both home > 0 AND away > 0 for P(BTTS Yes)."
+        }
       ]
     },
     {
       "id": "deriving-markets",
-      "h2": "Deriving Market Probabilities",
+      "h2": "Deriving market probabilities",
       "blocks": [
-        { "type": "paragraph", "text": "Once the probability matrix is built, every football market reduces to summing the right cells." },
-        { "type": "h3", "text": "1X2 (match result)" },
-        { "type": "paragraph", "text": "P(home win) = sum of all cells where h > a. P(draw) = sum of cells where h = a. P(away win) = sum of cells where h < a. The three values must sum to 100%, providing a sanity check on the calculation." },
-        { "type": "h3", "text": "Over/Under goals" },
-        { "type": "paragraph", "text": "P(Over 2.5) = sum of all cells where h + a > 2 (i.e., total goals = 3, 4, 5, ...). P(Under 2.5) is the complement. The same logic works for 1.5, 3.5, or any threshold." },
-        { "type": "h3", "text": "Both Teams to Score" },
-        { "type": "paragraph", "text": "P(BTTS Yes) = sum of all cells where h ≥ 1 AND a ≥ 1. P(BTTS No) is the complement. This market depends sensitively on how close to zero each lambda is — a match with one strong team and one very defensive team has low BTTS probability even if total goals are high." },
-        { "type": "h3", "text": "Exact score" },
-        { "type": "paragraph", "text": "The Poisson matrix gives you the probability of every exact score directly. Most likely score is the cell with the highest probability (typically 1-1 in evenly matched games, 1-0 or 2-1 with one favourite). But \"most likely\" is rarely above 12% — exact scores are inherently low-probability events." }
+        {
+          "type": "paragraph",
+          "text": "Once the probability matrix is built, every football market reduces to summing the right cells."
+        },
+        {
+          "type": "h3",
+          "text": "1X2 (match result)"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(home win) = sum of all cells where h > a. P(draw) = sum of cells where h = a. P(away win) = sum of cells where h < a. The three values must sum to 100%, providing a sanity check on the calculation."
+        },
+        {
+          "type": "h3",
+          "text": "Over/Under goals"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(Over 2.5) = sum of all cells where h + a > 2 (i.e., total goals = 3, 4, 5, ...). P(Under 2.5) is the complement. The same logic works for 1.5, 3.5, or any threshold."
+        },
+        {
+          "type": "h3",
+          "text": "Both Teams to Score"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(BTTS Yes) = sum of all cells where h ≥ 1 AND a ≥ 1. P(BTTS No) is the complement. This market depends sensitively on how close to zero each lambda is — a match with one strong team and one very defensive team has low BTTS probability even if total goals are high."
+        },
+        {
+          "type": "h3",
+          "text": "Exact score"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Poisson matrix gives you the probability of every exact score directly. Most likely score is the cell with the highest probability (typically 1-1 in evenly matched games, 1-0 or 2-1 with one favourite). But \"most likely\" is rarely above 12% — exact scores are inherently low-probability events."
+        }
       ]
     },
     {
       "id": "dixon-coles",
-      "h2": "The Dixon-Coles Adjustment",
+      "h2": "The dixon-coles adjustment",
       "blocks": [
-        { "type": "paragraph", "text": "Pure Poisson has a known weakness in football: it underestimates the probability of low-scoring draws and overestimates 0-0 vs 1-0 ratios. Real football data shows more 0-0, 1-1 draws, and slightly fewer 1-0 / 0-1 results than pure Poisson predicts. The reason is that goal events aren't perfectly independent — when one team is winning narrowly, both teams tend to play more conservatively, suppressing further goals." },
-        { "type": "paragraph", "text": "Mark Dixon and Stuart Coles published a fix in 1997 — now known as the Dixon-Coles adjustment. They added a parameter (tau) that explicitly inflates the probability of 0-0, 1-0, 0-1, and 1-1 results, calibrated against real match outcomes. Modern Poisson-based prediction systems use Dixon-Coles or similar refinements as standard." },
-        { "type": "paragraph", "text": "The Dixon-Coles correction also weakens slightly when there's a large favourite (a 4.0-vs-0.4 lambda matchup behaves more like pure Poisson because the leading team isn't motivated to defend a 1-0 lead — they're chasing more goals). Sophisticated implementations blend tau dynamically based on lambda values." }
+        {
+          "type": "paragraph",
+          "text": "Pure Poisson has a known weakness in football: it underestimates the probability of low-scoring draws and overestimates 0-0 vs 1-0 ratios. Real football data shows more 0-0, 1-1 draws, and slightly fewer 1-0 / 0-1 results than pure Poisson predicts. The reason is that goal events aren't perfectly independent — when one team is winning narrowly, both teams tend to play more conservatively, suppressing further goals."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mark Dixon and Stuart Coles published a fix in 1997 — now known as the Dixon-Coles adjustment. They added a parameter (tau) that explicitly inflates the probability of 0-0, 1-0, 0-1, and 1-1 results, calibrated against real match outcomes. Modern Poisson-based prediction systems use Dixon-Coles or similar refinements as standard."
+        },
+        {
+          "type": "paragraph",
+          "text": "The Dixon-Coles correction also weakens slightly when there's a large favourite (a 4.0-vs-0.4 lambda matchup behaves more like pure Poisson because the leading team isn't motivated to defend a 1-0 lead — they're chasing more goals). Sophisticated implementations blend tau dynamically based on lambda values."
+        }
       ]
     },
     {
       "id": "what-poisson-predicts-well",
-      "h2": "What Poisson Predicts Well",
+      "h2": "What Poisson predicts well",
       "blocks": [
-        { "type": "list", "items": [
-          "Over/Under goal markets — most direct application; Poisson literally outputs goal-distribution probabilities.",
-          "Both Teams to Score (BTTS) — derives cleanly from the matrix.",
-          "Most likely score and 1X2 outcomes — strong baseline, especially when paired with Elo for lambda calibration.",
-          "Long-term goal totals per team — over a full season, Poisson gives reliable expected goal totals.",
-          "Cross-market consistency — derived probabilities all sum properly, no internal contradictions."
-        ]}
+        {
+          "type": "list",
+          "items": [
+            "Over/Under goal markets — most direct application; Poisson literally outputs goal-distribution probabilities.",
+            "Both Teams to Score (BTTS) — derives cleanly from the matrix.",
+            "Most likely score and 1X2 outcomes — strong baseline, especially when paired with Elo for lambda calibration.",
+            "Long-term goal totals per team — over a full season, Poisson gives reliable expected goal totals.",
+            "Cross-market consistency — derived probabilities all sum properly, no internal contradictions."
+          ]
+        }
       ]
     },
     {
       "id": "what-poisson-doesnt",
-      "h2": "What Poisson Doesn't Predict",
+      "h2": "What Poisson doesn't predict",
       "blocks": [
-        { "type": "list", "items": [
-          "Specific scorers — Poisson is team-level only.",
-          "Match events — red cards, penalties, formation changes, injuries mid-game.",
-          "Tactical shifts — the model assumes 90 minutes of constant scoring rate, which isn't how matches actually unfold.",
-          "Extreme low-probability outcomes — exact scores like 4-3 are individually rare, so Poisson predictions for them are noisy.",
-          "Time-correlated events — a goal in the 10th minute changes both teams' tactics, but Poisson treats each minute as identical."
-        ]},
-        { "type": "paragraph", "text": "The standard solution is to layer machine learning on top of Poisson. The Poisson model produces a baseline probability matrix; the ML layer adjusts based on factors Poisson can't capture (tactical matchup, lineup changes, weather). This hybrid approach is what modern engines, including ours, use." }
+        {
+          "type": "list",
+          "items": [
+            "Specific scorers — Poisson is team-level only.",
+            "Match events — red cards, penalties, formation changes, injuries mid-game.",
+            "Tactical shifts — the model assumes 90 minutes of constant scoring rate, which isn't how matches actually unfold.",
+            "Extreme low-probability outcomes — exact scores like 4-3 are individually rare, so Poisson predictions for them are noisy.",
+            "Time-correlated events — a goal in the 10th minute changes both teams' tactics, but Poisson treats each minute as identical."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The standard solution is to layer machine learning on top of Poisson. The Poisson model produces a baseline probability matrix; the ML layer adjusts based on factors Poisson can't capture (tactical matchup, lineup changes, weather). This hybrid approach is what modern engines, including ours, use."
+        }
       ]
     },
     {
       "id": "betsplug-poisson",
-      "h2": "How BetsPlug Uses Poisson",
+      "h2": "How BetsPlug uses Poisson",
       "blocks": [
-        { "type": "paragraph", "text": "Lambda for each team is calculated from current Elo, recent xG trend (weighted toward last 6-10 matches), opponent defensive xG, lineup strength, days of rest, and competition context. Home/away advantage is built in. The result is a Dixon-Coles-adjusted probability matrix for every match across our 30+ covered leagues." },
-        { "type": "paragraph", "text": "From the matrix, we derive probabilities for every market we publish: 1X2, Over/Under at multiple thresholds, BTTS, Asian Handicap, Correct Score (with the matrix shown directly to subscribers), Half-Time / Full-Time. The ML layer then adjusts these baseline probabilities for context the Poisson model can't see — manager changes, fixture congestion, knockout-round dynamics. The final prediction is the ML-adjusted probability." }
+        {
+          "type": "paragraph",
+          "text": "Lambda for each team is calculated from current Elo, recent xG trend (weighted toward last 6-10 matches), opponent defensive xG, lineup strength, days of rest, and competition context. Home/away advantage is built in. The result is a Dixon-Coles-adjusted probability matrix for every match across our 30+ covered leagues."
+        },
+        {
+          "type": "paragraph",
+          "text": "From the matrix, we derive probabilities for every market we publish: 1X2, Over/Under at multiple thresholds, BTTS, Asian Handicap, Correct Score (with the matrix shown directly to subscribers), Half-Time / Full-Time. The ML layer then adjusts these baseline probabilities for context the Poisson model can't see — manager changes, fixture congestion, knockout-round dynamics. The final prediction is the ML-adjusted probability."
+        }
       ]
     }
   ],
   "keyTakeaways": {
-    "h3": "Key Takeaways",
+    "h3": "Key takeaways",
     "items": [
       "Poisson distribution models football scoring using one parameter per team: lambda (expected goals).",
       "From two lambdas, derive a probability matrix for every possible exact score, then sum cells to get any market probability.",
@@ -120,22 +217,44 @@
     ]
   },
   "faq": {
-    "h2": "Poisson Models FAQ",
+    "h2": "Poisson models FAQ",
     "questions": [
-      { "q": "Why Poisson and not normal distribution?", "a": "Goals are discrete (you can score 0, 1, 2 — not 1.5) and rare relative to the time window. Both properties match Poisson assumptions exactly. Normal distributions are continuous and don't naturally model rare-event counts. Other discrete distributions (negative binomial, zero-inflated Poisson) sometimes fit football data better, especially for very low-scoring leagues, but Poisson is the standard starting point because it's tractable and accurate enough." },
-      { "q": "What lambda values are typical?", "a": "Premier League home teams average around 1.5-1.7 lambda; away teams around 1.1-1.3. Strong teams playing weak teams might hit lambda 2.5-3.0. Bottom-of-the-table sides often produce lambdas of 0.6-0.9. The Bundesliga and Eredivisie skew higher (more attacking leagues); Serie A historically skewed lower (more defensive). League-specific calibration matters." },
-      { "q": "Does Poisson account for in-match tactics like protecting a lead?", "a": "Pure Poisson does not. Dixon-Coles partially does (the tau adjustment captures the average effect of teams protecting narrow leads). Sophisticated time-series Poisson models split the match into two halves with different lambdas, or use \"in-running\" lambdas that update based on current score. These extensions improve accuracy but add complexity. Most published Poisson models stop at Dixon-Coles." },
-      { "q": "Is Poisson better than xG-based predictions?", "a": "They're complementary, not competing. xG measures shot quality at the team level. Poisson uses xG-derived expected goal rates as input lambdas, then converts those into score probability distributions. You need both: xG for the rate, Poisson for the distribution. Together they give you market-level probabilities; either alone is incomplete." }
+      {
+        "q": "Why Poisson and not normal distribution?",
+        "a": "Goals are discrete (you can score 0, 1, 2 — not 1.5) and rare relative to the time window. Both properties match Poisson assumptions exactly. Normal distributions are continuous and don't naturally model rare-event counts. Other discrete distributions (negative binomial, zero-inflated Poisson) sometimes fit football data better, especially for very low-scoring leagues, but Poisson is the standard starting point because it's tractable and accurate enough."
+      },
+      {
+        "q": "What lambda values are typical?",
+        "a": "Premier League home teams average around 1.5-1.7 lambda; away teams around 1.1-1.3. Strong teams playing weak teams might hit lambda 2.5-3.0. Bottom-of-the-table sides often produce lambdas of 0.6-0.9. The Bundesliga and Eredivisie skew higher (more attacking leagues); Serie A historically skewed lower (more defensive). League-specific calibration matters."
+      },
+      {
+        "q": "Does Poisson account for in-match tactics like protecting a lead?",
+        "a": "Pure Poisson does not. Dixon-Coles partially does (the tau adjustment captures the average effect of teams protecting narrow leads). Sophisticated time-series Poisson models split the match into two halves with different lambdas, or use \"in-running\" lambdas that update based on current score. These extensions improve accuracy but add complexity. Most published Poisson models stop at Dixon-Coles."
+      },
+      {
+        "q": "Is Poisson better than xG-based predictions?",
+        "a": "They're complementary, not competing. xG measures shot quality at the team level. Poisson uses xG-derived expected goal rates as input lambdas, then converts those into score probability distributions. You need both: xG for the rate, Poisson for the distribution. Together they give you market-level probabilities; either alone is incomplete."
+      }
     ]
   },
   "relatedArticles": {
-    "h2": "Related Articles",
-    "slugs": ["expected-goals-explained", "elo-rating-explained", "ai-vs-tipsters"]
+    "h2": "Related articles",
+    "slugs": [
+      "expected-goals-explained",
+      "elo-rating-explained",
+      "ai-vs-tipsters"
+    ]
   },
   "applyThis": {
-    "h2": "See Poisson Probabilities in Action",
+    "h2": "See Poisson probabilities in action",
     "body": "Every BetsPlug prediction draws on a Dixon-Coles-adjusted Poisson matrix. Subscribers see the full probability distribution per match — Correct Score, BTTS, Over/Under all rendered from the same model.",
-    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Read Methodology", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "View Today's Predictions",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Read Methodology",
+      "canonical": "methodology"
+    }
   }
 }

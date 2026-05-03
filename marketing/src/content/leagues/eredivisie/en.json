@@ -1,30 +1,45 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Eredivisie Predictions Today | AI-Powered | BetsPlug",
+    "title": "Eredivisie predictions today | AI-powered | BetsPlug",
     "description": "AI-powered Eredivisie predictions for every match. Ajax, PSV, Feyenoord and the rest — analyzed with Elo + Poisson + ML. Available with any paid plan.",
     "ogImage": "/og-images/league-eredivisie-en.jpg"
   },
   "hero": {
-    "h1": "Eredivisie Predictions",
+    "h1": "Eredivisie predictions",
     "subheadline": "AI-powered predictions for every Eredivisie match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
     "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
     "trustStripUpdated": "Updated every minute",
     "trustStripLocked": "Locked before kickoff",
     "ctaPrimaryFreeLabel": "View Free Predictions",
     "ctaPrimaryGatedLabel": "Unlock Eredivisie Predictions",
-    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "ctaSecondary": {
+      "label": "How it works",
+      "canonical": "methodology"
+    },
     "statsTeams": "Teams",
     "statsMatchweek": "Current matchweek",
     "statsThisWeek": "Predictions this week"
   },
   "cards": {
-    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
-    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
-    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "locked": "Locked",
+    "freePick": "Free pick",
+    "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction",
+    "viewAnalysis": "View match analysis",
+    "confidence": "Confidence",
+    "lockedBeforeKickoff": "Locked before kickoff",
     "viewPricing": "View Pricing"
   },
-  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "filter": {
+    "today": "Today",
+    "thisWeek": "This Week",
+    "allUpcoming": "All Upcoming"
+  },
   "cardsSection": {
     "moreTodayPaid": "{count} more predictions today — paid only",
     "unlockAll": "Subscribe to view all Eredivisie predictions",
@@ -32,7 +47,7 @@
     "fixturesEmpty": "No upcoming fixtures in this window."
   },
   "context": {
-    "h2": "About Eredivisie Predictions",
+    "h2": "About Eredivisie predictions",
     "paragraphs": [
       "The Eredivisie is the Netherlands' top football division, contested by 18 clubs across 34 matchdays from August to May. Historically a youth-development powerhouse — producing players like Cruyff, Van Basten, Bergkamp and more recently De Jong, Van Dijk and Van de Beek — the league has a distinct attacking identity. Ajax, PSV and Feyenoord form the historic 'Big Three', with AZ, Twente and Utrecht as established challengers. Our AI engine analyzes every Eredivisie match using current form, head-to-head history, expected goals and 40+ other variables.",
       "The Eredivisie is one of Europe's most goal-rich leagues, averaging well above 3.0 goals per match — comparable to the Bundesliga and significantly higher than Serie A or Ligue 1. The league's emphasis on attacking football and high defensive lines means goal-line markets (Over 2.5, Both Teams to Score) carry strong predictive signals. Our Poisson layer is calibrated to Dutch football's elevated scoring environment, and our ML layer accounts for the relatively wide gap between top-three clubs and the rest, plus the impact of European-fixture rotation on weekend Eredivisie performance.",
@@ -40,43 +55,88 @@
     ],
     "statsPanel": {
       "h3": "Eredivisie at a glance",
-      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
-      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
-      "updatedLabel": "Updated", "ctaLabel": "View Eredivisie on app"
+      "teamsLabel": "Teams",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated",
+      "ctaLabel": "View Eredivisie on app"
     }
   },
   "topTeams": {
-    "h2": "Top Eredivisie Teams",
-    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+    "h2": "Top Eredivisie teams",
+    "positionLabel": "Position",
+    "formLabel": "Form",
+    "viewTeamLabel": "View team"
   },
   "methodology": {
-    "h2": "How Eredivisie Predictions Are Made",
+    "h2": "How Eredivisie predictions are made",
     "body": "Eredivisie predictions use the same engine as all our football predictions: Elo ratings, Poisson goal models calibrated for the league's high scoring rate, and machine learning. The model accounts for Dutch football's attacking patterns and the European-fixture rotation impact on the top three clubs.",
     "pillars": [
-      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine learning trained on Eredivisie data" },
-      { "icon": "lock", "label": "Locked & timestamped" }
+      {
+        "icon": "calc",
+        "label": "Mathematical models (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning trained on Eredivisie data"
+      },
+      {
+        "icon": "lock",
+        "label": "Locked & timestamped"
+      }
     ],
-    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+    "cta": {
+      "label": "Read full methodology",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Eredivisie Predictions FAQ",
+    "h2": "Eredivisie predictions FAQ",
     "questions": [
-      { "q": "How accurate are AI predictions for the Eredivisie?", "a": "Accuracy varies per matchday and prediction type. We publish every Eredivisie prediction in our public track record so you can verify performance yourself." },
-      { "q": "Why are Eredivisie predictions paid only?", "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Eredivisie predictions are part of all paid plans, with full match analysis included." },
-      { "q": "What types of predictions do you publish for the Eredivisie?", "a": "For every Eredivisie match we publish predictions across multiple markets, with goal-line markets (Over/Under, BTTS) particularly emphasized given the league's high scoring. We also cover 1X2 and Double Chance." },
-      { "q": "How early are Eredivisie predictions available?", "a": "Subscribers see Eredivisie predictions up to 24 hours before kickoff." },
-      { "q": "Do you cover KNVB Beker (Dutch Cup) fixtures?", "a": "We cover all Eredivisie league matches. KNVB Beker fixtures are not in our default coverage; European fixtures involving Ajax, PSV and Feyenoord are covered separately." },
-      { "q": "Can I get Eredivisie predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Eredivisie predictions." }
+      {
+        "q": "How accurate are AI predictions for the Eredivisie?",
+        "a": "Accuracy varies per matchday and prediction type. We publish every Eredivisie prediction in our public track record so you can verify performance yourself."
+      },
+      {
+        "q": "Why are Eredivisie predictions paid only?",
+        "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Eredivisie predictions are part of all paid plans, with full match analysis included."
+      },
+      {
+        "q": "What types of predictions do you publish for the Eredivisie?",
+        "a": "For every Eredivisie match we publish predictions across multiple markets, with goal-line markets (Over/Under, BTTS) particularly emphasized given the league's high scoring. We also cover 1X2 and Double Chance."
+      },
+      {
+        "q": "How early are Eredivisie predictions available?",
+        "a": "Subscribers see Eredivisie predictions up to 24 hours before kickoff."
+      },
+      {
+        "q": "Do you cover KNVB-beker (Dutch cup) fixtures?",
+        "a": "We cover all Eredivisie league matches. KNVB Beker fixtures are not in our default coverage; European fixtures involving Ajax, PSV and Feyenoord are covered separately."
+      },
+      {
+        "q": "Can I get Eredivisie predictions via Telegram?",
+        "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Eredivisie predictions."
+      }
     ],
-    "cta": { "label": "All FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "All FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Want All Eredivisie Predictions?",
     "h2Gated": "Unlock Eredivisie Predictions",
     "bodyFree": "Subscribers get every match with full statistical analysis.",
     "bodyGated": "Eredivisie predictions are part of all paid plans.",
-    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_eredivisie" }
+    "ctaPrimary": {
+      "label": "View Pricing",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Try Free",
+      "href": "https://app.betsplug.com/register?source=league_eredivisie"
+    }
   }
 }

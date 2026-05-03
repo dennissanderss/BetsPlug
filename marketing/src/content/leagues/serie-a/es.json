@@ -1,14 +1,21 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Pronósticos Serie A Hoy | IA | BetsPlug",
+    "title": "Pronósticos Serie A hoy | IA | BetsPlug",
     "description": "Pronósticos IA Serie A para cada partido. Análisis táctico del fútbol italiano con Elo + Poisson + ML.",
     "ogImage": "/og-images/league-serie-a-es.jpg"
   },
   "hero": {
     "h1": "Pronósticos Serie A",
     "subheadline": "Pronósticos IA para cada partido de Serie A. Generados con puntuaciones Elo, modelos Poisson y machine learning. Bloqueados antes del inicio.",
-    "ctaSecondary": { "label": "Cómo funciona", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Cómo funciona",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "Sobre los pronósticos de Serie A",
@@ -17,32 +24,67 @@
       "Los pronósticos de Serie A requieren ponderación especial en los matchups tácticos. La liga tiene la correlación más fuerte entre estabilidad de entrenador y resultados de partido entre los big five europeos. Nuestro modelo tiene en cuenta la permanencia del entrenador, los cambios de formación esperados por lesiones y el rendimiento histórico contra configuraciones tácticas específicas.",
       "Cada pronóstico de Serie A se bloquea con marca de tiempo pública antes del inicio. Los pronósticos de Serie A son parte de todos los planes de pago — los usuarios gratuitos ven calendarios sin pronósticos, mientras que los suscriptores reciben cada partido con análisis estadístico completo."
     ],
-    "statsPanel": { "h3": "Serie A de un vistazo", "ctaLabel": "Ver Serie A en la app" }
+    "statsPanel": {
+      "h3": "Serie A de un vistazo",
+      "ctaLabel": "Ver Serie A en la app"
+    }
   },
-  "topTeams": { "h2": "Mejores equipos Serie A" },
+  "topTeams": {
+    "h2": "Mejores equipos Serie A"
+  },
   "methodology": {
     "h2": "Cómo se crean los pronósticos de Serie A",
     "body": "Los pronósticos de Serie A utilizan el mismo motor, ajustado para los patrones tácticos italianos y el valor predictivo de la estabilidad del entrenador.",
-    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+    "cta": {
+      "label": "Leer metodología completa",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Pronósticos Serie A",
+    "h2": "FAQ pronósticos Serie A",
     "questions": [
-      { "q": "¿Qué tan precisos son los pronósticos IA Serie A?", "a": "La precisión varía. Publicamos cada pronóstico en nuestro historial público." },
-      { "q": "¿Por qué los pronósticos Serie A son solo de pago?", "a": "Los pronósticos gratuitos están limitados a las 3 ligas principales. Serie A es parte de todos los planes de pago." },
-      { "q": "¿Qué tipos de pronósticos para Serie A?", "a": "1X2, Más/Menos, BTTS, Doble Oportunidad — con contexto de matchup táctico." },
-      { "q": "¿Cuándo están disponibles los pronósticos?", "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio." },
-      { "q": "¿Cubren la Coppa Italia y partidos europeos?", "a": "Cubrimos todos los partidos de Serie A. Coppa Italia y competiciones europeas por separado." },
-      { "q": "¿Pronósticos Serie A vía Telegram?", "a": "Sí, para suscriptores de pago." }
+      {
+        "q": "¿Qué tan precisos son los pronósticos IA Serie A?",
+        "a": "La precisión varía. Publicamos cada pronóstico en nuestro historial público."
+      },
+      {
+        "q": "¿Por qué los pronósticos Serie A son solo de pago?",
+        "a": "Los pronósticos gratuitos están limitados a las 3 ligas principales. Serie A es parte de todos los planes de pago."
+      },
+      {
+        "q": "¿Qué tipos de pronósticos para Serie A?",
+        "a": "1X2, Más/Menos, BTTS, Doble Oportunidad — con contexto de matchup táctico."
+      },
+      {
+        "q": "¿Cuándo están disponibles los pronósticos?",
+        "a": "Los suscriptores ven los pronósticos hasta 24h antes del inicio."
+      },
+      {
+        "q": "¿Cubren la Coppa Italia y partidos europeos?",
+        "a": "Cubrimos todos los partidos de Serie A. Coppa Italia y competiciones europeas por separado."
+      },
+      {
+        "q": "¿Pronósticos Serie A vía Telegram?",
+        "a": "Sí, para suscriptores de pago."
+      }
     ],
-    "cta": { "label": "Todas las FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Todas las FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "¿Quieres todos los pronósticos Serie A?",
     "h2Gated": "Desbloquea los pronósticos Serie A",
     "bodyFree": "Los suscriptores tienen cada partido con análisis completo.",
     "bodyGated": "Los pronósticos de Serie A están incluidos en todos los planes de pago.",
-    "ctaPrimary": { "label": "Ver Precios", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Probar Gratis", "href": "https://app.betsplug.com/register?source=league_serie-a" }
+    "ctaPrimary": {
+      "label": "Ver Precios",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Probar Gratis",
+      "href": "https://app.betsplug.com/register?source=league_serie-a"
+    }
   }
 }

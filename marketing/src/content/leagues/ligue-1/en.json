@@ -1,30 +1,45 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Ligue 1 Predictions Today | AI-Powered | BetsPlug",
+    "title": "Ligue 1 predictions today | AI-powered | BetsPlug",
     "description": "AI-powered Ligue 1 predictions for every match. PSG, Marseille, Monaco and the rest — analyzed with Elo + Poisson + ML. Available with any paid plan.",
     "ogImage": "/og-images/league-ligue-1-en.jpg"
   },
   "hero": {
-    "h1": "Ligue 1 Predictions",
+    "h1": "Ligue 1 predictions",
     "subheadline": "AI-powered predictions for every Ligue 1 match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
     "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
     "trustStripUpdated": "Updated every minute",
     "trustStripLocked": "Locked before kickoff",
     "ctaPrimaryFreeLabel": "View Free Predictions",
     "ctaPrimaryGatedLabel": "Unlock Ligue 1 Predictions",
-    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "ctaSecondary": {
+      "label": "How it works",
+      "canonical": "methodology"
+    },
     "statsTeams": "Teams",
     "statsMatchweek": "Current matchweek",
     "statsThisWeek": "Predictions this week"
   },
   "cards": {
-    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
-    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
-    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "locked": "Locked",
+    "freePick": "Free pick",
+    "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction",
+    "viewAnalysis": "View match analysis",
+    "confidence": "Confidence",
+    "lockedBeforeKickoff": "Locked before kickoff",
     "viewPricing": "View Pricing"
   },
-  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "filter": {
+    "today": "Today",
+    "thisWeek": "This Week",
+    "allUpcoming": "All Upcoming"
+  },
   "cardsSection": {
     "moreTodayPaid": "{count} more predictions today — paid only",
     "unlockAll": "Subscribe to view all Ligue 1 predictions",
@@ -32,7 +47,7 @@
     "fixturesEmpty": "No upcoming fixtures in this window."
   },
   "context": {
-    "h2": "About Ligue 1 Predictions",
+    "h2": "About Ligue 1 predictions",
     "paragraphs": [
       "Ligue 1 is France's top football division, recently restructured to 18 clubs contesting 34 matchdays from August to May. The league has been historically dominated by Paris Saint-Germain since the QSI takeover in 2011, with Marseille, Monaco, Lille and Lyon competing for European places. Ligue 1 is renowned as a development league — many of Europe's brightest young talents (Mbappé, Kanté, Pogba, Camavinga) emerged here before being sold abroad. Our AI engine analyzes every Ligue 1 match using current form, head-to-head history, expected goals and 40+ other variables.",
       "Ligue 1 predictions present a unique challenge: PSG's rotation policies in domestic matches (saving key players for Champions League) introduce significant lineup variance. Mid-table teams in Ligue 1 also tend to have higher tactical volatility than other big-five leagues, with managerial changes mid-season being more frequent. Our model accounts for PSG's expected rotation patterns, mid-week European fixture impact, and the historically high incidence of late goals in French football.",
@@ -40,43 +55,88 @@
     ],
     "statsPanel": {
       "h3": "Ligue 1 at a glance",
-      "teamsLabel": "Teams", "seasonLabel": "Season", "matchweekLabel": "Matchweek",
-      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
-      "updatedLabel": "Updated", "ctaLabel": "View Ligue 1 on app"
+      "teamsLabel": "Teams",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchweek",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated",
+      "ctaLabel": "View Ligue 1 on app"
     }
   },
   "topTeams": {
-    "h2": "Top Ligue 1 Teams",
-    "positionLabel": "Position", "formLabel": "Form", "viewTeamLabel": "View team"
+    "h2": "Top Ligue 1 teams",
+    "positionLabel": "Position",
+    "formLabel": "Form",
+    "viewTeamLabel": "View team"
   },
   "methodology": {
-    "h2": "How Ligue 1 Predictions Are Made",
+    "h2": "How Ligue 1 predictions are made",
     "body": "Ligue 1 predictions use the same engine as all our football predictions: Elo ratings for team strength, Poisson models for goal probability, and machine learning for pattern recognition. The model factors in PSG's rotation patterns and mid-table managerial volatility specific to French football.",
     "pillars": [
-      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine learning trained on Ligue 1 data" },
-      { "icon": "lock", "label": "Locked & timestamped" }
+      {
+        "icon": "calc",
+        "label": "Mathematical models (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning trained on Ligue 1 data"
+      },
+      {
+        "icon": "lock",
+        "label": "Locked & timestamped"
+      }
     ],
-    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+    "cta": {
+      "label": "Read full methodology",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Ligue 1 Predictions FAQ",
+    "h2": "Ligue 1 predictions FAQ",
     "questions": [
-      { "q": "How accurate are AI predictions for Ligue 1?", "a": "Accuracy varies per matchday and prediction type, with PSG's rotation patterns adding variance. We publish every Ligue 1 prediction in our public track record so you can verify performance yourself." },
-      { "q": "Why are Ligue 1 predictions paid only?", "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Ligue 1 predictions are part of all paid plans." },
-      { "q": "How does the model handle PSG's rotation in domestic matches?", "a": "Our ML layer factors in PSG's expected lineup based on Champions League fixture proximity. Predictions for PSG matches account for likely starter availability rather than assuming first-choice XI." },
-      { "q": "How early are Ligue 1 predictions available?", "a": "Subscribers see Ligue 1 predictions up to 24 hours before kickoff." },
-      { "q": "Do you cover Coupe de France and European fixtures involving Ligue 1 clubs?", "a": "We cover all Ligue 1 league matches. Coupe de France, Champions League and Europa League fixtures involving Ligue 1 clubs are covered separately under their own competition pages." },
-      { "q": "Can I get Ligue 1 predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Ligue 1 predictions." }
+      {
+        "q": "How accurate are AI predictions for Ligue 1?",
+        "a": "Accuracy varies per matchday and prediction type, with PSG's rotation patterns adding variance. We publish every Ligue 1 prediction in our public track record so you can verify performance yourself."
+      },
+      {
+        "q": "Why are Ligue 1 predictions paid only?",
+        "a": "Free predictions are limited to top 3 leagues (Premier League, La Liga, Bundesliga). Ligue 1 predictions are part of all paid plans."
+      },
+      {
+        "q": "How does the model handle PSG's rotation in domestic matches?",
+        "a": "Our ML layer factors in PSG's expected lineup based on Champions League fixture proximity. Predictions for PSG matches account for likely starter availability rather than assuming first-choice XI."
+      },
+      {
+        "q": "How early are Ligue 1 predictions available?",
+        "a": "Subscribers see Ligue 1 predictions up to 24 hours before kickoff."
+      },
+      {
+        "q": "Do you cover Coupe de France and European fixtures involving Ligue 1 clubs?",
+        "a": "We cover all Ligue 1 league matches. Coupe de France, Champions League and Europa League fixtures involving Ligue 1 clubs are covered separately under their own competition pages."
+      },
+      {
+        "q": "Can I get Ligue 1 predictions via Telegram?",
+        "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Ligue 1 predictions."
+      }
     ],
-    "cta": { "label": "All FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "All FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Want All Ligue 1 Predictions?",
     "h2Gated": "Unlock Ligue 1 Predictions",
     "bodyFree": "Subscribers get every match with full statistical analysis.",
     "bodyGated": "Ligue 1 predictions are part of all paid plans.",
-    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_ligue-1" }
+    "ctaPrimary": {
+      "label": "View Pricing",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Try Free",
+      "href": "https://app.betsplug.com/register?source=league_ligue-1"
+    }
   }
 }

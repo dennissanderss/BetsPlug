@@ -1,37 +1,87 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Methodik: Wie BetsPlug KI-Vorhersagen Funktionieren | BetsPlug",
+    "title": "Methodik: wie BetsPlug KI-Vorhersagen funktionieren | BetsPlug",
     "description": "Detaillierte Methodik hinter BetsPlug KI-Fußballvorhersagen. Elo-Bewertungen, Poisson-Tor-Modelle, Machine Learning. Offen, reproduzierbar, vor Anpfiff gesperrt.",
     "ogImage": "/og-images/methodology-de.jpg"
   },
   "hero": {
-    "h1": "Die Methodik Hinter BetsPlug Vorhersagen",
+    "h1": "Die Methodik hinter {{accent}}BetsPlug{{/accent}} Vorhersagen",
     "subheadline": "Wie wir Elo-Bewertungen, Poisson-Tor-Modelle und Machine Learning zu einer einzigen Vorhersage-Engine kombinieren. Kein geheimer Algorithmus. Keine redaktionelle Auswahl. Nur Mathematik, transparent angewendet.",
-    "trustStrip": ["Offene Methodik", "Reproduzierbare Logik", "Gesperrte Vorhersagen"],
-    "ctaPrimary": { "label": "Vorhersagen erhalten", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Track Record ansehen", "canonical": "track-record" }
+    "trustStrip": [
+      "Offene Methodik",
+      "Reproduzierbare Logik",
+      "Gesperrte Vorhersagen"
+    ],
+    "ctaPrimary": {
+      "label": "Vorhersagen erhalten",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Track Record ansehen",
+      "canonical": "track-record"
+    }
   },
   "toc": {
-    "h2": "Auf Dieser Seite",
+    "h2": "Auf dieser Seite",
     "items": [
-      { "id": "pillars", "label": "Die drei Säulen" },
-      { "id": "elo", "label": "Elo-Bewertungssystem" },
-      { "id": "poisson", "label": "Poisson-Tor-Modelle" },
-      { "id": "ml", "label": "Machine-Learning-Schicht" },
-      { "id": "data", "label": "Datenquellen & Validierung" },
-      { "id": "locking", "label": "Der Sperr-Mechanismus" },
-      { "id": "what-we-dont-do", "label": "Was wir nicht tun" },
-      { "id": "limitations", "label": "Grenzen & Ehrlichkeit" }
+      {
+        "id": "pillars",
+        "label": "Die drei Säulen"
+      },
+      {
+        "id": "elo",
+        "label": "Elo-Bewertungssystem"
+      },
+      {
+        "id": "poisson",
+        "label": "Poisson-Tor-Modelle"
+      },
+      {
+        "id": "ml",
+        "label": "Machine-Learning-Schicht"
+      },
+      {
+        "id": "data",
+        "label": "Datenquellen & Validierung"
+      },
+      {
+        "id": "locking",
+        "label": "Der Sperr-Mechanismus"
+      },
+      {
+        "id": "what-we-dont-do",
+        "label": "Was wir nicht tun"
+      },
+      {
+        "id": "limitations",
+        "label": "Grenzen & Ehrlichkeit"
+      }
     ]
   },
   "pillars": {
     "h2": "Die Drei Säulen Unserer Engine",
     "intro": "BetsPlug verlässt sich nicht auf eine einzige statistische Methode. Stattdessen kombinieren wir drei etablierte Ansätze — jeder stark in unterschiedlichen Aspekten der Fußballvorhersage — und lassen Machine Learning ihre Outputs basierend auf dem jeweiligen Spielkontext gewichten.",
     "items": [
-      { "tagline": "Teamstärke, dynamisch aktualisiert", "oneLiner": "Jedes Team hat eine numerische Stärke-Bewertung, die sich nach jedem Spiel basierend auf Ergebnis und Gegnerqualität anpasst.", "icon": "elo" },
-      { "tagline": "Mathematik der Tor-Wahrscheinlichkeit", "oneLiner": "Statistische Verteilung, die die Wahrscheinlichkeit spezifischer Ergebnisausgänge berechnet.", "icon": "poisson" },
-      { "tagline": "Mustererkennung über Tausende Spiele", "oneLiner": "Algorithmen, die nicht-offensichtliche Korrelationen zwischen Spielvariablen und Ergebnissen erkennen.", "icon": "ml" }
+      {
+        "tagline": "Teamstärke, dynamisch aktualisiert",
+        "oneLiner": "Jedes Team hat eine numerische Stärke-Bewertung, die sich nach jedem Spiel basierend auf Ergebnis und Gegnerqualität anpasst.",
+        "icon": "elo"
+      },
+      {
+        "tagline": "Mathematik der Tor-Wahrscheinlichkeit",
+        "oneLiner": "Statistische Verteilung, die die Wahrscheinlichkeit spezifischer Ergebnisausgänge berechnet.",
+        "icon": "poisson"
+      },
+      {
+        "tagline": "Mustererkennung über Tausende Spiele",
+        "oneLiner": "Algorithmen, die nicht-offensichtliche Korrelationen zwischen Spielvariablen und Ergebnissen erkennen.",
+        "icon": "ml"
+      }
     ]
   },
   "elo": {
@@ -94,24 +144,60 @@
     ],
     "timelineCaption": "Vorhersage-Lebenszyklus: 24h vor Anpfiff erstellt, bei 2h vor gesperrt, danach für immer unveränderlich.",
     "timelineSteps": [
-      { "label": "24h vor Anpfiff", "detail": "Vorhersage erstellt (Abonnenten-Zugriff)" },
-      { "label": "2h vor Anpfiff", "detail": "Öffentliche Sperre + Free-Zugriff" },
-      { "label": "Anpfiff", "detail": "Spiel beginnt" },
-      { "label": "Nach dem Spiel", "detail": "Ergebnis zum Track Record hinzugefügt" },
-      { "label": "Für immer", "detail": "Vorhersage unveränderlich" }
+      {
+        "label": "24h vor Anpfiff",
+        "detail": "Vorhersage erstellt (Abonnenten-Zugriff)"
+      },
+      {
+        "label": "2h vor Anpfiff",
+        "detail": "Öffentliche Sperre + Free-Zugriff"
+      },
+      {
+        "label": "Anpfiff",
+        "detail": "Spiel beginnt"
+      },
+      {
+        "label": "Nach dem Spiel",
+        "detail": "Ergebnis zum Track Record hinzugefügt"
+      },
+      {
+        "label": "Für immer",
+        "detail": "Vorhersage unveränderlich"
+      }
     ]
   },
   "whatWeDontDo": {
-    "h2": "Was Wir Nicht Tun",
+    "h2": "Was wir nicht tun",
     "intro": "Transparenz funktioniert in beide Richtungen. Hier sind Dinge, die einige Vorhersagedienste tun, die wir bewusst nicht tun:",
     "items": [
-      { "title": "Wir verkaufen keine 'Fixed Matches'", "detail": "Wir haben keine Insiderinformationen. Jeder, der behauptet Fixed Matches zu verkaufen, begeht Betrug." },
-      { "title": "Wir bearbeiten keine Vorhersagen nach Veröffentlichung", "detail": "Einmal gesperrt, können Vorhersagen nicht modifiziert werden — architektonisch, nicht per Richtlinie." },
-      { "title": "Wir verstecken keine Verluste in unserem Track Record", "detail": "Jede Vorhersage wird veröffentlicht — Gewinne, Verluste und Pushes gleichermaßen." },
-      { "title": "Wir versprechen keine spezifischen Genauigkeitsprozentsätze", "detail": "KI-Vorhersagen haben probabilistische Genauigkeit, die je nach Markt und Wettbewerb variiert." },
-      { "title": "Wir verwenden keine redaktionelle Voreingenommenheit", "detail": "Vorhersagen werden von der Engine ohne menschliche Überschreibung erstellt." },
-      { "title": "Wir agieren nicht als Buchmacher", "detail": "Wir nehmen keine Wetten an, halten kein Geld und ermöglichen kein Glücksspiel." },
-      { "title": "Wir teilen keine Nutzerdaten mit Buchmachern", "detail": "Deine Kontoinformationen bleiben innerhalb von BetsPlug." }
+      {
+        "title": "Wir verkaufen keine 'Fixed Matches'",
+        "detail": "Wir haben keine Insiderinformationen. Jeder, der behauptet Fixed Matches zu verkaufen, begeht Betrug."
+      },
+      {
+        "title": "Wir bearbeiten keine Vorhersagen nach Veröffentlichung",
+        "detail": "Einmal gesperrt, können Vorhersagen nicht modifiziert werden — architektonisch, nicht per Richtlinie."
+      },
+      {
+        "title": "Wir verstecken keine Verluste in unserem Track Record",
+        "detail": "Jede Vorhersage wird veröffentlicht — Gewinne, Verluste und Pushes gleichermaßen."
+      },
+      {
+        "title": "Wir versprechen keine spezifischen Genauigkeitsprozentsätze",
+        "detail": "KI-Vorhersagen haben probabilistische Genauigkeit, die je nach Markt und Wettbewerb variiert."
+      },
+      {
+        "title": "Wir verwenden keine redaktionelle Voreingenommenheit",
+        "detail": "Vorhersagen werden von der Engine ohne menschliche Überschreibung erstellt."
+      },
+      {
+        "title": "Wir agieren nicht als Buchmacher",
+        "detail": "Wir nehmen keine Wetten an, halten kein Geld und ermöglichen kein Glücksspiel."
+      },
+      {
+        "title": "Wir teilen keine Nutzerdaten mit Buchmachern",
+        "detail": "Deine Kontoinformationen bleiben innerhalb von BetsPlug."
+      }
     ]
   },
   "limitations": {
@@ -126,19 +212,46 @@
   "faq": {
     "h2": "Methodik FAQ",
     "questions": [
-      { "q": "Kann ich den tatsächlichen Modellcode sehen?", "a": "Wir veröffentlichen keinen Quellcode (das ist unser Kern-IP), aber wir veröffentlichen detaillierte Methodik." },
-      { "q": "Wie behandelt ihr unerwartete Ereignisse während eines Spiels?", "a": "Unsere Vorhersagen werden vor dem Anpfiff erstellt und gesperrt, also aktualisieren sie sich nicht während eines Spiels." },
-      { "q": "Warum mehrere Modelle statt einem perfekten Modell?", "a": "Keine einzelne statistische Methode erfasst die gesamte Fußballdynamik." },
-      { "q": "Wie genau sind eure Vorhersagen im Vergleich zu Buchmacher-Quoten?", "a": "Wir veröffentlichen keine vergleichende Genauigkeit. Schau in unseren öffentlichen Track Record für die rohe Leistung." },
-      { "q": "Berücksichtigt ihr spielerspezifische Daten?", "a": "Ja, aber auf Teamebene. Wir berücksichtigen Aufstellungsstärke basierend auf individuellen Spieler-Bewertungen." },
-      { "q": "Wie oft wird das Modell neu trainiert?", "a": "Kontinuierlich, mit großen Retraining-Zyklen nach jedem Spieltag." }
+      {
+        "q": "Kann ich den tatsächlichen Modellcode sehen?",
+        "a": "Wir veröffentlichen keinen Quellcode (das ist unser Kern-IP), aber wir veröffentlichen detaillierte Methodik."
+      },
+      {
+        "q": "Wie behandelt ihr unerwartete Ereignisse während eines Spiels?",
+        "a": "Unsere Vorhersagen werden vor dem Anpfiff erstellt und gesperrt, also aktualisieren sie sich nicht während eines Spiels."
+      },
+      {
+        "q": "Warum mehrere Modelle statt einem perfekten Modell?",
+        "a": "Keine einzelne statistische Methode erfasst die gesamte Fußballdynamik."
+      },
+      {
+        "q": "Wie genau sind eure Vorhersagen im Vergleich zu Buchmacher-Quoten?",
+        "a": "Wir veröffentlichen keine vergleichende Genauigkeit. Schau in unseren öffentlichen Track Record für die rohe Leistung."
+      },
+      {
+        "q": "Berücksichtigt ihr spielerspezifische Daten?",
+        "a": "Ja, aber auf Teamebene. Wir berücksichtigen Aufstellungsstärke basierend auf individuellen Spieler-Bewertungen."
+      },
+      {
+        "q": "Wie oft wird das Modell neu trainiert?",
+        "a": "Kontinuierlich, mit großen Retraining-Zyklen nach jedem Spieltag."
+      }
     ],
-    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Alle FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2": "Sieh die Methodik in Aktion",
     "body": "Jetzt da du verstehst, wie unsere Vorhersagen funktionieren, sieh sie über 30+ Ligen angewandt.",
-    "ctaPrimary": { "label": "Heutige Vorhersagen ansehen", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Pläne vergleichen", "canonical": "pricing" }
+    "ctaPrimary": {
+      "label": "Heutige Vorhersagen ansehen",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Pläne vergleichen",
+      "canonical": "pricing"
+    }
   }
 }

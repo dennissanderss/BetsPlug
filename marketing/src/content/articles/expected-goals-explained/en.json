@@ -1,12 +1,16 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Expected Goals (xG) Explained | BetsPlug Learn",
+    "title": "Expected goals (xG) explained | BetsPlug learn",
     "description": "Expected Goals (xG) measures shot quality, not just shot count. Learn how xG is calculated, why it predicts long-term performance, and how BetsPlug uses it.",
     "ogImage": "/og-images/learn-expected-goals-en.jpg"
   },
   "header": {
-    "h1": "Expected Goals (xG) Explained: How Quality Beats Quantity",
+    "h1": "Expected goals (xG) explained: how quality beats quantity",
     "excerpt": "How xG measures shot quality and predicts long-term team performance better than traditional goal counts.",
     "readingTime": "8 min read",
     "difficulty": "Beginner",
@@ -20,75 +24,134 @@
   "sections": [
     {
       "id": "what-is-xg",
-      "h2": "What is Expected Goals?",
+      "h2": "What is expected goals?",
       "blocks": [
-        { "type": "paragraph", "text": "Expected goals is the probability that a given shot will end up in the back of the net, expressed on a 0.0 to 1.0 scale. A penalty kick has an xG of around 0.78 — converted roughly 78% of the time historically. A shot from 30 metres with a defender in the line of fire has an xG of around 0.03 — three percent likely to score. Add up the xG of every shot a team takes, and you get their total xG for the match: a measure of how many goals their chances were worth, on average." },
-        { "type": "paragraph", "text": "The intuition is simple. Goals are rare events with high variance — a team can dominate a match and not score, or steal a 1-0 against the run of play. Counting goals tells you what happened in one match. Counting xG tells you what would have happened if the same chances had occurred a thousand times." },
-        { "type": "diagram", "name": "xg-shot-map", "caption": "Sample xG values by shot location. Penalty (~0.78), six-yard box header (~0.45), edge of the box (~0.09), 30-metre strike (~0.03)." }
+        {
+          "type": "paragraph",
+          "text": "Expected goals is the probability that a given shot will end up in the back of the net, expressed on a 0.0 to 1.0 scale. A penalty kick has an xG of around 0.78 — converted roughly 78% of the time historically. A shot from 30 metres with a defender in the line of fire has an xG of around 0.03 — three percent likely to score. Add up the xG of every shot a team takes, and you get their total xG for the match: a measure of how many goals their chances were worth, on average."
+        },
+        {
+          "type": "paragraph",
+          "text": "The intuition is simple. Goals are rare events with high variance — a team can dominate a match and not score, or steal a 1-0 against the run of play. Counting goals tells you what happened in one match. Counting xG tells you what would have happened if the same chances had occurred a thousand times."
+        },
+        {
+          "type": "diagram",
+          "name": "xg-shot-map",
+          "caption": "Sample xG values by shot location. Penalty (~0.78), six-yard box header (~0.45), edge of the box (~0.09), 30-metre strike (~0.03)."
+        }
       ]
     },
     {
       "id": "how-calculated",
-      "h2": "How is xG Calculated?",
+      "h2": "How is xG calculated?",
       "blocks": [
-        { "type": "paragraph", "text": "xG models are trained on historical shot data — typically hundreds of thousands of shots tagged with their context. For each shot, the model considers a set of input variables, then outputs a probability." },
-        { "type": "h3", "text": "Variables that drive xG" },
-        { "type": "list", "items": [
-          "Shot location: distance and angle to goal — by far the strongest signal.",
-          "Body part: foot vs head — headers convert at lower rates than equivalent foot shots.",
-          "Assist type: through-ball, cross, cutback, rebound — affects time available to shoot cleanly.",
-          "Defender pressure: number of defenders between shot and goal, plus pressure on the shooter.",
-          "Game state: open play, set piece, penalty, fast break — fast breaks produce higher-quality chances.",
-          "Goalkeeper position: only available in some advanced models."
-        ]},
-        { "type": "paragraph", "text": "A modern xG model might use logistic regression, a gradient-boosted tree (XGBoost), or a small neural network. The exact algorithm matters less than the training data: the more shots and the cleaner the labelling, the better the model. Different providers produce slightly different xG numbers because they use different training data and feature sets — Opta, StatsBomb, and Understat are the best-known publishers, and their numbers usually agree to within ~10% on aggregate team totals." },
-        { "type": "example", "label": "Worked example", "body": "Manchester City had 14 shots against Crystal Palace in a 2024 league match: total xG 2.4. Crystal Palace had 4 shots, total xG 0.3. Final score: Crystal Palace 2-1 Manchester City. The 2.1 xG difference says City created vastly more dangerous chances. The actual scoreline says Palace took theirs and City didn't. Repeated 100 times, this matchup would average closer to 2.4 vs 0.3 in goals — but in any single match, anything can happen." }
+        {
+          "type": "paragraph",
+          "text": "xG models are trained on historical shot data — typically hundreds of thousands of shots tagged with their context. For each shot, the model considers a set of input variables, then outputs a probability."
+        },
+        {
+          "type": "h3",
+          "text": "Variables that drive xG"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Shot location: distance and angle to goal — by far the strongest signal.",
+            "Body part: foot vs head — headers convert at lower rates than equivalent foot shots.",
+            "Assist type: through-ball, cross, cutback, rebound — affects time available to shoot cleanly.",
+            "Defender pressure: number of defenders between shot and goal, plus pressure on the shooter.",
+            "Game state: open play, set piece, penalty, fast break — fast breaks produce higher-quality chances.",
+            "Goalkeeper position: only available in some advanced models."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "A modern xG model might use logistic regression, a gradient-boosted tree (XGBoost), or a small neural network. The exact algorithm matters less than the training data: the more shots and the cleaner the labelling, the better the model. Different providers produce slightly different xG numbers because they use different training data and feature sets — Opta, StatsBomb, and Understat are the best-known publishers, and their numbers usually agree to within ~10% on aggregate team totals."
+        },
+        {
+          "type": "example",
+          "label": "Worked example",
+          "body": "Manchester City had 14 shots against Crystal Palace in a 2024 league match: total xG 2.4. Crystal Palace had 4 shots, total xG 0.3. Final score: Crystal Palace 2-1 Manchester City. The 2.1 xG difference says City created vastly more dangerous chances. The actual scoreline says Palace took theirs and City didn't. Repeated 100 times, this matchup would average closer to 2.4 vs 0.3 in goals — but in any single match, anything can happen."
+        }
       ]
     },
     {
       "id": "why-matters",
-      "h2": "Why xG Matters for Predictions",
+      "h2": "Why xG matters for predictions",
       "blocks": [
-        { "type": "paragraph", "text": "Past goals are noisy. xG is less noisy. That's the whole insight. A team with 1.0 goals per match over 5 matches but 1.6 xG per match is likely to score more in the next 5 matches — they've been creating chances at a higher rate than their conversion has reflected. Statistically, xG \"regresses to the mean\" over time, but it does so faster and more predictably than goals." },
-        { "type": "paragraph", "text": "This is why football analysts and prediction engines weight recent xG trends heavily — typically the last 5 to 10 matches. A team in a slump (low goals but high xG) is undervalued by traditional form tables; a team on a hot streak (high goals but low xG) is overvalued. xG identifies both." },
-        { "type": "h3", "text": "What xG is good at" },
-        { "type": "list", "items": [
-          "Identifying teams whose recent results are misleading (good xG, bad form, or vice versa).",
-          "Predicting future goal totals more accurately than past goal totals.",
-          "Comparing teams across different leagues and tactical styles.",
-          "Evaluating tactical changes — a new manager's xG signature usually appears within 5-8 matches."
-        ]}
+        {
+          "type": "paragraph",
+          "text": "Past goals are noisy. xG is less noisy. That's the whole insight. A team with 1.0 goals per match over 5 matches but 1.6 xG per match is likely to score more in the next 5 matches — they've been creating chances at a higher rate than their conversion has reflected. Statistically, xG \"regresses to the mean\" over time, but it does so faster and more predictably than goals."
+        },
+        {
+          "type": "paragraph",
+          "text": "This is why football analysts and prediction engines weight recent xG trends heavily — typically the last 5 to 10 matches. A team in a slump (low goals but high xG) is undervalued by traditional form tables; a team on a hot streak (high goals but low xG) is overvalued. xG identifies both."
+        },
+        {
+          "type": "h3",
+          "text": "What xG is good at"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Identifying teams whose recent results are misleading (good xG, bad form, or vice versa).",
+            "Predicting future goal totals more accurately than past goal totals.",
+            "Comparing teams across different leagues and tactical styles.",
+            "Evaluating tactical changes — a new manager's xG signature usually appears within 5-8 matches."
+          ]
+        }
       ]
     },
     {
       "id": "betsplug-use",
-      "h2": "How BetsPlug Uses xG",
+      "h2": "How BetsPlug uses xG",
       "blocks": [
-        { "type": "paragraph", "text": "xG is one of more than 40 input variables in our prediction engine, but it's a particularly weighted one. We track three xG metrics per team: xG for (chances created), xG against (chances allowed), and xG difference (the net). Recent-form xG (last 6-10 matches) carries more weight than season-average xG, with an exponential decay so the most recent matches matter most." },
-        { "type": "paragraph", "text": "Our Poisson goal model uses xG-derived expected scoring rates as its primary input. A team's lambda (expected goals per match) blends Elo strength, current xG trend, opponent defensive xG, and home/away splits. The result feeds directly into Over/Under, BTTS, and exact-score predictions. For 1X2 predictions, xG is one of the strongest signals — particularly when xG diverges from form." },
-        { "type": "paragraph", "text": "Read our methodology page for the full picture of how xG, Elo, Poisson, and machine learning combine into final predictions." }
+        {
+          "type": "paragraph",
+          "text": "xG is one of more than 40 input variables in our prediction engine, but it's a particularly weighted one. We track three xG metrics per team: xG for (chances created), xG against (chances allowed), and xG difference (the net). Recent-form xG (last 6-10 matches) carries more weight than season-average xG, with an exponential decay so the most recent matches matter most."
+        },
+        {
+          "type": "paragraph",
+          "text": "Our Poisson goal model uses xG-derived expected scoring rates as its primary input. A team's lambda (expected goals per match) blends Elo strength, current xG trend, opponent defensive xG, and home/away splits. The result feeds directly into Over/Under, BTTS, and exact-score predictions. For 1X2 predictions, xG is one of the strongest signals — particularly when xG diverges from form."
+        },
+        {
+          "type": "paragraph",
+          "text": "Read our methodology page for the full picture of how xG, Elo, Poisson, and machine learning combine into final predictions."
+        }
       ]
     },
     {
       "id": "limitations",
       "h2": "Limitations of xG",
       "blocks": [
-        { "type": "paragraph", "text": "xG is not a magic number. It has real limitations that anyone using it should understand." },
-        { "type": "h3", "text": "Where xG falls short" },
-        { "type": "list", "items": [
-          "Provider differences: Opta, StatsBomb, and Understat give slightly different xG values for the same shot. Don't compare across providers.",
-          "Defensive errors not captured: an own goal or a defensive blunder isn't reflected in xG models.",
-          "Refereeing impact: penalty decisions and red cards swing matches but aren't an xG input.",
-          "Weather and pitch: heavy rain or a poor pitch reduces shot quality in ways most xG models don't capture.",
-          "Small samples: in low-shot matches (4-5 shots total), xG has high variance and is less reliable.",
-          "Set-piece specialists: a team with an exceptional free-kick taker outperforms generic xG predictions for those shots."
-        ]},
-        { "type": "paragraph", "text": "These limitations are why no serious analyst uses xG alone. It's an input — a strong one — alongside form, head-to-head, lineups, and tactical context. Prediction engines that rely solely on xG are less accurate than engines that blend xG with other signals." }
+        {
+          "type": "paragraph",
+          "text": "xG is not a magic number. It has real limitations that anyone using it should understand."
+        },
+        {
+          "type": "h3",
+          "text": "Where xG falls short"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Provider differences: Opta, StatsBomb, and Understat give slightly different xG values for the same shot. Don't compare across providers.",
+            "Defensive errors not captured: an own goal or a defensive blunder isn't reflected in xG models.",
+            "Refereeing impact: penalty decisions and red cards swing matches but aren't an xG input.",
+            "Weather and pitch: heavy rain or a poor pitch reduces shot quality in ways most xG models don't capture.",
+            "Small samples: in low-shot matches (4-5 shots total), xG has high variance and is less reliable.",
+            "Set-piece specialists: a team with an exceptional free-kick taker outperforms generic xG predictions for those shots."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "These limitations are why no serious analyst uses xG alone. It's an input — a strong one — alongside form, head-to-head, lineups, and tactical context. Prediction engines that rely solely on xG are less accurate than engines that blend xG with other signals."
+        }
       ]
     }
   ],
   "keyTakeaways": {
-    "h3": "Key Takeaways",
+    "h3": "Key takeaways",
     "items": [
       "xG measures shot quality on a 0.0–1.0 scale — total xG aggregates a team's chance quality per match.",
       "xG predicts future goal-scoring better than past goals, especially over 5-10 match windows.",
@@ -98,22 +161,44 @@
     ]
   },
   "faq": {
-    "h2": "Expected Goals FAQ",
+    "h2": "Expected goals FAQ",
     "questions": [
-      { "q": "What's a 'good' xG per match?", "a": "Top teams in major leagues average 1.5–2.0 xG per match. Mid-table sides typically sit 1.1–1.4. Bottom teams hover around 0.8–1.1. Numbers vary by league: the Bundesliga and Eredivisie tend to produce higher xG averages than Serie A or Ligue 1 because of more open tactical styles." },
-      { "q": "Is xG used by professional football clubs?", "a": "Yes. Most Premier League and major European clubs employ data analysts who use xG and similar metrics for tactical analysis, opposition scouting, and player recruitment. Liverpool's hiring of Ian Graham as Director of Research in 2012 was an early high-profile example. xG-driven recruitment is now standard at the top of the game." },
-      { "q": "Can I use xG to predict matches myself?", "a": "Recent xG trends are useful inputs, especially when they diverge from form (a team scoring more or less than their xG suggests). But xG alone isn't sufficient — combine it with team form, head-to-head data, lineup news, and contextual factors. This is why prediction engines blend multiple metrics rather than relying on any single number." },
-      { "q": "Where can I find xG data for free?", "a": "Understat publishes free xG data for top European leagues. FBref and StatsBomb also offer some free public data. For real-time, comprehensive xG across 30+ leagues, you typically need a paid data provider — which is what professional clubs and data-driven prediction services use." }
+      {
+        "q": "What's a 'good' xG per match?",
+        "a": "Top teams in major leagues average 1.5–2.0 xG per match. Mid-table sides typically sit 1.1–1.4. Bottom teams hover around 0.8–1.1. Numbers vary by league: the Bundesliga and Eredivisie tend to produce higher xG averages than Serie A or Ligue 1 because of more open tactical styles."
+      },
+      {
+        "q": "Is xG used by professional football clubs?",
+        "a": "Yes. Most Premier League and major European clubs employ data analysts who use xG and similar metrics for tactical analysis, opposition scouting, and player recruitment. Liverpool's hiring of Ian Graham as Director of Research in 2012 was an early high-profile example. xG-driven recruitment is now standard at the top of the game."
+      },
+      {
+        "q": "Can I use xG to predict matches myself?",
+        "a": "Recent xG trends are useful inputs, especially when they diverge from form (a team scoring more or less than their xG suggests). But xG alone isn't sufficient — combine it with team form, head-to-head data, lineup news, and contextual factors. This is why prediction engines blend multiple metrics rather than relying on any single number."
+      },
+      {
+        "q": "Where can I find xG data for free?",
+        "a": "Understat publishes free xG data for top European leagues. FBref and StatsBomb also offer some free public data. For real-time, comprehensive xG across 30+ leagues, you typically need a paid data provider — which is what professional clubs and data-driven prediction services use."
+      }
     ]
   },
   "relatedArticles": {
-    "h2": "Related Articles",
-    "slugs": ["poisson-goal-models", "elo-rating-explained", "ai-vs-tipsters"]
+    "h2": "Related articles",
+    "slugs": [
+      "poisson-goal-models",
+      "elo-rating-explained",
+      "ai-vs-tipsters"
+    ]
   },
   "applyThis": {
-    "h2": "See xG Applied to Real Predictions",
+    "h2": "See xG applied to real predictions",
     "body": "BetsPlug uses xG as one of 40+ variables in our prediction engine, combined with Elo ratings and Poisson goal models. Every prediction across 30+ leagues reflects this xG-aware methodology.",
-    "ctaPrimary": { "label": "View Today's Predictions", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Read Methodology", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "View Today's Predictions",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Read Methodology",
+      "canonical": "methodology"
+    }
   }
 }

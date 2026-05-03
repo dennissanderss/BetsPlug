@@ -1,46 +1,100 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Imparare — Metodi Dietro i Pronostici Calcio | BetsPlug",
+    "title": "Imparare — metodi dietro i pronostici calcio | BetsPlug",
     "description": "Guide approfondite su Elo, Poisson, machine learning, value betting e gestione del bankroll. Impara la matematica dietro i pronostici IA.",
     "ogImage": "/og-images/learn-it.jpg"
   },
   "hero": {
-    "h1": "Impara la Matematica Dietro i Pronostici Calcio",
+    "h1": "Impara la {{accent}}matematica{{/accent}} dietro i pronostici calcio",
     "subheadline": "Guide approfondite sui modelli statistici, concetti di scommessa e framework analitici dietro i pronostici basati sui dati. Niente fluff. Solo la vera matematica.",
-    "trustStrip": ["Scritto da ingegneri", "Aggiornato regolarmente", "Nessun spam di affiliazione"]
+    "trustStrip": [
+      "Scritto da ingegneri",
+      "Aggiornato regolarmente",
+      "Nessun spam di affiliazione"
+    ]
   },
   "grid": {
-    "h2": "Esplora gli Articoli",
+    "h2": "Esplora gli articoli",
     "readMore": "Leggi articolo",
-    "difficultyLabels": { "Beginner": "Principiante", "Intermediate": "Intermedio", "Advanced": "Avanzato" },
+    "difficultyLabels": {
+      "Beginner": "Principiante",
+      "Intermediate": "Intermedio",
+      "Advanced": "Avanzato"
+    },
     "categories": [
       {
-        "title": "Modelli Statistici",
+        "title": "Modelli statistici",
         "articles": [
-          { "slug": "expected-goals-explained", "title": "Expected Goals (xG) Spiegato", "excerpt": "Come xG misura la qualità dei tiri e prevede la performance a lungo termine meglio dei conteggi tradizionali.", "readingTime": "8 min di lettura", "difficulty": "Beginner" },
-          { "slug": "elo-rating-explained", "title": "Sistema di Classifica Elo per il Calcio", "excerpt": "Il sistema dinamico che adegua la forza della squadra dopo ogni partita. Originariamente per gli scacchi, ora motore dei pronostici moderni.", "readingTime": "10 min di lettura", "difficulty": "Intermediate" },
-          { "slug": "poisson-goal-models", "title": "Modelli Poisson di Gol", "excerpt": "La distribuzione matematica che prevede la probabilità di risultati specifici basata su tassi di attacco e difesa.", "readingTime": "12 min di lettura", "difficulty": "Intermediate" }
+          {
+            "slug": "expected-goals-explained",
+            "title": "Expected goals (xG) spiegato",
+            "excerpt": "Come xG misura la qualità dei tiri e prevede la performance a lungo termine meglio dei conteggi tradizionali.",
+            "readingTime": "8 min di lettura",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "elo-rating-explained",
+            "title": "Sistema di classifica Elo per il calcio",
+            "excerpt": "Il sistema dinamico che adegua la forza della squadra dopo ogni partita. Originariamente per gli scacchi, ora motore dei pronostici moderni.",
+            "readingTime": "10 min di lettura",
+            "difficulty": "Intermediate"
+          },
+          {
+            "slug": "poisson-goal-models",
+            "title": "Modelli Poisson di gol",
+            "excerpt": "La distribuzione matematica che prevede la probabilità di risultati specifici basata su tassi di attacco e difesa.",
+            "readingTime": "12 min di lettura",
+            "difficulty": "Intermediate"
+          }
         ]
       },
       {
-        "title": "Concetti di Scommessa",
+        "title": "Concetti di scommessa",
         "articles": [
-          { "slug": "what-is-value-betting", "title": "Cos'è il Value Betting?", "excerpt": "Perché trovare scommesse con valore atteso positivo è l'unica strategia matematicamente solida a lungo termine.", "readingTime": "9 min di lettura", "difficulty": "Beginner" },
-          { "slug": "kelly-criterion", "title": "Il Criterio di Kelly", "excerpt": "La formula matematica per la dimensione ottimale della puntata basata su edge e quote. Perché la maggior parte degli scommettitori sbaglia.", "readingTime": "11 min di lettura", "difficulty": "Advanced" },
-          { "slug": "bankroll-management", "title": "Gestione del Bankroll", "excerpt": "Come gestire il tuo capitale di pronostici affinché la variabilità a breve termine non distrugga i risultati a lungo termine.", "readingTime": "8 min di lettura", "difficulty": "Beginner" }
+          {
+            "slug": "what-is-value-betting",
+            "title": "Cos'è il value betting?",
+            "excerpt": "Perché trovare scommesse con valore atteso positivo è l'unica strategia matematicamente solida a lungo termine.",
+            "readingTime": "9 min di lettura",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "kelly-criterion",
+            "title": "Il criterio di Kelly",
+            "excerpt": "La formula matematica per la dimensione ottimale della puntata basata su edge e quote. Perché la maggior parte degli scommettitori sbaglia.",
+            "readingTime": "11 min di lettura",
+            "difficulty": "Advanced"
+          },
+          {
+            "slug": "bankroll-management",
+            "title": "Gestione del bankroll",
+            "excerpt": "Come gestire il tuo capitale di pronostici affinché la variabilità a breve termine non distrugga i risultati a lungo termine.",
+            "readingTime": "8 min di lettura",
+            "difficulty": "Beginner"
+          }
         ]
       },
       {
-        "title": "IA e Analisi",
+        "title": "IA e analisi",
         "articles": [
-          { "slug": "ai-vs-tipsters", "title": "IA vs Tipster Umani", "excerpt": "I vantaggi strutturali e i limiti dei pronostici IA rispetto alla competenza umana. Dove ciascuno eccelle.", "readingTime": "10 min di lettura", "difficulty": "Intermediate" }
+          {
+            "slug": "ai-vs-tipsters",
+            "title": "IA vs tipster umani",
+            "excerpt": "I vantaggi strutturali e i limiti dei pronostici IA rispetto alla competenza umana. Dove ciascuno eccelle.",
+            "readingTime": "10 min di lettura",
+            "difficulty": "Intermediate"
+          }
         ]
       }
     ]
   },
   "whyTopics": {
-    "h2": "Perché Abbiamo Scritto Queste Guide",
+    "h2": "Perché abbiamo scritto queste guide",
     "paragraphs": [
       "La maggior parte dei siti di pronostici tratta i propri metodi come 'segreti proprietari' o li semplifica eccessivamente per sembrare user-friendly. Entrambi gli approcci falliscono i lettori che vogliono davvero capire.",
       "La nostra sezione imparare spiega la matematica reale dietro i nostri pronostici — classifiche Elo, distribuzioni Poisson, pattern di machine learning — a un livello che rispetta la tua intelligenza.",
@@ -48,9 +102,15 @@
     ]
   },
   "finalCta": {
-    "h2": "Pronto a Vedere Questi Concetti in Azione?",
+    "h2": "Pronto a vedere questi concetti in azione?",
     "body": "Stesso motore, stessa metodologia — applicata su 30+ campionati ogni giorno.",
-    "ctaPrimary": { "label": "Vedi pronostici di oggi", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Come funziona il motore", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Vedi pronostici di oggi",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Come funziona il motore",
+      "canonical": "methodology"
+    }
   }
 }

@@ -1,12 +1,17 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json." },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json."
+  },
   "meta": {
-    "title": "AI vs Menselijke Tipsters: Waar Beide Uitblinken | BetsPlug Leren",
+    "title": "AI vs menselijke tipsters: waar beide uitblinken | BetsPlug leren",
     "description": "De structurele voordelen en beperkingen van AI-gedreven voetbalvoorspellingen versus menselijke tipsters. Waar consistentie intuïtie verslaat, en waar niet.",
     "ogImage": "/og-images/learn-ai-vs-tipsters-nl.jpg"
   },
   "header": {
-    "h1": "AI vs Menselijke Tipsters: Waar Beide Uitblinken",
+    "h1": "AI vs menselijke tipsters: waar beide uitblinken",
     "excerpt": "De structurele voordelen en beperkingen van AI-gedreven voorspellingen versus menselijke expertise. Waar elk uitblinkt.",
     "readingTime": "10 min lezen",
     "difficulty": "Gemiddeld",
@@ -20,85 +25,211 @@
   "sections": [
     {
       "id": "humans-excel",
-      "h2": "Waar Menselijke Tipsters Uitblinken",
+      "h2": "Waar menselijke tipsters uitblinken",
       "blocks": [
-        { "type": "h3", "text": "Tactische matchup-intuïtie" },
-        { "type": "paragraph", "text": "Een ervaren menselijke analist kan twee teams zien spelen en weten dat de ene zijn hoge pressing de opbouw van de ander zal slopen — zelfs als historische data dat niet vastlegt omdat de teams elkaar recent niet hebben getroffen. Deze intuïtieve patroonherkenning is genuinely moeilijk voor AI om te repliceren, vooral wanneer de matchup nieuwe trainers of recent veranderde tactische systemen betreft." },
-        { "type": "h3", "text": "Reageren op verse informatie" },
-        { "type": "paragraph", "text": "De sterspits van een team trekt iets in de warm-up. Een gelekt verhaal komt naar buiten over spanningen tussen trainer en speler. Een verrassende opstelling wordt 90 minuten voor de aftrap aangekondigd. Mensen kunnen deze verse informatie direct integreren; AI-systemen werken op de datapijplijn waarvoor ze ontworpen zijn. Als laat opstellingsnieuws niet in de pijplijn zit, loopt de voorspelling van AI achter." },
-        { "type": "h3", "text": "Nieuwe situaties zonder precedent" },
-        { "type": "paragraph", "text": "Een team speelt zijn eerste wedstrijd na een groot schandaal, verkoop van een sterspeler, of eigenaarsverandering. Historische data is niet langer volledig relevant. Menselijke analisten kunnen redeneren over wat waarschijnlijk is \"per analogie\" — door te vergelijken met andere teams die soortgelijke disruptie ervoeren. AI worstelt hier omdat zijn trainingsdata per definitie niet de exacte situatie bevat." },
-        { "type": "h3", "text": "Insider-informatie (af en toe)" },
-        { "type": "paragraph", "text": "Sommige tipsters hebben werkelijk toegang tot insider-bronnen — staf, journalisten, familie van spelers — die hen edge geeft op teamnieuws. Dit is een echt voordeel waar het bestaat, hoewel zeldzaam en vaak overdreven door tipsters die hun picks proberen te rechtvaardigen." }
+        {
+          "type": "h3",
+          "text": "Tactische matchup-intuïtie"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een ervaren menselijke analist kan twee teams zien spelen en weten dat de ene zijn hoge pressing de opbouw van de ander zal slopen — zelfs als historische data dat niet vastlegt omdat de teams elkaar recent niet hebben getroffen. Deze intuïtieve patroonherkenning is genuinely moeilijk voor AI om te repliceren, vooral wanneer de matchup nieuwe trainers of recent veranderde tactische systemen betreft."
+        },
+        {
+          "type": "h3",
+          "text": "Reageren op verse informatie"
+        },
+        {
+          "type": "paragraph",
+          "text": "De sterspits van een team trekt iets in de warm-up. Een gelekt verhaal komt naar buiten over spanningen tussen trainer en speler. Een verrassende opstelling wordt 90 minuten voor de aftrap aangekondigd. Mensen kunnen deze verse informatie direct integreren; AI-systemen werken op de datapijplijn waarvoor ze ontworpen zijn. Als laat opstellingsnieuws niet in de pijplijn zit, loopt de voorspelling van AI achter."
+        },
+        {
+          "type": "h3",
+          "text": "Nieuwe situaties zonder precedent"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een team speelt zijn eerste wedstrijd na een groot schandaal, verkoop van een sterspeler, of eigenaarsverandering. Historische data is niet langer volledig relevant. Menselijke analisten kunnen redeneren over wat waarschijnlijk is \"per analogie\" — door te vergelijken met andere teams die soortgelijke disruptie ervoeren. AI worstelt hier omdat zijn trainingsdata per definitie niet de exacte situatie bevat."
+        },
+        {
+          "type": "h3",
+          "text": "Insider-informatie (af en toe)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sommige tipsters hebben werkelijk toegang tot insider-bronnen — staf, journalisten, familie van spelers — die hen edge geeft op teamnieuws. Dit is een echt voordeel waar het bestaat, hoewel zeldzaam en vaak overdreven door tipsters die hun picks proberen te rechtvaardigen."
+        }
       ]
     },
     {
       "id": "humans-fail",
-      "h2": "Waar Menselijke Tipsters Falen",
+      "h2": "Waar menselijke tipsters falen",
       "blocks": [
-        { "type": "h3", "text": "Emotionele bias" },
-        { "type": "paragraph", "text": "Menselijke tipsters die een team steunen, schatten de kansen van dat team systematisch hoger in. Zelfs tipsters die deze bias bewust proberen te onderdrukken kunnen hem niet volledig elimineren — onderzoek naar cognitieve bias is hier unaniem over. AI heeft geen favoriete teams; het verwerkt Ajax en Feyenoord identiek." },
-        { "type": "h3", "text": "Cognitieve biases" },
-        { "type": "paragraph", "text": "Recency bias: mensen wegen recente resultaten te zwaar, vooral dramatische. Een 6-1 overwinning drie wedstrijden geleden voelt relevanter dan gemiddelde prestaties over de laatste 20 wedstrijden. Confirmation bias: mensen zoeken bewijs dat hun bestaande voorspelling bevestigt en negeren bewijs dat het tegenspreekt. Anchoring: mensen ankeren op het eerste getal dat ze zien (vaak de bookmaker-lijn) in plaats van onafhankelijk te redeneren. AI is structureel immuun voor deze biases — ze zijn ingebakken in menselijke cognitie." },
-        { "type": "h3", "text": "Inconsistentie" },
-        { "type": "paragraph", "text": "Tipsters hebben goede en slechte dagen. Hun methodologie kan driften; hun aandacht kan verslappen; ze kunnen moe, gehavend, of afgeleid zijn. AI past dezelfde methodologie toe op elke wedstrijd. Een pure AI-engine die 47 wedstrijden op één dag evalueert gebruikt identieke verwerking voor wedstrijd 1 en wedstrijd 47. De 47e wedstrijd van een menselijke tipster ziet er substantieel slechter uit dan zijn eerste." },
-        { "type": "h3", "text": "Onvermogen om volume te verwerken" },
-        { "type": "paragraph", "text": "Een serieuze bettor wil voorspellingen over 30+ competities, ~3.000+ wedstrijden per jaar. Geen mens kan dat volume diep analyseren. Ze kunnen samplen, ze kunnen specialiseren, maar ze kunnen niet uitgebreid dekken. AI is structureel geschikt voor volume — elke wedstrijd krijgt dezelfde diepgang van analyse." }
+        {
+          "type": "h3",
+          "text": "Emotionele bias"
+        },
+        {
+          "type": "paragraph",
+          "text": "Menselijke tipsters die een team steunen, schatten de kansen van dat team systematisch hoger in. Zelfs tipsters die deze bias bewust proberen te onderdrukken kunnen hem niet volledig elimineren — onderzoek naar cognitieve bias is hier unaniem over. AI heeft geen favoriete teams; het verwerkt Ajax en Feyenoord identiek."
+        },
+        {
+          "type": "h3",
+          "text": "Cognitieve biases"
+        },
+        {
+          "type": "paragraph",
+          "text": "Recency bias: mensen wegen recente resultaten te zwaar, vooral dramatische. Een 6-1 overwinning drie wedstrijden geleden voelt relevanter dan gemiddelde prestaties over de laatste 20 wedstrijden. Confirmation bias: mensen zoeken bewijs dat hun bestaande voorspelling bevestigt en negeren bewijs dat het tegenspreekt. Anchoring: mensen ankeren op het eerste getal dat ze zien (vaak de bookmaker-lijn) in plaats van onafhankelijk te redeneren. AI is structureel immuun voor deze biases — ze zijn ingebakken in menselijke cognitie."
+        },
+        {
+          "type": "h3",
+          "text": "Inconsistentie"
+        },
+        {
+          "type": "paragraph",
+          "text": "Tipsters hebben goede en slechte dagen. Hun methodologie kan driften; hun aandacht kan verslappen; ze kunnen moe, gehavend, of afgeleid zijn. AI past dezelfde methodologie toe op elke wedstrijd. Een pure AI-engine die 47 wedstrijden op één dag evalueert gebruikt identieke verwerking voor wedstrijd 1 en wedstrijd 47. De 47e wedstrijd van een menselijke tipster ziet er substantieel slechter uit dan zijn eerste."
+        },
+        {
+          "type": "h3",
+          "text": "Onvermogen om volume te verwerken"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een serieuze bettor wil voorspellingen over 30+ competities, ~3.000+ wedstrijden per jaar. Geen mens kan dat volume diep analyseren. Ze kunnen samplen, ze kunnen specialiseren, maar ze kunnen niet uitgebreid dekken. AI is structureel geschikt voor volume — elke wedstrijd krijgt dezelfde diepgang van analyse."
+        }
       ]
     },
     {
       "id": "ai-excels",
-      "h2": "Waar AI Uitblinkt",
+      "h2": "Waar AI uitblinkt",
       "blocks": [
-        { "type": "h3", "text": "Consistentie" },
-        { "type": "paragraph", "text": "Dezelfde methodologie toegepast op elke wedstrijd, elke dag. De Liverpool–Manchester City top-clash krijgt dezelfde statistische behandeling als een Eredivisie-middenmoter. Deze consistentie is de basis van elk ander AI-voordeel." },
-        { "type": "h3", "text": "Volume" },
-        { "type": "paragraph", "text": "AI kan elke wedstrijd in elke gedekte competitie tegelijkertijd verwerken. Er is geen \"te veel wedstrijden vandaag\"-probleem. Een menselijke tipster die 30+ competities dekt geeft óf oppervlakkige analyse aan de meeste, óf dekt slechts een kleine subset diep. AI geeft diepe analyse aan alle." },
-        { "type": "h3", "text": "Geen emotionele bias" },
-        { "type": "paragraph", "text": "Een AI-engine geeft niets om of Manchester United overhyped is, of Real Madrid historische mystiek heeft, of een derby dramatische context heeft. Het verwerkt statistieken en levert kansen. Dit is waardevol — emotionele bias is de grootste bron van systematische fouten in menselijke voorspellingen." },
-        { "type": "h3", "text": "Continue leren van data" },
-        { "type": "paragraph", "text": "Een AI-engine traint elke week of dag opnieuw op nieuwe wedstrijddata. Zijn begrip van bijvoorbeeld hoe opstellings-rotatie de prestaties beïnvloedt wordt elk seizoen scherper naarmate meer data accumuleert. Het begrip van een menselijke analist kan ook verbeteren met ervaring, maar trager en minder systematisch." }
+        {
+          "type": "h3",
+          "text": "Consistentie"
+        },
+        {
+          "type": "paragraph",
+          "text": "Dezelfde methodologie toegepast op elke wedstrijd, elke dag. De Liverpool–Manchester City top-clash krijgt dezelfde statistische behandeling als een Eredivisie-middenmoter. Deze consistentie is de basis van elk ander AI-voordeel."
+        },
+        {
+          "type": "h3",
+          "text": "Volume"
+        },
+        {
+          "type": "paragraph",
+          "text": "AI kan elke wedstrijd in elke gedekte competitie tegelijkertijd verwerken. Er is geen \"te veel wedstrijden vandaag\"-probleem. Een menselijke tipster die 30+ competities dekt geeft óf oppervlakkige analyse aan de meeste, óf dekt slechts een kleine subset diep. AI geeft diepe analyse aan alle."
+        },
+        {
+          "type": "h3",
+          "text": "Geen emotionele bias"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een AI-engine geeft niets om of Manchester United overhyped is, of Real Madrid historische mystiek heeft, of een derby dramatische context heeft. Het verwerkt statistieken en levert kansen. Dit is waardevol — emotionele bias is de grootste bron van systematische fouten in menselijke voorspellingen."
+        },
+        {
+          "type": "h3",
+          "text": "Continue leren van data"
+        },
+        {
+          "type": "paragraph",
+          "text": "Een AI-engine traint elke week of dag opnieuw op nieuwe wedstrijddata. Zijn begrip van bijvoorbeeld hoe opstellings-rotatie de prestaties beïnvloedt wordt elk seizoen scherper naarmate meer data accumuleert. Het begrip van een menselijke analist kan ook verbeteren met ervaring, maar trager en minder systematisch."
+        }
       ]
     },
     {
       "id": "ai-fails",
-      "h2": "Waar AI Faalt",
+      "h2": "Waar AI faalt",
       "blocks": [
-        { "type": "h3", "text": "Edge cases zonder historisch precedent" },
-        { "type": "paragraph", "text": "Wanneer er iets werkelijk nieuws gebeurt — een wereldwijde pandemie die wedstrijden achter gesloten deuren dwingt, een nieuw competitieformaat, een regelwijziging die de tactiek beïnvloedt — is de trainingsdata van AI geen betrouwbare gids. Het model heeft patronen geleerd die mogelijk niet meer gelden. Mensen kunnen hun redenering aanpassen; AI vereist hertraining en validatie, wat achterloopt." },
-        { "type": "h3", "text": "Black swan events" },
-        { "type": "paragraph", "text": "Gebeurtenissen die nooit zijn voorgekomen (of zo zelden dat de trainingsdata van AI ze in essentie negeert) zorgen ervoor dat AI-voorspellingen zelfverzekerd verkeerd zijn. De La Liga-titelstrijd van 2011-12 zag Barcelona en Real Madrid beide 100 punten halen — een scenario zonder historisch precedent in het Spaanse voetbal. AI-modellen gekalibreerd op eerdere seizoenen voorspelden Liga-wedstrijden het hele seizoen verkeerd omdat de onderliggende competitiviteit was verschoven." },
-        { "type": "h3", "text": "Trage adaptatie aan tussentijdse trainerswisselingen" },
-        { "type": "paragraph", "text": "Wanneer een team midden in het seizoen de trainer ontslaat, kan de tactische identiteit overnight veranderen. AI ziet de pre-ontslag-data en gaat uit van continuïteit. Voorspellingen voor de eerste 5-10 wedstrijden onder de nieuwe trainer zijn merkbaar minder accuraat dan baseline omdat het model verouderde tactische aannames gebruikt. Mensen kunnen direct herkalibreren op basis van de bekende stijl van de nieuwe trainer." },
-        { "type": "h3", "text": "Lokale kennis" },
-        { "type": "paragraph", "text": "Specifieke stadion-eigenaardigheden, neigingen van bepaalde scheidsrechters in bepaalde matchups, weerinvloed op een specifiek veld — deze leven vaak in menselijke kennisbases die AI-trainingsdata niet schoon vastlegt. Een mens die regelmatig Eredivisie volgt weet dat het specifieke veld van AZ in de winter bepaalde stijlen bevoordeelt. Een AI-engine getraind op nationale-competitiedata weet dat mogelijk niet." }
+        {
+          "type": "h3",
+          "text": "Edge cases zonder historisch precedent"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer er iets werkelijk nieuws gebeurt — een wereldwijde pandemie die wedstrijden achter gesloten deuren dwingt, een nieuw competitieformaat, een regelwijziging die de tactiek beïnvloedt — is de trainingsdata van AI geen betrouwbare gids. Het model heeft patronen geleerd die mogelijk niet meer gelden. Mensen kunnen hun redenering aanpassen; AI vereist hertraining en validatie, wat achterloopt."
+        },
+        {
+          "type": "h3",
+          "text": "Black swan events"
+        },
+        {
+          "type": "paragraph",
+          "text": "Gebeurtenissen die nooit zijn voorgekomen (of zo zelden dat de trainingsdata van AI ze in essentie negeert) zorgen ervoor dat AI-voorspellingen zelfverzekerd verkeerd zijn. De La Liga-titelstrijd van 2011-12 zag Barcelona en Real Madrid beide 100 punten halen — een scenario zonder historisch precedent in het Spaanse voetbal. AI-modellen gekalibreerd op eerdere seizoenen voorspelden Liga-wedstrijden het hele seizoen verkeerd omdat de onderliggende competitiviteit was verschoven."
+        },
+        {
+          "type": "h3",
+          "text": "Trage adaptatie aan tussentijdse trainerswisselingen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanneer een team midden in het seizoen de trainer ontslaat, kan de tactische identiteit overnight veranderen. AI ziet de pre-ontslag-data en gaat uit van continuïteit. Voorspellingen voor de eerste 5-10 wedstrijden onder de nieuwe trainer zijn merkbaar minder accuraat dan baseline omdat het model verouderde tactische aannames gebruikt. Mensen kunnen direct herkalibreren op basis van de bekende stijl van de nieuwe trainer."
+        },
+        {
+          "type": "h3",
+          "text": "Lokale kennis"
+        },
+        {
+          "type": "paragraph",
+          "text": "Specifieke stadion-eigenaardigheden, neigingen van bepaalde scheidsrechters in bepaalde matchups, weerinvloed op een specifiek veld — deze leven vaak in menselijke kennisbases die AI-trainingsdata niet schoon vastlegt. Een mens die regelmatig Eredivisie volgt weet dat het specifieke veld van AZ in de winter bepaalde stijlen bevoordeelt. Een AI-engine getraind op nationale-competitiedata weet dat mogelijk niet."
+        }
       ]
     },
     {
       "id": "hybrid-reality",
-      "h2": "De Hybride Realiteit",
+      "h2": "De hybride realiteit",
       "blocks": [
-        { "type": "paragraph", "text": "De framing van \"AI vs menselijke tipsters\" is misleidend. De beste moderne voorspellingssystemen zijn hybride: AI verzorgt het consistente statistische zware werk, terwijl menselijk-engineered features de soort context die AI moeilijk vindt incorporeren. Domain-experts coderen hun kennis in de feature-pijplijn van het model — niet door individuele voorspellingen te overrulen, maar door te zorgen dat het model toegang heeft tot de juiste data-inputs." },
-        { "type": "paragraph", "text": "Topprofessionele bettors die de markt over decennia verslaan zijn geen pure AI-gebruikers of pure menselijke tipsters. Ze gebruiken AI-tools voor probability-schatting over volume, en leggen er hun eigen analyse overheen voor specifieke situaties waar de edge van AI het zwakst is. Het resultaat is hybride: AI-baseline, menselijke override voor edge cases." }
+        {
+          "type": "paragraph",
+          "text": "De framing van \"AI vs menselijke tipsters\" is misleidend. De beste moderne voorspellingssystemen zijn hybride: AI verzorgt het consistente statistische zware werk, terwijl menselijk-engineered features de soort context die AI moeilijk vindt incorporeren. Domain-experts coderen hun kennis in de feature-pijplijn van het model — niet door individuele voorspellingen te overrulen, maar door te zorgen dat het model toegang heeft tot de juiste data-inputs."
+        },
+        {
+          "type": "paragraph",
+          "text": "Topprofessionele bettors die de markt over decennia verslaan zijn geen pure AI-gebruikers of pure menselijke tipsters. Ze gebruiken AI-tools voor probability-schatting over volume, en leggen er hun eigen analyse overheen voor specifieke situaties waar de edge van AI het zwakst is. Het resultaat is hybride: AI-baseline, menselijke override voor edge cases."
+        }
       ]
     },
     {
       "id": "betsplug-ai-first",
-      "h2": "Waarom BetsPlug AI-First Is",
+      "h2": "Waarom BetsPlug AI-first is",
       "blocks": [
-        { "type": "paragraph", "text": "We zijn AI-first vanwege drie structurele eisen die pure menselijke tipsters niet kunnen vervullen:" },
-        { "type": "h3", "text": "Volume" },
-        { "type": "paragraph", "text": "30+ competities, ~3.000 wedstrijden per jaar. Geen menselijk team zou dit volume diep kunnen analyseren; specialisatie zou betekenen dat er gaten in de dekking zitten. Onze gebruikers willen voorspellingen voor de wedstrijden die zij belangrijk vinden, ongeacht de competitie-grootte. AI schaalt natuurlijk waar mensen dat niet kunnen." },
-        { "type": "h3", "text": "Consistentie" },
-        { "type": "paragraph", "text": "Elke voorspelling in onze publieke track record is gegenereerd door dezelfde methodologie. Er zijn geen \"betere dagen\" of \"slechtere dagen\" — dezelfde engine verwerkt wedstrijd 1 en wedstrijd 3.000. Deze consistentie maakt de track record betekenisvol. Een menselijke-tipster track record, zelfs een eerlijke, kan dezelfde eigenschap niet claimen." },
-        { "type": "h3", "text": "Transparantie" },
-        { "type": "paragraph", "text": "Voorspellingen zijn deterministisch gegeven de inputs. Er is geen menselijke override die inconsistent toegepast zou kunnen worden. Onze methodologie is gepubliceerd; onze track record is publiek; voorspellingen worden vóór de aftrap vergrendeld. Dit niveau van transparantie is structureel makkelijker voor een AI-systeem dan voor een menselijke tipster, waar redactionele beslissingen buiten zicht genomen kunnen worden." },
-        { "type": "paragraph", "text": "We vullen de AI-engine aan met menselijk-engineered features waar passend — variabelen die tactische patronen vangen, manager-tenure-effecten, en soortgelijke context die pure data niet zou oppervlakken. Maar de voorspellingen zelf worden automatisch gegenereerd en vergrendeld vóór de aftrap. Geen menselijke override achteraf." }
+        {
+          "type": "paragraph",
+          "text": "We zijn AI-first vanwege drie structurele eisen die pure menselijke tipsters niet kunnen vervullen:"
+        },
+        {
+          "type": "h3",
+          "text": "Volume"
+        },
+        {
+          "type": "paragraph",
+          "text": "30+ competities, ~3.000 wedstrijden per jaar. Geen menselijk team zou dit volume diep kunnen analyseren; specialisatie zou betekenen dat er gaten in de dekking zitten. Onze gebruikers willen voorspellingen voor de wedstrijden die zij belangrijk vinden, ongeacht de competitie-grootte. AI schaalt natuurlijk waar mensen dat niet kunnen."
+        },
+        {
+          "type": "h3",
+          "text": "Consistentie"
+        },
+        {
+          "type": "paragraph",
+          "text": "Elke voorspelling in onze publieke track record is gegenereerd door dezelfde methodologie. Er zijn geen \"betere dagen\" of \"slechtere dagen\" — dezelfde engine verwerkt wedstrijd 1 en wedstrijd 3.000. Deze consistentie maakt de track record betekenisvol. Een menselijke-tipster track record, zelfs een eerlijke, kan dezelfde eigenschap niet claimen."
+        },
+        {
+          "type": "h3",
+          "text": "Transparantie"
+        },
+        {
+          "type": "paragraph",
+          "text": "Voorspellingen zijn deterministisch gegeven de inputs. Er is geen menselijke override die inconsistent toegepast zou kunnen worden. Onze methodologie is gepubliceerd; onze track record is publiek; voorspellingen worden vóór de aftrap vergrendeld. Dit niveau van transparantie is structureel makkelijker voor een AI-systeem dan voor een menselijke tipster, waar redactionele beslissingen buiten zicht genomen kunnen worden."
+        },
+        {
+          "type": "paragraph",
+          "text": "We vullen de AI-engine aan met menselijk-engineered features waar passend — variabelen die tactische patronen vangen, manager-tenure-effecten, en soortgelijke context die pure data niet zou oppervlakken. Maar de voorspellingen zelf worden automatisch gegenereerd en vergrendeld vóór de aftrap. Geen menselijke override achteraf."
+        }
       ]
     }
   ],
   "keyTakeaways": {
-    "h3": "Belangrijkste Punten",
+    "h3": "Belangrijkste punten",
     "items": [
       "AI blinkt uit in consistentie, volume en bias-vrije verwerking van gestructureerde data.",
       "Mensen blinken uit in tactische intuïtie, reageren op verse informatie, en redeneren in nieuwe situaties.",
@@ -108,22 +239,44 @@
     ]
   },
   "faq": {
-    "h2": "AI Voorspellingen FAQ",
+    "h2": "AI voorspellingen FAQ",
     "questions": [
-      { "q": "Zijn AI-voorspellingen écht accurater dan menselijke tipsters?", "a": "Gemiddeld en over lange samples — ja, vooral voor consistent volume. Pure AI-systemen verslaan willekeurige tipsters en de meeste menselijke tipsters die geen data-tools gebruiken. Ze verslaan de beste menselijk-plus-AI hybride systemen niet, maar die vereisen professionele infrastructuur. Voor een typische volger die AI-voorspellingen vergelijkt met zijn favoriete tipster wint AI typisch op accuraatheid over 500+ voorspellingen, vooral bij competities waarin de tipster niet specialiseert." },
-      { "q": "Verwerkt AI insider-informatie?", "a": "Nee. AI werkt uitsluitend met publiek beschikbare data — historische wedstrijduitslagen, publieke xG-cijfers, bevestigde opstellingen, weerdata, etc. Menselijke tipsters met echte insider-bronnen hebben een edge die AI niet kan repliceren. Maar echte insider-bronnen zijn zeldzaam; de meeste tipsters die insider-informatie claimen overdrijven." },
-      { "q": "Waarom kijken AI-systemen niet gewoon naar bookmaker-quoteringen?", "a": "Sommige doen dat, maar het is een zwakke strategie op lange termijn. Bookmaker-quoteringen zijn accurate baselines maar bevatten de marge van de bookmaker en weerspiegelen de collectieve probability-schatting van de markt. Om de markt te verslaan heb je een schatting nodig die beter is dan die van de markt — niet dezelfde schatting. De meest succesvolle AI-systemen genereren onafhankelijke probability-schattingen vanuit wedstrijddata, en zoeken dan divergentie van bookmaker-quoteringen (het value-betting framework)." },
-      { "q": "Kan AI Europese competities zoals Champions League aan?", "a": "Ja, maar met verminderde sample size — knock-out rondes zijn rumoeriger dan competitiewedstrijden, en het nieuwe league-phase format is pas in 2024-25 begonnen. De accuraatheid van AI in Champions League-wedstrijden van topclubs is vergelijkbaar met die in competitiewedstrijden; in vroege kwalificaties met kleinere clubs zijn sample-size-grenzen belangrijker. We behandelen league-phase- en knock-outwedstrijden om deze reden als aparte voorspellingsproblemen." }
+      {
+        "q": "Zijn AI-voorspellingen écht accurater dan menselijke tipsters?",
+        "a": "Gemiddeld en over lange samples — ja, vooral voor consistent volume. Pure AI-systemen verslaan willekeurige tipsters en de meeste menselijke tipsters die geen data-tools gebruiken. Ze verslaan de beste menselijk-plus-AI hybride systemen niet, maar die vereisen professionele infrastructuur. Voor een typische volger die AI-voorspellingen vergelijkt met zijn favoriete tipster wint AI typisch op accuraatheid over 500+ voorspellingen, vooral bij competities waarin de tipster niet specialiseert."
+      },
+      {
+        "q": "Verwerkt AI insider-informatie?",
+        "a": "Nee. AI werkt uitsluitend met publiek beschikbare data — historische wedstrijduitslagen, publieke xG-cijfers, bevestigde opstellingen, weerdata, etc. Menselijke tipsters met echte insider-bronnen hebben een edge die AI niet kan repliceren. Maar echte insider-bronnen zijn zeldzaam; de meeste tipsters die insider-informatie claimen overdrijven."
+      },
+      {
+        "q": "Waarom kijken AI-systemen niet gewoon naar bookmaker-quoteringen?",
+        "a": "Sommige doen dat, maar het is een zwakke strategie op lange termijn. Bookmaker-quoteringen zijn accurate baselines maar bevatten de marge van de bookmaker en weerspiegelen de collectieve probability-schatting van de markt. Om de markt te verslaan heb je een schatting nodig die beter is dan die van de markt — niet dezelfde schatting. De meest succesvolle AI-systemen genereren onafhankelijke probability-schattingen vanuit wedstrijddata, en zoeken dan divergentie van bookmaker-quoteringen (het value-betting framework)."
+      },
+      {
+        "q": "Kan AI europese competities zoals Champions League aan?",
+        "a": "Ja, maar met verminderde sample size — knock-out rondes zijn rumoeriger dan competitiewedstrijden, en het nieuwe league-phase format is pas in 2024-25 begonnen. De accuraatheid van AI in Champions League-wedstrijden van topclubs is vergelijkbaar met die in competitiewedstrijden; in vroege kwalificaties met kleinere clubs zijn sample-size-grenzen belangrijker. We behandelen league-phase- en knock-outwedstrijden om deze reden als aparte voorspellingsproblemen."
+      }
     ]
   },
   "relatedArticles": {
-    "h2": "Gerelateerde Artikelen",
-    "slugs": ["expected-goals-explained", "elo-rating-explained", "what-is-value-betting"]
+    "h2": "Gerelateerde artikelen",
+    "slugs": [
+      "expected-goals-explained",
+      "elo-rating-explained",
+      "what-is-value-betting"
+    ]
   },
   "applyThis": {
-    "h2": "Hybride Aanpak in de Praktijk",
+    "h2": "Hybride aanpak in de praktijk",
     "body": "BetsPlug is AI-first maar niet alleen AI — we coderen menselijk-afgeleide features (tactische patronen, manager-tenure-effecten) in de engine. Elke voorspelling weerspiegelt deze gecombineerde aanpak.",
-    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Lees Methodologie", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Bekijk Voorspellingen Vandaag",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Lees Methodologie",
+      "canonical": "methodology"
+    }
   }
 }

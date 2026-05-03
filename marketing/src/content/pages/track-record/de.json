@@ -1,16 +1,30 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "BetsPlug Track Record — Jede Vorhersage Öffentlich | BetsPlug",
+    "title": "BetsPlug Track Record — Jede Vorhersage öffentlich | BetsPlug",
     "description": "Sieh jede BetsPlug KI-Vorhersage, die je veröffentlicht wurde — Gewinne und Verluste. Live Track Record täglich aktualisiert.",
     "ogImage": "/og-images/track-record-de.jpg"
   },
   "hero": {
-    "h1": "Jede Vorhersage. Öffentlich. Für Immer.",
+    "h1": "Jede Vorhersage. {{accent}}Öffentlich. Für Immer.{{/accent}}",
     "subheadline": "Die meisten Vorhersage-Sites zeigen nur ihre Gewinner. Wir veröffentlichen alles — Gewinne, Verluste, exakte Vorhersagen und Zeitstempel. Verifiziere jede Vorhersage, die wir je gemacht haben.",
-    "trustStrip": ["Vor dem Anpfiff gesperrt", "Nicht editierbar", "Gewinne und Verluste"],
-    "ctaPrimary": { "label": "So funktioniert's", "canonical": "methodology" },
-    "ctaSecondary": { "label": "Vorhersagen ansehen", "canonical": "predictions" }
+    "trustStrip": [
+      "Vor dem Anpfiff gesperrt",
+      "Nicht editierbar",
+      "Gewinne und Verluste"
+    ],
+    "ctaPrimary": {
+      "label": "So funktioniert's",
+      "canonical": "methodology"
+    },
+    "ctaSecondary": {
+      "label": "Vorhersagen ansehen",
+      "canonical": "predictions"
+    }
   },
   "widget": {
     "h2": "Live Track Record",
@@ -35,7 +49,7 @@
     "tooltipPattern": "{result}: {home} vs {away}, {prediction}, gesperrt {date}"
   },
   "whyPublishLosses": {
-    "h2": "Warum Wir Auch Verluste Veröffentlichen",
+    "h2": "Warum wir auch Verluste veröffentlichen",
     "paragraphs": [
       "Die Vorhersage-Branche hat ein Integritätsproblem. Die meisten Sites zeigen selektiv gewinnende Vorhersagen, während sie still Verluste entfernen. Wir haben diesen Ansatz von Tag eins abgelehnt.",
       "Jede BetsPlug-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Einmal veröffentlicht, kann sie nicht bearbeitet, gelöscht oder versteckt werden. Gewinn oder Verlust, die Vorhersage bleibt für immer in unserem öffentlichen Register.",
@@ -50,24 +64,48 @@
     }
   },
   "methodologyLink": {
-    "h2": "Die Methodik Hinter Diesen Zahlen",
+    "h2": "Die Methodik hinter diesen Zahlen",
     "body": "Jede Vorhersage in unserem Track Record wurde von derselben KI-Engine erstellt: Elo-Bewertungen, Poisson-Tor-Modelle und Machine Learning kombiniert.",
-    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+    "cta": {
+      "label": "Vollständige Methodik lesen",
+      "canonical": "methodology"
+    }
   },
   "faq": {
     "h2": "Track Record FAQ",
     "questions": [
-      { "q": "Können Vorhersagen aus dem Track Record entfernt werden?", "a": "Nein. Jede Vorhersage wird mit einem unveränderlichen Zeitstempel vor dem Anpfiff gesperrt. Architektonisch, nicht per Richtlinie." },
-      { "q": "Was bedeutet 'ungültig' im Track Record?", "a": "Ungültiger Status gilt für Vorhersagen, bei denen das Spiel verschoben oder abgesagt wurde. Wir zählen diese nicht als Gewinne oder Verluste." },
-      { "q": "Warum zeigt ihr keine spezifischen Genauigkeitsprozentsätze prominent?", "a": "Genauigkeit variiert dramatisch je nach Liga, Markttyp und Zeitraum. Wir bevorzugen es, die Rohdaten zu zeigen." },
-      { "q": "Kann ich die Track-Record-Daten herunterladen?", "a": "Track-Record-Daten sind über unsere API für zahlende Abonnenten verfügbar." },
-      { "q": "Wie verifiziere ich eine bestimmte Vorhersage?", "a": "Klicke auf eine Vorhersage. Die Detailseite zeigt den Sperrzeitstempel im Vergleich zur Anpfiffzeit." }
+      {
+        "q": "Können Vorhersagen aus dem Track Record entfernt werden?",
+        "a": "Nein. Jede Vorhersage wird mit einem unveränderlichen Zeitstempel vor dem Anpfiff gesperrt. Architektonisch, nicht per Richtlinie."
+      },
+      {
+        "q": "Was bedeutet 'ungültig' im Track Record?",
+        "a": "Ungültiger Status gilt für Vorhersagen, bei denen das Spiel verschoben oder abgesagt wurde. Wir zählen diese nicht als Gewinne oder Verluste."
+      },
+      {
+        "q": "Warum zeigt ihr keine spezifischen Genauigkeitsprozentsätze prominent?",
+        "a": "Genauigkeit variiert dramatisch je nach Liga, Markttyp und Zeitraum. Wir bevorzugen es, die Rohdaten zu zeigen."
+      },
+      {
+        "q": "Kann ich die Track-Record-Daten herunterladen?",
+        "a": "Track-Record-Daten sind über unsere API für zahlende Abonnenten verfügbar."
+      },
+      {
+        "q": "Wie verifiziere ich eine bestimmte Vorhersage?",
+        "a": "Klicke auf eine Vorhersage. Die Detailseite zeigt den Sperrzeitstempel im Vergleich zur Anpfiffzeit."
+      }
     ]
   },
   "finalCta": {
     "h2": "Bereit für die heutigen Vorhersagen?",
     "body": "Dieselbe Engine, dieselbe Transparenz. Probiere unsere kostenlosen Vorhersagen heute.",
-    "ctaPrimary": { "label": "Kostenlose Picks erhalten", "href": "https://app.betsplug.com/register?source=track_record_final" },
-    "ctaSecondary": { "label": "Pläne vergleichen", "canonical": "pricing" }
+    "ctaPrimary": {
+      "label": "Kostenlose Picks erhalten",
+      "href": "https://app.betsplug.com/register?source=track_record_final"
+    },
+    "ctaSecondary": {
+      "label": "Pläne vergleichen",
+      "canonical": "pricing"
+    }
   }
 }

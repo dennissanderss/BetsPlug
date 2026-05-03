@@ -6,13 +6,13 @@
     "_note": "TODO: Native speaker review needed for nl. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
   },
   "meta": {
-    "title": "AI Voetbalvoorspellingen Gebouwd op Echte Data | BetsPlug",
+    "title": "AI voetbalvoorspellingen gebouwd op echte data | BetsPlug",
     "description": "AI-voetbalvoorspellingen voor 30+ competities met Elo-ratings, Poisson-modellen en machine learning. Elke voorspelling vergrendeld vóór de aftrap. Publiek track record.",
     "ogImage": "/og-images/homepage-nl.jpg"
   },
   "hero": {
     "kicker": "AI voetbalintelligentie",
-    "h1": "AI Voetbalvoorspellingen Gebouwd op Echte Data",
+    "h1": "AI voetbalvoorspellingen gebouwd op {{accent}}echte data{{/accent}}",
     "subheadline": "Voorspellingen voor 30+ competities met Elo-ratings, Poisson-modellen en machine learning. Elke voorspelling vergrendeld vóór de aftrap. Volledig track record openbaar.",
     "trustStrip": [
       "Vergrendeld vóór de aftrap",
@@ -39,7 +39,7 @@
     }
   },
   "howItWorks": {
-    "h2": "Hoe BetsPlug Werkt",
+    "h2": "Hoe BetsPlug {{accent}}werkt{{/accent}}",
     "subhead": "Van data naar voorspelling in drie stappen. Transparant. Reproduceerbaar. Vergrendeld.",
     "steps": [
       {
@@ -70,7 +70,7 @@
     }
   },
   "livePredictions": {
-    "h2": "Gratis AI-voorspellingen van Vandaag",
+    "h2": "Gratis AI-voorspellingen van vandaag",
     "subhead": "Vijf gratis voorspellingen, elke minuut ververst. Vergrendeld vóór de aftrap, precies zoals onze betalende leden ze ontvangen.",
     "liveLabel": "Bijgewerkt",
     "liveSecondsAgo": "{seconds}s geleden",
@@ -80,27 +80,53 @@
     "ctaSection": {
       "h3": "Onbeperkte voorspellingen?",
       "body": "Krijg alle dagelijkse voorspellingen voor 30+ competities, volledige statistieken en dezelfde AI als onze betalende leden.",
-      "ctaPrimary": { "label": "Bekijk Prijzen", "canonical": "pricing" },
-      "ctaSecondary": { "label": "Gratis account aanmaken", "href": "https://app.betsplug.com/register?source=homepage_live" }
+      "ctaPrimary": {
+        "label": "Bekijk Prijzen",
+        "canonical": "pricing"
+      },
+      "ctaSecondary": {
+        "label": "Gratis account aanmaken",
+        "href": "https://app.betsplug.com/register?source=homepage_live"
+      }
     }
   },
   "methodology": {
-    "h2": "Gebouwd op Wiskunde, Niet op Onderbuikgevoel",
+    "h2": "Gebouwd op {{accent}}wiskunde{{/accent}}, niet op onderbuikgevoel",
     "paragraphs": [
       "BetsPlug combineert drie statistische disciplines in één voorspellingsengine. Elo-ratings rangschikken teamsterkte op basis van elke gespeelde wedstrijd. Poisson-doelpuntmodellen berekenen de waarschijnlijkheid van specifieke score-uitkomsten. Machine learning identificeert patronen in duizenden historische wedstrijden die mensen missen.",
       "De engine verwerkt 40+ variabelen per wedstrijd: recente vorm, onderlinge geschiedenis, opstellingen, blessures, expected goals, balbezit-trends, weersomstandigheden en meer. Geen redactionele input. Geen emotionele bias. Alleen wiskunde.",
       "Elke voorspelling wordt gegenereerd en vergrendeld vóór de aftrap. We publiceren zowel winst als verlies. Het volledige track record is openbaar toegankelijk — want transparantie is het enige bewijs dat telt."
     ],
     "stats": [
-      { "value": "30+", "label": "Competities gedekt" },
-      { "value": "40+", "label": "Variabelen per wedstrijd" },
-      { "value": "3", "label": "Statistische modellen" },
-      { "value": "100%", "label": "Voorspellingen vergrendeld" }
+      {
+        "value": "30+",
+        "label": "Competities gedekt"
+      },
+      {
+        "value": "40+",
+        "label": "Variabelen per wedstrijd"
+      },
+      {
+        "value": "3",
+        "label": "Statistische modellen"
+      },
+      {
+        "value": "100%",
+        "label": "Voorspellingen vergrendeld"
+      }
     ],
     "diagram": {
       "input": "Invoerlaag",
-      "inputItems": ["Wedstrijdstatistieken", "Teamvorm", "Externe data"],
-      "models": ["Elo-ratings", "Poisson-doelpunten", "Machine learning"],
+      "inputItems": [
+        "Wedstrijdstatistieken",
+        "Teamvorm",
+        "Externe data"
+      ],
+      "models": [
+        "Elo-ratings",
+        "Poisson-doelpunten",
+        "Machine learning"
+      ],
       "output": "Vergrendelde voorspelling"
     },
     "cta": {
@@ -109,7 +135,7 @@
     }
   },
   "trackRecord": {
-    "h2": "Elke Voorspelling. Publiek. Voor Altijd.",
+    "h2": "Elke voorspelling. {{accent}}Publiek. Voor altijd.{{/accent}}",
     "body": "De meeste voorspellingssites tonen alleen hun winnaars. Wij publiceren alles — winst, verlies, exacte voorspellingen en tijdstempels. Verifieer ons track record zelf.",
     "topLineLabel": "Laatste 30 dagen",
     "topLineValue": "Alle voorspellingen gepubliceerd — publiek register",
@@ -125,21 +151,53 @@
     }
   },
   "comparison": {
-    "h2": "Waarom AI Traditionele Tipsters Verslaat",
+    "h2": "Waarom AI traditionele tipsters verslaat",
     "headers": {
       "criterion": "Criterium",
       "tipster": "Traditionele tipsters",
       "betsplug": "BetsPlug AI"
     },
     "rows": [
-      { "criterion": "Bron van voorspellingen", "tipster": "Persoonlijke meningen", "betsplug": "Statistische modellen" },
-      { "criterion": "Aantal geanalyseerde wedstrijden", "tipster": "Enkele per dag geselecteerd", "betsplug": "Alle wedstrijden, 30+ competities" },
-      { "criterion": "Bias", "tipster": "Emotioneel, fan-loyaal", "betsplug": "Geen (data-gedreven)" },
-      { "criterion": "Aanpasbaar na aftrap", "tipster": "Vaak wel", "betsplug": "Nooit (vergrendeld)" },
-      { "criterion": "Publicatie van verlies", "tipster": "Verbergt verliezen", "betsplug": "Publiceert alles" },
-      { "criterion": "Update-snelheid", "tipster": "Handmatig", "betsplug": "Real-time" },
-      { "criterion": "Methodologie-transparantie", "tipster": "\"Geheim systeem\"", "betsplug": "Elo + Poisson + ML" },
-      { "criterion": "Verificatie", "tipster": "Vertrouw mij", "betsplug": "Publiek track record" }
+      {
+        "criterion": "Bron van voorspellingen",
+        "tipster": "Persoonlijke meningen",
+        "betsplug": "Statistische modellen"
+      },
+      {
+        "criterion": "Aantal geanalyseerde wedstrijden",
+        "tipster": "Enkele per dag geselecteerd",
+        "betsplug": "Alle wedstrijden, 30+ competities"
+      },
+      {
+        "criterion": "Bias",
+        "tipster": "Emotioneel, fan-loyaal",
+        "betsplug": "Geen (data-gedreven)"
+      },
+      {
+        "criterion": "Aanpasbaar na aftrap",
+        "tipster": "Vaak wel",
+        "betsplug": "Nooit (vergrendeld)"
+      },
+      {
+        "criterion": "Publicatie van verlies",
+        "tipster": "Verbergt verliezen",
+        "betsplug": "Publiceert alles"
+      },
+      {
+        "criterion": "Update-snelheid",
+        "tipster": "Handmatig",
+        "betsplug": "Real-time"
+      },
+      {
+        "criterion": "Methodologie-transparantie",
+        "tipster": "\"Geheim systeem\"",
+        "betsplug": "Elo + Poisson + ML"
+      },
+      {
+        "criterion": "Verificatie",
+        "tipster": "Vertrouw mij",
+        "betsplug": "Publiek track record"
+      }
     ],
     "footnote": "Dit gaat niet over AI als magie. Het gaat over het wegnemen van twee dingen die de nauwkeurigheid schaden: menselijke bias en inconsistentie.",
     "cta": {
@@ -148,7 +206,7 @@
     }
   },
   "pricing": {
-    "h2": "Begin Gratis. Upgrade Wanneer Je Klaar Bent.",
+    "h2": "Begin gratis. Upgrade wanneer je klaar bent.",
     "subhead": "Drie plannen. Geen verborgen kosten. Op elk moment opzegbaar.",
     "tiers": [
       {
@@ -162,7 +220,10 @@
           "Alleen top 3 competities",
           "Basis-toegang tot track record"
         ],
-        "cta": { "label": "Aan de slag", "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing" },
+        "cta": {
+          "label": "Aan de slag",
+          "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing"
+        },
         "highlighted": false
       },
       {
@@ -179,7 +240,10 @@
           "Telegram-meldingen",
           "Voorrang bij support"
         ],
-        "cta": { "label": "Start gratis proefperiode", "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing" },
+        "cta": {
+          "label": "Start gratis proefperiode",
+          "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
+        },
         "highlighted": true
       },
       {
@@ -195,15 +259,21 @@
           "API-toegang (binnenkort)",
           "VIP-support"
         ],
-        "cta": { "label": "Start gratis proefperiode", "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing" },
+        "cta": {
+          "label": "Start gratis proefperiode",
+          "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
+        },
         "highlighted": false
       }
     ],
     "guaranteeMicro": "Alle plannen: 7 dagen niet-goed-geld-terug op betaalde tiers",
-    "compareLink": { "label": "Vergelijk plannen in detail", "canonical": "pricing" }
+    "compareLink": {
+      "label": "Vergelijk plannen in detail",
+      "canonical": "pricing"
+    }
   },
   "faq": {
-    "h2": "Veelgestelde Vragen",
+    "h2": "Veelgestelde vragen",
     "questions": [
       {
         "q": "Is BetsPlug een bookmaker?",
@@ -236,7 +306,7 @@
     }
   },
   "finalCta": {
-    "h2": "Klaar om AI Voetbalvoorspellingen te Proberen?",
+    "h2": "Klaar om {{accent}}AI voetbalvoorspellingen{{/accent}} te proberen?",
     "body": "Krijg vandaag 5 gratis voorspellingen. Geen creditcard nodig.",
     "ctaPrimary": {
       "label": "Gratis Picks Krijgen",

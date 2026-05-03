@@ -1,17 +1,25 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Leren — Methoden Achter Voetbalvoorspellingen | BetsPlug",
+    "title": "Leren — methoden achter voetbalvoorspellingen | BetsPlug",
     "description": "Diepe gidsen over Elo, Poisson, machine learning, value betting en bankroll management. Leer de wiskunde achter AI-voetbalvoorspellingen.",
     "ogImage": "/og-images/learn-nl.jpg"
   },
   "hero": {
-    "h1": "Leer de Wiskunde Achter Voetbalvoorspellingen",
+    "h1": "Leer de {{accent}}wiskunde{{/accent}} achter voetbalvoorspellingen",
     "subheadline": "Diepe gidsen over de statistische modellen, wedconcepten en analytische frameworks achter data-gedreven voetbalvoorspellingen. Geen fluff. Alleen de werkelijke wiskunde.",
-    "trustStrip": ["Geschreven door engineers", "Regelmatig bijgewerkt", "Geen affiliate-spam"]
+    "trustStrip": [
+      "Geschreven door engineers",
+      "Regelmatig bijgewerkt",
+      "Geen affiliate-spam"
+    ]
   },
   "grid": {
-    "h2": "Bekijk Artikelen",
+    "h2": "Bekijk artikelen",
     "readMore": "Lees artikel",
     "difficultyLabels": {
       "Beginner": "Beginner",
@@ -20,31 +28,73 @@
     },
     "categories": [
       {
-        "title": "Statistische Modellen",
+        "title": "Statistische modellen",
         "articles": [
-          { "slug": "expected-goals-explained", "title": "Expected Goals (xG) Uitgelegd", "excerpt": "Hoe xG schotkwaliteit meet en lange-termijn teamprestaties beter voorspelt dan traditionele doelpunttellingen.", "readingTime": "8 min lezen", "difficulty": "Beginner" },
-          { "slug": "elo-rating-explained", "title": "Elo-rating Systeem voor Voetbal", "excerpt": "Het dynamische ranglijstsysteem dat teamsterkte aanpast na elke wedstrijd. Oorspronkelijk voor schaak, nu de motor achter moderne voorspellingen.", "readingTime": "10 min lezen", "difficulty": "Intermediate" },
-          { "slug": "poisson-goal-models", "title": "Poisson-doelpuntmodellen", "excerpt": "De wiskundige verdeling die de waarschijnlijkheid van specifieke wedstrijdscores voorspelt op basis van aanvallende en verdedigende rates.", "readingTime": "12 min lezen", "difficulty": "Intermediate" }
+          {
+            "slug": "expected-goals-explained",
+            "title": "Expected goals (xG) uitgelegd",
+            "excerpt": "Hoe xG schotkwaliteit meet en lange-termijn teamprestaties beter voorspelt dan traditionele doelpunttellingen.",
+            "readingTime": "8 min lezen",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "elo-rating-explained",
+            "title": "Elo-rating systeem voor voetbal",
+            "excerpt": "Het dynamische ranglijstsysteem dat teamsterkte aanpast na elke wedstrijd. Oorspronkelijk voor schaak, nu de motor achter moderne voorspellingen.",
+            "readingTime": "10 min lezen",
+            "difficulty": "Intermediate"
+          },
+          {
+            "slug": "poisson-goal-models",
+            "title": "Poisson-doelpuntmodellen",
+            "excerpt": "De wiskundige verdeling die de waarschijnlijkheid van specifieke wedstrijdscores voorspelt op basis van aanvallende en verdedigende rates.",
+            "readingTime": "12 min lezen",
+            "difficulty": "Intermediate"
+          }
         ]
       },
       {
         "title": "Wedconcepten",
         "articles": [
-          { "slug": "what-is-value-betting", "title": "Wat is Value Betting?", "excerpt": "Waarom het vinden van weddenschappen met positieve verwachte waarde de enige wiskundig solide lange-termijn strategie is.", "readingTime": "9 min lezen", "difficulty": "Beginner" },
-          { "slug": "kelly-criterion", "title": "Het Kelly-criterium", "excerpt": "De wiskundige formule voor optimale inzetgrootte op basis van edge en odds. Waarom de meeste bettors hun inzetten verkeerd dimensioneren.", "readingTime": "11 min lezen", "difficulty": "Advanced" },
-          { "slug": "bankroll-management", "title": "Bankroll Management", "excerpt": "Hoe je je voorspellings-kapitaal beheert zodat korte-termijn variantie de lange-termijn resultaten niet vernietigt.", "readingTime": "8 min lezen", "difficulty": "Beginner" }
+          {
+            "slug": "what-is-value-betting",
+            "title": "Wat is value betting?",
+            "excerpt": "Waarom het vinden van weddenschappen met positieve verwachte waarde de enige wiskundig solide lange-termijn strategie is.",
+            "readingTime": "9 min lezen",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "kelly-criterion",
+            "title": "Het Kelly-criterium",
+            "excerpt": "De wiskundige formule voor optimale inzetgrootte op basis van edge en odds. Waarom de meeste bettors hun inzetten verkeerd dimensioneren.",
+            "readingTime": "11 min lezen",
+            "difficulty": "Advanced"
+          },
+          {
+            "slug": "bankroll-management",
+            "title": "Bankroll management",
+            "excerpt": "Hoe je je voorspellings-kapitaal beheert zodat korte-termijn variantie de lange-termijn resultaten niet vernietigt.",
+            "readingTime": "8 min lezen",
+            "difficulty": "Beginner"
+          }
         ]
       },
       {
-        "title": "AI & Analyse",
+        "title": "AI & analyse",
         "articles": [
-          { "slug": "ai-vs-tipsters", "title": "AI vs Menselijke Tipsters", "excerpt": "De structurele voordelen en beperkingen van AI-gedreven voorspellingen versus menselijke expertise. Waar elk uitblinkt.", "readingTime": "10 min lezen", "difficulty": "Intermediate" }
+          {
+            "slug": "ai-vs-tipsters",
+            "title": "AI vs menselijke tipsters",
+            "excerpt": "De structurele voordelen en beperkingen van AI-gedreven voorspellingen versus menselijke expertise. Waar elk uitblinkt.",
+            "readingTime": "10 min lezen",
+            "difficulty": "Intermediate"
+          }
         ]
       }
     ]
   },
   "whyTopics": {
-    "h2": "Waarom We Deze Gidsen Schreven",
+    "h2": "Waarom we deze gidsen schreven",
     "paragraphs": [
       "De meeste voorspellingssites behandelen hun methoden als 'eigen geheimen' of vereenvoudigen ze tot ze gebruiksvriendelijk lijken. Beide aanpakken falen lezers die werkelijk willen begrijpen wat er gebeurt.",
       "Onze leersectie legt de werkelijke wiskunde uit achter onze voorspellingen — Elo-ratings, Poisson-verdelingen, machine learning patronen — op een niveau dat je intelligentie respecteert. Als je klaar bent om te leren, is de diepte hier.",
@@ -52,9 +102,15 @@
     ]
   },
   "finalCta": {
-    "h2": "Klaar om Deze Concepten in Actie te Zien?",
+    "h2": "Klaar om deze concepten in actie te zien?",
     "body": "Dezelfde engine, dezelfde methodologie — toegepast op 30+ competities elke dag.",
-    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Hoe Onze Engine Werkt", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Bekijk Voorspellingen Vandaag",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Hoe Onze Engine Werkt",
+      "canonical": "methodology"
+    }
   }
 }

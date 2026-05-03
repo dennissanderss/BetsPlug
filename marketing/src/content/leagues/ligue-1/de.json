@@ -1,5 +1,9 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
     "title": "Ligue 1 Vorhersagen Heute | KI-Gestützt | BetsPlug",
     "description": "KI-gestützte Ligue 1-Vorhersagen für jedes Spiel. PSG, Marseille, Monaco und der Rest — analysiert mit Elo + Poisson + ML.",
@@ -8,7 +12,10 @@
   "hero": {
     "h1": "Ligue 1 Vorhersagen",
     "subheadline": "KI-gestützte Vorhersagen für jedes Ligue 1-Spiel. Erstellt mit Elo-Bewertungen, Poisson-Modellen und Machine Learning. Vor Anpfiff gesperrt.",
-    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "So funktioniert's",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "Über Ligue 1 Vorhersagen",
@@ -17,32 +24,67 @@
       "Ligue 1-Vorhersagen stellen eine einzigartige Herausforderung dar: PSGs Rotationspolitik in nationalen Spielen (Schonung von Schlüsselspielern für Champions League) führt zu erheblicher Aufstellungsvarianz. Mittelfeldteams in der Ligue 1 haben ebenfalls höhere taktische Volatilität als andere Big-Five-Ligen, mit häufigeren Trainerwechseln Mid-Season. Unser Modell berücksichtigt PSGs erwartete Rotationsmuster, Mid-Week-Auswirkungen europäischer Spiele und die historisch hohe Inzidenz später Tore im französischen Fußball.",
       "Jede Ligue 1-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Sowohl Gewinne als auch Verluste landen in unserem öffentlichen Track Record. Ligue 1-Vorhersagen sind Teil aller bezahlten Pläne — Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse einschließlich xG, Aufstellungs-Rotationsnotizen für Top-Clubs und Form-Trend-Metriken."
     ],
-    "statsPanel": { "h3": "Ligue 1 auf einen Blick", "ctaLabel": "Ligue 1 in App ansehen" }
+    "statsPanel": {
+      "h3": "Ligue 1 auf einen Blick",
+      "ctaLabel": "Ligue 1 in App ansehen"
+    }
   },
-  "topTeams": { "h2": "Top Ligue 1 Teams" },
+  "topTeams": {
+    "h2": "Top Ligue 1 Teams"
+  },
   "methodology": {
-    "h2": "Wie Ligue 1 Vorhersagen Erstellt Werden",
+    "h2": "Wie Ligue 1 Vorhersagen erstellt werden",
     "body": "Ligue 1-Vorhersagen verwenden dieselbe Engine wie alle unsere Fußballvorhersagen: Elo-Bewertungen, Poisson-Modelle und Machine Learning. Das Modell berücksichtigt PSGs Rotationsmuster und die Mid-Tabellen-Trainervolatilität spezifisch für den französischen Fußball.",
-    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+    "cta": {
+      "label": "Vollständige Methodik lesen",
+      "canonical": "methodology"
+    }
   },
   "faq": {
     "h2": "Ligue 1 Vorhersagen FAQ",
     "questions": [
-      { "q": "Wie genau sind KI-Vorhersagen für die Ligue 1?", "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp, mit PSGs Rotationsmustern als Varianzquelle. Wir veröffentlichen jede Ligue 1-Vorhersage in unserem öffentlichen Track Record." },
-      { "q": "Warum sind Ligue 1-Vorhersagen nur kostenpflichtig?", "a": "Kostenlose Vorhersagen sind auf Top-3-Ligen beschränkt. Ligue 1-Vorhersagen sind Teil aller bezahlten Pläne." },
-      { "q": "Wie behandelt das Modell PSGs Rotation in nationalen Spielen?", "a": "Unsere ML-Schicht berücksichtigt PSGs erwartete Aufstellung basierend auf der Champions-League-Spielnähe." },
-      { "q": "Wie früh sind Ligue 1-Vorhersagen verfügbar?", "a": "Abonnenten sehen Ligue 1-Vorhersagen bis zu 24 Stunden vor Anpfiff." },
-      { "q": "Deckt ihr Coupe de France und europäische Spiele mit Ligue 1-Clubs ab?", "a": "Wir decken alle Ligue 1-Ligaspiele ab. Coupe de France und europäische Wettbewerbe werden separat abgedeckt." },
-      { "q": "Kann ich Ligue 1-Vorhersagen über Telegram erhalten?", "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Ligue 1-Vorhersagen." }
+      {
+        "q": "Wie genau sind KI-Vorhersagen für die Ligue 1?",
+        "a": "Genauigkeit variiert je nach Spieltag und Vorhersagetyp, mit PSGs Rotationsmustern als Varianzquelle. Wir veröffentlichen jede Ligue 1-Vorhersage in unserem öffentlichen Track Record."
+      },
+      {
+        "q": "Warum sind Ligue 1-Vorhersagen nur kostenpflichtig?",
+        "a": "Kostenlose Vorhersagen sind auf Top-3-Ligen beschränkt. Ligue 1-Vorhersagen sind Teil aller bezahlten Pläne."
+      },
+      {
+        "q": "Wie behandelt das Modell PSGs Rotation in nationalen Spielen?",
+        "a": "Unsere ML-Schicht berücksichtigt PSGs erwartete Aufstellung basierend auf der Champions-League-Spielnähe."
+      },
+      {
+        "q": "Wie früh sind Ligue 1-Vorhersagen verfügbar?",
+        "a": "Abonnenten sehen Ligue 1-Vorhersagen bis zu 24 Stunden vor Anpfiff."
+      },
+      {
+        "q": "Deckt ihr Coupe de France und europäische Spiele mit Ligue 1-Clubs ab?",
+        "a": "Wir decken alle Ligue 1-Ligaspiele ab. Coupe de France und europäische Wettbewerbe werden separat abgedeckt."
+      },
+      {
+        "q": "Kann ich Ligue 1-Vorhersagen über Telegram erhalten?",
+        "a": "Ja. Bezahlte Abonnenten erhalten Telegram-Benachrichtigungen für High-Confidence Ligue 1-Vorhersagen."
+      }
     ],
-    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Alle FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Willst du alle Ligue 1 Vorhersagen?",
     "h2Gated": "Ligue 1 Vorhersagen Freischalten",
     "bodyFree": "Abonnenten erhalten jedes Spiel mit vollständiger statistischer Analyse.",
     "bodyGated": "Ligue 1-Vorhersagen sind Teil aller bezahlten Pläne.",
-    "ctaPrimary": { "label": "Preise ansehen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Kostenlos testen", "href": "https://app.betsplug.com/register?source=league_ligue-1" }
+    "ctaPrimary": {
+      "label": "Preise ansehen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Kostenlos testen",
+      "href": "https://app.betsplug.com/register?source=league_ligue-1"
+    }
   }
 }

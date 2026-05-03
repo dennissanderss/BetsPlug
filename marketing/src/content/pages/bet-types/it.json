@@ -1,26 +1,58 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native speaker review needed for it. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md." },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native speaker review needed for it. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
+  },
   "meta": {
-    "title": "Tipi di Pronostici Calcio Spiegati: Guida Completa | BetsPlug",
+    "title": "Tipi di pronostici calcio spiegati: guida completa | BetsPlug",
     "description": "Guida completa ai tipi di pronostici calcio: 1X2, BTTS, Più/Meno, Handicap Asiatico, Risultato Esatto e altro. Come l'IA prevede ogni mercato.",
     "ogImage": "/og-images/bet-types-it.jpg"
   },
   "hero": {
-    "h1": "Tipi di Pronostici Calcio: Una Guida Completa",
+    "h1": "Tipi di pronostici calcio: {{accent}}una guida completa{{/accent}}",
     "subheadline": "Ogni grande mercato calcistico spiegato: come funziona, quando è prevedibile e come l'IA di BetsPlug genera pronostici per ciascuno. Senza fronzoli."
   },
   "toc": {
     "label": "In Questa Pagina",
     "items": [
-      { "id": "match-result",  "label": "Risultato Partita (1X2)" },
-      { "id": "double-chance", "label": "Doppia Chance" },
-      { "id": "btts",          "label": "Entrambe Segnano (BTTS)" },
-      { "id": "over-under",    "label": "Più/Meno Gol" },
-      { "id": "asian-handicap","label": "Handicap Asiatico" },
-      { "id": "correct-score", "label": "Risultato Esatto" },
-      { "id": "ht-ft",         "label": "Primo Tempo / Finale" },
-      { "id": "draw-no-bet",   "label": "Draw No Bet" },
-      { "id": "coverage",      "label": "Copertura per piano" }
+      {
+        "id": "match-result",
+        "label": "Risultato Partita (1X2)"
+      },
+      {
+        "id": "double-chance",
+        "label": "Doppia Chance"
+      },
+      {
+        "id": "btts",
+        "label": "Entrambe Segnano (BTTS)"
+      },
+      {
+        "id": "over-under",
+        "label": "Più/Meno Gol"
+      },
+      {
+        "id": "asian-handicap",
+        "label": "Handicap Asiatico"
+      },
+      {
+        "id": "correct-score",
+        "label": "Risultato Esatto"
+      },
+      {
+        "id": "ht-ft",
+        "label": "Primo Tempo / Finale"
+      },
+      {
+        "id": "draw-no-bet",
+        "label": "Draw No Bet"
+      },
+      {
+        "id": "coverage",
+        "label": "Copertura per piano"
+      }
     ]
   },
   "sectionLabels": {
@@ -33,7 +65,7 @@
   "betTypes": [
     {
       "id": "match-result",
-      "h2": "Risultato Partita (1X2)",
+      "h2": "Risultato partita (1x2)",
       "definition": "Prevedere se la squadra di casa vince (1), la partita finisce in pareggio (X), o la squadra in trasferta vince (2).",
       "howItWorks": [
         "1X2 è il mercato calcistico più fondamentale. Tre esiti possibili per partita, con quote per ciascuno. Il mercato si risolve in base al risultato dopo 90 minuti più recupero. Tempi supplementari e rigori non contano per 1X2 — quegli scenari si applicano solo a specifici mercati di eliminazione diretta in coppa.",
@@ -53,11 +85,17 @@
         "1X2 è più difficile da prevedere rispetto a Più/Meno — la struttura a tre esiti distribuisce la probabilità in modo diverso dai mercati a due esiti.",
         "Traccia la tua precisione per campionato. Alcuni campionati (Bundesliga, Premier League) hanno dati storici più ricchi e producono output del modello più accurati di altri."
       ],
-      "example": { "homeTeam": "Manchester City", "awayTeam": "Crystal Palace", "league": "Premier League", "prediction": "Vittoria Casa", "confidence": 71 }
+      "example": {
+        "homeTeam": "Manchester City",
+        "awayTeam": "Crystal Palace",
+        "league": "Premier League",
+        "prediction": "Vittoria Casa",
+        "confidence": 71
+      }
     },
     {
       "id": "double-chance",
-      "h2": "Doppia Chance",
+      "h2": "Doppia chance",
       "definition": "Coprire due dei tre esiti 1X2 con un singolo pronostico. Varianti: 1X (casa o pareggio), X2 (pareggio o trasferta), 12 (casa o trasferta — niente pareggio).",
       "howItWorks": [
         "Doppia Chance è essenzialmente 1X2 con un margine di sicurezza integrato. Coprendo due esiti, accetti quote più basse in cambio di una probabilità di vittoria più alta. Uso comune: sostenere una squadra più forte senza esposizione al pareggio, o coprire una sfavorita in trasferta e profittare comunque se non perde.",
@@ -77,11 +115,17 @@
         "Utile per la gestione del rischio quando segui un tipster di cui non ti fidi pienamente — coprire il pareggio protegge dal bias di ottimismo del tipster.",
         "Non usare Doppia Chance per mascherare pronostici deboli. Le quote ridotte riflettono rischio ridotto; un'analisi cattiva non si ripara con coperture."
       ],
-      "example": { "homeTeam": "Bayern Monaco", "awayTeam": "Augsburg", "league": "Bundesliga", "prediction": "1X (Casa o Pareggio)", "confidence": 86 }
+      "example": {
+        "homeTeam": "Bayern Monaco",
+        "awayTeam": "Augsburg",
+        "league": "Bundesliga",
+        "prediction": "1X (Casa o Pareggio)",
+        "confidence": 86
+      }
     },
     {
       "id": "btts",
-      "h2": "Entrambe Segnano (BTTS)",
+      "h2": "Entrambe segnano (BTTS)",
       "definition": "Prevede se entrambe le squadre segnano almeno un gol durante i tempi regolamentari. Due esiti: Sì (entrambe segnano) o No (una o entrambe non segnano).",
       "howItWorks": [
         "BTTS è un mercato binario più semplice di 1X2 — solo due esiti. Il mercato si risolve in base a se entrambe le squadre casa E trasferta segnano almeno una volta durante i tempi regolamentari (90 minuti più recupero). Tempi supplementari e rigori non contano. Gli autogol contano per la squadra a cui è assegnato il gol.",
@@ -101,11 +145,17 @@
         "BTTS Sì correla con tattiche ad alta pressione; controlla le formazioni attese.",
         "Sii cauto con i mercati BTTS in partite con grandi infortuni difensivi — la dimensione del campione per quel scenario specifico è piccola, la precisione del modello inferiore."
       ],
-      "example": { "homeTeam": "Borussia Dortmund", "awayTeam": "Bayer Leverkusen", "league": "Bundesliga", "prediction": "BTTS Sì", "confidence": 74 }
+      "example": {
+        "homeTeam": "Borussia Dortmund",
+        "awayTeam": "Bayer Leverkusen",
+        "league": "Bundesliga",
+        "prediction": "BTTS Sì",
+        "confidence": 74
+      }
     },
     {
       "id": "over-under",
-      "h2": "Più/Meno Gol",
+      "h2": "Più/Meno gol",
       "definition": "Prevede se il totale combinato di gol supererà una soglia specificata. Linee più comuni: 0,5, 1,5, 2,5, 3,5, 4,5.",
       "howItWorks": [
         "Il bookmaker fissa una soglia di gol (es. 2,5). Più vince se la partita ha 3 o più gol totali; Meno vince se la partita ha 2 o meno gol. La soglia frazionaria 0,5 garantisce un vincitore — nessun \"push\" possibile.",
@@ -126,11 +176,17 @@
         "Le partite di coppa sono più difficili da prevedere — turnover e motivazione fanno deviare le distribuzioni Più/Meno dalle norme di campionato.",
         "Evita i mercati Più/Meno dove il meteo è un fattore importante. Pioggia o vento forti riducono la conversione dei tiri in modi che la maggior parte dei modelli non cattura pienamente."
       ],
-      "example": { "homeTeam": "Real Madrid", "awayTeam": "Siviglia", "league": "La Liga", "prediction": "Più di 2,5 Gol", "confidence": 68 }
+      "example": {
+        "homeTeam": "Real Madrid",
+        "awayTeam": "Siviglia",
+        "league": "La Liga",
+        "prediction": "Più di 2,5 Gol",
+        "confidence": 68
+      }
     },
     {
       "id": "asian-handicap",
-      "h2": "Handicap Asiatico",
+      "h2": "Handicap asiatico",
       "definition": "Elimina l'esito del pareggio dando a una squadra un vantaggio virtuale (handicap). Gli handicap a numero intero possono risultare in push (rimborso); gli handicap a mezza linea garantiscono un vincitore.",
       "howItWorks": [
         "L'Handicap Asiatico fu sviluppato sui mercati asiatici e si è diffuso globalmente per la sua precisione. Handicap comuni: -0,5 (la favorita deve vincere), -1,0 (la favorita deve vincere con 2+; vittoria di 1 gol è push), -1,5 (la favorita deve vincere con 2+), e quarti di handicap come -0,75 che dividono la posta tra -0,5 e -1,0.",
@@ -151,11 +207,17 @@
         "Evita l'Handicap Asiatico in derby e partite emotivamente cariche dove la varianza di margine è più alta.",
         "I bookmaker più precisi (Pinnacle, exchange) offrono linee Handicap Asiatico migliori dei bookmaker ricreativi — i margini più stretti contano di più in questo mercato che in 1X2."
       ],
-      "example": { "homeTeam": "Manchester City", "awayTeam": "Brentford", "league": "Premier League", "prediction": "Man City -1,5", "confidence": 62 }
+      "example": {
+        "homeTeam": "Manchester City",
+        "awayTeam": "Brentford",
+        "league": "Premier League",
+        "prediction": "Man City -1,5",
+        "confidence": 62
+      }
     },
     {
       "id": "correct-score",
-      "h2": "Risultato Esatto",
+      "h2": "Risultato esatto",
       "definition": "Prevede il punteggio finale esatto della partita. Massima varianza, quote più alte tra i mercati comuni.",
       "howItWorks": [
         "Risultato Esatto offre quote su ogni risultato finale plausibile (tipicamente 0-0 fino a 5-4, talvolta più alti). Ogni esito ha individualmente bassa probabilità — anche il punteggio più probabile in una partita raramente supera il 12% — quindi le quote sono di conseguenza lunghe.",
@@ -176,11 +238,17 @@
         "Traccia quali linee Risultato Esatto i bookmaker modulano di più. Punteggi che sembrano comuni (1-1, 2-1) sono spesso più corti della loro probabilità di modello; punteggi meno comuni (2-2, 3-2) sono spesso più lunghi.",
         "Evita Risultato Esatto in partite ad alta varianza: partite di coppa, partite influenzate da turnover, fine stagione senza posta in palio."
       ],
-      "example": { "homeTeam": "Bayern Monaco", "awayTeam": "Eintracht Francoforte", "league": "Bundesliga", "prediction": "2-1 Bayern", "confidence": 12 }
+      "example": {
+        "homeTeam": "Bayern Monaco",
+        "awayTeam": "Eintracht Francoforte",
+        "league": "Bundesliga",
+        "prediction": "2-1 Bayern",
+        "confidence": 12
+      }
     },
     {
       "id": "ht-ft",
-      "h2": "Primo Tempo / Finale",
+      "h2": "Primo tempo / finale",
       "definition": "Prevede il risultato all'intervallo E al termine. Nove combinazioni possibili (C/C, C/P, C/T, P/C, ecc.).",
       "howItWorks": [
         "PT/FT richiede di prevedere correttamente sia il leader all'intervallo (o pareggio) SIA il leader al termine. Notazione: C/C significa casa in vantaggio all'intervallo e al termine; P/C significa pareggio all'intervallo, vittoria casa al termine; ecc.",
@@ -201,11 +269,17 @@
         "Evita P/C o P/T (pronostici di rimonta) — le rimonte sono intrinsecamente imprevedibili.",
         "Utile per scommettitori emotivi che vogliono pronostici narrativi più semplici — ma la varianza è reale."
       ],
-      "example": { "homeTeam": "Real Madrid", "awayTeam": "Almería", "league": "La Liga", "prediction": "Madrid PT/FT", "confidence": 38 }
+      "example": {
+        "homeTeam": "Real Madrid",
+        "awayTeam": "Almería",
+        "league": "La Liga",
+        "prediction": "Madrid PT/FT",
+        "confidence": 38
+      }
     },
     {
       "id": "draw-no-bet",
-      "h2": "Draw No Bet",
+      "h2": "Draw no bet",
       "definition": "Elimina l'esito del pareggio da 1X2. Se la partita finisce in pareggio, la tua posta è rimborsata. Altrimenti si risolve come un normale pronostico vincitore 1X2.",
       "howItWorks": [
         "Draw No Bet (DNB) è essenzialmente Handicap Asiatico con linea 0, ma presentato in modo più intuitivo. Due esiti pagano: vittoria casa o vittoria trasferta. Un pareggio rimborsa la posta.",
@@ -226,42 +300,115 @@
         "Utile per sostenere favoriti modesti in trasferte equilibrate — protezione contro il pareggio senza sacrificare troppo rendimento potenziale.",
         "Non usare DNB per riparare pronostici cattivi. Il rimborso del pareggio non compensa una cattiva analisi."
       ],
-      "example": { "homeTeam": "Arsenal", "awayTeam": "Tottenham", "league": "Premier League", "prediction": "Arsenal DNB", "confidence": 56 }
+      "example": {
+        "homeTeam": "Arsenal",
+        "awayTeam": "Tottenham",
+        "league": "Premier League",
+        "prediction": "Arsenal DNB",
+        "confidence": 56
+      }
     }
   ],
   "coverage": {
-    "h2": "Quali Tipi di Pronostici BetsPlug Copre",
+    "h2": "Quali tipi di pronostici BetsPlug copre",
     "body": "Il piano gratuito mostra il pronostico ad alta confidenza per partita — tipicamente 1X2. Gli abbonati a pagamento vedono tutti i tipi di mercato con analisi completa.",
-    "headers": { "betType": "Tipo di Pronostico", "freeTier": "Piano Gratuito", "paidTier": "Piano a Pagamento" },
+    "headers": {
+      "betType": "Tipo di Pronostico",
+      "freeTier": "Piano Gratuito",
+      "paidTier": "Piano a Pagamento"
+    },
     "rows": [
-      { "betType": "1X2",                "free": true,  "paid": true },
-      { "betType": "Doppia Chance",      "free": false, "paid": true },
-      { "betType": "BTTS",               "free": false, "paid": true },
-      { "betType": "Più/Meno 2,5",       "free": false, "paid": true },
-      { "betType": "Più/Meno 1,5/3,5",   "free": false, "paid": true },
-      { "betType": "Handicap Asiatico",  "free": false, "paid": true },
-      { "betType": "Risultato Esatto",   "free": false, "paid": "matrix" },
-      { "betType": "PT/FT",              "free": false, "paid": true },
-      { "betType": "Draw No Bet",        "free": false, "paid": true }
+      {
+        "betType": "1X2",
+        "free": true,
+        "paid": true
+      },
+      {
+        "betType": "Doppia Chance",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "BTTS",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Più/Meno 2,5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Più/Meno 1,5/3,5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Handicap Asiatico",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Risultato Esatto",
+        "free": false,
+        "paid": "matrix"
+      },
+      {
+        "betType": "PT/FT",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Draw No Bet",
+        "free": false,
+        "paid": true
+      }
     ],
     "note": "Il piano gratuito mostra il pronostico ad alta confidenza per partita (tipicamente 1X2). Gli abbonati a pagamento vedono tutti i tipi di mercato con analisi completa.",
-    "cta": { "label": "Vedi Prezzi", "canonical": "pricing" }
+    "cta": {
+      "label": "Vedi Prezzi",
+      "canonical": "pricing"
+    }
   },
   "faq": {
-    "h2": "FAQ Tipi di Pronostici",
+    "h2": "FAQ tipi di pronostici",
     "questions": [
-      { "q": "Quale tipo di pronostico è più prevedibile?", "a": "Statisticamente, i mercati Più/Meno 2,5 gol e BTTS sono i più prevedibili usando modelli Poisson. Hanno distribuzioni di probabilità ben definite e grandi dimensioni di campione storiche. L'Handicap Asiatico è anche molto prevedibile in partite con favorito chiaro ma meno in partite equilibrate. 1X2 sta nel mezzo — prevedibile ma con l'incertezza intrinseca dei mercati a tre esiti." },
-      { "q": "Perché BetsPlug raccomanda tipi di pronostici specifici per partita?", "a": "Il nostro motore identifica il pronostico ad alta confidenza per ogni partita — il mercato dove il segnale statistico è più forte. Questo varia per partita: a volte 1X2 ha il segnale più chiaro, a volte Più/Meno, a volte BTTS. Pubblichiamo il segnale più forte invece di forzare un singolo mercato su tutte le partite." },
-      { "q": "Posso vedere tutti i pronostici per tipo per una singola partita?", "a": "Gli abbonati a pagamento vedono tutti i pronostici di mercato per partita — ogni pronostico che generiamo, inclusa la matrice di probabilità per il Risultato Esatto. Gli utenti gratuiti vedono il pronostico ad alta confidenza del motore per partita (tipicamente 1X2 o Più/Meno 2,5)." },
-      { "q": "Perché non prevedete i marcatori specifici?", "a": "I pronostici a livello giocatore hanno varianza molto più alta dei pronostici a livello squadra. L'incertezza delle formazioni, la varianza di forma individuale e i cambi tattici rendono il pronostico accurato dei marcatori inaffidabile. Ci concentriamo su mercati a livello squadra dove la precisione è raggiungibile. I mercati prop giocatore sono anche meno efficienti presso la maggior parte dei bookmaker, rendendo i dati più difficili da modellare." },
-      { "q": "Qual è la differenza tra probabilità e confidenza?", "a": "La probabilità è la verosimiglianza matematica che calcoliamo (es. 78% di probabilità di Più 2,5). La confidenza è la nostra certezza in quella probabilità — influenzata da qualità dei dati, dimensione del campione e caratteristiche di partita corrispondenti. Mostriamo numeri di probabilità; i pronostici ad alta confidenza sono segnati separatamente nell'UI abbonato." },
-      { "q": "Perché alcuni tipi di pronostici sono disponibili solo nei piani a pagamento?", "a": "Il piano gratuito mostra il nostro pronostico ad alta confidenza per partita — tipicamente 1X2. Altri mercati (Più/Meno, BTTS, Handicap Asiatico, Risultato Esatto, PT/FT, DNB) richiedono accesso abbonato. Questo bilancia il valore gratuito con un modello di abbonamento sostenibile. Gli abbonati vedono anche la matrice di probabilità sottostante e possono costruire le proprie strategie multi-mercato." }
+      {
+        "q": "Quale tipo di pronostico è più prevedibile?",
+        "a": "Statisticamente, i mercati Più/Meno 2,5 gol e BTTS sono i più prevedibili usando modelli Poisson. Hanno distribuzioni di probabilità ben definite e grandi dimensioni di campione storiche. L'Handicap Asiatico è anche molto prevedibile in partite con favorito chiaro ma meno in partite equilibrate. 1X2 sta nel mezzo — prevedibile ma con l'incertezza intrinseca dei mercati a tre esiti."
+      },
+      {
+        "q": "Perché BetsPlug raccomanda tipi di pronostici specifici per partita?",
+        "a": "Il nostro motore identifica il pronostico ad alta confidenza per ogni partita — il mercato dove il segnale statistico è più forte. Questo varia per partita: a volte 1X2 ha il segnale più chiaro, a volte Più/Meno, a volte BTTS. Pubblichiamo il segnale più forte invece di forzare un singolo mercato su tutte le partite."
+      },
+      {
+        "q": "Posso vedere tutti i pronostici per tipo per una singola partita?",
+        "a": "Gli abbonati a pagamento vedono tutti i pronostici di mercato per partita — ogni pronostico che generiamo, inclusa la matrice di probabilità per il Risultato Esatto. Gli utenti gratuiti vedono il pronostico ad alta confidenza del motore per partita (tipicamente 1X2 o Più/Meno 2,5)."
+      },
+      {
+        "q": "Perché non prevedete i marcatori specifici?",
+        "a": "I pronostici a livello giocatore hanno varianza molto più alta dei pronostici a livello squadra. L'incertezza delle formazioni, la varianza di forma individuale e i cambi tattici rendono il pronostico accurato dei marcatori inaffidabile. Ci concentriamo su mercati a livello squadra dove la precisione è raggiungibile. I mercati prop giocatore sono anche meno efficienti presso la maggior parte dei bookmaker, rendendo i dati più difficili da modellare."
+      },
+      {
+        "q": "Qual è la differenza tra probabilità e confidenza?",
+        "a": "La probabilità è la verosimiglianza matematica che calcoliamo (es. 78% di probabilità di Più 2,5). La confidenza è la nostra certezza in quella probabilità — influenzata da qualità dei dati, dimensione del campione e caratteristiche di partita corrispondenti. Mostriamo numeri di probabilità; i pronostici ad alta confidenza sono segnati separatamente nell'UI abbonato."
+      },
+      {
+        "q": "Perché alcuni tipi di pronostici sono disponibili solo nei piani a pagamento?",
+        "a": "Il piano gratuito mostra il nostro pronostico ad alta confidenza per partita — tipicamente 1X2. Altri mercati (Più/Meno, BTTS, Handicap Asiatico, Risultato Esatto, PT/FT, DNB) richiedono accesso abbonato. Questo bilancia il valore gratuito con un modello di abbonamento sostenibile. Gli abbonati vedono anche la matrice di probabilità sottostante e possono costruire le proprie strategie multi-mercato."
+      }
     ]
   },
   "finalCta": {
-    "h2": "Vedi i Pronostici per Tipo in Azione",
+    "h2": "Vedi i pronostici per tipo in azione",
     "body": "Ogni pronostico su 30+ campionati. Analisi multi-mercato. Bloccato prima del fischio iniziale. Track record pubblico.",
-    "ctaPrimary": { "label": "Vedi Pronostici di Oggi", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Come Funzionano i Pronostici", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Vedi Pronostici di Oggi",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Come Funzionano i Pronostici",
+      "canonical": "methodology"
+    }
   }
 }

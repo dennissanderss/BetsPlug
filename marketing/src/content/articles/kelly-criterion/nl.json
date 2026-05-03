@@ -1,12 +1,17 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02", "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json." },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02",
+    "_note": "TODO: Native NL speaker review needed. Hand-authored by Claude based on en.json."
+  },
   "meta": {
-    "title": "Het Kelly Criterion: Optimale Inzetdosering | BetsPlug Leren",
+    "title": "Het Kelly criterion: optimale inzetdosering | BetsPlug leren",
     "description": "Kelly Criterion uitgelegd: de wiskundige formule voor optimale inzetdosering. Waarom de meeste bettors verkeerd doseren, wanneer Kelly faalt, en waarom fractional Kelly meestal veiliger is.",
     "ogImage": "/og-images/learn-kelly-nl.jpg"
   },
   "header": {
-    "h1": "Het Kelly Criterion: Optimale Inzetdosering voor Lange-Termijn Groei",
+    "h1": "Het Kelly criterion: optimale inzetdosering voor lange-termijn groei",
     "excerpt": "De wiskundige formule voor optimale inzetdosering op basis van edge en quotering. Waarom de meeste bettors hun inzetten verkeerd doseren.",
     "readingTime": "11 min lezen",
     "difficulty": "Gevorderd",
@@ -20,89 +25,183 @@
   "sections": [
     {
       "id": "what-is-kelly",
-      "h2": "Wat is het Kelly Criterion?",
+      "h2": "Wat is het Kelly criterion?",
       "blocks": [
-        { "type": "paragraph", "text": "John Kelly Jr. publiceerde het criterion in 1956 toen hij bij Bell Labs werkte. Hij bestudeerde lange-afstand telefoonsignaal-ruis, maar realiseerde dat dezelfde wiskunde gold voor gokken: gegeven een reeks inzetten met positieve verwachte waarde, welke fractie van je bankroll moet je inzetten om lange-termijn groei te maximaliseren? Zijn antwoord werd één van de fundamentele resultaten in mathematische finance en gokwiskunde." },
-        { "type": "h3", "text": "De formule" },
-        { "type": "formula", "latex": "f^* = \\dfrac{bp - q}{b}", "caption": "f* = optimale inzetfractie; b = decimale quotering minus 1 (netto winst per eenheid); p = winstwaarschijnlijkheid; q = 1 − p." },
-        { "type": "paragraph", "text": "Ontcijferd: teller is je verwachte winst per inzeteenheid, noemer is de uitbetalingsmultiplier. Vermenigvuldig met de huidige bankroll om het werkelijke geld te krijgen om in te zetten. Als f* negatief is, heeft de inzet negatieve verwachte waarde — zet helemaal niets in." }
+        {
+          "type": "paragraph",
+          "text": "John Kelly Jr. publiceerde het criterion in 1956 toen hij bij Bell Labs werkte. Hij bestudeerde lange-afstand telefoonsignaal-ruis, maar realiseerde dat dezelfde wiskunde gold voor gokken: gegeven een reeks inzetten met positieve verwachte waarde, welke fractie van je bankroll moet je inzetten om lange-termijn groei te maximaliseren? Zijn antwoord werd één van de fundamentele resultaten in mathematische finance en gokwiskunde."
+        },
+        {
+          "type": "h3",
+          "text": "De formule"
+        },
+        {
+          "type": "formula",
+          "latex": "f^* = \\dfrac{bp - q}{b}",
+          "caption": "f* = optimale inzetfractie; b = decimale quotering minus 1 (netto winst per eenheid); p = winstwaarschijnlijkheid; q = 1 − p."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ontcijferd: teller is je verwachte winst per inzeteenheid, noemer is de uitbetalingsmultiplier. Vermenigvuldig met de huidige bankroll om het werkelijke geld te krijgen om in te zetten. Als f* negatief is, heeft de inzet negatieve verwachte waarde — zet helemaal niets in."
+        }
       ]
     },
     {
       "id": "why-kelly-works",
-      "h2": "Waarom Kelly Lange-Termijn Groei Maximaliseert",
+      "h2": "Waarom Kelly lange-termijn groei maximaliseert",
       "blocks": [
-        { "type": "paragraph", "text": "Kelly is bewijsbaar optimaal in één specifieke zin: het maximaliseert het verwachte logaritme van je bankroll over tijd, wat equivalent is aan het maximaliseren van de compound-groeivoet. Grotere inzetten dan Kelly produceren hogere arithmetische rendementen maar lagere geometrische (compound) rendementen. Kleinere inzetten dan Kelly zijn veiliger maar groeien trager. Kelly is de unieke fractie die de sweet spot raakt — en belangrijk: die sweet spot is de maximale compound-groei, niet de gemiddelde winst." },
-        { "type": "diagram", "name": "kelly-curve", "caption": "Bankroll-traject simulatie: 100 inzetten met 55% hit-rate, 2,0 quotering. Full Kelly (10%) verslaat flat 2%; Over-Kelly (25%) crasht door versterkte verliesreeksen." },
-        { "type": "paragraph", "text": "De intuïtie: zet te klein in en je compoundt niet. Zet te groot in en je kunt niet herstellen van variantie — een 50% drawdown vereist 100% groei om te herstellen, maar een 20% drawdown slechts 25%. Kelly draadt deze naald door inzetgrootte te koppelen aan je edge en de aangeboden quotering." },
-        { "type": "h3", "text": "Vergelijking met andere staking-systemen" },
-        { "type": "list", "items": [
-          "Flat staking (bijv. 2% per inzet): simpel, robuust tegen schattingsfout. Lagere lange-termijn groei dan Kelly als edge echt is.",
-          "Martingale (verdubbelen na elke verliezer): wiskundig zelfmoord. Een lange genoege verliesreeks failliet elke eindige bankroll.",
-          "Full Kelly: theoretisch optimaal maar hoge variantie. 50% drawdowns vanaf piek zijn gewoon.",
-          "Half Kelly: lagere groei (ongeveer 75% van Full Kelly's groei) maar veel lagere variantie. De keuze van de meeste profs."
-        ]}
+        {
+          "type": "paragraph",
+          "text": "Kelly is bewijsbaar optimaal in één specifieke zin: het maximaliseert het verwachte logaritme van je bankroll over tijd, wat equivalent is aan het maximaliseren van de compound-groeivoet. Grotere inzetten dan Kelly produceren hogere arithmetische rendementen maar lagere geometrische (compound) rendementen. Kleinere inzetten dan Kelly zijn veiliger maar groeien trager. Kelly is de unieke fractie die de sweet spot raakt — en belangrijk: die sweet spot is de maximale compound-groei, niet de gemiddelde winst."
+        },
+        {
+          "type": "diagram",
+          "name": "kelly-curve",
+          "caption": "Bankroll-traject simulatie: 100 inzetten met 55% hit-rate, 2,0 quotering. Full Kelly (10%) verslaat flat 2%; Over-Kelly (25%) crasht door versterkte verliesreeksen."
+        },
+        {
+          "type": "paragraph",
+          "text": "De intuïtie: zet te klein in en je compoundt niet. Zet te groot in en je kunt niet herstellen van variantie — een 50% drawdown vereist 100% groei om te herstellen, maar een 20% drawdown slechts 25%. Kelly draadt deze naald door inzetgrootte te koppelen aan je edge en de aangeboden quotering."
+        },
+        {
+          "type": "h3",
+          "text": "Vergelijking met andere staking-systemen"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Flat staking (bijv. 2% per inzet): simpel, robuust tegen schattingsfout. Lagere lange-termijn groei dan Kelly als edge echt is.",
+            "Martingale (verdubbelen na elke verliezer): wiskundig zelfmoord. Een lange genoege verliesreeks failliet elke eindige bankroll.",
+            "Full Kelly: theoretisch optimaal maar hoge variantie. 50% drawdowns vanaf piek zijn gewoon.",
+            "Half Kelly: lagere groei (ongeveer 75% van Full Kelly's groei) maar veel lagere variantie. De keuze van de meeste profs."
+          ]
+        }
       ]
     },
     {
       "id": "calculating-kelly",
-      "h2": "Kelly Inzetgrootte Berekenen",
+      "h2": "Kelly inzetgrootte berekenen",
       "blocks": [
-        { "type": "h3", "text": "Stap-voor-stap" },
-        { "type": "paragraph", "text": "1. Schat ware waarschijnlijkheid p van de uitkomst (dit is het moeilijke deel — apart behandeld in onze Value Betting-gids). 2. Haal decimale quotering op bij de bookmaker; bereken b = quotering − 1. 3. Bereken q = 1 − p. 4. Pas formule toe: f* = (bp − q) / b. 5. Vermenigvuldig f* met de huidige bankroll voor de werkelijke inzetgrootte." },
-        { "type": "example", "label": "Uitgewerkt voorbeeld", "body": "Je schat dat Real Madrid 60% kans heeft om thuis te winnen (p = 0,60). Bookmaker biedt 2,10 decimale quotering (b = 1,10). q = 0,40. f* = (1,10 × 0,60 − 0,40) / 1,10 = (0,66 − 0,40) / 1,10 = 0,236. Full Kelly suggereert 23,6% van de bankroll inzetten. Op een €1.000 bankroll is dat €236 op deze enkele inzet. De meeste praktijkmensen zouden Half Kelly (~11,8%, €118) of Quarter Kelly (~5,9%, €59) gebruiken voor variantie-reductie." },
-        { "type": "h3", "text": "Veelgemaakte rekenfouten" },
-        { "type": "list", "items": [
-          "Verwarren impliciete waarschijnlijkheid met je probability-schatting. Impliciete waarschijnlijkheid komt van de quotering; je schatting moet uit onafhankelijke analyse komen.",
-          "Bookmaker-quotering gebruiken als zowel de b als de probability-bron. Als je dit doet is f* altijd 0 — je hebt geen edge.",
-          "Vergeten te vermenigvuldigen met bankroll. f* is een fractie; de werkelijke inzet is f* × bankroll.",
-          "Kelly toepassen op dezelfde inzet over meerdere bookmakers zonder de inzetten te combineren — elke inzet moet worden gedoseerd tegen de huidige bankroll, niet de pre-inzet-bankroll."
-        ]}
+        {
+          "type": "h3",
+          "text": "Stap-voor-stap"
+        },
+        {
+          "type": "paragraph",
+          "text": "1. Schat ware waarschijnlijkheid p van de uitkomst (dit is het moeilijke deel — apart behandeld in onze Value Betting-gids). 2. Haal decimale quotering op bij de bookmaker; bereken b = quotering − 1. 3. Bereken q = 1 − p. 4. Pas formule toe: f* = (bp − q) / b. 5. Vermenigvuldig f* met de huidige bankroll voor de werkelijke inzetgrootte."
+        },
+        {
+          "type": "example",
+          "label": "Uitgewerkt voorbeeld",
+          "body": "Je schat dat Real Madrid 60% kans heeft om thuis te winnen (p = 0,60). Bookmaker biedt 2,10 decimale quotering (b = 1,10). q = 0,40. f* = (1,10 × 0,60 − 0,40) / 1,10 = (0,66 − 0,40) / 1,10 = 0,236. Full Kelly suggereert 23,6% van de bankroll inzetten. Op een €1.000 bankroll is dat €236 op deze enkele inzet. De meeste praktijkmensen zouden Half Kelly (~11,8%, €118) of Quarter Kelly (~5,9%, €59) gebruiken voor variantie-reductie."
+        },
+        {
+          "type": "h3",
+          "text": "Veelgemaakte rekenfouten"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Verwarren impliciete waarschijnlijkheid met je probability-schatting. Impliciete waarschijnlijkheid komt van de quotering; je schatting moet uit onafhankelijke analyse komen.",
+            "Bookmaker-quotering gebruiken als zowel de b als de probability-bron. Als je dit doet is f* altijd 0 — je hebt geen edge.",
+            "Vergeten te vermenigvuldigen met bankroll. f* is een fractie; de werkelijke inzet is f* × bankroll.",
+            "Kelly toepassen op dezelfde inzet over meerdere bookmakers zonder de inzetten te combineren — elke inzet moet worden gedoseerd tegen de huidige bankroll, niet de pre-inzet-bankroll."
+          ]
+        }
       ]
     },
     {
       "id": "fractional-kelly",
-      "h2": "Full Kelly vs Fractional Kelly",
+      "h2": "Full Kelly vs fractional Kelly",
       "blocks": [
-        { "type": "paragraph", "text": "Full Kelly is theoretisch optimaal — maar alleen als je probability-schattingen perfect accuraat zijn. In de echte wereld zijn schattingen rumoerig. Zelfs een 5% overschatting van je edge zorgt ervoor dat Full Kelly substantieel overzet, wat de variantie dramatisch verhoogt. De standaard praktische aanpassing is om een fractie van Full Kelly in te zetten." },
-        { "type": "h3", "text": "Half Kelly (50%)" },
-        { "type": "paragraph", "text": "Zet de helft van de Kelly-gesuggereerde fractie in. Wiskundig levert dit ongeveer 75% van Full Kelly's lange-termijn groei tegen ruwweg de helft van de variantie. Veel professionele bettors en kwantitatieve funds defaulten hier omdat de variantie-reductie de lichte groei-penalty waard is." },
-        { "type": "h3", "text": "Quarter Kelly (25%)" },
-        { "type": "paragraph", "text": "Zet een kwart van de Kelly-gesuggereerde fractie in. Tragere groei maar veel gladdere bankroll-curve. Aanbevolen voor bettors die hun probability-schattingen niet volledig vertrouwen — wat eerlijk gezegd de meeste bettors zijn. Quarter Kelly tolereert matige schattingsfout zonder kapot te gaan." },
-        { "type": "h3", "text": "Waarom over-Kelly zelfmoord is" },
-        { "type": "paragraph", "text": "Meer dan Full Kelly inzetten produceert strikt slechtere uitkomsten: hogere variantie ÉN lagere verwachte lange-termijn groei. Een veelgemaakte fout is double-Kelly (\"Ik heb extra vertrouwen, laat me 2x inzetten wat Kelly suggereert\"). De wiskunde toont dat deze strategie failliet gaat tegen een tempo dat dramatisch toeneemt als je overzet. Plafonneer jezelf altijd bij Full Kelly; in de praktijk reduceren tot fractioneel." }
+        {
+          "type": "paragraph",
+          "text": "Full Kelly is theoretisch optimaal — maar alleen als je probability-schattingen perfect accuraat zijn. In de echte wereld zijn schattingen rumoerig. Zelfs een 5% overschatting van je edge zorgt ervoor dat Full Kelly substantieel overzet, wat de variantie dramatisch verhoogt. De standaard praktische aanpassing is om een fractie van Full Kelly in te zetten."
+        },
+        {
+          "type": "h3",
+          "text": "Half Kelly (50%)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zet de helft van de Kelly-gesuggereerde fractie in. Wiskundig levert dit ongeveer 75% van Full Kelly's lange-termijn groei tegen ruwweg de helft van de variantie. Veel professionele bettors en kwantitatieve funds defaulten hier omdat de variantie-reductie de lichte groei-penalty waard is."
+        },
+        {
+          "type": "h3",
+          "text": "Quarter Kelly (25%)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zet een kwart van de Kelly-gesuggereerde fractie in. Tragere groei maar veel gladdere bankroll-curve. Aanbevolen voor bettors die hun probability-schattingen niet volledig vertrouwen — wat eerlijk gezegd de meeste bettors zijn. Quarter Kelly tolereert matige schattingsfout zonder kapot te gaan."
+        },
+        {
+          "type": "h3",
+          "text": "Waarom over-Kelly zelfmoord is"
+        },
+        {
+          "type": "paragraph",
+          "text": "Meer dan Full Kelly inzetten produceert strikt slechtere uitkomsten: hogere variantie ÉN lagere verwachte lange-termijn groei. Een veelgemaakte fout is double-Kelly (\"Ik heb extra vertrouwen, laat me 2x inzetten wat Kelly suggereert\"). De wiskunde toont dat deze strategie failliet gaat tegen een tempo dat dramatisch toeneemt als je overzet. Plafonneer jezelf altijd bij Full Kelly; in de praktijk reduceren tot fractioneel."
+        }
       ]
     },
     {
       "id": "when-kelly-fails",
-      "h2": "Wanneer Kelly Faalt",
+      "h2": "Wanneer Kelly faalt",
       "blocks": [
-        { "type": "h3", "text": "Inaccurate probability-schattingen" },
-        { "type": "paragraph", "text": "Kelly is alleen optimaal als je probability-schatting correct is. Overschat met 5% en je zet merkbaar over; overschat met 10% en je riskeert catastrofale drawdowns. De meeste amateur-bettors overschatten systematisch hun edge — ze herinneren zich winnaars beter dan verliezers, en verwarren vertrouwen met accuraatheid. De praktijkoplossing is fractional Kelly gebruiken die robuust is tegen de schattingsfout die je werkelijk hebt." },
-        { "type": "h3", "text": "Kleine samples" },
-        { "type": "paragraph", "text": "Kelly's optimaliteit is asymptotisch — het is het lange-termijn antwoord. In kleine samples (onder 100 inzetten) domineert variantie. Je kunt Full Kelly perfect uitvoeren en alsnog kapot gaan door pech als je sample klein is. Daarom is Kelly combineren met aparte bankroll-management regels (bijv. \"zet nooit meer dan 10% in zelfs als Kelly 20% zegt\") gangbare praktijk." },
-        { "type": "h3", "text": "Closing odds" },
-        { "type": "paragraph", "text": "Kelly gaat uit van inzet bij vaste quotering. In werkelijkheid bewegen quoteringen tussen analyse en plaatsen van de inzet. Als je inzet groot genoeg is om de lijn zelf te bewegen (relatief aan bookmaker-liquiditeit), zijn de effectieve quoteringen die je krijgt slechter dan de getoonde. Compenseer hiervoor door Kelly-fractie iets te verlagen bij grote inzetten." },
-        { "type": "h3", "text": "Beperkte bankroll" },
-        { "type": "paragraph", "text": "Kelly veronderstelt een continue bankroll waar elke fractie kan worden ingezet. Met een kleine bankroll vertekenen minimale-inzet-restricties (de meeste bookmakers hebben €1+ minimums) en afronding van inzetten de berekening. Kleinere bankrolls moeten simpelere regels gebruiken — vlakke percentages presteren vaak beter dan slecht-toegepaste Kelly bij kleine schaal." }
+        {
+          "type": "h3",
+          "text": "Inaccurate probability-schattingen"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kelly is alleen optimaal als je probability-schatting correct is. Overschat met 5% en je zet merkbaar over; overschat met 10% en je riskeert catastrofale drawdowns. De meeste amateur-bettors overschatten systematisch hun edge — ze herinneren zich winnaars beter dan verliezers, en verwarren vertrouwen met accuraatheid. De praktijkoplossing is fractional Kelly gebruiken die robuust is tegen de schattingsfout die je werkelijk hebt."
+        },
+        {
+          "type": "h3",
+          "text": "Kleine samples"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kelly's optimaliteit is asymptotisch — het is het lange-termijn antwoord. In kleine samples (onder 100 inzetten) domineert variantie. Je kunt Full Kelly perfect uitvoeren en alsnog kapot gaan door pech als je sample klein is. Daarom is Kelly combineren met aparte bankroll-management regels (bijv. \"zet nooit meer dan 10% in zelfs als Kelly 20% zegt\") gangbare praktijk."
+        },
+        {
+          "type": "h3",
+          "text": "Closing odds"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kelly gaat uit van inzet bij vaste quotering. In werkelijkheid bewegen quoteringen tussen analyse en plaatsen van de inzet. Als je inzet groot genoeg is om de lijn zelf te bewegen (relatief aan bookmaker-liquiditeit), zijn de effectieve quoteringen die je krijgt slechter dan de getoonde. Compenseer hiervoor door Kelly-fractie iets te verlagen bij grote inzetten."
+        },
+        {
+          "type": "h3",
+          "text": "Beperkte bankroll"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kelly veronderstelt een continue bankroll waar elke fractie kan worden ingezet. Met een kleine bankroll vertekenen minimale-inzet-restricties (de meeste bookmakers hebben €1+ minimums) en afronding van inzetten de berekening. Kleinere bankrolls moeten simpelere regels gebruiken — vlakke percentages presteren vaak beter dan slecht-toegepaste Kelly bij kleine schaal."
+        }
       ]
     },
     {
       "id": "practical-kelly",
-      "h2": "Praktische Kelly-Toepassing",
+      "h2": "Praktische Kelly-toepassing",
       "blocks": [
-        { "type": "list", "ordered": true, "items": [
-          "Gebruik fractional Kelly (typisch 0,25 tot 0,5). Full Kelly is voor bijna iedereen te agressief.",
-          "Update bankroll voor inzetberekening regelmatig. Herbereken f* tegen huidige bankroll, niet startbankroll.",
-          "Plafonneer individuele inzetten op 5-10% van bankroll ongeacht wat Kelly zegt. Dit is een sanity-vloer.",
-          "Zet niet onder ~1% van bankroll in — minimums en afrondings-wrijving maken minuscule inzetten inefficiënt.",
-          "Track resultaten over 500+ inzetten en vergelijk met voorspelde Kelly-prestaties. Als je significant onderpresteert, zijn je probability-schattingen verkeerd en moet je Kelly-fractie verlagen."
-        ]}
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            "Gebruik fractional Kelly (typisch 0,25 tot 0,5). Full Kelly is voor bijna iedereen te agressief.",
+            "Update bankroll voor inzetberekening regelmatig. Herbereken f* tegen huidige bankroll, niet startbankroll.",
+            "Plafonneer individuele inzetten op 5-10% van bankroll ongeacht wat Kelly zegt. Dit is een sanity-vloer.",
+            "Zet niet onder ~1% van bankroll in — minimums en afrondings-wrijving maken minuscule inzetten inefficiënt.",
+            "Track resultaten over 500+ inzetten en vergelijk met voorspelde Kelly-prestaties. Als je significant onderpresteert, zijn je probability-schattingen verkeerd en moet je Kelly-fractie verlagen."
+          ]
+        }
       ]
     }
   ],
   "keyTakeaways": {
-    "h3": "Belangrijkste Punten",
+    "h3": "Belangrijkste punten",
     "items": [
       "Kelly Criterion geeft de optimale inzetfractie: f* = (bp − q) / b. Maximaliseert lange-termijn compound groei.",
       "Full Kelly is wiskundig optimaal alleen met perfecte probability-schattingen. Echte schattingen zijn rumoerig.",
@@ -112,22 +211,44 @@
     ]
   },
   "faq": {
-    "h2": "Kelly Criterion FAQ",
+    "h2": "Kelly criterion FAQ",
     "questions": [
-      { "q": "Moet ik Full Kelly of Fractional Kelly gebruiken?", "a": "Vrijwel zeker fractional. Full Kelly is theoretisch optimaal alleen met perfect-gekalibreerde probability-schattingen, wat in essentie niemand heeft. Half Kelly of Quarter Kelly produceert vrijwel dezelfde lange-termijn groei met dramatisch lagere variantie en veel hogere tolerantie voor schattingsfout. De meeste professionele bettors en kwantitatieve funds gebruiken Half of Quarter Kelly als hun default." },
-      { "q": "Wat als mijn probability-schattingen niet erg accuraat zijn?", "a": "Gebruik Quarter Kelly of zelfs Eighth Kelly. De wiskunde achter fractional Kelly is robuust tegen schattingsfout — je geeft wat lange-termijn groei op in ruil voor veel hogere tolerantie voor verkeerd zitten. Als je echt niet weet hoe accuraat je schattingen zijn, heb je nog geen edge en moet je flat-staking of paper-trading doen totdat je een gedocumenteerde track record hebt." },
-      { "q": "Geldt Kelly voor sportwedden of alleen investeren?", "a": "Beide — en voor alles met opeenvolgende inzetten en positieve verwachte waarde. Kelly is wiskundig algemeen; de formule werkt voor aandelen, opties, poker, sportwedden, of elke opeenvolgende probabilistische beslissing. De implementatie verschilt (verschillende bookmaker-restricties, verschillende quoterings-structuren) maar de onderliggende wiskunde is identiek." },
-      { "q": "Hoe verhoudt Kelly zich tot bankroll-management?", "a": "Kelly is één specifieke bankroll-management strategie die optimale inzetgrootte afleidt uit edge. Andere bankroll-management strategieën (flat staking, percentage van bankroll, unit-systemen) gebruiken Kelly's formule niet — ze vervangen het door simpelere regels die geen accurate probability-schattingen vereisen. Voor de meeste bettors zonder grote samples en bewezen kalibratie presteren simpelere bankroll-management strategieën beter dan slecht-toegepaste Kelly. Zie onze speciale Bankroll Management-gids voor alternatieven." }
+      {
+        "q": "Moet ik full Kelly of fractional Kelly gebruiken?",
+        "a": "Vrijwel zeker fractional. Full Kelly is theoretisch optimaal alleen met perfect-gekalibreerde probability-schattingen, wat in essentie niemand heeft. Half Kelly of Quarter Kelly produceert vrijwel dezelfde lange-termijn groei met dramatisch lagere variantie en veel hogere tolerantie voor schattingsfout. De meeste professionele bettors en kwantitatieve funds gebruiken Half of Quarter Kelly als hun default."
+      },
+      {
+        "q": "Wat als mijn probability-schattingen niet erg accuraat zijn?",
+        "a": "Gebruik Quarter Kelly of zelfs Eighth Kelly. De wiskunde achter fractional Kelly is robuust tegen schattingsfout — je geeft wat lange-termijn groei op in ruil voor veel hogere tolerantie voor verkeerd zitten. Als je echt niet weet hoe accuraat je schattingen zijn, heb je nog geen edge en moet je flat-staking of paper-trading doen totdat je een gedocumenteerde track record hebt."
+      },
+      {
+        "q": "Geldt Kelly voor sportwedden of alleen investeren?",
+        "a": "Beide — en voor alles met opeenvolgende inzetten en positieve verwachte waarde. Kelly is wiskundig algemeen; de formule werkt voor aandelen, opties, poker, sportwedden, of elke opeenvolgende probabilistische beslissing. De implementatie verschilt (verschillende bookmaker-restricties, verschillende quoterings-structuren) maar de onderliggende wiskunde is identiek."
+      },
+      {
+        "q": "Hoe verhoudt Kelly zich tot bankroll-management?",
+        "a": "Kelly is één specifieke bankroll-management strategie die optimale inzetgrootte afleidt uit edge. Andere bankroll-management strategieën (flat staking, percentage van bankroll, unit-systemen) gebruiken Kelly's formule niet — ze vervangen het door simpelere regels die geen accurate probability-schattingen vereisen. Voor de meeste bettors zonder grote samples en bewezen kalibratie presteren simpelere bankroll-management strategieën beter dan slecht-toegepaste Kelly. Zie onze speciale Bankroll Management-gids voor alternatieven."
+      }
     ]
   },
   "relatedArticles": {
-    "h2": "Gerelateerde Artikelen",
-    "slugs": ["what-is-value-betting", "bankroll-management", "ai-vs-tipsters"]
+    "h2": "Gerelateerde artikelen",
+    "slugs": [
+      "what-is-value-betting",
+      "bankroll-management",
+      "ai-vs-tipsters"
+    ]
   },
   "applyThis": {
-    "h2": "Probability-Schattingen Voeden Kelly",
+    "h2": "Probability-schattingen voeden Kelly",
     "body": "Kelly is alleen zo goed als de probability-schatting die het voedt. BetsPlug publiceert gekalibreerde confidence-percentages op elke voorspelling — voer ze in Kelly met passende fractional discount.",
-    "ctaPrimary": { "label": "Bekijk Voorspellingen Vandaag", "canonical": "predictions" },
-    "ctaSecondary": { "label": "Bekijk Track Record", "canonical": "track-record" }
+    "ctaPrimary": {
+      "label": "Bekijk Voorspellingen Vandaag",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Bekijk Track Record",
+      "canonical": "track-record"
+    }
   }
 }

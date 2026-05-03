@@ -82,36 +82,70 @@ TYPOGRAPHY
 FONT STACK
 
 Primary (sans-serif):
-- Inter (variable font, weights 400/500/600/700)
+- Geist (variable font, weights 400/500/600/700)
+  Self-hosted via @fontsource-variable/geist. Replaces Inter as of
+  2026-05-03 — Geist gives the marketing site a sharper, more
+  distinctive look closer to Vercel/Linear and away from generic SaaS.
 
 Mono (data display):
-- JetBrains Mono (variable, weights 400/500/700)
+- Geist Mono (variable, weights 400/500/600)
+  Pairs with Geist Sans, identical metrics, same family. font-display:
+  optional so it never blocks first paint.
 
 WEIGHTS
 
 - 400: body text
 - 500: labels, small UI
-- 600: subheadings, CTAs
-- 700: main headings
+- 600: subheadings, CTAs, headings (Geist renders ~1 step heavier
+  than Inter at the same numeric weight, so headings are 600, not 700)
+
+CASING — sentence case across the board
+
+All headings (H1-H4) use sentence case in every locale, NOT Title Case.
+Only the first word and proper nouns are capitalised. Brand names
+(BetsPlug, Premier League, La Liga, Serie A, etc.), statistical models
+(Elo, Poisson, Kelly, BTTS, xG), and acronyms (AI, ROI, KI, IA, FAQ)
+keep their original casing. German nouns stay capitalised — sentence
+case in German lowercases articles, prepositions, conjunctions, verbs,
+and adjectives, but never substantives.
+
+Examples:
+- ✓ "How BetsPlug works"        ✗ "How BetsPlug Works"
+- ✓ "Built on mathematics"      ✗ "Built on Mathematics"
+- ✓ "Wie BetsPlug funktioniert" ✗ "Wie BetsPlug Funktioniert"
+
+ACCENT WORD HIGHLIGHTING
+
+Hero H1's and a small set of major section H2's tint 1-2 strategic
+words in `text-pitch-green-500` for visual focus. Markup uses a
+`{{accent}}…{{/accent}}` token in the JSON content; components run
+the value through `parseAccent()` (src/lib/parseAccent.ts) to emit
+`<span class="text-pitch-green-500">…</span>`. Schema.org / meta
+title slots use `stripAccent()` so the markers never leak into
+structured data.
+
+Use sparingly: 1-2 words per heading, only on hero H1's and the major
+homepage section H2's. Don't accent sub-section H3's, article body
+H2's, or every section H2 — that turns the accent into decoration.
 
 TYPE SCALE
 
 H1 (hero):
-- Mobile: 36px / line-height 1.1 / weight 700
+- Mobile: 36px / line-height 1.1 / weight 600 / letter-spacing -0.025em
 - Tablet: 48px / line-height 1.05
 - Desktop: 64px / line-height 1.0
 
 H2 (section):
-- Mobile: 28px / line-height 1.2
+- Mobile: 28px / line-height 1.2 / weight 600 / letter-spacing -0.02em
 - Tablet: 36px
 - Desktop: 44px
 
 H3 (subsection):
-- Mobile: 22px / line-height 1.3
+- Mobile: 22px / line-height 1.3 / weight 600 / letter-spacing -0.015em
 - Tablet: 26px
 - Desktop: 28px
 
-H4: 18px / line-height 1.4 / weight 600
+H4: 18px / line-height 1.4 / weight 600 / letter-spacing -0.01em
 
 Body Large (intro):
 - Mobile: 18px / line-height 1.6
@@ -332,9 +366,13 @@ colors: {
 }
 
 fontFamily: {
-  sans: ['Inter Variable', 'Inter', 'system-ui', 'sans-serif'],
-  mono: ['JetBrains Mono Variable', 'JetBrains Mono', 'monospace'],
+  sans: ['Geist Variable', 'Geist', 'system-ui', 'sans-serif'],
+  mono: ['Geist Mono Variable', 'Geist Mono', 'ui-monospace', 'monospace'],
 }
+
+(Tailwind v4: tokens are declared inside `@theme` in
+src/styles/tokens.css, not a tailwind.config.js. The font-face imports
+live in src/styles/typography.css.)
 
 ═══════════════════════════════════════════════════════
 DESIGN PRINCIPLES SUMMARY

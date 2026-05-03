@@ -6,18 +6,28 @@
     "_note": "TODO: Native speaker review needed for de."
   },
   "meta": {
-    "title": "KI-Fußballvorhersagen Heute - Alle Ligen | BetsPlug",
+    "title": "KI-Fußballvorhersagen Heute - alle Ligen | BetsPlug",
     "description": "Tägliche KI-Fußballvorhersagen für 30+ Ligen. Kostenlose Picks heute, vor Anpfiff gesperrt. Öffentlicher Track Record.",
     "ogImage": "/og-images/predictions-de.jpg"
   },
   "hero": {
     "h1Template": "KI-Fußballvorhersagen für {date}",
     "subheadline": "Tägliche Vorhersagen für 30+ Ligen, generiert von unserer KI-Engine mit Elo, Poisson und Machine Learning. Vor dem Anpfiff gesperrt.",
-    "trustStrip": ["Live-Updates", "Gesperrte Vorhersagen", "Öffentlicher Track Record"],
+    "trustStrip": [
+      "Live-Updates",
+      "Gesperrte Vorhersagen",
+      "Öffentlicher Track Record"
+    ],
     "liveLabel": "Aktualisiert",
     "liveSecondsAgo": "vor {seconds}s",
-    "ctaPrimary": { "label": "Unbegrenzte Vorhersagen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "So funktioniert's", "canonical": "methodology" },
+    "ctaPrimary": {
+      "label": "Unbegrenzte Vorhersagen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "So funktioniert's",
+      "canonical": "methodology"
+    },
     "miniRecord": {
       "title": "Letzte 30 Tage",
       "subtitle": "Alle Vorhersagen veröffentlicht — öffentliches Register",
@@ -44,13 +54,27 @@
   "tomorrowEmpty": {
     "teaserTitle": "Morgens Vorhersagen Freischalten",
     "teaserBody": "{count} weitere Vorhersagen morgen — nur für zahlende Mitglieder",
-    "cta": { "label": "Preise anzeigen", "canonical": "pricing" }
+    "cta": {
+      "label": "Preise anzeigen",
+      "canonical": "pricing"
+    }
   },
   "weekTab": {
     "h3": "Diese-Woche-Übersicht",
     "body": "Abonnenten sehen jede Vorhersage der nächsten 7 Tage. Kostenlose Nutzer sehen nur heute.",
-    "weekdayLabels": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
-    "cta": { "label": "Hol dir die ganze Woche im Voraus", "canonical": "pricing" }
+    "weekdayLabels": [
+      "Mo",
+      "Di",
+      "Mi",
+      "Do",
+      "Fr",
+      "Sa",
+      "So"
+    ],
+    "cta": {
+      "label": "Hol dir die ganze Woche im Voraus",
+      "canonical": "pricing"
+    }
   },
   "paywall": {
     "h2Template": "Du Siehst 5 von {total} Heutigen Vorhersagen",
@@ -62,8 +86,14 @@
       "Vorhersagen 24h im Voraus (vs 2h vor Anpfiff)",
       "Telegram-Benachrichtigungen für High-Confidence-Picks"
     ],
-    "ctaPrimary": { "label": "Pläne ansehen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Kostenlos vs Bezahlt vergleichen", "canonical": "free-vs-paid" }
+    "ctaPrimary": {
+      "label": "Pläne ansehen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Kostenlos vs Bezahlt vergleichen",
+      "canonical": "free-vs-paid"
+    }
   },
   "leagueGrid": {
     "h2": "Vorhersagen nach Liga",
@@ -72,34 +102,73 @@
     "featuredBadge": "Empfohlen"
   },
   "methodology": {
-    "h2": "Wie Diese Vorhersagen Erstellt Werden",
+    "h2": "Wie diese Vorhersagen erstellt werden",
     "body": [
       "Jede Vorhersage auf dieser Seite wird von unserer KI-Engine erstellt, nicht von Redakteuren oder Tipstern. Die Engine kombiniert Elo-Bewertungen (Teamstärke), Poisson-Modelle (Tor-Wahrscheinlichkeit) und Machine Learning (Mustererkennung), um jedes Spiel anhand von 40+ Variablen zu bewerten.",
       "Vorhersagen werden mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Wir veröffentlichen sowohl Gewinne als auch Verluste — überprüfbar in unserem öffentlichen Track Record."
     ],
     "pillars": [
-      { "icon": "calc", "label": "Mathematische Modelle (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine Learning" },
-      { "icon": "lock", "label": "Gesperrt & zeitgestempelt" }
+      {
+        "icon": "calc",
+        "label": "Mathematische Modelle (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine Learning"
+      },
+      {
+        "icon": "lock",
+        "label": "Gesperrt & zeitgestempelt"
+      }
     ],
-    "cta": { "label": "Vollständige Methodik lesen", "canonical": "methodology" }
+    "cta": {
+      "label": "Vollständige Methodik lesen",
+      "canonical": "methodology"
+    }
   },
   "faq": {
     "h2": "Vorhersagen FAQ",
     "questions": [
-      { "q": "Wie oft werden Vorhersagen aktualisiert?", "a": "Vorhersagen werden kontinuierlich erstellt. Die Hub-Seite aktualisiert die Daten jede Minute. Sobald eine Vorhersage gesperrt ist, kann sie nicht mehr geändert werden." },
-      { "q": "Warum nur 5 kostenlose Vorhersagen pro Tag?", "a": "Kostenlose Vorhersagen sind eine Stichprobe unserer täglichen Ausgabe. Abonnenten erhalten alle täglichen Vorhersagen für 30+ Ligen plus vollständige Match-Analyse." },
-      { "q": "Kann ich Vorhersagen für ein bestimmtes Spiel bekommen?", "a": "Abonnenten können alle Vorhersagen für jede Liga oder jedes Spiel durchsuchen. Kostenlose Nutzer sehen eine kuratierte Auswahl aus Top-Ligen." },
-      { "q": "Was bedeutet 'Konfidenz-Prozentsatz'?", "a": "Konfidenz spiegelt die Sicherheit unseres Modells über das vorhergesagte Ergebnis wider. 78% Konfidenz auf 'Über 2,5 Tore' bedeutet, dass das Modell eine 78%-Wahrscheinlichkeit für dieses Ergebnis schätzt." },
-      { "q": "Warum werden Vorhersagen vor dem Anpfiff gesperrt?", "a": "Das Sperren mit öffentlichem Zeitstempel stellt sicher, dass wir Vorhersagen nicht nachträglich bearbeiten können. Das ist der Kern unserer Transparenzgarantie." },
-      { "q": "Haben kostenlose Vorhersagen geringere Genauigkeit als bezahlte?", "a": "Nein. Kostenlose Vorhersagen verwenden dieselbe Engine und Methodik wie bezahlte. Der Unterschied liegt in Volumen, Tiefe, Timing und Liga-Abdeckung." }
+      {
+        "q": "Wie oft werden Vorhersagen aktualisiert?",
+        "a": "Vorhersagen werden kontinuierlich erstellt. Die Hub-Seite aktualisiert die Daten jede Minute. Sobald eine Vorhersage gesperrt ist, kann sie nicht mehr geändert werden."
+      },
+      {
+        "q": "Warum nur 5 kostenlose Vorhersagen pro Tag?",
+        "a": "Kostenlose Vorhersagen sind eine Stichprobe unserer täglichen Ausgabe. Abonnenten erhalten alle täglichen Vorhersagen für 30+ Ligen plus vollständige Match-Analyse."
+      },
+      {
+        "q": "Kann ich Vorhersagen für ein bestimmtes Spiel bekommen?",
+        "a": "Abonnenten können alle Vorhersagen für jede Liga oder jedes Spiel durchsuchen. Kostenlose Nutzer sehen eine kuratierte Auswahl aus Top-Ligen."
+      },
+      {
+        "q": "Was bedeutet 'Konfidenz-Prozentsatz'?",
+        "a": "Konfidenz spiegelt die Sicherheit unseres Modells über das vorhergesagte Ergebnis wider. 78% Konfidenz auf 'Über 2,5 Tore' bedeutet, dass das Modell eine 78%-Wahrscheinlichkeit für dieses Ergebnis schätzt."
+      },
+      {
+        "q": "Warum werden Vorhersagen vor dem Anpfiff gesperrt?",
+        "a": "Das Sperren mit öffentlichem Zeitstempel stellt sicher, dass wir Vorhersagen nicht nachträglich bearbeiten können. Das ist der Kern unserer Transparenzgarantie."
+      },
+      {
+        "q": "Haben kostenlose Vorhersagen geringere Genauigkeit als bezahlte?",
+        "a": "Nein. Kostenlose Vorhersagen verwenden dieselbe Engine und Methodik wie bezahlte. Der Unterschied liegt in Volumen, Tiefe, Timing und Liga-Abdeckung."
+      }
     ],
-    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Alle FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
-    "h2": "Willst Du Alle Vorhersagen?",
+    "h2": "Willst du alle Vorhersagen?",
     "body": "5 kostenlos pro Tag. Unbegrenzt mit jedem bezahlten Plan.",
-    "ctaPrimary": { "label": "Pläne ansehen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Kostenloses Konto", "href": "https://app.betsplug.com/register?source=predictions_hub_final" }
+    "ctaPrimary": {
+      "label": "Pläne ansehen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Kostenloses Konto",
+      "href": "https://app.betsplug.com/register?source=predictions_hub_final"
+    }
   }
 }

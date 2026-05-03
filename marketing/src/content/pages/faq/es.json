@@ -1,12 +1,16 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Preguntas Frecuentes | BetsPlug",
+    "title": "Preguntas frecuentes | BetsPlug",
     "description": "Todo sobre los pronósticos de fútbol con IA de BetsPlug: metodología, precios, precisión, cumplimiento y más.",
     "ogImage": "/og-images/faq-es.jpg"
   },
   "hero": {
-    "h1": "Preguntas Frecuentes",
+    "h1": "Preguntas {{accent}}frecuentes{{/accent}}",
     "subheadline": "Todo sobre BetsPlug, nuestros pronósticos, metodología y suscripciones. Busca o navega por categoría."
   },
   "search": {
@@ -23,11 +27,31 @@
       "name": "Sobre BetsPlug",
       "description": "Quiénes somos y qué hacemos.",
       "questions": [
-        { "id": "about-1", "question": "¿Qué es BetsPlug?", "answer": "BetsPlug es una plataforma de pronósticos de fútbol impulsada por IA. Generamos pronósticos para más de 30 ligas mediante modelos estadísticos (Elo, Poisson) y machine learning, y publicamos cada pronóstico en un track record público." },
-        { "id": "about-2", "question": "¿BetsPlug es un bookmaker?", "answer": "No. Somos una plataforma de análisis de datos. No aceptamos apuestas, no manejamos dinero ni facilitamos el juego. Ofrecemos pronósticos estadísticos con fines educativos e informativos." },
-        { "id": "about-3", "question": "¿Dónde tiene su sede BetsPlug?", "answer": "BetsPlug opera como una empresa tecnológica independiente con sede en Europa. Para consultas comerciales, visita nuestra página de contacto." },
-        { "id": "about-4", "question": "¿Cuánto tiempo lleva operando BetsPlug?", "answer": "Nuestro track record público abarca desde el lanzamiento — cada pronóstico que hemos hecho es verificable en la página de track record. La plataforma lleva operando lo suficiente para tener una muestra significativa en las ligas cubiertas." },
-        { "id": "about-5", "question": "¿Quién es el dueño de BetsPlug?", "answer": "BetsPlug está operada por una empresa tecnológica independiente. No somos propiedad ni estamos afiliados a ningún bookmaker. Nuestro modelo de ingresos es por suscripción, no por afiliación." }
+        {
+          "id": "about-1",
+          "question": "¿Qué es BetsPlug?",
+          "answer": "BetsPlug es una plataforma de pronósticos de fútbol impulsada por IA. Generamos pronósticos para más de 30 ligas mediante modelos estadísticos (Elo, Poisson) y machine learning, y publicamos cada pronóstico en un track record público."
+        },
+        {
+          "id": "about-2",
+          "question": "¿BetsPlug es un bookmaker?",
+          "answer": "No. Somos una plataforma de análisis de datos. No aceptamos apuestas, no manejamos dinero ni facilitamos el juego. Ofrecemos pronósticos estadísticos con fines educativos e informativos."
+        },
+        {
+          "id": "about-3",
+          "question": "¿Dónde tiene su sede BetsPlug?",
+          "answer": "BetsPlug opera como una empresa tecnológica independiente con sede en Europa. Para consultas comerciales, visita nuestra página de contacto."
+        },
+        {
+          "id": "about-4",
+          "question": "¿Cuánto tiempo lleva operando BetsPlug?",
+          "answer": "Nuestro track record público abarca desde el lanzamiento — cada pronóstico que hemos hecho es verificable en la página de track record. La plataforma lleva operando lo suficiente para tener una muestra significativa en las ligas cubiertas."
+        },
+        {
+          "id": "about-5",
+          "question": "¿Quién es el dueño de BetsPlug?",
+          "answer": "BetsPlug está operada por una empresa tecnológica independiente. No somos propiedad ni estamos afiliados a ningún bookmaker. Nuestro modelo de ingresos es por suscripción, no por afiliación."
+        }
       ]
     },
     {
@@ -35,14 +59,46 @@
       "name": "Pronósticos & Metodología",
       "description": "Cómo funciona nuestro motor y qué predice.",
       "questions": [
-        { "id": "predictions-1", "question": "¿Qué tan precisos son los pronósticos de fútbol con IA?", "answer": "La precisión varía por liga, mercado y jornada. Publicamos cada pronóstico — tanto aciertos como fallos — en nuestro track record público, para que puedas verificar el rendimiento por ti mismo en lugar de fiarte de nuestras afirmaciones." },
-        { "id": "predictions-2", "question": "¿Pueden modificarse los pronósticos tras su publicación?", "answer": "No. Cada pronóstico se bloquea antes del saque inicial con una marca de tiempo pública. Una vez publicado, no se puede editar ni eliminar. Esto es verificable en nuestro track record. El bloqueo es arquitectónico — no hay un botón de admin que pueda cambiar un pronóstico publicado." },
-        { "id": "predictions-3", "question": "¿Por qué utilizan varios modelos estadísticos?", "answer": "Ningún método estadístico por sí solo captura toda la dinámica del fútbol. Elo gestiona la fuerza del equipo, Poisson la distribución de goles, machine learning el contexto. Combinarlos con integración ponderada produce pronósticos más robustos que cualquier método aislado." },
-        { "id": "predictions-4", "question": "¿Con cuánta antelación están disponibles los pronósticos?", "answer": "Los suscriptores ven los pronósticos hasta 24 horas antes del saque inicial. Los usuarios gratuitos los ven 2 horas antes. Una vez bloqueados, los pronósticos no se pueden modificar — cambia el momento de acceso, no los pronósticos." },
-        { "id": "predictions-5", "question": "¿Predicen partidos de copa e internacionales?", "answer": "Cubrimos Champions League, Europa League y las principales copas nacionales para nuestras 10 ligas cubiertas. Los partidos internacionales (Mundial, Eurocopa) se cubren cuando ocurren. Las rondas previas y las copas menores no entran en la cobertura por defecto." },
-        { "id": "predictions-6", "question": "¿En qué idiomas están disponibles los pronósticos?", "answer": "Los pronósticos de BetsPlug están disponibles en inglés, neerlandés, alemán, francés, español e italiano. Las páginas de metodología y contenido están totalmente traducidas para cada locale; los términos técnicos (Elo, Poisson, xG) se mantienen consistentes en todos los idiomas." },
-        { "id": "predictions-7", "question": "¿Cómo gestionan ascensos y descensos entre temporadas?", "answer": "Las puntuaciones Elo de los equipos se mantienen entre temporadas pero se calibran para la fuerza de la nueva liga cuando los equipos cambian de división. Los pronósticos de inicio de temporada tienen en cuenta los fichajes y cambios de entrenador. Los primeros partidos tienen algo más de incertidumbre mientras el modelo se recalibra." },
-        { "id": "predictions-8", "question": "¿Por qué no predicen goleadores específicos?", "answer": "Los pronósticos a nivel de jugador tienen mucha más varianza que los de equipo. La incertidumbre de alineación, la varianza de forma individual y los cambios tácticos hacen que los pronósticos de goleadores no sean fiables. Nos centramos en mercados a nivel de equipo donde la precisión es alcanzable." }
+        {
+          "id": "predictions-1",
+          "question": "¿Qué tan precisos son los pronósticos de fútbol con IA?",
+          "answer": "La precisión varía por liga, mercado y jornada. Publicamos cada pronóstico — tanto aciertos como fallos — en nuestro track record público, para que puedas verificar el rendimiento por ti mismo en lugar de fiarte de nuestras afirmaciones."
+        },
+        {
+          "id": "predictions-2",
+          "question": "¿Pueden modificarse los pronósticos tras su publicación?",
+          "answer": "No. Cada pronóstico se bloquea antes del saque inicial con una marca de tiempo pública. Una vez publicado, no se puede editar ni eliminar. Esto es verificable en nuestro track record. El bloqueo es arquitectónico — no hay un botón de admin que pueda cambiar un pronóstico publicado."
+        },
+        {
+          "id": "predictions-3",
+          "question": "¿Por qué utilizan varios modelos estadísticos?",
+          "answer": "Ningún método estadístico por sí solo captura toda la dinámica del fútbol. Elo gestiona la fuerza del equipo, Poisson la distribución de goles, machine learning el contexto. Combinarlos con integración ponderada produce pronósticos más robustos que cualquier método aislado."
+        },
+        {
+          "id": "predictions-4",
+          "question": "¿Con cuánta antelación están disponibles los pronósticos?",
+          "answer": "Los suscriptores ven los pronósticos hasta 24 horas antes del saque inicial. Los usuarios gratuitos los ven 2 horas antes. Una vez bloqueados, los pronósticos no se pueden modificar — cambia el momento de acceso, no los pronósticos."
+        },
+        {
+          "id": "predictions-5",
+          "question": "¿Predicen partidos de copa e internacionales?",
+          "answer": "Cubrimos Champions League, Europa League y las principales copas nacionales para nuestras 10 ligas cubiertas. Los partidos internacionales (Mundial, Eurocopa) se cubren cuando ocurren. Las rondas previas y las copas menores no entran en la cobertura por defecto."
+        },
+        {
+          "id": "predictions-6",
+          "question": "¿En qué idiomas están disponibles los pronósticos?",
+          "answer": "Los pronósticos de BetsPlug están disponibles en inglés, neerlandés, alemán, francés, español e italiano. Las páginas de metodología y contenido están totalmente traducidas para cada locale; los términos técnicos (Elo, Poisson, xG) se mantienen consistentes en todos los idiomas."
+        },
+        {
+          "id": "predictions-7",
+          "question": "¿Cómo gestionan ascensos y descensos entre temporadas?",
+          "answer": "Las puntuaciones Elo de los equipos se mantienen entre temporadas pero se calibran para la fuerza de la nueva liga cuando los equipos cambian de división. Los pronósticos de inicio de temporada tienen en cuenta los fichajes y cambios de entrenador. Los primeros partidos tienen algo más de incertidumbre mientras el modelo se recalibra."
+        },
+        {
+          "id": "predictions-8",
+          "question": "¿Por qué no predicen goleadores específicos?",
+          "answer": "Los pronósticos a nivel de jugador tienen mucha más varianza que los de equipo. La incertidumbre de alineación, la varianza de forma individual y los cambios tácticos hacen que los pronósticos de goleadores no sean fiables. Nos centramos en mercados a nivel de equipo donde la precisión es alcanzable."
+        }
       ]
     },
     {
@@ -50,14 +106,46 @@
       "name": "Precios & Suscripciones",
       "description": "Planes, pagos y reembolsos.",
       "questions": [
-        { "id": "pricing-1", "question": "¿Puedo cambiar de plan después?", "answer": "Sí, en cualquier momento. Al actualizar, el nuevo plan se activa de inmediato con facturación prorrateada. Al cambiar a uno inferior, el nuevo plan empieza en tu próximo ciclo de facturación." },
-        { "id": "pricing-2", "question": "¿Qué métodos de pago aceptan?", "answer": "Tarjetas de crédito/débito (Visa, Mastercard, American Express) y transferencias bancarias en EUR. Los pagos con criptomoneda no están soportados actualmente, pero están en nuestra hoja de ruta." },
-        { "id": "pricing-3", "question": "¿Ofrecen descuentos anuales?", "answer": "La facturación anual ahorra un 20% frente a la mensual. La opción anual aparece en el checkout. Puedes alternar entre mensual y anual en cualquier momento sin perder acceso." },
-        { "id": "pricing-4", "question": "¿La prueba de 7 días es realmente gratuita?", "answer": "Sí. Pedimos un método de pago para iniciar la prueba, pero no se cobra durante los primeros 7 días. Cancela antes del día 7 y no habrá cargo. Cancela después de un cargo y usa la garantía de devolución dentro de los primeros 7 días." },
-        { "id": "pricing-5", "question": "¿Puedo conseguir un plan de equipo u organización?", "answer": "Estamos trabajando en planes de equipo para analistas y pequeñas organizaciones. Contáctanos si tienes necesidades específicas — podemos configurar algo de forma anticipada." },
-        { "id": "pricing-6", "question": "¿Los precios incluyen IVA?", "answer": "Los precios mostrados incluyen el IVA aplicable para clientes de la UE. Para clientes fuera de la UE, el precio mostrado es el final. Los recibos incluyen detalles de IVA cuando proceda." },
-        { "id": "pricing-7", "question": "¿Qué pasa con mis datos si cancelo?", "answer": "Los datos de tu cuenta (historial de suscripción, ajustes, pronósticos guardados) se conservan 90 días tras la cancelación por si reactivas. Después de 90 días se eliminan permanentemente, salvo que solicites eliminación anticipada." },
-        { "id": "pricing-8", "question": "¿Ofrecen descuentos para estudiantes o instituciones?", "answer": "Actualmente no ofrecemos niveles de descuento aparte de la facturación anual (20% frente a la mensual). La facturación anual está disponible para todos al mismo precio." }
+        {
+          "id": "pricing-1",
+          "question": "¿Puedo cambiar de plan después?",
+          "answer": "Sí, en cualquier momento. Al actualizar, el nuevo plan se activa de inmediato con facturación prorrateada. Al cambiar a uno inferior, el nuevo plan empieza en tu próximo ciclo de facturación."
+        },
+        {
+          "id": "pricing-2",
+          "question": "¿Qué métodos de pago aceptan?",
+          "answer": "Tarjetas de crédito/débito (Visa, Mastercard, American Express) y transferencias bancarias en EUR. Los pagos con criptomoneda no están soportados actualmente, pero están en nuestra hoja de ruta."
+        },
+        {
+          "id": "pricing-3",
+          "question": "¿Ofrecen descuentos anuales?",
+          "answer": "La facturación anual ahorra un 20% frente a la mensual. La opción anual aparece en el checkout. Puedes alternar entre mensual y anual en cualquier momento sin perder acceso."
+        },
+        {
+          "id": "pricing-4",
+          "question": "¿La prueba de 7 días es realmente gratuita?",
+          "answer": "Sí. Pedimos un método de pago para iniciar la prueba, pero no se cobra durante los primeros 7 días. Cancela antes del día 7 y no habrá cargo. Cancela después de un cargo y usa la garantía de devolución dentro de los primeros 7 días."
+        },
+        {
+          "id": "pricing-5",
+          "question": "¿Puedo conseguir un plan de equipo u organización?",
+          "answer": "Estamos trabajando en planes de equipo para analistas y pequeñas organizaciones. Contáctanos si tienes necesidades específicas — podemos configurar algo de forma anticipada."
+        },
+        {
+          "id": "pricing-6",
+          "question": "¿Los precios incluyen IVA?",
+          "answer": "Los precios mostrados incluyen el IVA aplicable para clientes de la UE. Para clientes fuera de la UE, el precio mostrado es el final. Los recibos incluyen detalles de IVA cuando proceda."
+        },
+        {
+          "id": "pricing-7",
+          "question": "¿Qué pasa con mis datos si cancelo?",
+          "answer": "Los datos de tu cuenta (historial de suscripción, ajustes, pronósticos guardados) se conservan 90 días tras la cancelación por si reactivas. Después de 90 días se eliminan permanentemente, salvo que solicites eliminación anticipada."
+        },
+        {
+          "id": "pricing-8",
+          "question": "¿Ofrecen descuentos para estudiantes o instituciones?",
+          "answer": "Actualmente no ofrecemos niveles de descuento aparte de la facturación anual (20% frente a la mensual). La facturación anual está disponible para todos al mismo precio."
+        }
       ]
     },
     {
@@ -65,11 +153,31 @@
       "name": "Cuenta & Soporte Técnico",
       "description": "Gestión de cuenta y soporte técnico.",
       "questions": [
-        { "id": "account-1", "question": "¿Cómo actualizo mi correo?", "answer": "Desde tu panel en app.betsplug.com/account, haz clic en Perfil y actualiza el correo. Recibirás un email de verificación en la nueva dirección antes de que el cambio surta efecto." },
-        { "id": "account-2", "question": "He olvidado mi contraseña. ¿Qué hago?", "answer": "Usa el enlace de restablecer contraseña en app.betsplug.com/login. Introduce tu correo y recibirás instrucciones en minutos. Si el correo no llega, revisa spam; si no, contacta con soporte." },
-        { "id": "account-3", "question": "¿Puedo cambiar el idioma de mi cuenta tras el registro?", "answer": "Sí. Desde la configuración de la cuenta, puedes cambiar el idioma de la interfaz en cualquier momento. Las notificaciones de pronósticos también pasan al idioma elegido." },
-        { "id": "account-4", "question": "¿Hay aplicación móvil?", "answer": "Actualmente tenemos una web app responsive que funciona perfectamente en navegadores móviles. Una aplicación móvil nativa está en nuestra hoja de ruta. La web app ya admite añadir a la pantalla de inicio en iOS y Android para un comportamiento tipo app." },
-        { "id": "account-5", "question": "¿Qué navegadores soportan?", "answer": "BetsPlug funciona en todos los navegadores modernos (Chrome, Firefox, Safari, Edge) lanzados en los últimos 2 años. Los navegadores más antiguos pueden tener funcionalidad limitada." }
+        {
+          "id": "account-1",
+          "question": "¿Cómo actualizo mi correo?",
+          "answer": "Desde tu panel en app.betsplug.com/account, haz clic en Perfil y actualiza el correo. Recibirás un email de verificación en la nueva dirección antes de que el cambio surta efecto."
+        },
+        {
+          "id": "account-2",
+          "question": "He olvidado mi contraseña. ¿Qué hago?",
+          "answer": "Usa el enlace de restablecer contraseña en app.betsplug.com/login. Introduce tu correo y recibirás instrucciones en minutos. Si el correo no llega, revisa spam; si no, contacta con soporte."
+        },
+        {
+          "id": "account-3",
+          "question": "¿Puedo cambiar el idioma de mi cuenta tras el registro?",
+          "answer": "Sí. Desde la configuración de la cuenta, puedes cambiar el idioma de la interfaz en cualquier momento. Las notificaciones de pronósticos también pasan al idioma elegido."
+        },
+        {
+          "id": "account-4",
+          "question": "¿Hay aplicación móvil?",
+          "answer": "Actualmente tenemos una web app responsive que funciona perfectamente en navegadores móviles. Una aplicación móvil nativa está en nuestra hoja de ruta. La web app ya admite añadir a la pantalla de inicio en iOS y Android para un comportamiento tipo app."
+        },
+        {
+          "id": "account-5",
+          "question": "¿Qué navegadores soportan?",
+          "answer": "BetsPlug funciona en todos los navegadores modernos (Chrome, Firefox, Safari, Edge) lanzados en los últimos 2 años. Los navegadores más antiguos pueden tener funcionalidad limitada."
+        }
       ]
     },
     {
@@ -77,11 +185,31 @@
       "name": "Cumplimiento & Legal",
       "description": "Posicionamiento legal y protección de datos.",
       "questions": [
-        { "id": "compliance-1", "question": "¿Es legal usar BetsPlug en mi país?", "answer": "BetsPlug ofrece análisis estadístico, no servicios de juego. La legalidad de los servicios de pronósticos varía por jurisdicción. Consulta tus leyes locales sobre apuestas deportivas y servicios de pronósticos. Cumplimos con la normativa de la UE para usuarios de países UE." },
-        { "id": "compliance-2", "question": "¿Tienen licencia de juego?", "answer": "No necesitamos licencia de juego porque no operamos como bookmaker. Somos un servicio de análisis de datos. Cumplimos con la normativa empresarial y de protección de datos aplicable a empresas de software." },
-        { "id": "compliance-3", "question": "¿Cómo manejan el juego responsable?", "answer": "Apoyamos los principios del juego responsable. Consulta nuestra página de Juego Responsable para más detalles. No promovemos el juego, evitamos lenguaje incentivador en nuestro marketing y exigimos que los usuarios tengan la edad legal de juego en su jurisdicción." },
-        { "id": "compliance-4", "question": "¿Pueden usar BetsPlug los menores?", "answer": "Nuestras Condiciones requieren que los usuarios sean mayores de 18 años (o la edad legal de juego en su jurisdicción, la que sea mayor). No nos dirigimos a menores ni aceptamos sus registros." },
-        { "id": "compliance-5", "question": "¿Cómo manejan mis datos personales?", "answer": "Cumplimos con el RGPD y normativas similares. No compartimos datos de usuarios con bookmakers. Consulta nuestra Política de Privacidad para detalles sobre recopilación, almacenamiento y derechos del usuario." }
+        {
+          "id": "compliance-1",
+          "question": "¿Es legal usar BetsPlug en mi país?",
+          "answer": "BetsPlug ofrece análisis estadístico, no servicios de juego. La legalidad de los servicios de pronósticos varía por jurisdicción. Consulta tus leyes locales sobre apuestas deportivas y servicios de pronósticos. Cumplimos con la normativa de la UE para usuarios de países UE."
+        },
+        {
+          "id": "compliance-2",
+          "question": "¿Tienen licencia de juego?",
+          "answer": "No necesitamos licencia de juego porque no operamos como bookmaker. Somos un servicio de análisis de datos. Cumplimos con la normativa empresarial y de protección de datos aplicable a empresas de software."
+        },
+        {
+          "id": "compliance-3",
+          "question": "¿Cómo manejan el juego responsable?",
+          "answer": "Apoyamos los principios del juego responsable. Consulta nuestra página de Juego Responsable para más detalles. No promovemos el juego, evitamos lenguaje incentivador en nuestro marketing y exigimos que los usuarios tengan la edad legal de juego en su jurisdicción."
+        },
+        {
+          "id": "compliance-4",
+          "question": "¿Pueden usar BetsPlug los menores?",
+          "answer": "Nuestras Condiciones requieren que los usuarios sean mayores de 18 años (o la edad legal de juego en su jurisdicción, la que sea mayor). No nos dirigimos a menores ni aceptamos sus registros."
+        },
+        {
+          "id": "compliance-5",
+          "question": "¿Cómo manejan mis datos personales?",
+          "answer": "Cumplimos con el RGPD y normativas similares. No compartimos datos de usuarios con bookmakers. Consulta nuestra Política de Privacidad para detalles sobre recopilación, almacenamiento y derechos del usuario."
+        }
       ]
     },
     {
@@ -89,17 +217,39 @@
       "name": "Track Record & Verificación",
       "description": "Cómo respaldamos nuestras afirmaciones de precisión.",
       "questions": [
-        { "id": "track-1", "question": "¿De verdad no se pueden editar los pronósticos tras publicarlos?", "answer": "No. Cada pronóstico se bloquea con una marca de tiempo inmutable antes del saque inicial. No tenemos mecanismo para borrar u ocultar pronósticos publicados, aunque quisiéramos. Es arquitectónico, no política — no se puede cambiar." },
-        { "id": "track-2", "question": "¿Cómo verifico que un pronóstico se bloqueó antes del saque inicial?", "answer": "Haz clic en cualquier pronóstico del track record. La página de detalle muestra la marca de bloqueo — el instante exacto en que el pronóstico se confirmó. Compáralo con la hora real del saque inicial (también mostrada). La marca de bloqueo siempre es anterior al saque." },
-        { "id": "track-3", "question": "¿Por qué no muestran porcentajes de precisión específicos?", "answer": "La precisión varía mucho por liga, tipo de mercado y periodo. Un único porcentaje destacado oculta esa varianza. Preferimos mostrar los datos brutos para que veas el rendimiento real en contexto — qué competiciones, qué mercados, qué periodos han ido mejor o peor." },
-        { "id": "track-4", "question": "¿Puedo descargar los datos del track record?", "answer": "Los datos del track record están disponibles vía nuestra API para suscriptores de pago. El track record visual en la página track-record es de acceso público con fines de verificación." }
+        {
+          "id": "track-1",
+          "question": "¿De verdad no se pueden editar los pronósticos tras publicarlos?",
+          "answer": "No. Cada pronóstico se bloquea con una marca de tiempo inmutable antes del saque inicial. No tenemos mecanismo para borrar u ocultar pronósticos publicados, aunque quisiéramos. Es arquitectónico, no política — no se puede cambiar."
+        },
+        {
+          "id": "track-2",
+          "question": "¿Cómo verifico que un pronóstico se bloqueó antes del saque inicial?",
+          "answer": "Haz clic en cualquier pronóstico del track record. La página de detalle muestra la marca de bloqueo — el instante exacto en que el pronóstico se confirmó. Compáralo con la hora real del saque inicial (también mostrada). La marca de bloqueo siempre es anterior al saque."
+        },
+        {
+          "id": "track-3",
+          "question": "¿Por qué no muestran porcentajes de precisión específicos?",
+          "answer": "La precisión varía mucho por liga, tipo de mercado y periodo. Un único porcentaje destacado oculta esa varianza. Preferimos mostrar los datos brutos para que veas el rendimiento real en contexto — qué competiciones, qué mercados, qué periodos han ido mejor o peor."
+        },
+        {
+          "id": "track-4",
+          "question": "¿Puedo descargar los datos del track record?",
+          "answer": "Los datos del track record están disponibles vía nuestra API para suscriptores de pago. El track record visual en la página track-record es de acceso público con fines de verificación."
+        }
       ]
     }
   ],
   "stillHaveQuestions": {
     "h2": "¿Aún tienes preguntas?",
     "body": "¿No encuentras lo que buscas? Envíanos un mensaje y responderemos en menos de 24 horas.",
-    "ctaPrimary": { "label": "Contactar Soporte", "canonical": "contact" },
-    "ctaSecondary": { "label": "Leer Metodología", "canonical": "methodology" }
+    "ctaPrimary": {
+      "label": "Contactar Soporte",
+      "canonical": "contact"
+    },
+    "ctaSecondary": {
+      "label": "Leer Metodología",
+      "canonical": "methodology"
+    }
   }
 }

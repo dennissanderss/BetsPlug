@@ -1,14 +1,21 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Pronostics Championship Aujourd'hui | IA | BetsPlug",
+    "title": "Pronostics Championship aujourd'hui | IA | BetsPlug",
     "description": "Pronostics IA EFL Championship pour chaque match. Deuxième division anglaise — analysée avec Elo + Poisson + ML.",
     "ogImage": "/og-images/league-championship-fr.jpg"
   },
   "hero": {
     "h1": "Pronostics Championship",
     "subheadline": "Pronostics IA pour chaque match de Championship. Générés avec classements Elo, modèles de Poisson et machine learning. Verrouillés avant le coup d'envoi.",
-    "ctaSecondary": { "label": "Comment ça marche", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Comment ça marche",
+      "canonical": "methodology"
+    }
   },
   "context": {
     "h2": "À propos des pronostics Championship",
@@ -17,32 +24,67 @@
       "Les pronostics Championship sont statistiquement distincts des grandes ligues européennes. Le volume de matchs est exceptionnellement élevé (46 matchs de ligue plus engagements en coupes), ce qui produit des dynamiques d'accumulation de blessures. Notre modèle prend en compte la congestion du calendrier et les différentiels de qualité d'effectif liés aux paiements parachute.",
       "Chaque pronostic Championship est verrouillé avec un horodatage public avant le coup d'envoi. Les pronostics Championship font partie de tous les plans payants."
     ],
-    "statsPanel": { "h3": "Championship en bref", "ctaLabel": "Voir Championship sur l'app" }
+    "statsPanel": {
+      "h3": "Championship en bref",
+      "ctaLabel": "Voir Championship sur l'app"
+    }
   },
-  "topTeams": { "h2": "Top équipes Championship" },
+  "topTeams": {
+    "h2": "Top équipes Championship"
+  },
   "methodology": {
     "h2": "Comment les pronostics Championship sont créés",
     "body": "Les pronostics Championship utilisent le même moteur, ajusté pour le volume élevé de matchs et l'impact de la congestion du calendrier.",
-    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" }
+    "cta": {
+      "label": "Lire la méthodologie complète",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Pronostics Championship",
+    "h2": "FAQ pronostics Championship",
     "questions": [
-      { "q": "Quelle précision pour les pronostics IA Championship ?", "a": "La précision varie. Nous publions chaque pronostic dans notre historique public." },
-      { "q": "Pourquoi les pronostics Championship sont-ils payants uniquement ?", "a": "Les pronostics gratuits sont limités aux 3 ligues principales." },
-      { "q": "Comment le modèle gère-t-il le volume élevé de matchs ?", "a": "Notre couche ML applique des ajustements de congestion basés sur les jours de repos et la fréquence des matchs en milieu de semaine." },
-      { "q": "Quand les pronostics Championship sont-ils disponibles ?", "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi." },
-      { "q": "Couvrez-vous la FA Cup et l'EFL Cup ?", "a": "Nous couvrons tous les matchs de Championship. FA Cup et EFL Cup ne sont pas dans notre couverture standard." },
-      { "q": "Pronostics Championship via Telegram ?", "a": "Oui, pour les abonnés payants." }
+      {
+        "q": "Quelle précision pour les pronostics IA Championship ?",
+        "a": "La précision varie. Nous publions chaque pronostic dans notre historique public."
+      },
+      {
+        "q": "Pourquoi les pronostics Championship sont-ils payants uniquement ?",
+        "a": "Les pronostics gratuits sont limités aux 3 ligues principales."
+      },
+      {
+        "q": "Comment le modèle gère-t-il le volume élevé de matchs ?",
+        "a": "Notre couche ML applique des ajustements de congestion basés sur les jours de repos et la fréquence des matchs en milieu de semaine."
+      },
+      {
+        "q": "Quand les pronostics Championship sont-ils disponibles ?",
+        "a": "Les abonnés voient les pronostics jusqu'à 24h avant le coup d'envoi."
+      },
+      {
+        "q": "Couvrez-vous la FA Cup et l'EFL Cup ?",
+        "a": "Nous couvrons tous les matchs de Championship. FA Cup et EFL Cup ne sont pas dans notre couverture standard."
+      },
+      {
+        "q": "Pronostics Championship via Telegram ?",
+        "a": "Oui, pour les abonnés payants."
+      }
     ],
-    "cta": { "label": "Toutes les FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Toutes les FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Voulez-vous tous les pronostics Championship ?",
     "h2Gated": "Débloquez les pronostics Championship",
     "bodyFree": "Les abonnés ont chaque match avec analyse complète.",
     "bodyGated": "Les pronostics Championship sont inclus dans tous les plans payants.",
-    "ctaPrimary": { "label": "Voir les Tarifs", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Essayer Gratuitement", "href": "https://app.betsplug.com/register?source=league_championship" }
+    "ctaPrimary": {
+      "label": "Voir les Tarifs",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Essayer Gratuitement",
+      "href": "https://app.betsplug.com/register?source=league_championship"
+    }
   }
 }

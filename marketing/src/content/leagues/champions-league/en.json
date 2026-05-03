@@ -1,30 +1,45 @@
 {
-  "_meta": { "translationStatus": "source", "needsReview": false, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Champions League Predictions | AI-Powered | BetsPlug",
+    "title": "Champions League predictions | AI-powered | BetsPlug",
     "description": "AI-powered UEFA Champions League predictions for every match. Group stage to final — analyzed with Elo + Poisson + ML. Available with any paid plan.",
     "ogImage": "/og-images/league-champions-league-en.jpg"
   },
   "hero": {
-    "h1": "Champions League Predictions",
+    "h1": "Champions League predictions",
     "subheadline": "AI-powered predictions for every UEFA Champions League match. Generated using Elo ratings, Poisson models and machine learning. Locked before kickoff.",
     "trustStripPredictionsThisWeek": "{count} predictions this matchweek",
     "trustStripUpdated": "Updated every minute",
     "trustStripLocked": "Locked before kickoff",
     "ctaPrimaryFreeLabel": "View Free Predictions",
     "ctaPrimaryGatedLabel": "Unlock Champions League Predictions",
-    "ctaSecondary": { "label": "How it works", "canonical": "methodology" },
+    "ctaSecondary": {
+      "label": "How it works",
+      "canonical": "methodology"
+    },
     "statsTeams": "Teams",
     "statsMatchweek": "Current matchday",
     "statsThisWeek": "Predictions this week"
   },
   "cards": {
-    "locked": "Locked", "freePick": "Free pick", "unlock": "Unlock prediction",
-    "subscribeToView": "Subscribe to view prediction", "viewAnalysis": "View match analysis",
-    "confidence": "Confidence", "lockedBeforeKickoff": "Locked before kickoff",
+    "locked": "Locked",
+    "freePick": "Free pick",
+    "unlock": "Unlock prediction",
+    "subscribeToView": "Subscribe to view prediction",
+    "viewAnalysis": "View match analysis",
+    "confidence": "Confidence",
+    "lockedBeforeKickoff": "Locked before kickoff",
     "viewPricing": "View Pricing"
   },
-  "filter": { "today": "Today", "thisWeek": "This Week", "allUpcoming": "All Upcoming" },
+  "filter": {
+    "today": "Today",
+    "thisWeek": "This Week",
+    "allUpcoming": "All Upcoming"
+  },
   "cardsSection": {
     "moreTodayPaid": "{count} more predictions today — paid only",
     "unlockAll": "Subscribe to view all Champions League predictions",
@@ -32,7 +47,7 @@
     "fixturesEmpty": "No upcoming fixtures in this window."
   },
   "context": {
-    "h2": "About Champions League Predictions",
+    "h2": "About Champions League predictions",
     "paragraphs": [
       "The UEFA Champions League is Europe's premier club competition, contested between the top clubs from across the continent. The 2024-25 season introduced a new league-phase format with 36 clubs in a single combined table, replaced the traditional 32-team group stage. The competition culminates in two-legged knockout rounds and a single-match final. Our AI engine analyzes every Champions League fixture using current form, head-to-head history (when teams have met before), expected goals and 40+ other variables.",
       "Champions League predictions have unique characteristics that distinguish them from domestic-league predictions. The competitive gap between teams is wider — a Real Madrid vs RB Salzburg fixture has very different statistical dynamics than two evenly-matched Premier League sides. Two-legged knockout ties also introduce strategic considerations: teams play differently in first vs second legs depending on score, away-goal needs (where applicable historically), and aggregate context. Our model treats league-phase and knockout-phase matches as separate prediction problems with different feature weights.",
@@ -40,43 +55,88 @@
     ],
     "statsPanel": {
       "h3": "Champions League at a glance",
-      "teamsLabel": "Clubs", "seasonLabel": "Season", "matchweekLabel": "Matchday",
-      "topScorerLabel": "Top scorer", "predictionsThisSeasonLabel": "Predictions this season",
-      "updatedLabel": "Updated", "ctaLabel": "View Champions League on app"
+      "teamsLabel": "Clubs",
+      "seasonLabel": "Season",
+      "matchweekLabel": "Matchday",
+      "topScorerLabel": "Top scorer",
+      "predictionsThisSeasonLabel": "Predictions this season",
+      "updatedLabel": "Updated",
+      "ctaLabel": "View Champions League on app"
     }
   },
   "topTeams": {
-    "h2": "Top Champions League Clubs",
-    "positionLabel": "League-phase position", "formLabel": "Form", "viewTeamLabel": "View team"
+    "h2": "Top Champions League clubs",
+    "positionLabel": "League-phase position",
+    "formLabel": "Form",
+    "viewTeamLabel": "View team"
   },
   "methodology": {
-    "h2": "How Champions League Predictions Are Made",
+    "h2": "How Champions League predictions are made",
     "body": "Champions League predictions use the same core engine as our domestic predictions, with separate calibration for league-phase versus knockout-round dynamics. Two-legged ties are modeled with aggregate context — a 2-0 first-leg deficit produces fundamentally different second-leg behavior than an even tie.",
     "pillars": [
-      { "icon": "calc", "label": "Mathematical models (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine learning with knockout-context weighting" },
-      { "icon": "lock", "label": "Locked & timestamped" }
+      {
+        "icon": "calc",
+        "label": "Mathematical models (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning with knockout-context weighting"
+      },
+      {
+        "icon": "lock",
+        "label": "Locked & timestamped"
+      }
     ],
-    "cta": { "label": "Read full methodology", "canonical": "methodology" }
+    "cta": {
+      "label": "Read full methodology",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Champions League Predictions FAQ",
+    "h2": "Champions League predictions FAQ",
     "questions": [
-      { "q": "How accurate are AI predictions for the Champions League?", "a": "Accuracy varies between league-phase and knockout fixtures, with the wider competitive gap in early-stage matches affecting confidence levels. We publish every Champions League prediction in our public track record." },
-      { "q": "Why are Champions League predictions paid only?", "a": "Free predictions are limited to the top 3 domestic leagues. Champions League predictions are part of all paid plans, with knockout-context analysis included." },
-      { "q": "How do you handle two-legged knockout ties?", "a": "We treat each leg as a separate prediction with the aggregate score and away-context (where applicable) as input variables. Second-leg predictions account for in-match strategic shifts based on first-leg results." },
-      { "q": "How early are Champions League predictions available?", "a": "Subscribers see Champions League predictions up to 24 hours before kickoff." },
-      { "q": "Do you cover Champions League qualifying rounds?", "a": "We cover league-phase and knockout matches. Earlier qualifying rounds (where major-league clubs are not yet involved) are not in our default coverage." },
-      { "q": "Can I get Champions League predictions via Telegram?", "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Champions League predictions, especially around knockout fixtures." }
+      {
+        "q": "How accurate are AI predictions for the Champions League?",
+        "a": "Accuracy varies between league-phase and knockout fixtures, with the wider competitive gap in early-stage matches affecting confidence levels. We publish every Champions League prediction in our public track record."
+      },
+      {
+        "q": "Why are Champions League predictions paid only?",
+        "a": "Free predictions are limited to the top 3 domestic leagues. Champions League predictions are part of all paid plans, with knockout-context analysis included."
+      },
+      {
+        "q": "How do you handle two-legged knockout ties?",
+        "a": "We treat each leg as a separate prediction with the aggregate score and away-context (where applicable) as input variables. Second-leg predictions account for in-match strategic shifts based on first-leg results."
+      },
+      {
+        "q": "How early are Champions League predictions available?",
+        "a": "Subscribers see Champions League predictions up to 24 hours before kickoff."
+      },
+      {
+        "q": "Do you cover Champions League qualifying rounds?",
+        "a": "We cover league-phase and knockout matches. Earlier qualifying rounds (where major-league clubs are not yet involved) are not in our default coverage."
+      },
+      {
+        "q": "Can I get Champions League predictions via Telegram?",
+        "a": "Yes. Paid subscribers receive Telegram notifications for high-confidence Champions League predictions, especially around knockout fixtures."
+      }
     ],
-    "cta": { "label": "All FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "All FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Want All Champions League Predictions?",
     "h2Gated": "Unlock Champions League Predictions",
     "bodyFree": "Subscribers get every match with full statistical analysis.",
     "bodyGated": "Champions League predictions are part of all paid plans.",
-    "ctaPrimary": { "label": "View Pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Try Free", "href": "https://app.betsplug.com/register?source=league_champions-league" }
+    "ctaPrimary": {
+      "label": "View Pricing",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Try Free",
+      "href": "https://app.betsplug.com/register?source=league_champions-league"
+    }
   }
 }

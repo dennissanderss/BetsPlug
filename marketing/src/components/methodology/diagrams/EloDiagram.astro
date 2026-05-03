@@ -24,18 +24,18 @@ const danger = "#dc2626";
         <text x="120" y="30" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill={muted}>BEFORE MATCH</text>
         <rect x="40" y="50" width="160" height="70" rx="10" fill="none" stroke={accent} stroke-width="2"/>
         <text x="120" y="78" font-family="Inter, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill={fg}>Team A</text>
-        <text x="120" y="105" font-family="JetBrains Mono, monospace" font-size="22" font-weight="700" text-anchor="middle" fill={accent}>1820</text>
+        <text x="120" y="105" font-family="Geist Mono, ui-monospace, monospace" font-size="22" font-weight="700" text-anchor="middle" fill={accent}>1820</text>
 
         <rect x="40" y="170" width="160" height="70" rx="10" fill="none" stroke={muted} stroke-width="2"/>
         <text x="120" y="198" font-family="Inter, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill={fg}>Team B</text>
-        <text x="120" y="225" font-family="JetBrains Mono, monospace" font-size="22" font-weight="700" text-anchor="middle" fill={muted}>1680</text>
+        <text x="120" y="225" font-family="Geist Mono, ui-monospace, monospace" font-size="22" font-weight="700" text-anchor="middle" fill={muted}>1680</text>
       </g>
 
       <!-- Match result -->
       <g>
         <text x="360" y="30" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill={muted}>MATCH RESULT</text>
         <rect x="280" y="50" width="160" height="190" rx="14" fill={surface === "dark" ? "rgba(0,210,106,0.05)" : "rgba(0,210,106,0.05)"} stroke={accent} stroke-width="1.5"/>
-        <text x="360" y="115" font-family="JetBrains Mono, monospace" font-size="42" font-weight="700" text-anchor="middle" fill={fg}>2 — 1</text>
+        <text x="360" y="115" font-family="Geist Mono, ui-monospace, monospace" font-size="42" font-weight="700" text-anchor="middle" fill={fg}>2 — 1</text>
         <text x="360" y="155" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" fill={muted}>Expected: 0.65</text>
         <text x="360" y="175" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" fill={muted}>Actual: 1.00</text>
         <text x="360" y="210" font-family="Inter, sans-serif" font-size="11" text-anchor="middle" fill={accent} font-weight="600">A wins</text>
@@ -57,15 +57,15 @@ const danger = "#dc2626";
         <text x="600" y="30" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill={muted}>AFTER MATCH</text>
         <rect x="520" y="50" width="160" height="70" rx="10" fill={accent} stroke={accent} stroke-width="2"/>
         <text x="600" y="78" font-family="Inter, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#050811">Team A</text>
-        <text x="600" y="105" font-family="JetBrains Mono, monospace" font-size="22" font-weight="700" text-anchor="middle" fill="#050811">1832 (+12)</text>
+        <text x="600" y="105" font-family="Geist Mono, ui-monospace, monospace" font-size="22" font-weight="700" text-anchor="middle" fill="#050811">1832 (+12)</text>
 
         <rect x="520" y="170" width="160" height="70" rx="10" fill="none" stroke={danger} stroke-width="2"/>
         <text x="600" y="198" font-family="Inter, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill={fg}>Team B</text>
-        <text x="600" y="225" font-family="JetBrains Mono, monospace" font-size="22" font-weight="700" text-anchor="middle" fill={danger}>1668 (−12)</text>
+        <text x="600" y="225" font-family="Geist Mono, ui-monospace, monospace" font-size="22" font-weight="700" text-anchor="middle" fill={danger}>1668 (−12)</text>
       </g>
 
       <!-- Formula -->
-      <text x="360" y="295" font-family="JetBrains Mono, monospace" font-size="14" font-weight="600" text-anchor="middle" fill={fg}>R_new = R_old + K × (S − E)</text>
+      <text x="360" y="295" font-family="Geist Mono, ui-monospace, monospace" font-size="14" font-weight="600" text-anchor="middle" fill={fg}>R_new = R_old + K × (S − E)</text>
       <text x="360" y="318" font-family="Inter, sans-serif" font-size="11" text-anchor="middle" fill={muted}>K = 32, S = 1 (win), E = 0.65 → ΔR = +12</text>
     </svg>
   </div>

@@ -1,48 +1,90 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Ligue 1 Voorspellingen Vandaag | AI-Gedreven | BetsPlug",
+    "title": "Ligue 1 voorspellingen vandaag | AI-gedreven | BetsPlug",
     "description": "AI-gedreven Ligue 1-voorspellingen voor elke wedstrijd. PSG, Marseille, Monaco en de rest — geanalyseerd met Elo + Poisson + ML.",
     "ogImage": "/og-images/league-ligue-1-nl.jpg"
   },
   "hero": {
-    "h1": "Ligue 1 Voorspellingen",
+    "h1": "Ligue 1 voorspellingen",
     "subheadline": "AI-gedreven voorspellingen voor elke Ligue 1-wedstrijd. Gegenereerd met Elo-ratings, Poisson-modellen en machine learning. Vergrendeld vóór de aftrap.",
-    "ctaSecondary": { "label": "Hoe het werkt", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Hoe het werkt",
+      "canonical": "methodology"
+    }
   },
   "context": {
-    "h2": "Over Ligue 1 Voorspellingen",
+    "h2": "Over Ligue 1 voorspellingen",
     "paragraphs": [
       "Ligue 1 is Frankrijks hoogste voetbalcompetitie, recent geherstructureerd naar 18 clubs over 34 speeldagen van augustus tot mei. De competitie wordt sinds de QSI-overname in 2011 historisch gedomineerd door Paris Saint-Germain, met Marseille, Monaco, Lille en Lyon strijdend om Europese plekken. Ligue 1 staat bekend als ontwikkelingscompetitie — veel van Europa's grootste talenten (Mbappé, Kanté, Pogba, Camavinga) ontstonden hier voordat ze werden verkocht. Onze AI-engine analyseert elke Ligue 1-wedstrijd op basis van actuele vorm, onderlinge geschiedenis, expected goals en 40+ andere variabelen.",
       "Ligue 1-voorspellingen brengen een unieke uitdaging: PSG's rotatie-beleid in nationale wedstrijden (sterren sparen voor Champions League) introduceert significante opstellingsvariantie. Middenmoters in Ligue 1 hebben ook hogere tactische volatiliteit dan andere big-five competities, met midseizoens-trainerwisselingen vaker. Ons model houdt rekening met PSG's verwachte rotatiepatronen, midweekse Europese impact, en de historisch hoge incidentie van late doelpunten in Frans voetbal.",
       "Elke Ligue 1-voorspelling wordt vergrendeld met een publiek tijdstempel vóór de aftrap. Zowel winst als verlies komen in ons publieke track record. Ligue 1-voorspellingen zijn onderdeel van alle betaalde plannen — gratis gebruikers zien fixturelijsten zonder voorspellingen, terwijl leden elke wedstrijd ontvangen met volledige statistische analyse inclusief xG, opstellings-rotatie-notities voor topclubs en vorm-trend metrics."
     ],
-    "statsPanel": { "h3": "Ligue 1 in een oogopslag", "ctaLabel": "Bekijk Ligue 1 in app" }
+    "statsPanel": {
+      "h3": "Ligue 1 in een oogopslag",
+      "ctaLabel": "Bekijk Ligue 1 in app"
+    }
   },
-  "topTeams": { "h2": "Top Ligue 1 Teams" },
+  "topTeams": {
+    "h2": "Top Ligue 1 teams"
+  },
   "methodology": {
-    "h2": "Hoe Ligue 1 Voorspellingen Worden Gemaakt",
+    "h2": "Hoe Ligue 1 voorspellingen worden gemaakt",
     "body": "Ligue 1-voorspellingen gebruiken dezelfde engine als al onze voetbalvoorspellingen: Elo-ratings voor teamsterkte, Poisson-modellen voor doelpunt-waarschijnlijkheid en machine learning. Het model houdt rekening met PSG's rotatiepatronen en de tactische volatiliteit van middenmoters specifiek voor Frans voetbal.",
-    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" }
+    "cta": {
+      "label": "Lees volledige methodologie",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Ligue 1 Voorspellingen FAQ",
+    "h2": "Ligue 1 voorspellingen FAQ",
     "questions": [
-      { "q": "Hoe nauwkeurig zijn AI-voorspellingen voor Ligue 1?", "a": "Nauwkeurigheid varieert per speeldag en voorspellingstype, met PSG's rotatie als variantie-bron. We publiceren elke Ligue 1-voorspelling in ons publieke track record." },
-      { "q": "Waarom zijn Ligue 1-voorspellingen alleen voor leden?", "a": "Gratis voorspellingen zijn beperkt tot top 3 competities (Premier League, La Liga, Bundesliga). Ligue 1-voorspellingen zijn onderdeel van alle betaalde plannen." },
-      { "q": "Hoe gaat het model om met PSG's rotatie in nationale wedstrijden?", "a": "Onze ML-laag houdt rekening met PSG's verwachte opstelling op basis van de Champions League-fixture-nabijheid. Voorspellingen voor PSG-wedstrijden houden rekening met waarschijnlijke speler-beschikbaarheid in plaats van uit te gaan van eerste-keus XI." },
-      { "q": "Hoe vroeg zijn Ligue 1-voorspellingen beschikbaar?", "a": "Leden zien Ligue 1-voorspellingen tot 24 uur vóór de aftrap." },
-      { "q": "Behandelen jullie Coupe de France en Europese wedstrijden van Ligue 1-clubs?", "a": "We behandelen alle Ligue 1-wedstrijden. Coupe de France, Champions League en Europa League-wedstrijden van Ligue 1-clubs worden afzonderlijk behandeld." },
-      { "q": "Kan ik Ligue 1-voorspellingen via Telegram krijgen?", "a": "Ja. Betalende leden ontvangen Telegram-meldingen voor high-confidence Ligue 1-voorspellingen." }
+      {
+        "q": "Hoe nauwkeurig zijn AI-voorspellingen voor Ligue 1?",
+        "a": "Nauwkeurigheid varieert per speeldag en voorspellingstype, met PSG's rotatie als variantie-bron. We publiceren elke Ligue 1-voorspelling in ons publieke track record."
+      },
+      {
+        "q": "Waarom zijn Ligue 1-voorspellingen alleen voor leden?",
+        "a": "Gratis voorspellingen zijn beperkt tot top 3 competities (Premier League, La Liga, Bundesliga). Ligue 1-voorspellingen zijn onderdeel van alle betaalde plannen."
+      },
+      {
+        "q": "Hoe gaat het model om met PSG's rotatie in nationale wedstrijden?",
+        "a": "Onze ML-laag houdt rekening met PSG's verwachte opstelling op basis van de Champions League-fixture-nabijheid. Voorspellingen voor PSG-wedstrijden houden rekening met waarschijnlijke speler-beschikbaarheid in plaats van uit te gaan van eerste-keus XI."
+      },
+      {
+        "q": "Hoe vroeg zijn Ligue 1-voorspellingen beschikbaar?",
+        "a": "Leden zien Ligue 1-voorspellingen tot 24 uur vóór de aftrap."
+      },
+      {
+        "q": "Behandelen jullie Coupe de France en europese wedstrijden van Ligue 1-clubs?",
+        "a": "We behandelen alle Ligue 1-wedstrijden. Coupe de France, Champions League en Europa League-wedstrijden van Ligue 1-clubs worden afzonderlijk behandeld."
+      },
+      {
+        "q": "Kan ik Ligue 1-voorspellingen via Telegram krijgen?",
+        "a": "Ja. Betalende leden ontvangen Telegram-meldingen voor high-confidence Ligue 1-voorspellingen."
+      }
     ],
-    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Alle FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Wil Je Alle Ligue 1 Voorspellingen?",
     "h2Gated": "Ontgrendel Ligue 1 Voorspellingen",
     "bodyFree": "Leden krijgen elke wedstrijd met volledige statistische analyse.",
     "bodyGated": "Ligue 1-voorspellingen zijn onderdeel van alle betaalde plannen.",
-    "ctaPrimary": { "label": "Bekijk Prijzen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Probeer Gratis", "href": "https://app.betsplug.com/register?source=league_ligue-1" }
+    "ctaPrimary": {
+      "label": "Bekijk Prijzen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Probeer Gratis",
+      "href": "https://app.betsplug.com/register?source=league_ligue-1"
+    }
   }
 }

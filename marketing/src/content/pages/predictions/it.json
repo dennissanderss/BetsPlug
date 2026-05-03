@@ -6,18 +6,28 @@
     "_note": "TODO: Native speaker review needed for it."
   },
   "meta": {
-    "title": "Pronostici Calcio IA Oggi - Tutti i Campionati | BetsPlug",
+    "title": "Pronostici calcio IA oggi - tutti i campionati | BetsPlug",
     "description": "Pronostici calcio IA quotidiani per 30+ campionati. Pick gratuiti oggi, bloccati prima del calcio d'inizio. Track record pubblico.",
     "ogImage": "/og-images/predictions-it.jpg"
   },
   "hero": {
     "h1Template": "Pronostici Calcio IA per {date}",
     "subheadline": "Pronostici quotidiani per 30+ campionati, generati dal nostro motore IA con Elo, Poisson e machine learning. Bloccati prima del calcio d'inizio.",
-    "trustStrip": ["Aggiornamenti live", "Pronostici bloccati", "Track record pubblico"],
+    "trustStrip": [
+      "Aggiornamenti live",
+      "Pronostici bloccati",
+      "Track record pubblico"
+    ],
     "liveLabel": "Aggiornato",
     "liveSecondsAgo": "{seconds}s fa",
-    "ctaPrimary": { "label": "Pronostici Illimitati", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Come funziona", "canonical": "methodology" },
+    "ctaPrimary": {
+      "label": "Pronostici Illimitati",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Come funziona",
+      "canonical": "methodology"
+    },
     "miniRecord": {
       "title": "Ultimi 30 giorni",
       "subtitle": "Tutti i pronostici pubblicati — registro pubblico",
@@ -44,13 +54,27 @@
   "tomorrowEmpty": {
     "teaserTitle": "Sblocca i Pronostici di Domani",
     "teaserBody": "{count} pronostici in più domani — solo a pagamento",
-    "cta": { "label": "Vedi Prezzi", "canonical": "pricing" }
+    "cta": {
+      "label": "Vedi Prezzi",
+      "canonical": "pricing"
+    }
   },
   "weekTab": {
-    "h3": "Panoramica Settimanale",
+    "h3": "Panoramica settimanale",
     "body": "Gli abbonati vedono ogni pronostico dei prossimi 7 giorni. Gli utenti gratuiti vedono solo oggi.",
-    "weekdayLabels": ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"],
-    "cta": { "label": "Ottieni l'intera settimana in anticipo", "canonical": "pricing" }
+    "weekdayLabels": [
+      "Lun",
+      "Mar",
+      "Mer",
+      "Gio",
+      "Ven",
+      "Sab",
+      "Dom"
+    ],
+    "cta": {
+      "label": "Ottieni l'intera settimana in anticipo",
+      "canonical": "pricing"
+    }
   },
   "paywall": {
     "h2Template": "Stai Vedendo 5 su {total} Pronostici di Oggi",
@@ -62,44 +86,89 @@
       "Pronostici 24h prima (vs 2h prima del calcio d'inizio)",
       "Notifiche Telegram per pick ad alta confidenza"
     ],
-    "ctaPrimary": { "label": "Vedi i Piani", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Confronta gratis vs a pagamento", "canonical": "free-vs-paid" }
+    "ctaPrimary": {
+      "label": "Vedi i Piani",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Confronta gratis vs a pagamento",
+      "canonical": "free-vs-paid"
+    }
   },
   "leagueGrid": {
-    "h2": "Pronostici per Campionato",
+    "h2": "Pronostici per campionato",
     "cardCta": "Vedi pronostici",
     "todayCountTemplate": "{count} pronostici oggi",
     "featuredBadge": "In primo piano"
   },
   "methodology": {
-    "h2": "Come Vengono Creati Questi Pronostici",
+    "h2": "Come vengono creati questi pronostici",
     "body": [
       "Ogni pronostico in questa pagina è generato dal nostro motore IA, non da editor o tipster. Il motore combina classifiche Elo (forza della squadra), modelli Poisson (probabilità di gol) e machine learning (riconoscimento di pattern) per valutare ogni partita su 40+ variabili.",
       "I pronostici vengono bloccati con timestamp pubblico prima del calcio d'inizio. Pubblichiamo sia vittorie che sconfitte — verificabile nel nostro track record pubblico."
     ],
     "pillars": [
-      { "icon": "calc", "label": "Modelli matematici (Elo + Poisson)" },
-      { "icon": "ml", "label": "Machine learning" },
-      { "icon": "lock", "label": "Bloccato e timestamped" }
+      {
+        "icon": "calc",
+        "label": "Modelli matematici (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning"
+      },
+      {
+        "icon": "lock",
+        "label": "Bloccato e timestamped"
+      }
     ],
-    "cta": { "label": "Leggi metodologia completa", "canonical": "methodology" }
+    "cta": {
+      "label": "Leggi metodologia completa",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Pronostici",
+    "h2": "FAQ pronostici",
     "questions": [
-      { "q": "Con che frequenza vengono aggiornati i pronostici?", "a": "I pronostici vengono generati continuamente. La pagina hub aggiorna i dati ogni minuto. Una volta bloccato, un pronostico non può essere modificato." },
-      { "q": "Perché solo 5 pronostici gratuiti al giorno?", "a": "I pronostici gratuiti sono un campione del nostro output quotidiano. Gli abbonati ricevono tutti i pronostici quotidiani per 30+ campionati, più l'analisi completa." },
-      { "q": "Posso ottenere pronostici per una partita specifica?", "a": "Gli abbonati possono sfogliare tutti i pronostici per qualsiasi campionato o partita. Gli utenti gratuiti vedono una selezione curata dai campionati top." },
-      { "q": "Cosa significa la 'percentuale di confidenza'?", "a": "La confidenza riflette la certezza del nostro modello sul risultato previsto. 78% di confidenza su 'Più di 2,5 gol' significa che il modello stima quella probabilità al 78%." },
-      { "q": "Perché bloccare i pronostici prima del calcio d'inizio?", "a": "Bloccare con timestamp pubblico assicura che non possiamo modificarli retroattivamente. È il nucleo della nostra garanzia di trasparenza." },
-      { "q": "I pronostici gratuiti hanno minore accuratezza dei pagati?", "a": "No. I pronostici gratuiti usano lo stesso motore e metodologia di quelli pagati. La differenza è volume, profondità, timing e copertura dei campionati." }
+      {
+        "q": "Con che frequenza vengono aggiornati i pronostici?",
+        "a": "I pronostici vengono generati continuamente. La pagina hub aggiorna i dati ogni minuto. Una volta bloccato, un pronostico non può essere modificato."
+      },
+      {
+        "q": "Perché solo 5 pronostici gratuiti al giorno?",
+        "a": "I pronostici gratuiti sono un campione del nostro output quotidiano. Gli abbonati ricevono tutti i pronostici quotidiani per 30+ campionati, più l'analisi completa."
+      },
+      {
+        "q": "Posso ottenere pronostici per una partita specifica?",
+        "a": "Gli abbonati possono sfogliare tutti i pronostici per qualsiasi campionato o partita. Gli utenti gratuiti vedono una selezione curata dai campionati top."
+      },
+      {
+        "q": "Cosa significa la 'percentuale di confidenza'?",
+        "a": "La confidenza riflette la certezza del nostro modello sul risultato previsto. 78% di confidenza su 'Più di 2,5 gol' significa che il modello stima quella probabilità al 78%."
+      },
+      {
+        "q": "Perché bloccare i pronostici prima del calcio d'inizio?",
+        "a": "Bloccare con timestamp pubblico assicura che non possiamo modificarli retroattivamente. È il nucleo della nostra garanzia di trasparenza."
+      },
+      {
+        "q": "I pronostici gratuiti hanno minore accuratezza dei pagati?",
+        "a": "No. I pronostici gratuiti usano lo stesso motore e metodologia di quelli pagati. La differenza è volume, profondità, timing e copertura dei campionati."
+      }
     ],
-    "cta": { "label": "Tutte le FAQ", "canonical": "faq" }
+    "cta": {
+      "label": "Tutte le FAQ",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
-    "h2": "Vuoi Tutti i Pronostici?",
+    "h2": "Vuoi tutti i pronostici?",
     "body": "5 gratuiti al giorno. Illimitati con qualsiasi piano a pagamento.",
-    "ctaPrimary": { "label": "Vedi i Piani", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Account Gratuito", "href": "https://app.betsplug.com/register?source=predictions_hub_final" }
+    "ctaPrimary": {
+      "label": "Vedi i Piani",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Account Gratuito",
+      "href": "https://app.betsplug.com/register?source=predictions_hub_final"
+    }
   }
 }

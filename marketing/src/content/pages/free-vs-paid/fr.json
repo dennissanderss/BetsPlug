@@ -1,16 +1,20 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Gratuit vs Payant : Quel BetsPlug ? | BetsPlug",
+    "title": "Gratuit vs payant : quel BetsPlug ? | BetsPlug",
     "description": "Comparez les tiers gratuits et payants BetsPlug. Même moteur IA, volume et profondeur différents. 5 pronostics gratuits par jour, illimité en payant.",
     "ogImage": "/og-images/free-vs-paid-fr.jpg"
   },
   "hero": {
-    "h1": "Gratuit ou Payant : Quel BetsPlug Vous Convient ?",
+    "h1": "Gratuit ou payant : {{accent}}quel BetsPlug{{/accent}} vous convient ?",
     "subheadline": "Les deux tiers utilisent le même moteur IA et la même méthodologie. La différence est volume, profondeur et timing."
   },
   "visual": {
-    "h2": "Ce Que Vous Voyez Par Tier",
+    "h2": "Ce que vous voyez par tier",
     "free": {
       "header": "Gratuit",
       "subheader": "Essayez le moteur, sans engagement",
@@ -25,8 +29,17 @@
         "2 heures avant le coup d'envoi (vs 24h en payant)",
         "Info de base uniquement (pas de xG, H2H, compositions)"
       ],
-      "cta": { "label": "Commencer gratuitement", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid" },
-      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Plus de 2,5 buts", "confidence": 78 }
+      "cta": {
+        "label": "Commencer gratuitement",
+        "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid"
+      },
+      "mockMatch": {
+        "home": "Manchester City",
+        "away": "Arsenal",
+        "league": "Premier League",
+        "pick": "Plus de 2,5 buts",
+        "confidence": 78
+      }
     },
     "paid": {
       "header": "Silver / Gold",
@@ -38,46 +51,149 @@
         "Notifications Telegram pour les picks haute confiance",
         "Tous les marchés par match"
       ],
-      "cta": { "label": "Voir les Tarifs", "canonical": "pricing" },
-      "mockMatch": { "home": "Manchester City", "away": "Arsenal", "league": "Premier League", "pick": "Plus de 2,5 buts", "confidence": 78, "xg": "City 2,4 — Arsenal 1,6", "h2h": "5 derniers : City 4V 1N 0D", "lineup": "Compositions titulaires" }
+      "cta": {
+        "label": "Voir les Tarifs",
+        "canonical": "pricing"
+      },
+      "mockMatch": {
+        "home": "Manchester City",
+        "away": "Arsenal",
+        "league": "Premier League",
+        "pick": "Plus de 2,5 buts",
+        "confidence": 78,
+        "xg": "City 2,4 — Arsenal 1,6",
+        "h2h": "5 derniers : City 4V 1N 0D",
+        "lineup": "Compositions titulaires"
+      }
     }
   },
   "comparison": {
-    "h2": "Comparaison des Fonctionnalités",
-    "headers": { "feature": "Fonctionnalité", "free": "Gratuit", "silver": "Silver", "gold": "Gold" },
+    "h2": "Comparaison des fonctionnalités",
+    "headers": {
+      "feature": "Fonctionnalité",
+      "free": "Gratuit",
+      "silver": "Silver",
+      "gold": "Gold"
+    },
     "rows": [
-      { "feature": "Pronostics quotidiens", "free": "5",          "silver": "Illimités",  "gold": "Illimités" },
-      { "feature": "Ligues",                "free": "Top 3",      "silver": "Toutes 30+", "gold": "Toutes 30+" },
-      { "feature": "Marchés",               "free": "1X2 uniquement","silver": "Tous",    "gold": "Tous" },
-      { "feature": "Analyse de match",      "free": "Basique",    "silver": "Complète",   "gold": "Complète" },
-      { "feature": "Accès anticipé",        "free": "2h avant",   "silver": "24h avant",  "gold": "24h avant" },
-      { "feature": "Alertes Telegram",      "free": "—",          "silver": "✓",          "gold": "✓ (perso)" },
-      { "feature": "Garantie remboursement","free": "n/a",        "silver": "7 jours",    "gold": "7 jours" }
+      {
+        "feature": "Pronostics quotidiens",
+        "free": "5",
+        "silver": "Illimités",
+        "gold": "Illimités"
+      },
+      {
+        "feature": "Ligues",
+        "free": "Top 3",
+        "silver": "Toutes 30+",
+        "gold": "Toutes 30+"
+      },
+      {
+        "feature": "Marchés",
+        "free": "1X2 uniquement",
+        "silver": "Tous",
+        "gold": "Tous"
+      },
+      {
+        "feature": "Analyse de match",
+        "free": "Basique",
+        "silver": "Complète",
+        "gold": "Complète"
+      },
+      {
+        "feature": "Accès anticipé",
+        "free": "2h avant",
+        "silver": "24h avant",
+        "gold": "24h avant"
+      },
+      {
+        "feature": "Alertes Telegram",
+        "free": "—",
+        "silver": "✓",
+        "gold": "✓ (perso)"
+      },
+      {
+        "feature": "Garantie remboursement",
+        "free": "n/a",
+        "silver": "7 jours",
+        "gold": "7 jours"
+      }
     ],
-    "cta": { "label": "Comparaison complète", "canonical": "pricing" }
+    "cta": {
+      "label": "Comparaison complète",
+      "canonical": "pricing"
+    }
   },
   "useCases": {
-    "h2": "Quel Tier Vous Correspond ?",
+    "h2": "Quel tier vous correspond ?",
     "profiles": [
-      { "icon": "user", "title": "Testeur Occasionnel", "description": "Curieux des pronostics IA, veut essayer avant de s'engager. Ne suit que 1-2 ligues principales.", "recommendation": "Le gratuit vous convient.", "cta": { "label": "Commencer gratuitement", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual" } },
-      { "icon": "trending-up", "title": "Parieur Régulier", "description": "Parie 2-3 fois par semaine sur plusieurs ligues. Veut une qualité de pronostic constante.", "recommendation": "Silver est fait pour vous.", "cta": { "label": "Essayer Silver", "canonical": "pricing" } },
-      { "icon": "chart", "title": "Analyste Sérieux", "description": "Suivi quotidien, multiples marchés, besoin de profondeur de données. Veut accès anticipé et notifications.", "recommendation": "Gold vous donne tout.", "cta": { "label": "Essayer Gold", "canonical": "pricing" } }
+      {
+        "icon": "user",
+        "title": "Testeur occasionnel",
+        "description": "Curieux des pronostics IA, veut essayer avant de s'engager. Ne suit que 1-2 ligues principales.",
+        "recommendation": "Le gratuit vous convient.",
+        "cta": {
+          "label": "Commencer gratuitement",
+          "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual"
+        }
+      },
+      {
+        "icon": "trending-up",
+        "title": "Parieur régulier",
+        "description": "Parie 2-3 fois par semaine sur plusieurs ligues. Veut une qualité de pronostic constante.",
+        "recommendation": "Silver est fait pour vous.",
+        "cta": {
+          "label": "Essayer Silver",
+          "canonical": "pricing"
+        }
+      },
+      {
+        "icon": "chart",
+        "title": "Analyste sérieux",
+        "description": "Suivi quotidien, multiples marchés, besoin de profondeur de données. Veut accès anticipé et notifications.",
+        "recommendation": "Gold vous donne tout.",
+        "cta": {
+          "label": "Essayer Gold",
+          "canonical": "pricing"
+        }
+      }
     ]
   },
   "faq": {
-    "h2": "FAQ Gratuit vs Payant",
+    "h2": "FAQ gratuit vs payant",
     "questions": [
-      { "q": "Les pronostics gratuits sont-ils moins précis que les payants ?", "a": "Non. Les pronostics gratuits utilisent le même moteur IA et la même méthodologie. La différence est volume, profondeur, timing et couverture des ligues — pas la précision." },
-      { "q": "Pourquoi ai-je besoin d'une carte bancaire pour l'essai ?", "a": "Configuration de facturation SaaS standard. Vous n'êtes pas facturé pendant les 7 premiers jours. Annulez avant le jour 7 et aucun frais ne s'applique." },
-      { "q": "Puis-je rétrograder de payant vers gratuit ?", "a": "Oui, à tout moment. Annulez votre plan payant depuis le tableau de bord. Votre accès continue jusqu'à la fin de la période de facturation, puis bascule automatiquement en gratuit." },
-      { "q": "Et si je ne veux que 1-2 types de paris spécifiques ?", "a": "Le tier gratuit montre notre pick le plus confiant par match. Les plans payants montrent tous les marchés par match. Même pour des marchés ciblés, le payant aide car vous comparez sur plus de matchs." },
-      { "q": "L'essai gratuit de 7 jours est-il vraiment sans risque ?", "a": "Oui. Aucun frais pendant 7 jours. Et si vous êtes facturé après 7 jours sans être satisfait, notre garantie remboursement couvre le premier mois payant." }
+      {
+        "q": "Les pronostics gratuits sont-ils moins précis que les payants ?",
+        "a": "Non. Les pronostics gratuits utilisent le même moteur IA et la même méthodologie. La différence est volume, profondeur, timing et couverture des ligues — pas la précision."
+      },
+      {
+        "q": "Pourquoi ai-je besoin d'une carte bancaire pour l'essai ?",
+        "a": "Configuration de facturation SaaS standard. Vous n'êtes pas facturé pendant les 7 premiers jours. Annulez avant le jour 7 et aucun frais ne s'applique."
+      },
+      {
+        "q": "Puis-je rétrograder de payant vers gratuit ?",
+        "a": "Oui, à tout moment. Annulez votre plan payant depuis le tableau de bord. Votre accès continue jusqu'à la fin de la période de facturation, puis bascule automatiquement en gratuit."
+      },
+      {
+        "q": "Et si je ne veux que 1-2 types de paris spécifiques ?",
+        "a": "Le tier gratuit montre notre pick le plus confiant par match. Les plans payants montrent tous les marchés par match. Même pour des marchés ciblés, le payant aide car vous comparez sur plus de matchs."
+      },
+      {
+        "q": "L'essai gratuit de 7 jours est-il vraiment sans risque ?",
+        "a": "Oui. Aucun frais pendant 7 jours. Et si vous êtes facturé après 7 jours sans être satisfait, notre garantie remboursement couvre le premier mois payant."
+      }
     ]
   },
   "finalCta": {
-    "h2": "Commencez Gratuit, Améliorez Quand Prêt",
+    "h2": "Commencez gratuit, améliorez quand prêt",
     "body": "5 pronostics gratuits par jour. Aucune carte bancaire requise pour le gratuit.",
-    "ctaPrimary": { "label": "Commencer gratuitement", "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final" },
-    "ctaSecondary": { "label": "Voir les Plans", "canonical": "pricing" }
+    "ctaPrimary": {
+      "label": "Commencer gratuitement",
+      "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final"
+    },
+    "ctaSecondary": {
+      "label": "Voir les Plans",
+      "canonical": "pricing"
+    }
   }
 }

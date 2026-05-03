@@ -1,48 +1,90 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Championship Voorspellingen Vandaag | AI-Gedreven | BetsPlug",
+    "title": "Championship voorspellingen vandaag | AI-gedreven | BetsPlug",
     "description": "AI-gedreven EFL Championship-voorspellingen voor elke wedstrijd. Engelands tweede tier — geanalyseerd met Elo + Poisson + ML.",
     "ogImage": "/og-images/league-championship-nl.jpg"
   },
   "hero": {
-    "h1": "Championship Voorspellingen",
+    "h1": "Championship voorspellingen",
     "subheadline": "AI-gedreven voorspellingen voor elke Championship-wedstrijd. Gegenereerd met Elo-ratings, Poisson-modellen en machine learning. Vergrendeld vóór de aftrap.",
-    "ctaSecondary": { "label": "Hoe het werkt", "canonical": "methodology" }
+    "ctaSecondary": {
+      "label": "Hoe het werkt",
+      "canonical": "methodology"
+    }
   },
   "context": {
-    "h2": "Over Championship Voorspellingen",
+    "h2": "Over Championship voorspellingen",
     "paragraphs": [
       "De EFL Championship is Engelands tweede voetbaldivisie — de meest veeleisende 'tweede tier' ter wereld, betwist door 24 clubs over 46 speeldagen plus een vier-team play-off mini-toernooi voor de laatste promotieplek. Recent gedegradeerde Premier League-clubs (met parachutebetalingen) strijden naast lang-gevestigde Championship-clubs en gepromoveerde League One-clubs, wat een van de meest onvoorspelbare competitieve omgevingen in voetbal oplevert. Promotie naar de Premier League is naar schatting £170 miljoen aan inkomsten waard. Onze AI-engine analyseert elke Championship-wedstrijd op basis van actuele vorm, onderlinge geschiedenis, expected goals en 40+ andere variabelen.",
       "Championship-voorspellingen zijn statistisch onderscheidend van Europese topvluchtige competities op meerdere manieren. Wedstrijdvolume is uitzonderlijk hoog (46 competitiewedstrijden plus beker-verplichtingen), wat blessure-accumulatie en selectie-rotatie-dynamiek produceert die niet in 38-wedstrijd competities voorkomt. De eind-seizoen play-off race introduceert motivatie-distorsies in de laatste 10-15 speeldagen — clubs op 7e plaats hebben heel andere prikkels dan 8e. Ons model houdt rekening met fixture-congestie, parachute-betaling selectie-kwaliteit verschillen en eind-seizoen play-off positionering-context.",
       "Elke Championship-voorspelling wordt vergrendeld met een publiek tijdstempel vóór de aftrap. Zowel winst als verlies komen in ons publieke track record. Championship-voorspellingen zijn onderdeel van alle betaalde plannen — leden ontvangen elke fixture met volledige statistische analyse inclusief fixture-congestie-aangepaste vorm-metrics, parachute-betaling context en eind-seizoen motivatie-modellering."
     ],
-    "statsPanel": { "h3": "Championship in een oogopslag", "ctaLabel": "Bekijk Championship in app" }
+    "statsPanel": {
+      "h3": "Championship in een oogopslag",
+      "ctaLabel": "Bekijk Championship in app"
+    }
   },
-  "topTeams": { "h2": "Top Championship Teams" },
+  "topTeams": {
+    "h2": "Top Championship teams"
+  },
   "methodology": {
-    "h2": "Hoe Championship Voorspellingen Worden Gemaakt",
+    "h2": "Hoe Championship voorspellingen worden gemaakt",
     "body": "Championship-voorspellingen gebruiken dezelfde engine als al onze voetbalvoorspellingen: Elo-ratings, Poisson-modellen en machine learning. Het model is specifiek afgestemd op het hoge wedstrijdvolume en fixture-congestie impact, plus de parachute-betaling selectie-kwaliteit dynamiek tussen recent gedegradeerde clubs en de rest.",
-    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" }
+    "cta": {
+      "label": "Lees volledige methodologie",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "Championship Voorspellingen FAQ",
+    "h2": "Championship voorspellingen FAQ",
     "questions": [
-      { "q": "Hoe nauwkeurig zijn AI-voorspellingen voor de Championship?", "a": "Nauwkeurigheid varieert, met de hoge competitieve volatiliteit van de competitie die bredere confidence-ranges produceert dan topvluchtige competities. We publiceren elke Championship-voorspelling in ons publieke track record." },
-      { "q": "Waarom zijn Championship-voorspellingen alleen voor leden?", "a": "Gratis voorspellingen zijn beperkt tot top 3 competities (Premier League, La Liga, Bundesliga). Championship-voorspellingen zijn onderdeel van alle betaalde plannen." },
-      { "q": "Hoe gaat het model om met het hoge wedstrijdvolume van de Championship?", "a": "Onze ML-laag past fixture-congestie aanpassingen toe op basis van rustdagen, midweekse wedstrijdfrequentie en selectie-rotatie patronen. Vorm-metrics wegen recente wedstrijden zwaarder wanneer teams in congested fixture-stretches zitten." },
-      { "q": "Hoe vroeg zijn Championship-voorspellingen beschikbaar?", "a": "Leden zien Championship-voorspellingen tot 24 uur vóór de aftrap." },
-      { "q": "Behandelen jullie FA Cup en EFL Cup-wedstrijden van Championship-clubs?", "a": "We behandelen alle Championship-wedstrijden. FA Cup en EFL Cup-wedstrijden zijn niet in onze standaard dekking." },
-      { "q": "Kan ik Championship-voorspellingen via Telegram krijgen?", "a": "Ja. Betalende leden ontvangen Telegram-meldingen voor high-confidence Championship-voorspellingen." }
+      {
+        "q": "Hoe nauwkeurig zijn AI-voorspellingen voor de Championship?",
+        "a": "Nauwkeurigheid varieert, met de hoge competitieve volatiliteit van de competitie die bredere confidence-ranges produceert dan topvluchtige competities. We publiceren elke Championship-voorspelling in ons publieke track record."
+      },
+      {
+        "q": "Waarom zijn Championship-voorspellingen alleen voor leden?",
+        "a": "Gratis voorspellingen zijn beperkt tot top 3 competities (Premier League, La Liga, Bundesliga). Championship-voorspellingen zijn onderdeel van alle betaalde plannen."
+      },
+      {
+        "q": "Hoe gaat het model om met het hoge wedstrijdvolume van de Championship?",
+        "a": "Onze ML-laag past fixture-congestie aanpassingen toe op basis van rustdagen, midweekse wedstrijdfrequentie en selectie-rotatie patronen. Vorm-metrics wegen recente wedstrijden zwaarder wanneer teams in congested fixture-stretches zitten."
+      },
+      {
+        "q": "Hoe vroeg zijn Championship-voorspellingen beschikbaar?",
+        "a": "Leden zien Championship-voorspellingen tot 24 uur vóór de aftrap."
+      },
+      {
+        "q": "Behandelen jullie FA Cup en EFL Cup-wedstrijden van Championship-clubs?",
+        "a": "We behandelen alle Championship-wedstrijden. FA Cup en EFL Cup-wedstrijden zijn niet in onze standaard dekking."
+      },
+      {
+        "q": "Kan ik Championship-voorspellingen via Telegram krijgen?",
+        "a": "Ja. Betalende leden ontvangen Telegram-meldingen voor high-confidence Championship-voorspellingen."
+      }
     ],
-    "cta": { "label": "Alle FAQs", "canonical": "faq" }
+    "cta": {
+      "label": "Alle FAQs",
+      "canonical": "faq"
+    }
   },
   "finalCta": {
     "h2Free": "Wil Je Alle Championship Voorspellingen?",
     "h2Gated": "Ontgrendel Championship Voorspellingen",
     "bodyFree": "Leden krijgen elke wedstrijd met volledige statistische analyse.",
     "bodyGated": "Championship-voorspellingen zijn onderdeel van alle betaalde plannen.",
-    "ctaPrimary": { "label": "Bekijk Prijzen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Probeer Gratis", "href": "https://app.betsplug.com/register?source=league_championship" }
+    "ctaPrimary": {
+      "label": "Bekijk Prijzen",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Probeer Gratis",
+      "href": "https://app.betsplug.com/register?source=league_championship"
+    }
   }
 }

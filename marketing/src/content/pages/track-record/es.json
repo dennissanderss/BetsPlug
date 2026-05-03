@@ -1,19 +1,33 @@
 {
-  "_meta": { "translationStatus": "ai-generated", "needsReview": true, "lastUpdated": "2026-05-02" },
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-02"
+  },
   "meta": {
-    "title": "Track Record BetsPlug — Cada Pronóstico Público | BetsPlug",
+    "title": "Track record BetsPlug — cada pronóstico público | BetsPlug",
     "description": "Mira cada pronóstico IA BetsPlug jamás publicado — aciertos y fallos. Track record en vivo actualizado diariamente.",
     "ogImage": "/og-images/track-record-es.jpg"
   },
   "hero": {
-    "h1": "Cada Pronóstico. Público. Para Siempre.",
+    "h1": "Cada pronóstico. {{accent}}Público. Para siempre.{{/accent}}",
     "subheadline": "La mayoría de sitios de pronósticos solo muestran sus aciertos. Nosotros publicamos todo — aciertos, fallos, pronósticos exactos y marcas de tiempo. Verifica cada pronóstico que hemos hecho.",
-    "trustStrip": ["Bloqueado antes del inicio", "No editable", "Aciertos y fallos"],
-    "ctaPrimary": { "label": "Cómo funciona", "canonical": "methodology" },
-    "ctaSecondary": { "label": "Ver pronósticos", "canonical": "predictions" }
+    "trustStrip": [
+      "Bloqueado antes del inicio",
+      "No editable",
+      "Aciertos y fallos"
+    ],
+    "ctaPrimary": {
+      "label": "Cómo funciona",
+      "canonical": "methodology"
+    },
+    "ctaSecondary": {
+      "label": "Ver pronósticos",
+      "canonical": "predictions"
+    }
   },
   "widget": {
-    "h2": "Track Record en Vivo",
+    "h2": "Track record en vivo",
     "subhead": "Actualizado automáticamente cuando los partidos terminan. Haz clic en cualquier pronóstico para detalles completos.",
     "rangeLabel": "Período",
     "range30": "Últimos 30 días",
@@ -35,7 +49,7 @@
     "tooltipPattern": "{result}: {home} vs {away}, {prediction}, bloqueado {date}"
   },
   "whyPublishLosses": {
-    "h2": "Por Qué Publicamos También las Pérdidas",
+    "h2": "Por qué publicamos también las pérdidas",
     "paragraphs": [
       "La industria de pronósticos tiene un problema de integridad. La mayoría de sitios muestran selectivamente pronósticos ganadores mientras eliminan silenciosamente las pérdidas. Rechazamos este enfoque desde el primer día.",
       "Cada pronóstico BetsPlug se bloquea con marca de tiempo pública antes del inicio. Una vez publicado, no se puede editar, eliminar ni ocultar. Acierto o fallo, el pronóstico permanece para siempre en nuestro registro público.",
@@ -50,24 +64,48 @@
     }
   },
   "methodologyLink": {
-    "h2": "La Metodología Detrás de Estos Números",
+    "h2": "La metodología detrás de estos números",
     "body": "Cada pronóstico en nuestro track record fue generado por el mismo motor IA: puntuaciones Elo, modelos Poisson de goles y machine learning combinados.",
-    "cta": { "label": "Leer metodología completa", "canonical": "methodology" }
+    "cta": {
+      "label": "Leer metodología completa",
+      "canonical": "methodology"
+    }
   },
   "faq": {
-    "h2": "FAQ Track Record",
+    "h2": "FAQ track record",
     "questions": [
-      { "q": "¿Pueden eliminarse pronósticos del track record?", "a": "No. Cada pronóstico se bloquea con una marca de tiempo inmutable antes del inicio. Arquitectónicamente, no por política." },
-      { "q": "¿Qué significa 'anulado' en el track record?", "a": "El estado anulado se aplica a pronósticos donde el partido fue pospuesto o cancelado. No los contamos como aciertos ni fallos." },
-      { "q": "¿Por qué no muestran porcentajes de precisión específicos prominentemente?", "a": "La precisión varía dramáticamente por liga, tipo de mercado y período. Preferimos mostrar los datos brutos." },
-      { "q": "¿Puedo descargar los datos del track record?", "a": "Los datos del track record están disponibles vía nuestra API para suscriptores de pago." },
-      { "q": "¿Cómo verifico que un pronóstico específico se bloqueó antes del inicio?", "a": "Haz clic en cualquier pronóstico. La página de detalles muestra la marca de tiempo de bloqueo en comparación con el tiempo de inicio." }
+      {
+        "q": "¿Pueden eliminarse pronósticos del track record?",
+        "a": "No. Cada pronóstico se bloquea con una marca de tiempo inmutable antes del inicio. Arquitectónicamente, no por política."
+      },
+      {
+        "q": "¿Qué significa 'anulado' en el track record?",
+        "a": "El estado anulado se aplica a pronósticos donde el partido fue pospuesto o cancelado. No los contamos como aciertos ni fallos."
+      },
+      {
+        "q": "¿Por qué no muestran porcentajes de precisión específicos prominentemente?",
+        "a": "La precisión varía dramáticamente por liga, tipo de mercado y período. Preferimos mostrar los datos brutos."
+      },
+      {
+        "q": "¿Puedo descargar los datos del track record?",
+        "a": "Los datos del track record están disponibles vía nuestra API para suscriptores de pago."
+      },
+      {
+        "q": "¿Cómo verifico que un pronóstico específico se bloqueó antes del inicio?",
+        "a": "Haz clic en cualquier pronóstico. La página de detalles muestra la marca de tiempo de bloqueo en comparación con el tiempo de inicio."
+      }
     ]
   },
   "finalCta": {
-    "h2": "¿Listo para Ver los Pronósticos de Hoy?",
+    "h2": "¿Listo para ver los pronósticos de hoy?",
     "body": "Mismo motor, misma transparencia. Prueba nuestros pronósticos gratuitos hoy.",
-    "ctaPrimary": { "label": "Obtener picks gratis", "href": "https://app.betsplug.com/register?source=track_record_final" },
-    "ctaSecondary": { "label": "Comparar planes", "canonical": "pricing" }
+    "ctaPrimary": {
+      "label": "Obtener picks gratis",
+      "href": "https://app.betsplug.com/register?source=track_record_final"
+    },
+    "ctaSecondary": {
+      "label": "Comparar planes",
+      "canonical": "pricing"
+    }
   }
 }

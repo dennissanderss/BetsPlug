@@ -31,10 +31,10 @@ import {
 } from "@/lib/i18n";
 import { localeOgTag } from "@/i18n/locales";
 
-// Resolve the bundled URL for the Inter Variable Latin WOFF2.
+// Resolve the bundled URL for the Geist Variable Latin WOFF2.
 // Vite emits the file with a hashed name and gives us back the
 // public path; we then preload it to cut the LCP cost.
-import interLatinUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+import geistLatinUrl from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
 
 interface Props {
   title: string;
@@ -129,10 +129,10 @@ const robotsContent = noIndex
     <link rel="preconnect" href="https://cdn.sanity.io" crossorigin />
     <link rel="dns-prefetch" href="https://api.betsplug.com" />
 
-    <!-- Critical font preload (Inter Variable, Latin subset). -->
+    <!-- Critical font preload (Geist Variable, Latin subset). -->
     <link
       rel="preload"
-      href={interLatinUrl}
+      href={geistLatinUrl}
       as="font"
       type="font/woff2"
       crossorigin="anonymous"
