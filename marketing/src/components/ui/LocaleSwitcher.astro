@@ -30,11 +30,14 @@ interface LocaleVersion {
 }
 
 type Surface = "dark" | "light";
+type Mode = "dropdown" | "inline";
 
 interface Props {
   currentLocale: string;
   versions: LocaleVersion[];
   surface?: Surface;
+  /** "dropdown" (default) renders the disclosure widget; "inline" renders a wrap-friendly pill list (used in MobileDrawer). */
+  mode?: Mode;
   class?: string;
 }
 
@@ -42,6 +45,7 @@ const {
   currentLocale,
   versions,
   surface = "dark",
+  mode = "dropdown",
   class: extraClass = "",
 } = Astro.props;
 
@@ -78,6 +82,53 @@ const panelClasses: Record<Surface, string> = {
 };
 ---
 
+{mode === "inline" ? (
+  <ul
+    role="listbox"
+    aria-label="Available languages"
+    class:list={[
+      "flex flex-wrap gap-1.5",
+      extraClass,
+    ]}
+  >
+    {versions.map((v) => {
+      const label = v.name ?? localeNames[v.locale] ?? v.locale.toUpperCase();
+      const isActive = v.locale === currentLocale;
+      const baseClasses =
+        "inline-flex items-center min-h-[36px] px-3 py-1.5 rounded-full " +
+        "text-sm font-medium transition-colors duration-150 " +
+        "focus-visible:outline-none focus-visible:ring-2 " +
+        "focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 " +
+        (surface === "dark"
+          ? "focus-visible:ring-offset-deep-navy-900"
+          : "focus-visible:ring-offset-stadium-white-50");
+      const inactiveClasses =
+        surface === "dark"
+          ? "bg-white-pure/5 text-white-soft hover:bg-white-pure/10 hover:text-white-pure"
+          : "bg-charcoal-900/5 text-charcoal-700 hover:bg-charcoal-900/10 hover:text-charcoal-900";
+      const activeClasses =
+        "bg-pitch-green-500 text-white-pure shadow-[var(--shadow-glow-pitch)]";
+
+      return (
+        <li role="none">
+          <a
+            href={v.url}
+            hreflang={v.locale}
+            role="option"
+            aria-current={isActive ? "true" : undefined}
+            aria-selected={isActive ? "true" : "false"}
+            class:list={[
+              baseClasses,
+              isActive ? activeClasses : inactiveClasses,
+            ]}
+          >
+            {label}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+) : (
 <details
   class:list={[
     "locale-switcher relative inline-block group",
@@ -183,6 +234,7 @@ const panelClasses: Record<Surface, string> = {
     })}
   </ul>
 </details>
+)}
 
 <style>
   /* Hide the default disclosure marker on every browser. */

@@ -33,4 +33,6 @@ export type IconName =
   | "minus"
   | "trophy"
   | "users"
-  | "message-circle";
+  | "message-circle"
+  | "menu"
+  | "chevron-right";

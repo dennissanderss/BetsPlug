@@ -16,6 +16,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import MobileDrawer from "@/components/layout/MobileDrawer.astro";
 import CookieBanner from "@/components/CookieBanner.astro";
 import {
   defaultLocale,
@@ -42,6 +43,7 @@ const locale: Locale = isLocale(localsLocale) ? localsLocale : defaultLocale;
   <slot name="head" slot="head" />
 
   <Header locale={locale} canonicalPath={canonicalPath} />
+  <MobileDrawer locale={locale} canonicalPath={canonicalPath} />
 
   <main id="main">
     <slot />
