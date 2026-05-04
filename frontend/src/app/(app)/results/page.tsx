@@ -540,6 +540,7 @@ function RoiCalculatorCard({
   dataSource,
   setDataSource,
   userTier,
+  isAdmin,
 }: {
   fixtures: Fixture[];
   isLoading: boolean;
@@ -554,6 +555,7 @@ function RoiCalculatorCard({
   dataSource: DataSource;
   setDataSource: (v: DataSource) => void;
   userTier: Tier;
+  isAdmin: boolean;
 }) {
   const { t } = useTranslations();
   const botdMode = stream === "botd";
@@ -639,25 +641,31 @@ function RoiCalculatorCard({
       <div className="mb-3 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
           {([
-            { key: "live" as const, label: t("results.sourceLive") },
-            { key: "backtest" as const, label: t("results.sourceBacktest") },
+            { key: "live" as const, label: t("results.sourceLive"), adminOnly: true },
+            { key: "backtest" as const, label: t("results.sourceBacktest"), adminOnly: false },
           ]).map((opt) => {
             const active = dataSource === opt.key;
+            const locked = opt.adminOnly && !isAdmin;
             return (
               <button
                 key={opt.key}
                 type="button"
-                onClick={() => setDataSource(opt.key)}
+                disabled={locked}
+                onClick={() => !locked && setDataSource(opt.key)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
-                  active
-                    ? opt.key === "live"
-                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
-                      : "bg-amber-500 text-[#1a1408] shadow-md shadow-amber-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                  locked
+                    ? "text-slate-600 bg-white/[0.01] cursor-not-allowed"
+                    : active
+                      ? opt.key === "live"
+                        ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
+                        : "bg-amber-500 text-[#1a1408] shadow-md shadow-amber-500/30"
+                      : "text-slate-400 hover:text-slate-200"
                 }`}
                 aria-pressed={active}
+                title={locked ? "Live measurement is locked while we collect more data — admin only for now" : undefined}
               >
                 {opt.label}
+                {locked && <Lock className="h-3 w-3" />}
               </button>
             );
           })}
@@ -665,6 +673,10 @@ function RoiCalculatorCard({
         {dataSource === "live" ? (
           <span className="text-[11px] text-slate-500">
             {t("results.sourceLiveHint", { days: liveDays })}
+          </span>
+        ) : !isAdmin ? (
+          <span className="text-[11px] text-slate-500">
+            Live measurement opens once we&apos;ve gathered 90+ days of data — backtest is the educational simulation in the meantime.
           </span>
         ) : (
           <span className="text-[11px] font-semibold uppercase tracking-widest text-amber-400">
@@ -1129,6 +1141,21 @@ function RoiCalculatorCard({
           )}
         </p>
       </div>
+      {/* Why the long-window backtest hovers around zero — explicit
+          explainer when model-derived odds dominate (typically true for
+          365d backtest where most matches predate odds capture). The
+          same picks evaluated on real bookmaker odds will look
+          materially different; we surface the math so users don't read
+          "−0.3% over 365d" as a model verdict. */}
+      {headline.matches >= 30 && headline.modelCount / headline.matches >= 0.5 && (
+        <div className="mt-3 rounded-lg border border-sky-500/25 bg-sky-500/[0.05] px-3 py-2 text-[11px] leading-relaxed text-sky-200/85">
+          <span className="font-semibold text-sky-200">Why the backtest sits near zero:</span>{" "}
+          most of these picks have no real bookmaker odds on file, so we price them at 1/prob
+          (a model-fair odd minus a 5% margin). By construction that gives a near-break-even ROI
+          regardless of how good the model is. Real-odds windows ({headline.matches - headline.modelCount} of {headline.matches} picks
+          here) carry the actual signal — switch to a 7d/14d window once Live measurement opens for a cleaner read.
+        </div>
+      )}
     </div>
   );
 }
@@ -1598,7 +1625,7 @@ function LockedSection({
 
 function ResultsPageContent() {
   const { t } = useTranslations();
-  const { tier: userTier } = useTier();
+  const { tier: userTier, isAdmin } = useTier();
   // Free users keep access but several controls / columns are gated.
   const isFree = userTier === "free";
   // Which tiers is the user allowed to actually select in Step 1?
@@ -1641,7 +1668,20 @@ function ResultsPageContent() {
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
   const [stream, setStream] = useState<StreamMode>(initialStream);
-  const [dataSource, setDataSource] = useState<DataSource>(initialDataSource);
+  // Live measurement is admin-only while the v8.1 honest-engine sample is
+  // still maturing. Users default to (and are pinned to) Backtest until
+  // the live window has enough data to be representative. Admin can
+  // toggle freely; non-admin can only see Backtest.
+  const [dataSource, setDataSource] = useState<DataSource>(
+    isAdmin ? initialDataSource : "backtest",
+  );
+  // If we boot with a stale "live" mode and the user turns out to be
+  // non-admin (auth resolves async), force-flip to backtest.
+  useEffect(() => {
+    if (!isAdmin && dataSource === "live") {
+      setDataSource("backtest");
+    }
+  }, [isAdmin, dataSource]);
   // useTier() starts as "free" before localStorage hydrates, then
   // settles on the real subscription tier asynchronously after
   // /subscriptions/me resolves. Earlier we snapped tierFilter once
@@ -1777,6 +1817,12 @@ function ResultsPageContent() {
   }, [allResults, resultFilter, leagueFilter, tierFilter, period, dataSource]);
 
   // ── Summary computed from filtered so stats always match the table ─────────
+  // P/L formula MUST mirror RoiCalculatorCard.aggregateFixtures so the
+  // headline "Your Return" and the "This Week's Performance" tile can
+  // never disagree on the same picks. Earlier this card hardcoded a
+  // flat 2.0 odds assumption when no real odds were on file (winners
+  // got +1u, losers -1u), while the calculator used 1/prob (model-fair
+  // odds). Same picks, two formulas → two stories on one screen.
   const computedSummary = useMemo<WeeklySummary | null>(() => {
     if (filtered.length === 0) return null;
     let won = 0;
@@ -1785,22 +1831,15 @@ function ResultsPageContent() {
     for (const f of filtered) {
       if (!f.prediction || !f.result) continue;
       const predictedSide = derivePickSide(f.prediction);
+      if (predictedSide === null) continue;
       const { home_score, away_score } = f.result;
       const actualOutcome =
         home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
       const correct = actualOutcome === predictedSide;
+      const { odds: oddsUsed } = oddsForPick(f, predictedSide);
       if (correct) {
         won++;
-        const o = f.odds;
-        const raw =
-          o != null
-            ? predictedSide === "home"
-              ? o.home
-              : predictedSide === "away"
-              ? o.away
-              : o.draw
-            : null;
-        plUnits += raw != null ? raw - 1 : 1;
+        plUnits += oddsUsed - 1;
       } else {
         plUnits -= 1;
       }
@@ -1878,6 +1917,7 @@ function ResultsPageContent() {
         dataSource={dataSource}
         setDataSource={setDataSource}
         userTier={userTier}
+        isAdmin={isAdmin}
       />
 
       {/* ── Weekly Summary ── */}
