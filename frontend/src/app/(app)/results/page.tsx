@@ -77,11 +77,13 @@ function daysOfLiveData(now: number = Date.now()): number {
   return Math.max(0, Math.floor((now - LIVE_START_MS) / ONE_DAY_MS));
 }
 
-// Which dataset the calculator + table draws from.
-//   "live"     — strict pre-match picks since LIVE_START_MS (default).
-//   "backtest" — model-validation picks from before LIVE_START_MS,
-//                with reconstructed odds. Lets users explore long
-//                periods (>10 days at launch) and is clearly labelled.
+// Calculator + table both draw from the strict pre-match Live
+// measurement universe. Backtest mode (model-implied odds for picks
+// that lacked real bookmaker data) was removed because it produced
+// near-zero ROI by construction, regardless of model quality. Type
+// kept as a discriminated union for forward-compat in case Backtest
+// returns once we have real historical odds, but the only legal
+// runtime value is now "live".
 type DataSource = "live" | "backtest";
 
 // Which pick-stream the calculator / table should show. "botd" = the
@@ -1069,21 +1071,6 @@ function RoiCalculatorCard({
           )}
         </p>
       </div>
-      {/* Why the long-window backtest hovers around zero — explicit
-          explainer when model-derived odds dominate (typically true for
-          365d backtest where most matches predate odds capture). The
-          same picks evaluated on real bookmaker odds will look
-          materially different; we surface the math so users don't read
-          "−0.3% over 365d" as a model verdict. */}
-      {headline.matches >= 30 && headline.modelCount / headline.matches >= 0.5 && (
-        <div className="mt-3 rounded-lg border border-sky-500/25 bg-sky-500/[0.05] px-3 py-2 text-[11px] leading-relaxed text-sky-200/85">
-          <span className="font-semibold text-sky-200">Why the backtest sits near zero:</span>{" "}
-          most of these picks have no real bookmaker odds on file, so we price them at 1/prob
-          (a model-fair odd minus a 5% margin). By construction that gives a near-break-even ROI
-          regardless of how good the model is. Real-odds windows ({headline.matches - headline.modelCount} of {headline.matches} picks
-          here) carry the actual signal — switch to a 7d/14d window once Live measurement opens for a cleaner read.
-        </div>
-      )}
     </div>
   );
 }
@@ -1176,12 +1163,8 @@ function ResultsFilterBar({
               to: fmtDate(todayDate),
             })}
           </span>
-          <span className={`text-[9px] font-bold uppercase tracking-widest ${
-            dataSource === "live" ? "text-emerald-400" : "text-amber-400"
-          }`}>
-            {dataSource === "live"
-              ? t("results.sourceLive")
-              : t("results.sourceBacktest")}
+          <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-400">
+            {t("results.sourceLive")}
           </span>
         </div>
 
@@ -1590,8 +1573,6 @@ function ResultsPageContent() {
     return Math.max(1, Math.min(365, Math.round(q)));
   })();
   const initialStream: StreamMode = searchParams?.get("stream") === "botd" ? "botd" : "all";
-  const initialDataSource: DataSource =
-    searchParams?.get("source") === "backtest" ? "backtest" : "live";
 
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
@@ -1601,14 +1582,10 @@ function ResultsPageContent() {
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
   const [stream, setStream] = useState<StreamMode>(initialStream);
-  // Live measurement is admin-only while the v8.1 honest-engine sample is
-  // still maturing. Users default to (and are pinned to) Backtest until
-  // the live window has enough data to be representative. Admin can
-  // toggle freely; non-admin can only see Backtest.
-  // Backtest mode removed — Result Simulation only runs on Live
-  // measurement (real pre-match odds). The dataSource is hardcoded
-  // here so the rest of the calculator code (filters, headlines,
-  // table) stays untouched.
+  // Result Simulation runs Live-only — Backtest mode was removed
+  // because reconstructing odds via 1/prob made ROI mathematically
+  // meaningless. dataSource is hardcoded so existing filter / headline
+  // / table code keeps working without per-mode branches.
   const dataSource: DataSource = "live";
   const setDataSource = (_: DataSource) => {};
   // useTier() starts as "free" before localStorage hydrates, then
