@@ -642,22 +642,23 @@ function RoiCalculatorCard({
       </div>
       <p className="text-xs text-slate-500 mb-5">{t("results.roiCalcIntro")}</p>
 
-      {/* Data-source = Live measurement only.
-          Backtest mode was removed because the model-fair odds fallback
-          (used for ~86% of historical picks without real bookmaker
-          rows) makes ROI mathematically meaningless — by construction
-          a 1/prob price gives zero EV regardless of how good the
-          model is. Showing −0.2% on 365d wasn't a verdict on the
-          model; it was an artefact of reconstructing odds from the
-          model itself. We only run on real pre-match odds now,
-          so every cell on this card reflects what a real bettor
-          would have measured at the line. */}
-      <div className="mb-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
-        <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Live measurement
-        </span>
-        <span>Real pre-match 1X2 odds · {liveDays} days of data so far</span>
+      {/* Live-only data source. Backtest was removed because reconstructed
+          1/prob odds gave zero-EV by construction — see commit history. */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] px-3 py-2">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Live measurement
+          </span>
+          <span className="text-[11px] text-slate-300">
+            Real pre-match 1X2 odds, started <span className="font-semibold tabular-nums">16 Apr 2026</span>
+          </span>
+        </div>
+        <div className="flex items-baseline gap-1.5 tabular-nums">
+          <span className="text-[10px] uppercase tracking-widest text-slate-500">Day</span>
+          <span className="text-base font-extrabold text-emerald-300">{liveDays}</span>
+          <span className="text-[10px] text-slate-500">/ 90 before ROI claims open</span>
+        </div>
       </div>
 
       {/* ── Stream toggle — All predictions vs Bet of the Day ── */}
@@ -1807,79 +1808,41 @@ function ResultsPageContent() {
         </span>
       </div>
 
-      {/* ── ROI Calculator — admin-only while we collect Live data ── */}
-      {adminUnlocked ? (
-        <RoiCalculatorCard
-          fixtures={allResults}
-          isLoading={isLoading}
-          stake={stake}
-          setStake={setStake}
-          calcTier={tierFilter}
-          setCalcTier={(v) => {
-            // Any manual click freezes the auto-snap effect so the
-            // user's choice wins over the server-confirmed default.
-            setManualTierOverride(true);
-            setTierFilter(v);
-          }}
-          calcPeriod={calcPeriod}
-          setCalcPeriod={setCalcPeriod}
-          stream={stream}
-          setStream={setStream}
-          dataSource={dataSource}
-          setDataSource={setDataSource}
-          userTier={userTier}
-          isAdmin={adminUnlocked}
-        />
-      ) : (
-        <div className="glass-card p-6 sm:p-8" style={{ border: "1px solid rgba(16,185,129,0.18)" }}>
-          <div className="flex items-start gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
-              <Lock className="h-4 w-4 text-emerald-400" />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-base font-semibold text-white">Result Simulation opens soon</h2>
-              <p className="text-sm leading-relaxed text-slate-400">
-                We only run the simulation on real pre-match bookmaker odds, no reconstructions.
-                The honest live measurement started on{" "}
-                <span className="text-slate-300 font-semibold">{LIVE_TRACKING_START}</span>{" "}
-                and we want at least 90 days of measurements before opening this page — short windows
-                are too noisy to draw conclusions from. Track Record below shows the model&apos;s historical
-                accuracy in the meantime.
-              </p>
-              <div className="flex flex-wrap items-center gap-2 pt-2">
-                <Link
-                  href="/trackrecord"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20"
-                >
-                  <Trophy className="h-3.5 w-3.5" />
-                  Open Track Record
-                </Link>
-                <Link
-                  href="/predictions"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/[0.04]"
-                >
-                  Today&apos;s predictions
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ── ROI Calculator — open for all tiers, matching the
+          Track Record live-measurement section. */}
+      <RoiCalculatorCard
+        fixtures={allResults}
+        isLoading={isLoading}
+        stake={stake}
+        setStake={setStake}
+        calcTier={tierFilter}
+        setCalcTier={(v) => {
+          // Any manual click freezes the auto-snap effect so the
+          // user's choice wins over the server-confirmed default.
+          setManualTierOverride(true);
+          setTierFilter(v);
+        }}
+        calcPeriod={calcPeriod}
+        setCalcPeriod={setCalcPeriod}
+        stream={stream}
+        setStream={setStream}
+        dataSource={dataSource}
+        setDataSource={setDataSource}
+        userTier={userTier}
+        isAdmin={adminUnlocked}
+      />
 
-      {/* ── Filtered-period Summary (admin-only with the rest of the
-          live simulator) ── */}
-      {adminUnlocked && (
-        <WeeklySummaryCard
-          data={computedSummary ?? undefined}
-          isLoading={isLoading}
-          isError={hasError}
-          isFree={isFree}
-          scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${tierFilter.charAt(0).toUpperCase()}${tierFilter.slice(1)} tier · Live`}
-        />
-      )}
+      {/* ── Filtered-period Summary ── */}
+      <WeeklySummaryCard
+        data={computedSummary ?? undefined}
+        isLoading={isLoading}
+        isError={hasError}
+        isFree={isFree}
+        scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${tierFilter.charAt(0).toUpperCase()}${tierFilter.slice(1)} tier · Live`}
+      />
 
       {/* ── Streak Stats ── */}
-      {adminUnlocked && filtered.length > 0 && (() => {
+      {filtered.length > 0 && (() => {
         // Compute streaks from the visible results
         const evaluated = filtered.filter(f => f.prediction && f.result);
         let currentStreak = 0;
@@ -1923,20 +1886,18 @@ function ResultsPageContent() {
         );
       })()}
 
-      {/* ── Filter bar (admin-only with the rest of the simulator) ── */}
-      {adminUnlocked && (
-        <ResultsFilterBar
-          period={period}
-          setPeriod={setPeriod}
-          resultFilter={resultFilter}
-          setResultFilter={setResultFilter}
-          leagueFilter={leagueFilter}
-          setLeagueFilter={setLeagueFilter}
-          leagues={leagues}
-          total={filtered.length}
-          dataSource={dataSource}
-        />
-      )}
+      {/* ── Filter bar ── */}
+      <ResultsFilterBar
+        period={period}
+        setPeriod={setPeriod}
+        resultFilter={resultFilter}
+        setResultFilter={setResultFilter}
+        leagueFilter={leagueFilter}
+        setLeagueFilter={setLeagueFilter}
+        leagues={leagues}
+        total={filtered.length}
+        dataSource={dataSource}
+      />
 
       {/* ── Error banner ── */}
       {hasError && (
@@ -1951,8 +1912,8 @@ function ResultsPageContent() {
         </div>
       )}
 
-      {/* ── Content (admin-only with the rest of the simulator) ── */}
-      {adminUnlocked && (isLoading ? (
+      {/* ── Content ── */}
+      {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => <SkeletonCard key={i} />)}
         </div>
@@ -2010,7 +1971,7 @@ function ResultsPageContent() {
           {/* Footer: sum of visible rows' returns so the user can verify the headline */}
           <ResultsTableFooter fixtures={filtered} stake={stake} isFree={isFree} />
         </div>
-      ))}
+      )}
 
       {/* Upsell: Platinum lifetime */}
       <UpsellBanner
