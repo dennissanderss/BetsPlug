@@ -1,10 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, ClipboardList } from "lucide-react";
 import { api } from "@/lib/api";
-import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
 import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
 import { UpcomingPicksStrip } from "@/components/dashboard/UpcomingPicksStrip";
@@ -12,7 +9,6 @@ import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
 import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import { TelegramInviteCard } from "@/components/telegram/invite-card";
-import { HexBadge } from "@/components/noct/hex-badge";
 import { useTier } from "@/hooks/use-tier";
 import { classifyPickTier, TIER_RANK } from "@/lib/pick-tier";
 import type { Fixture, PickTierSlug } from "@/types/api";
@@ -31,8 +27,6 @@ function isTrulyLive(f: Fixture, now: number): boolean {
 }
 
 export default function DashboardPage() {
-  const { t } = useTranslations();
-  const lHref = useLocalizedHref();
   const { tier: userTierSlug } = useTier();
 
   const { data: botd, isLoading: botdLoading } = useQuery({
@@ -183,20 +177,10 @@ export default function DashboardPage() {
             />
           )}
 
-          {/* Section 6 — Slim quick link. Trackrecord only; everything
-              else lives in the sidebar already. */}
-          <Link
-            href={lHref("/trackrecord")}
-            className="strip-card strip-card-green group"
-          >
-            <HexBadge variant="green" size="sm" noGlow>
-              <ClipboardList className="h-3.5 w-3.5" />
-            </HexBadge>
-            <span className="flex-1 text-sm font-medium text-[#ededed]">
-              {t("nav.trackrecord" as any)}
-            </span>
-            <ArrowRight className="h-3.5 w-3.5 text-[#6b7280] transition-colors group-hover:text-[#4ade80]" />
-          </Link>
+          {/* Trackrecord strip removed — already lives in the
+              Quick Links list inside SportsHubSidebar (right
+              column on xl+, below the tier widget on mobile),
+              so showing it again on the main column was duplicate. */}
         </div>
 
         {/* Section 2 — Tier accuracy widget. Right column on wide

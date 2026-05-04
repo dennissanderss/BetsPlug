@@ -1632,42 +1632,39 @@ export default function PredictionsPage() {
         </button>
       </div>
 
-      {/* ── Upcoming-mode guidance banner ── */}
-      {!isResults && !isLive && (
-        <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
-          <span className="mt-0.5 text-base">💡</span>
-          <p className="text-xs leading-relaxed text-slate-300">
-            <span className="font-semibold text-white">{t("pred.upcomingGuidance.title")}</span>{" "}
-            {t("pred.upcomingGuidance.bodyBefore")}{" "}
-            <span className="font-semibold text-amber-300">{t("pred.upcomingGuidance.confidenceLabel")}</span>{t("pred.upcomingGuidance.bodyAfterConfidence")}{" "}
-            <span className="font-semibold text-emerald-300">{t("pred.upcomingGuidance.recommend")}</span>{" "}
-            {t("pred.upcomingGuidance.bodyAfterRecommend")}{" "}
-            <span className="font-semibold text-white">Gold</span>{" "}{t("pred.upcomingGuidance.or")}{" "}
-            <span className="font-semibold text-white">Platinum</span>{" "}
-            {t("pred.upcomingGuidance.bodyTail")}
-          </p>
-        </div>
-      )}
-
-      {/* ── Live-mode banner: makes clear we show the pre-match pick, not a live recommendation ── */}
-      {isLive && (
-        <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
-          <Radio className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400" />
-          <p className="text-xs leading-relaxed text-slate-300">
-            <span className="font-semibold text-white">{t("pred.live.bannerTitle")}</span>{" "}
-            {t("pred.live.bannerBodyBefore")}{" "}<span className="font-semibold text-white">{t("pred.live.bannerEmphasis")}</span>{" "}{t("pred.live.bannerBodyAfter")}
-          </p>
-        </div>
-      )}
-
-      {/* ── Trackrecord transparency notice — same picks shown here go into the tier stats ── */}
-      {!isResults && !isLive && (
-        <div className="flex items-start gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
-          <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-400" />
-          <p className="text-xs leading-relaxed text-slate-300">
-            <span className="font-semibold text-white">{t("pred.trackrecordNoticeTitle")}</span>{" "}
-            {t("pred.trackrecordNoticeBody")}
-          </p>
+      {/* ── Tier accuracy legend — replaces the two large guidance
+           banners. One compact strip with the historical hit-rate
+           per tier so users can read confidence-% in context.
+           Hidden on Results because confidence becomes a hit/miss
+           there, not a probability the user needs to compare. */}
+      {!isResults && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[11px] text-slate-300">
+          <span className="font-semibold uppercase tracking-widest text-slate-500">
+            Tier accuracy guide
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#e8a864]" />
+            <span className="font-semibold text-[#e8a864]">Free</span>
+            <span className="text-slate-400">≈ 45%+</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#d7d9dc]" />
+            <span className="font-semibold text-[#d7d9dc]">Silver</span>
+            <span className="text-slate-400">≈ 60%+</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#f5d67a]" />
+            <span className="font-semibold text-[#f5d67a]">Gold</span>
+            <span className="text-slate-400">≈ 70%+</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#d9f0ff]" />
+            <span className="font-semibold text-[#d9f0ff]">Platinum</span>
+            <span className="text-slate-400">≈ 85%+</span>
+          </span>
+          <span className="ml-auto text-slate-500">
+            Higher tier = stricter confidence floor
+          </span>
         </div>
       )}
 

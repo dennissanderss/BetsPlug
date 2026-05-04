@@ -128,13 +128,27 @@ npm run migrate:homepage:dry    # same, dry-run (no writes)
 
 `npm install` silently runs `scripts/setup-hooks.sh` via `postinstall` to wire git hooks — expected, not an error.
 
+Marketing (from `marketing/`):
+```bash
+npm install
+npm run dev                     # http://localhost:4321 (Astro default port)
+npm run build                   # → dist/ static HTML
+npm run preview                 # serve the built site locally
+```
+
+Requires Node ≥ 22.12 (`engines` in `package.json`). The build is fully static — plain `.html` plus a single `_astro/` CSS chunk. Free picks on the homepage are fetched from the FastAPI backend; configure `PUBLIC_API_BASE` in `marketing/.env`. When the API is unreachable the page degrades gracefully (still renders, picks grid empty).
+
 Docker (from repo root):
 ```bash
 docker-compose up --build       # db + redis + backend + celery_worker + celery_beat + frontend
 docker-compose exec backend python -m seed.seed_data
 ```
 
+Note: `docker-compose.yml` does NOT include the `marketing/` Astro site — run it separately with `npm run dev` from that folder when needed.
+
 Windows convenience wrappers: `start.bat`, `stop.bat`, `open.bat`.
+
+CI (`.github/workflows/seo-checks.yml`): SEO regression audit runs on every PR that touches `frontend/src/**`, `frontend/scripts/**`, `frontend/next.config.js`, or `frontend/public/sitemap*`, and on a daily 06:00 UTC cron against `https://betsplug.com`. Soft-fails on medium severity, hard-fails on high. Touching the sitemap, canonical helpers, or schema generators may trigger it.
 
 ## Architecture notes that aren't obvious from file names
 
@@ -150,9 +164,11 @@ Windows convenience wrappers: `start.bat`, `stop.bat`, `open.bat`.
 
 **Frontend route groups**: `src/app/(app)/*` is the authenticated SaaS (dashboard, predictions, trackrecord, admin, etc.); `src/app/*` (outside the group) is the public marketing site (home, pricing, blog, auth). They share `layout.tsx` at the root. Sanity Studio is mounted at `/studio`.
 
-**i18n**: **only EN and NL**. Don't generate other locales — `npm run translate` and the config in `src/i18n/` are intentionally constrained to save translation-API usage.
+**i18n**: **only EN and NL** during day-to-day development. Don't generate other locales — `npm run translate` and the config in `src/i18n/` are intentionally constrained to save translation-API usage. (Note: `frontend/` *supports* 16 locales but the auto-translate runs NL only; `marketing/` is a separate i18n surface — see below.)
 
 **Sanity CMS**: blog posts and marketing content come from Sanity (`frontend/sanity/`, `next-sanity` client). Don't hardcode content that belongs in the CMS.
+
+**Marketing site has its own i18n** (`marketing/src/i18n/`): **frozen at 6 locales** (`en, nl, de, fr, es, it`) — different set and smaller than `frontend/`'s 16. Adding a 7th is a deliberate multi-system change (`astro.config.mjs` + `slug-mappings.ts` + content folders + sitemap + hreflang). Page strings are hand-authored per locale; long-form content (articles, leagues, pages) lives in `marketing/src/content/` with per-locale JSON files and a `_meta.translationStatus` flag (`ai-generated` | `native-reviewed`). DeepL-powered scripts keep non-EN Sanity content filled. The marketing site can fall back to EN bodies under DE/FR/ES/IT URLs until native translations land — see `TODOs.md` § 🟡 for the open translation backlog.
 
 ## Working in this repo
 

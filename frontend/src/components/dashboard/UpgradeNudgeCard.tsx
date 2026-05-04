@@ -70,7 +70,10 @@ const STEPS: Record<NudgeableTier, TierStep> = {
       border: "border-slate-300/30",
       glow: "shadow-[0_0_48px_rgba(203,213,225,0.12)]",
       ring: "ring-slate-300/40",
-      btn: "bg-gradient-to-r from-slate-100 via-slate-200 to-slate-300 text-slate-900",
+      // Brand-green CTA against the silver-tinted card so the
+      // upgrade action stays high-contrast on a dark dashboard.
+      // (Old slate-100 gradient text disappeared into the bg.)
+      btn: "bg-[hsl(var(--accent-green))] text-[hsl(234_25%_5%)] shadow-[0_8px_24px_rgba(74,222,128,0.35)]",
       text: "text-slate-100",
     },
   },
@@ -90,7 +93,9 @@ const STEPS: Record<NudgeableTier, TierStep> = {
       border: "border-amber-400/40",
       glow: "shadow-[0_0_48px_rgba(251,191,36,0.18)]",
       ring: "ring-amber-300/40",
-      btn: "bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 text-[#1a1408]",
+      // Brand-green CTA — matches the rest of the 2026-05 redesign
+      // and stays readable regardless of card background tint.
+      btn: "bg-[hsl(var(--accent-green))] text-[hsl(234_25%_5%)] shadow-[0_8px_24px_rgba(74,222,128,0.35)]",
       text: "text-amber-100",
     },
   },
