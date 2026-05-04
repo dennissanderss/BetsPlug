@@ -318,6 +318,8 @@ def create_app() -> FastAPI:
         "https://app.betsplug.com",
         "https://marketing.betsplug.com",
         "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
         "http://localhost:4321",
     ]
     for o in _known:
