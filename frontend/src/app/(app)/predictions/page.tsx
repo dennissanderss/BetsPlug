@@ -1576,10 +1576,56 @@ export default function PredictionsPage() {
           </div>
         </div>
 
-        <Pill tone="win" className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          {t("pred.liveUpdates")}
-        </Pill>
+        <div className="flex flex-col items-stretch gap-3 sm:items-end">
+          <Pill tone="win" className="flex items-center gap-2 self-end">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            {t("pred.liveUpdates")}
+          </Pill>
+
+          {/* ── How it works — compact tier-explainer card.
+               Sits directly below the "Live updates" pill.
+               Always visible on Upcoming + Live tabs; hidden on
+               Results (confidence becomes hit/miss there). */}
+          {!isResults && (
+            <div className="w-full max-w-md rounded-xl border border-white/[0.06] bg-[hsl(230_22%_9%/0.5)] p-3 backdrop-blur-sm">
+              <div className="mb-2 flex items-baseline justify-between gap-3">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-400">
+                  How it works
+                </span>
+                <span className="text-[10px] text-slate-500">
+                  Higher tier = stricter floor
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#e8a864]" />
+                  <span className="font-semibold text-[#e8a864]">Free</span>
+                  <span className="text-slate-400">≈ 45%+ hit</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#d7d9dc]" />
+                  <span className="font-semibold text-[#d7d9dc]">Silver</span>
+                  <span className="text-slate-400">≈ 60%+ hit</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#f5d67a]" />
+                  <span className="font-semibold text-[#f5d67a]">Gold</span>
+                  <span className="text-slate-400">≈ 70%+ hit</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#d9f0ff]" />
+                  <span className="font-semibold text-[#d9f0ff]">Platinum</span>
+                  <span className="text-slate-400">≈ 85%+ hit</span>
+                </span>
+              </div>
+              <p className="mt-2 border-t border-white/[0.04] pt-2 text-[10px] leading-relaxed text-slate-500">
+                Higher confidence = stronger model conviction = better
+                historical hit rate. Tiers cluster picks by confidence
+                floor; the engine itself is the same.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── View Mode Tabs — Upcoming · Live · Results ──
@@ -1632,41 +1678,8 @@ export default function PredictionsPage() {
         </button>
       </div>
 
-      {/* ── Tier accuracy legend — replaces the two large guidance
-           banners. One compact strip with the historical hit-rate
-           per tier so users can read confidence-% in context.
-           Hidden on Results because confidence becomes a hit/miss
-           there, not a probability the user needs to compare. */}
-      {!isResults && (
-        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[11px] text-slate-300">
-          <span className="font-semibold uppercase tracking-widest text-slate-500">
-            Tier accuracy guide
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#e8a864]" />
-            <span className="font-semibold text-[#e8a864]">Free</span>
-            <span className="text-slate-400">≈ 45%+</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#d7d9dc]" />
-            <span className="font-semibold text-[#d7d9dc]">Silver</span>
-            <span className="text-slate-400">≈ 60%+</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#f5d67a]" />
-            <span className="font-semibold text-[#f5d67a]">Gold</span>
-            <span className="text-slate-400">≈ 70%+</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#d9f0ff]" />
-            <span className="font-semibold text-[#d9f0ff]">Platinum</span>
-            <span className="text-slate-400">≈ 85%+</span>
-          </span>
-          <span className="ml-auto text-slate-500">
-            Higher tier = stricter confidence floor
-          </span>
-        </div>
-      )}
+      {/* Tier-accuracy legend moved up next to the header
+          ("How it works" card under the Live updates pill). */}
 
       {/* ── Results-mode range selector (replaces the single-date picker) ── */}
       {isResults && (

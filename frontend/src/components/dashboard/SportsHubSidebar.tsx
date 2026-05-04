@@ -36,6 +36,10 @@ interface LiveMeasurementResponse {
 interface SportsHubSidebarProps {
   summary: WeeklySummary | undefined;
   isLoading: boolean;
+  /** Optional 14-day summary, rendered as a second row beneath the
+   *  default 7-day footer. */
+  summary14?: WeeklySummary | undefined;
+  isLoading14?: boolean;
   userTierSlug?: PickTierSlug | null;
   tierSummary?: TrackrecordSummary | undefined;
   tierSummaryLoading?: boolean;
@@ -44,6 +48,8 @@ interface SportsHubSidebarProps {
 export function SportsHubSidebar({
   summary,
   isLoading,
+  summary14,
+  isLoading14,
   userTierSlug,
   tierSummary,
   tierSummaryLoading,
@@ -232,6 +238,27 @@ export function SportsHubSidebar({
               <span className="ml-auto inline-flex items-center gap-1 text-[11px] tabular-nums text-slate-400">
                 <TrendingUp className="h-3 w-3" />
                 {Math.round(summary.win_rate * 100)}%
+              </span>
+            </div>
+          )}
+
+          {/* ── Last 14 days footer (optional) ─────────────────────── */}
+          {!isLoading14 && summary14 && (
+            <div className="flex items-center gap-3 border-t border-white/[0.04] px-4 py-3">
+              <span className="text-[10px] uppercase tracking-wider text-slate-500">
+                Last 14 days
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] tabular-nums text-emerald-300">
+                <CheckCircle2 className="h-3 w-3" />
+                {summary14.won}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] tabular-nums text-red-300">
+                <XCircle className="h-3 w-3" />
+                {summary14.lost}
+              </span>
+              <span className="ml-auto inline-flex items-center gap-1 text-[11px] tabular-nums text-slate-400">
+                <TrendingUp className="h-3 w-3" />
+                {Math.round(summary14.win_rate * 100)}%
               </span>
             </div>
           )}

@@ -71,12 +71,15 @@ since a `/pricing` page exists in both `marketing/` and (legacy) `frontend/`.
 
 ---
 
-> **Session handoff:** at the start of any new session, first read
-> `docs/SESSION_HANDOFF.md` for the current state of Fase A/B/C,
-> recent commits, open follow-ups, canonical tier facts and
-> do's/don'ts. Pair it with `docs/fase_b_qa_report.md` for the detailed
-> QA audit findings. Those two files together replace having to
-> reconstruct prior-session history.
+> **Session handoff:** at the start of any new session, orient via these
+> in priority order:
+> 1. `TODOs.md` (repo root) — current launch-blocking + post-launch punch list
+> 2. `docs/launch-readiness.md` — referenced from `TODOs.md`, full rationale
+> 3. `docs/v10_progress_*.md` — current engine/UX build working logs
+> 4. `docs/SESSION_HANDOFF.md` + `docs/fase_b_qa_report.md` — historical Fase A/B/C context (April 2026 tier UI sprint, canonical tier facts)
+> 5. `docs/BETSPLUG_STARTUP.md` — the recurring session-start protocol (git-log scan, deploy status, hardcoded-string check)
+>
+> Use 1–3 for *current* state and 4 for *background* state. The two together replace reconstructing prior-session history.
 
 > **Frontend design (NOCTURNE):** before touching any visual code, read
 > `frontend/NOCTURNE.md`. Every page, card, button and data chip on the

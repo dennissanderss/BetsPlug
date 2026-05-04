@@ -133,7 +133,7 @@ export function UpcomingPicksStrip({ data, isLoading, userTier }: UpcomingPicksS
   // dashboard shows the four sharpest calls — not just the four
   // earliest kickoffs.
   const now = Date.now();
-  const picks = React.useMemo(() => {
+  const inScope = React.useMemo(() => {
     const all = data?.fixtures ?? [];
     return all
       .filter((f) => {
@@ -149,15 +149,34 @@ export function UpcomingPicksStrip({ data, isLoading, userTier }: UpcomingPicksS
             confidence: f.prediction.confidence,
           });
         if (!tier) return false;
-        // Cumulative: a pick classified "platinum" is in scope for
-        // every tier; a "gold" pick is in scope for free/silver/gold
-        // but not platinum-only filters. The dashboard wants
-        // "anything visible to me", so user's rank ≤ pick's rank.
-        return TIER_RANK[tier] >= userRank;
+        // Cumulative tier model: a pick classified at tier X is
+        // visible to users at tier X AND LOWER. Free (0) sees only
+        // Free picks; Platinum (3) sees everything. Filter:
+        // pickRank <= userRank.
+        return TIER_RANK[tier] <= userRank;
       })
-      .sort((a, b) => (b.prediction!.confidence) - (a.prediction!.confidence))
-      .slice(0, 4);
+      .sort((a, b) => (b.prediction!.confidence) - (a.prediction!.confidence));
   }, [data, now, userRank]);
+
+  // Split: picks AT the user's tier vs picks BELOW the user's tier.
+  // For a Platinum user (rank 3), "atTier" = Platinum-classified
+  // picks (rank 3); "belowTier" = Gold/Silver/Free (rank < 3). For
+  // Free this distinction doesn't matter because picks below Free
+  // don't exist.
+  const atTier = inScope.filter((f) => {
+    const tier: PickTierSlug | null =
+      (f.prediction as any).pick_tier ??
+      classifyPickTier({
+        leagueId: (f as any).league_id ?? null,
+        leagueName: f.league_name ?? null,
+        confidence: f.prediction!.confidence,
+      });
+    return tier ? TIER_RANK[tier] === userRank : false;
+  });
+
+  const picks = inScope.slice(0, 4);
+  const showLowerTierFallbackBanner =
+    userRank > 0 && atTier.length === 0 && inScope.length > 0;
 
   return (
     <div className="card-neon">
@@ -185,6 +204,24 @@ export function UpcomingPicksStrip({ data, isLoading, userTier }: UpcomingPicksS
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
+
+        {/* Fallback notice — fires when the user's own tier has 0
+            picks but there ARE alternatives at lower tiers in their
+            cumulative scope. Tells a Platinum user "no Platinum picks
+            today, but here are X Gold/Silver/Free options the
+            engine is still confident about". */}
+        {!isLoading && showLowerTierFallbackBanner && (
+          <div className="mx-4 mt-3 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2 text-[11px] leading-relaxed text-amber-200/90">
+            <span className="font-semibold text-amber-200">
+              No {(userTier ?? "free").charAt(0).toUpperCase() + (userTier ?? "free").slice(1)} picks for the days ahead.
+            </span>{" "}
+            Engine is being selective at this confidence floor — but{" "}
+            <span className="font-semibold tabular-nums text-amber-100">
+              {inScope.length} alternative{inScope.length === 1 ? "" : "s"}
+            </span>{" "}
+            from lower tiers passed your scope. Shown below.
+          </div>
+        )}
 
         <div className="grid gap-3 p-4 sm:grid-cols-2 xl:grid-cols-4">
           {isLoading ? (

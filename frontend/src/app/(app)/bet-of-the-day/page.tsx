@@ -535,31 +535,29 @@ function BotdSkeleton() {
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-/** Try today, then the next 3 days, returning the first day with a pick. */
-async function fetchBotdWithFallback(): Promise<BetOfTheDay & { target_date?: string }> {
-  const dates: string[] = [];
-  for (let i = 0; i < 4; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    dates.push(d.toISOString().slice(0, 10)); // YYYY-MM-DD
-  }
-
-  for (const date of dates) {
-    const result = await api.getBetOfTheDay(date);
-    if (result.available && result.home_team) {
-      return { ...result, target_date: date };
-    }
-  }
-
-  // Nothing found for any of the 4 days — return the last response
-  return api.getBetOfTheDay();
+/**
+ * Pick of the Day = pick for TODAY. Not "best in the next 7 days".
+ * Same call as the dashboard preview (HeroBotdCompact via the
+ * parent dashboard page) so the two surfaces always show the same
+ * match. If today has no Gold-league fixture the response is
+ * available=false and the page renders its empty state.
+ *
+ * History: bug 2026-05-04. Page previously used a per-day fallback
+ * loop (today → +1 → +2 → +3) and dashboard used the bare no-date
+ * call (which is a 7-day window on the backend), so the two could
+ * legitimately disagree on "which match is THE Pick".
+ */
+async function fetchBotd(): Promise<BetOfTheDay & { target_date?: string }> {
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const result = await api.getBetOfTheDay(todayISO);
+  return { ...result, target_date: todayISO };
 }
 
 export default function BetOfTheDayPage() {
   const { t } = useTranslations();
   const { data, isLoading, isError } = useQuery<BetOfTheDay & { target_date?: string }>({
     queryKey: ["bet-of-the-day"],
-    queryFn: fetchBotdWithFallback,
+    queryFn: fetchBotd,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
   });
