@@ -640,58 +640,22 @@ function RoiCalculatorCard({
       </div>
       <p className="text-xs text-slate-500 mb-5">{t("results.roiCalcIntro")}</p>
 
-      {/* ── Data-source toggle — Live measurement vs Backtest ──
-          "Live" = strict pre-match picks since LIVE_START_MS (the
-          honest simulator). "Backtest" drops that constraint and
-          uses the full model-validation history with reconstructed
-          odds, so users can explore long periods even though live
-          tracking is only a few days deep. The two modes never mix
-          in the numbers — switching here re-runs aggregation. */}
-      <div className="mb-3 flex flex-wrap items-center gap-3">
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
-          {([
-            { key: "live" as const, label: t("results.sourceLive"), adminOnly: true },
-            { key: "backtest" as const, label: t("results.sourceBacktest"), adminOnly: false },
-          ]).map((opt) => {
-            const active = dataSource === opt.key;
-            const locked = opt.adminOnly && !isAdmin;
-            return (
-              <button
-                key={opt.key}
-                type="button"
-                disabled={locked}
-                onClick={() => !locked && setDataSource(opt.key)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
-                  locked
-                    ? "text-slate-600 bg-white/[0.01] cursor-not-allowed"
-                    : active
-                      ? opt.key === "live"
-                        ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
-                        : "bg-amber-500 text-[#1a1408] shadow-md shadow-amber-500/30"
-                      : "text-slate-400 hover:text-slate-200"
-                }`}
-                aria-pressed={active}
-                title={locked ? "Live measurement is locked while we collect more data — admin only for now" : undefined}
-              >
-                {opt.label}
-                {locked && <Lock className="h-3 w-3" />}
-              </button>
-            );
-          })}
-        </div>
-        {dataSource === "live" ? (
-          <span className="text-[11px] text-slate-500">
-            {t("results.sourceLiveHint", { days: liveDays })}
-          </span>
-        ) : !isAdmin ? (
-          <span className="text-[11px] text-slate-500">
-            Live measurement opens once we&apos;ve gathered 90+ days of data — backtest is the educational simulation in the meantime.
-          </span>
-        ) : (
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-amber-400">
-            {t("results.sourceBacktestHint")}
-          </span>
-        )}
+      {/* Data-source = Live measurement only.
+          Backtest mode was removed because the model-fair odds fallback
+          (used for ~86% of historical picks without real bookmaker
+          rows) makes ROI mathematically meaningless — by construction
+          a 1/prob price gives zero EV regardless of how good the
+          model is. Showing −0.2% on 365d wasn't a verdict on the
+          model; it was an artefact of reconstructing odds from the
+          model itself. We only run on real pre-match odds now,
+          so every cell on this card reflects what a real bettor
+          would have measured at the line. */}
+      <div className="mb-3 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          Live measurement
+        </span>
+        <span>Real pre-match 1X2 odds · {liveDays} days of data so far</span>
       </div>
 
       {/* ── Stream toggle — All predictions vs Bet of the Day ── */}
@@ -865,19 +829,10 @@ function RoiCalculatorCard({
                 live: liveDays,
               })}
             </span>
-            <button
-              type="button"
-              onClick={() => setDataSource("backtest")}
-              className="ml-auto rounded-md border border-amber-400/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-200 hover:bg-amber-500/20"
-            >
-              {t("results.roiCalcSwitchToBacktest")}
-            </button>
           </div>
         ) : (
           <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
-            {dataSource === "live"
-              ? t("results.roiCalcLiveStartNote")
-              : t("results.roiCalcBacktestNote")}
+            {t("results.roiCalcLiveStartNote")}
           </p>
         )}
       </Step>
@@ -1650,18 +1605,12 @@ function ResultsPageContent() {
   // still maturing. Users default to (and are pinned to) Backtest until
   // the live window has enough data to be representative. Admin can
   // toggle freely; non-admin can only see Backtest.
-  const [dataSource, setDataSource] = useState<DataSource>(
-    adminUnlocked ? initialDataSource : "backtest",
-  );
-  // If we boot with a stale "live" mode and the user turns out to be
-  // non-admin (auth resolves async, or admin enters tier-preview mode),
-  // force-flip to backtest so the gated state can never silently leak
-  // through.
-  useEffect(() => {
-    if (!adminUnlocked && dataSource === "live") {
-      setDataSource("backtest");
-    }
-  }, [adminUnlocked, dataSource]);
+  // Backtest mode removed — Result Simulation only runs on Live
+  // measurement (real pre-match odds). The dataSource is hardcoded
+  // here so the rest of the calculator code (filters, headlines,
+  // table) stays untouched.
+  const dataSource: DataSource = "live";
+  const setDataSource = (_: DataSource) => {};
   // useTier() starts as "free" before localStorage hydrates, then
   // settles on the real subscription tier asynchronously after
   // /subscriptions/me resolves. Earlier we snapped tierFilter once
@@ -1881,40 +1830,79 @@ function ResultsPageContent() {
         </span>
       </div>
 
-      {/* ── ROI Calculator (what would you have made?) ── */}
-      <RoiCalculatorCard
-        fixtures={allResults}
-        isLoading={isLoading}
-        stake={stake}
-        setStake={setStake}
-        calcTier={tierFilter}
-        setCalcTier={(v) => {
-          // Any manual click freezes the auto-snap effect so the
-          // user's choice wins over the server-confirmed default.
-          setManualTierOverride(true);
-          setTierFilter(v);
-        }}
-        calcPeriod={calcPeriod}
-        setCalcPeriod={setCalcPeriod}
-        stream={stream}
-        setStream={setStream}
-        dataSource={dataSource}
-        setDataSource={setDataSource}
-        userTier={userTier}
-        isAdmin={adminUnlocked}
-      />
+      {/* ── ROI Calculator — admin-only while we collect Live data ── */}
+      {adminUnlocked ? (
+        <RoiCalculatorCard
+          fixtures={allResults}
+          isLoading={isLoading}
+          stake={stake}
+          setStake={setStake}
+          calcTier={tierFilter}
+          setCalcTier={(v) => {
+            // Any manual click freezes the auto-snap effect so the
+            // user's choice wins over the server-confirmed default.
+            setManualTierOverride(true);
+            setTierFilter(v);
+          }}
+          calcPeriod={calcPeriod}
+          setCalcPeriod={setCalcPeriod}
+          stream={stream}
+          setStream={setStream}
+          dataSource={dataSource}
+          setDataSource={setDataSource}
+          userTier={userTier}
+          isAdmin={adminUnlocked}
+        />
+      ) : (
+        <div className="glass-card p-6 sm:p-8" style={{ border: "1px solid rgba(16,185,129,0.18)" }}>
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
+              <Lock className="h-4 w-4 text-emerald-400" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-base font-semibold text-white">Result Simulation opens soon</h2>
+              <p className="text-sm leading-relaxed text-slate-400">
+                We only run the simulation on real pre-match bookmaker odds, no reconstructions.
+                The honest live measurement started on{" "}
+                <span className="text-slate-300 font-semibold">{LIVE_TRACKING_START}</span>{" "}
+                and we want at least 90 days of measurements before opening this page — short windows
+                are too noisy to draw conclusions from. Track Record below shows the model&apos;s historical
+                accuracy in the meantime.
+              </p>
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <Link
+                  href="/trackrecord"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20"
+                >
+                  <Trophy className="h-3.5 w-3.5" />
+                  Open Track Record
+                </Link>
+                <Link
+                  href="/predictions"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/[0.04]"
+                >
+                  Today&apos;s predictions
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* ── Filtered-period Summary ── */}
-      <WeeklySummaryCard
-        data={computedSummary ?? undefined}
-        isLoading={isLoading}
-        isError={hasError}
-        isFree={isFree}
-        scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${tierFilter.charAt(0).toUpperCase()}${tierFilter.slice(1)} tier · ${dataSource === "live" ? "Live" : "Backtest"}`}
-      />
+      {/* ── Filtered-period Summary (admin-only with the rest of the
+          live simulator) ── */}
+      {adminUnlocked && (
+        <WeeklySummaryCard
+          data={computedSummary ?? undefined}
+          isLoading={isLoading}
+          isError={hasError}
+          isFree={isFree}
+          scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${tierFilter.charAt(0).toUpperCase()}${tierFilter.slice(1)} tier · Live`}
+        />
+      )}
 
       {/* ── Streak Stats ── */}
-      {filtered.length > 0 && (() => {
+      {adminUnlocked && filtered.length > 0 && (() => {
         // Compute streaks from the visible results
         const evaluated = filtered.filter(f => f.prediction && f.result);
         let currentStreak = 0;
@@ -1958,18 +1946,20 @@ function ResultsPageContent() {
         );
       })()}
 
-      {/* ── Filter bar ── */}
-      <ResultsFilterBar
-        period={period}
-        setPeriod={setPeriod}
-        resultFilter={resultFilter}
-        setResultFilter={setResultFilter}
-        leagueFilter={leagueFilter}
-        setLeagueFilter={setLeagueFilter}
-        leagues={leagues}
-        total={filtered.length}
-        dataSource={dataSource}
-      />
+      {/* ── Filter bar (admin-only with the rest of the simulator) ── */}
+      {adminUnlocked && (
+        <ResultsFilterBar
+          period={period}
+          setPeriod={setPeriod}
+          resultFilter={resultFilter}
+          setResultFilter={setResultFilter}
+          leagueFilter={leagueFilter}
+          setLeagueFilter={setLeagueFilter}
+          leagues={leagues}
+          total={filtered.length}
+          dataSource={dataSource}
+        />
+      )}
 
       {/* ── Error banner ── */}
       {hasError && (
@@ -1984,8 +1974,8 @@ function ResultsPageContent() {
         </div>
       )}
 
-      {/* ── Content ── */}
-      {isLoading ? (
+      {/* ── Content (admin-only with the rest of the simulator) ── */}
+      {adminUnlocked && (isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => <SkeletonCard key={i} />)}
         </div>
@@ -2043,7 +2033,7 @@ function ResultsPageContent() {
           {/* Footer: sum of visible rows' returns so the user can verify the headline */}
           <ResultsTableFooter fixtures={filtered} stake={stake} isFree={isFree} />
         </div>
-      )}
+      ))}
 
       {/* Upsell: Platinum lifetime */}
       <UpsellBanner
