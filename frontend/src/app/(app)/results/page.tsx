@@ -190,11 +190,17 @@ function formatPredictedOutcome(
 
 // ─── Weekly Summary Card ──────────────────────────────────────────────────────
 
-function WeeklySummaryCard({ data, isLoading, isError, isFree }: {
+function WeeklySummaryCard({ data, isLoading, isError, isFree, scopeLabel }: {
   data: WeeklySummary | undefined;
   isLoading: boolean;
   isError: boolean;
   isFree: boolean;
+  /** Dynamic scope ("365 days · Silver tier") so the card's title
+   *  matches the calculator's actual filter. The legacy "This Week's
+   *  Performance" string was hardcoded but the data is filtered by
+   *  whatever period the user picked, so the title lied on anything
+   *  other than 7d. */
+  scopeLabel: string;
 }) {
   const { t } = useTranslations();
   if (isLoading) {
@@ -222,7 +228,7 @@ function WeeklySummaryCard({ data, isLoading, isError, isFree }: {
       >
         <div className="flex items-center gap-2 mb-3">
           <Trophy className="h-4 w-4 text-emerald-400" />
-          <h2 className="text-sm font-semibold text-slate-200">{t("results.thisWeekPerformance")}</h2>
+          <h2 className="text-sm font-semibold text-slate-200">Performance · <span className="font-normal text-slate-400">{scopeLabel}</span></h2>
         </div>
         <p className="text-sm text-slate-500 italic">{t("results.noResultsThisWeek")}</p>
       </div>
@@ -564,12 +570,14 @@ function RoiCalculatorCard({
   const canSelectTier = (target: CalcTier): boolean =>
     USER_TIER_RANK[target as Tier] <= userRank;
 
-  // Tier comparison mode — controls both the headline card and the row.
-  // "subscriber" is the default because that's what reflects the actual
-  // product experience. Surprising-but-true result with "band" mode is
-  // that Silver beats Platinum on net €, because the disjoint Platinum
-  // band has only 12 picks at 1.45 avg odds — sample variance dominates.
-  const [compareMode, setCompareMode] = useState<CompareMode>("subscriber");
+  // The simulator always uses subscriber view: a Silver row includes
+  // every pick a Silver subscriber actually sees in the app (Free +
+  // Silver picks). The disjoint "tier band" mode only made sense for
+  // engine calibration, and exposing it as a user-facing toggle made
+  // people second-guess the headline numbers. Locked to subscriber
+  // mode here; an admin who wants per-band breakdowns can compute them
+  // off the same data via the SQL viewer.
+  const compareMode: CompareMode = "subscriber";
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
@@ -1003,48 +1011,12 @@ function RoiCalculatorCard({
         })()}
 
         {/* Per-tier comparison — tap any card to make it the active tier */}
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-[10px] uppercase tracking-widest text-slate-500">
-            {t("results.roiCalcCompareAllTiers")}
-          </p>
-          {/* Compare mode — "Subscriber view" is the default because it
-              answers the question users actually care about ("what would
-              I have made on tier X?"). "Tier band" answers "how does the
-              engine perform per confidence band?" — useful for
-              calibration but easy to misread (a Silver-band -€41 row
-              isn't what a Silver subscriber experienced; their funnel
-              also includes the Free band). */}
-          <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5 text-[10px]">
-            <button
-              type="button"
-              onClick={() => setCompareMode("subscriber")}
-              className={`rounded-md px-2 py-1 font-semibold uppercase tracking-widest transition-colors ${
-                compareMode === "subscriber"
-                  ? "bg-emerald-600/80 text-white"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              title="Cumulative — what a subscriber at this tier actually sees"
-            >
-              Subscriber view
-            </button>
-            <button
-              type="button"
-              onClick={() => setCompareMode("band")}
-              className={`rounded-md px-2 py-1 font-semibold uppercase tracking-widest transition-colors ${
-                compareMode === "band"
-                  ? "bg-emerald-600/80 text-white"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              title="Disjoint — picks classified into exactly one tier band"
-            >
-              Tier band
-            </button>
-          </div>
-        </div>
-        <p className="mb-1.5 text-[10px] leading-relaxed text-slate-500">
-          {compareMode === "subscriber"
-            ? "Cumulative: a Silver subscriber's row includes Free picks too — what they actually see in the app."
-            : "Disjoint: each pick counted once, in its classified tier band. Useful to see how the engine performs per confidence band."}
+        <p className="mb-1 text-[10px] uppercase tracking-widest text-slate-500">
+          {t("results.roiCalcCompareAllTiers")}
+        </p>
+        <p className="mb-2 text-[10px] leading-relaxed text-slate-500">
+          Each row shows what a subscriber at that tier actually sees in the app.
+          A Silver subscriber's numbers include Free picks too — that's their real funnel.
         </p>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {CALC_TIERS.map(({ key, label, accent }) => {
@@ -1797,7 +1769,16 @@ function ResultsPageContent() {
       items = items.filter((f) => isLivePick(f));
     }
 
-    items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
+    // Subscriber view: a tier's row includes every pick at OR BELOW
+    // that tier's rank. Mirrors aggregateFixtures(...mode="subscriber")
+    // so This Week's Performance shows the same universe as Step 4.
+    // Without this, Silver tier in the table read "461 picks" while
+    // Step 4 showed "1302 picks" — same name, different sample.
+    const targetRank = TIER_RANK_MAP[tierFilter as CalcTier];
+    items = items.filter((f) => {
+      const pickRank = TIER_RANK_MAP[f.prediction?.pick_tier as CalcTier];
+      return pickRank != null && pickRank <= targetRank;
+    });
 
     if (leagueFilter) {
       items = items.filter((f) => f.league_name === leagueFilter);
@@ -1927,12 +1908,13 @@ function ResultsPageContent() {
         isAdmin={adminUnlocked}
       />
 
-      {/* ── Weekly Summary ── */}
+      {/* ── Filtered-period Summary ── */}
       <WeeklySummaryCard
         data={computedSummary ?? undefined}
         isLoading={isLoading}
         isError={hasError}
         isFree={isFree}
+        scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${tierFilter.charAt(0).toUpperCase()}${tierFilter.slice(1)} tier · ${dataSource === "live" ? "Live" : "Backtest"}`}
       />
 
       {/* ── Streak Stats ── */}
