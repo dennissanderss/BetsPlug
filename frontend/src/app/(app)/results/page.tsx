@@ -570,14 +570,15 @@ function RoiCalculatorCard({
   const canSelectTier = (target: CalcTier): boolean =>
     USER_TIER_RANK[target as Tier] <= userRank;
 
-  // The simulator always uses subscriber view: a Silver row includes
-  // every pick a Silver subscriber actually sees in the app (Free +
-  // Silver picks). The disjoint "tier band" mode only made sense for
-  // engine calibration, and exposing it as a user-facing toggle made
-  // people second-guess the headline numbers. Locked to subscriber
-  // mode here; an admin who wants per-band breakdowns can compute them
-  // off the same data via the SQL viewer.
-  const compareMode: CompareMode = "subscriber";
+  // The simulator uses tier-band mode so labels align with Track Record:
+  // "Platinum" on this page = picks the engine classified as Platinum
+  // (the same 298-pick set Track Record reports as Platinum-tier). The
+  // cumulative subscriber view was technically more accurate to the
+  // product funnel, but having two pages disagree on what "Platinum"
+  // means broke trust — Track Record showed 298 / 85.2% and Result
+  // Simulation showed 1741 / 65% under the same label. Now both pages
+  // mean the same thing when they say "Platinum".
+  const compareMode: CompareMode = "band";
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
@@ -1015,8 +1016,8 @@ function RoiCalculatorCard({
           {t("results.roiCalcCompareAllTiers")}
         </p>
         <p className="mb-2 text-[10px] leading-relaxed text-slate-500">
-          Each row shows what a subscriber at that tier actually sees in the app.
-          A Silver subscriber's numbers include Free picks too — that's their real funnel.
+          Each row shows the picks the engine classified into that tier band — same set Track Record reports under the same label.
+          Higher tier = stricter confidence floor and a smaller sample.
         </p>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {CALC_TIERS.map(({ key, label, accent }) => {
@@ -1769,16 +1770,11 @@ function ResultsPageContent() {
       items = items.filter((f) => isLivePick(f));
     }
 
-    // Subscriber view: a tier's row includes every pick at OR BELOW
-    // that tier's rank. Mirrors aggregateFixtures(...mode="subscriber")
-    // so This Week's Performance shows the same universe as Step 4.
-    // Without this, Silver tier in the table read "461 picks" while
-    // Step 4 showed "1302 picks" — same name, different sample.
-    const targetRank = TIER_RANK_MAP[tierFilter as CalcTier];
-    items = items.filter((f) => {
-      const pickRank = TIER_RANK_MAP[f.prediction?.pick_tier as CalcTier];
-      return pickRank != null && pickRank <= targetRank;
-    });
+    // Tier-band match: each pick is in exactly one tier (the one the
+    // engine classified it under). Mirrors aggregateFixtures(...
+    // mode="band") + Track Record's per-tier rows so the same label
+    // means the same picks across both pages.
+    items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
     if (leagueFilter) {
       items = items.filter((f) => f.league_name === leagueFilter);
