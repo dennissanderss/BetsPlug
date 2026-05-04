@@ -112,7 +112,7 @@ async def realised_pnl_1x2(
     actual_outcome: Outcome,
     is_correct: bool,
     db: AsyncSession,
-) -> tuple[float, float, str]:
+) -> tuple[Optional[float], Optional[float], str]:
     """Compute the P&L (in units, 1u = 1 stake) for a single 1X2 pick.
 
     Returns ``(pnl, odds_used, odds_source)``:
@@ -202,6 +202,7 @@ async def compute_strategy_metrics_with_real_odds(
 
     wins = 0
     losses = 0
+    skipped_no_odds = 0
     total_pnl = 0.0
     with_real_odds = 0
     odds_values: list[float] = []
@@ -214,21 +215,27 @@ async def compute_strategy_metrics_with_real_odds(
     for pred, evaluation in picks:
         actual = evaluation.actual_outcome
         is_correct = bool(evaluation.is_correct)
-        if is_correct:
-            wins += 1
-        else:
-            losses += 1
         pnl, odds_used, source = await realised_pnl_1x2(
             prediction=pred,
             actual_outcome=actual,
             is_correct=is_correct,
             db=db,
         )
+        # H1 guard: realised_pnl_1x2 returns (None, None, "no_odds") when
+        # the match has no historical 1X2 row. Skip those picks entirely
+        # — a graded pick without odds can't honestly contribute to ROI.
+        # We still track the count so the caller can see how much of the
+        # universe was dropped.
+        if pnl is None or odds_used is None:
+            skipped_no_odds += 1
+            continue
+        if is_correct:
+            wins += 1
+        else:
+            losses += 1
         total_pnl += pnl
         if source == "historical_odds":
             with_real_odds += 1
-        # implied_from_model is not counted as "real" odds — it's better
-        # than 1.90 but still an estimate, not market data.
         if is_correct:
             odds_values.append(odds_used)
             gross_profit += pnl
@@ -241,16 +248,32 @@ async def compute_strategy_metrics_with_real_odds(
         if dd > max_dd:
             max_dd = dd
 
-    winrate = wins / n
-    roi = total_pnl / n
-    odds_coverage_pct = round(100 * with_real_odds / n, 1)
+    counted = wins + losses
+    if counted == 0:
+        return {
+            "sample_size": 0,
+            "wins": 0,
+            "losses": 0,
+            "winrate": 0.0,
+            "roi": 0.0,
+            "total_pnl": 0.0,
+            "odds_coverage_pct": 0.0,
+            "avg_odds_used": 0.0,
+            "max_drawdown": 0.0,
+            "profit_factor": 0.0,
+            "skipped_no_odds": skipped_no_odds,
+        }
+
+    winrate = wins / counted
+    roi = total_pnl / counted
+    odds_coverage_pct = round(100 * with_real_odds / counted, 1)
     avg_odds_used = round(sum(odds_values) / len(odds_values), 3) if odds_values else 0.0
     profit_factor = (
         round(gross_profit / gross_loss, 4) if gross_loss > 0 else 0.0
     )
 
     return {
-        "sample_size": n,
+        "sample_size": counted,
         "wins": wins,
         "losses": losses,
         "winrate": round(winrate, 4),
@@ -260,4 +283,5 @@ async def compute_strategy_metrics_with_real_odds(
         "avg_odds_used": avg_odds_used,
         "max_drawdown": round(max_dd, 2),
         "profit_factor": profit_factor,
+        "skipped_no_odds": skipped_no_odds,
     }

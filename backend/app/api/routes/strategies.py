@@ -19,6 +19,7 @@ from app.core.tier_system import (
 from app.db.session import get_db
 from app.models.league import League
 from app.models.match import Match
+from app.models.odds import OddsHistory
 from app.models.prediction import Prediction
 from app.models.strategy import Strategy
 from app.models.team import Team
@@ -30,6 +31,48 @@ from app.schemas.strategy import (
 from app.services.strategy_engine import evaluate_strategy
 
 router = APIRouter()
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Odds bulk-loader
+# ──────────────────────────────────────────────────────────────────────────────
+async def _load_odds_map(
+    match_ids: list[uuid.UUID], db: AsyncSession
+) -> dict[uuid.UUID, dict]:
+    """Bulk-load latest 1X2 odds rows keyed by match_id.
+
+    Strategy evaluators run in strict mode and reject rules whose feature
+    returns None. Without odds loaded, every odds-based rule (edge_pick,
+    odds_home, ...) silently fails — so a strategy like "edge >= 5%" can
+    never match a single pick. This helper hydrates a map of the latest
+    odds row per match in a single query, which the eval loop can then
+    pass into ``evaluate_strategy(..., odds=odds_map.get(match_id))``.
+
+    Returns ``{}`` when ``match_ids`` is empty.
+    """
+    if not match_ids:
+        return {}
+    stmt = (
+        select(OddsHistory)
+        .where(
+            OddsHistory.match_id.in_(match_ids),
+            OddsHistory.market.in_(["1x2", "1X2"]),
+        )
+        .order_by(OddsHistory.match_id, OddsHistory.recorded_at.desc())
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+    odds_map: dict[uuid.UUID, dict] = {}
+    for row in rows:
+        # First row per match wins (DESC order = latest recorded). Skip
+        # subsequent rows for the same match.
+        if row.match_id in odds_map:
+            continue
+        odds_map[row.match_id] = {
+            "home_odds": row.home_odds,
+            "draw_odds": row.draw_odds,
+            "away_odds": row.away_odds,
+        }
+    return odds_map
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -327,6 +370,11 @@ async def get_strategy_picks(
         .join(League, League.id == Match.league_id)
         .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .outerjoin(MatchResult, MatchResult.match_id == Match.id)
+        # H7: align /picks with /metrics — only show pre-kickoff v8.1 picks.
+        # Without this, post-kickoff backfill rows leak into the equity curve
+        # while the headline numbers are filtered, producing two universes
+        # on the same page.
+        .where(trackrecord_filter())
         .order_by(Match.scheduled_at.desc())
     )
     if TIER_SYSTEM_ENABLED:
@@ -334,6 +382,15 @@ async def get_strategy_picks(
 
     result = await db.execute(q)
     rows = result.all()
+
+    # H2: bulk-load 1X2 odds for every match in the candidate set so
+    # odds-based rules (edge_pick, odds_home, ...) can evaluate. Without
+    # this, strict-mode evaluation rejects every pick whose strategy
+    # mentions odds and the equity curve is silently empty.
+    odds_map = await _load_odds_map(
+        list({row[0].match_id for row in rows}), db
+    )
+    from app.services.roi_calculator import realised_pnl_1x2
 
     # Evaluate each prediction against strategy rules
     matched_picks: list[StrategyPickPrediction] = []
@@ -351,16 +408,26 @@ async def get_strategy_picks(
         home_score = row[10]
         away_score = row[11]
 
-        odds = None
+        odds = odds_map.get(prediction.match_id)
         if evaluate_strategy(strategy, prediction, odds):
             # Determine pick
             probs = {"HOME": prediction.home_win_prob, "DRAW": prediction.draw_prob or 0, "AWAY": prediction.away_win_prob}
             pick = max(probs, key=lambda k: probs[k])
 
-            # Calculate P/L (flat 1u stake, assume avg odds ~1.9)
-            pnl = None
-            if is_correct is not None:
-                pnl = 0.9 if is_correct else -1.0
+            # H8: compute P/L from real historical odds (or null when
+            # no odds row exists). The old hardcoded `0.9 / -1.0` was a
+            # flat-1.90 fallback that contradicted the real-odds ROI
+            # in /metrics — equity curve and headline numbers now
+            # share the same odds universe.
+            pnl: Optional[float] = None
+            if is_correct is not None and actual_outcome is not None:
+                computed_pnl, _, _ = await realised_pnl_1x2(
+                    prediction=prediction,
+                    actual_outcome=actual_outcome,
+                    is_correct=bool(is_correct),
+                    db=db,
+                )
+                pnl = computed_pnl
 
             status_str = match_status.value if hasattr(match_status, "value") else str(match_status)
 
@@ -459,9 +526,12 @@ async def get_strategy_today_picks(
         q = q.where(access_filter(user_tier))
     rows = (await db.execute(q)).all()
 
+    # H2: hydrate odds so odds-based strategy rules can match.
+    odds_map = await _load_odds_map([r[0].match_id for r in rows], db)
+
     picks = []
     for pred, scheduled_at, home, away, home_logo, away_logo, league in rows:
-        if evaluate_strategy(strategy, pred, odds=None):
+        if evaluate_strategy(strategy, pred, odds=odds_map.get(pred.match_id)):
             probs = {
                 "HOME": pred.home_win_prob,
                 "DRAW": pred.draw_prob or 0,
@@ -543,10 +613,15 @@ async def get_strategy_metrics(
         q = q.where(access_filter(user_tier))
     rows = (await db.execute(q)).all()
 
+    # H2: hydrate odds so edge / odds-based rules can match.
+    odds_map = await _load_odds_map(
+        list({pred.match_id for pred, _ in rows}), db
+    )
+
     # Filter for strategy matches
     matched_and_evaluated = []
     for pred, evaluation in rows:
-        if evaluate_strategy(strategy, pred, odds=None):
+        if evaluate_strategy(strategy, pred, odds=odds_map.get(pred.match_id)):
             matched_and_evaluated.append((pred, evaluation))
 
     sample_size = len(matched_and_evaluated)
@@ -664,9 +739,18 @@ async def _walk_forward_for_strategy(
     else:
         rows = pre_fetched_rows
 
+    # H2: hydrate odds for the entire walk-forward universe so odds-based
+    # strategy rules can match across all folds. Walk-forward needs a
+    # reasonable sample to be statistically meaningful, and odds=None
+    # silently emptied the pool for any strategy mentioning edge_pick.
+    odds_map = await _load_odds_map(
+        list({pred.match_id for pred, _, _ in rows}), db
+    )
     matched: list[tuple] = []
     for pred, evaluation, sched in rows:
-        if evaluate_strategy(strategy, pred, odds=None):
+        if evaluate_strategy(
+            strategy, pred, odds=odds_map.get(pred.match_id)
+        ):
             matched.append((pred, evaluation, sched))
 
     if len(matched) < 30:
@@ -910,6 +994,13 @@ async def refresh_strategy_validation_v2(
         .order_by(Match.scheduled_at.asc())
     )
     pre_fetched = (await db.execute(pre_fetch_stmt)).all()
+
+    # H2: hydrate odds once for the entire universe so every strategy in
+    # this batch can match its odds-based rules.
+    odds_map = await _load_odds_map(
+        list({pred.match_id for pred, _, _ in pre_fetched}), db
+    )
+
     # Picks-only tuples for the metrics call
     base_picks_by_strategy: dict = {}
 
@@ -917,7 +1008,9 @@ async def refresh_strategy_validation_v2(
     for strat in strategies:
         matched: list[tuple] = []
         for pred, evaluation, _sched in pre_fetched:
-            if evaluate_strategy(strat, pred, odds=None):
+            if evaluate_strategy(
+                strat, pred, odds=odds_map.get(pred.match_id)
+            ):
                 matched.append((pred, evaluation))
         sample_size = len(matched)
 
@@ -1056,11 +1149,18 @@ async def refresh_strategy_validation(
     # on the metrics endpoint.
     from app.services.roi_calculator import compute_strategy_metrics_with_real_odds
 
+    # H2: bulk-load odds once so odds-based rules can match.
+    odds_map = await _load_odds_map(
+        list({pred.match_id for pred, _ in pred_rows}), db
+    )
+
     summary: list[dict] = []
     for strat in strategies:
         matched: list[tuple] = []
         for pred, evaluation in pred_rows:
-            if evaluate_strategy(strat, pred, odds=None):
+            if evaluate_strategy(
+                strat, pred, odds=odds_map.get(pred.match_id)
+            ):
                 matched.append((pred, evaluation))
         sample_size = len(matched)
         if sample_size == 0:

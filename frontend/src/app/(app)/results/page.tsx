@@ -47,14 +47,15 @@ const PERIOD_MIN = 1;
 const PERIOD_MAX = 365;
 const PERIOD_PRESETS: number[] = [7, 14, 30, 90];
 
-// Launch date of the strict pre-match live measurement. Matches
-// LIVE_TRACKING_START below and the V81_DEPLOYMENT_CUTOFF on the
-// backend. Fixtures with a prediction locked before kickoff on or
-// after this date are counted in the live simulator; older fixtures
-// are model-validation backtest data — same picks, but odds are
-// reconstructed instead of stored pre-match, so payouts are
-// estimates rather than what you would have actually won.
-const LIVE_START_MS = Date.UTC(2026, 3, 16); // month is 0-indexed (3 = April)
+// Launch instant of the strict pre-match live measurement. MUST mirror
+// backend/app/core/prediction_filters.py V81_DEPLOYMENT_CUTOFF
+// (datetime(2026, 4, 16, 11, 0, 0, UTC)) and trackrecord_filter()'s
+// boundary semantics (predicted_at <= scheduled_at, inclusive). Without
+// this alignment the Results-page Live winrate disagreed with
+// /trackrecord/summary by ~11 hours of edge cases on 16 Apr 2026:
+// picks made between 00:00–11:00 UTC were counted live by the FE but
+// rejected by the backend filter.
+const LIVE_START_MS = Date.UTC(2026, 3, 16, 11, 0, 0); // 11:00 UTC, matches V81_DEPLOYMENT_CUTOFF
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 function isLivePick(f: Fixture): boolean {
@@ -63,7 +64,12 @@ function isLivePick(f: Fixture): boolean {
   const predMs = new Date(pred.predicted_at).getTime();
   const schedMs = new Date(f.scheduled_at).getTime();
   if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return false;
-  return predMs < schedMs && predMs >= LIVE_START_MS;
+  // Inclusive on both sides: predicted_at <= scheduled_at matches the
+  // backend's trackrecord_filter (predicted_at <= scheduled_at is the
+  // majority of v8.1 batch-simulation picks where predicted_at is
+  // stamped at exactly the kickoff timestamp — they are pre-match
+  // by design).
+  return predMs <= schedMs && predMs >= LIVE_START_MS;
 }
 
 /** Whole days elapsed since the live-measurement launched. */
@@ -430,6 +436,21 @@ function oddsForPick(fixture: Fixture, side: "home" | "draw" | "away"): {
   return { odds: 1.9, source: "flat" };
 }
 
+// Tier comparison mode: "band" partitions picks into disjoint tier bands
+// (Free 45-59% confidence, Silver 60-69%, Gold 70-84%, Platinum 85%+).
+// "subscriber" simulates what a subscriber AT THAT TIER actually
+// experiences — the cumulative scope: a Silver subscriber sees Silver
+// picks PLUS the lower-tier (Free) picks, because their tier funnel
+// includes everything below their floor.
+type CompareMode = "band" | "subscriber";
+
+const TIER_RANK_MAP: Record<CalcTier, number> = {
+  free: 0,
+  silver: 1,
+  gold: 2,
+  platinum: 3,
+};
+
 function aggregateFixtures(
   fixtures: Fixture[],
   stake: number,
@@ -437,13 +458,24 @@ function aggregateFixtures(
   periodDays: CalcPeriod,
   now: Date,
   dataSource: DataSource = "live",
+  mode: CompareMode = "band",
 ): PickAggregate {
   const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
   const agg = emptyAggregate();
+  const targetRank = TIER_RANK_MAP[tier];
 
   for (const f of fixtures) {
     if (f.status !== "finished" || !f.result || !f.prediction) continue;
-    if (f.prediction.pick_tier !== tier) continue;
+    // "band" → exclusive tier match (the engine's classification of
+    // each pick). "subscriber" → cumulative downward (every pick the
+    // subscriber's tier funnel admits). The dashboard's
+    // UpcomingPicksStrip uses the same `pickRank <= userRank` rule.
+    const pickRank = TIER_RANK_MAP[f.prediction.pick_tier as CalcTier];
+    if (mode === "band") {
+      if (f.prediction.pick_tier !== tier) continue;
+    } else {
+      if (pickRank == null || pickRank > targetRank) continue;
+    }
     // In live mode only count picks that were locked pre-kickoff
     // since LIVE_START_MS. Backtest mode drops that constraint and
     // simulates against the full model-validation history.
@@ -530,23 +562,30 @@ function RoiCalculatorCard({
   const canSelectTier = (target: CalcTier): boolean =>
     USER_TIER_RANK[target as Tier] <= userRank;
 
+  // Tier comparison mode — controls both the headline card and the row.
+  // "subscriber" is the default because that's what reflects the actual
+  // product experience. Surprising-but-true result with "band" mode is
+  // that Silver beats Platinum on net €, because the disjoint Platinum
+  // band has only 12 picks at 1.45 avg odds — sample variance dominates.
+  const [compareMode, setCompareMode] = useState<CompareMode>("subscriber");
+
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
-    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date(), dataSource);
-  }, [fixtures, stake, calcTier, calcPeriod, dataSource]);
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date(), dataSource, compareMode);
+  }, [fixtures, stake, calcTier, calcPeriod, dataSource, compareMode]);
 
   // Breakdown across all four tiers at the selected period, so the user can
   // compare what each tier would have paid out.
   const perTier = useMemo(() => {
     const now = new Date();
     const result: Record<CalcTier, PickAggregate> = {
-      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now, dataSource),
-      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now, dataSource),
-      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now, dataSource),
-      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now, dataSource),
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now, dataSource, compareMode),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now, dataSource, compareMode),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now, dataSource, compareMode),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now, dataSource, compareMode),
     };
     return result;
-  }, [fixtures, stake, calcPeriod, dataSource]);
+  }, [fixtures, stake, calcPeriod, dataSource, compareMode]);
 
   // Window-aware messaging for the live-data cap. When the user has
   // dialled the period beyond what live measurement can actually
@@ -952,8 +991,48 @@ function RoiCalculatorCard({
         })()}
 
         {/* Per-tier comparison — tap any card to make it the active tier */}
-        <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
-          {t("results.roiCalcCompareAllTiers")}
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-[10px] uppercase tracking-widest text-slate-500">
+            {t("results.roiCalcCompareAllTiers")}
+          </p>
+          {/* Compare mode — "Subscriber view" is the default because it
+              answers the question users actually care about ("what would
+              I have made on tier X?"). "Tier band" answers "how does the
+              engine perform per confidence band?" — useful for
+              calibration but easy to misread (a Silver-band -€41 row
+              isn't what a Silver subscriber experienced; their funnel
+              also includes the Free band). */}
+          <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5 text-[10px]">
+            <button
+              type="button"
+              onClick={() => setCompareMode("subscriber")}
+              className={`rounded-md px-2 py-1 font-semibold uppercase tracking-widest transition-colors ${
+                compareMode === "subscriber"
+                  ? "bg-emerald-600/80 text-white"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              title="Cumulative — what a subscriber at this tier actually sees"
+            >
+              Subscriber view
+            </button>
+            <button
+              type="button"
+              onClick={() => setCompareMode("band")}
+              className={`rounded-md px-2 py-1 font-semibold uppercase tracking-widest transition-colors ${
+                compareMode === "band"
+                  ? "bg-emerald-600/80 text-white"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              title="Disjoint — picks classified into exactly one tier band"
+            >
+              Tier band
+            </button>
+          </div>
+        </div>
+        <p className="mb-1.5 text-[10px] leading-relaxed text-slate-500">
+          {compareMode === "subscriber"
+            ? "Cumulative: a Silver subscriber's row includes Free picks too — what they actually see in the app."
+            : "Disjoint: each pick counted once, in its classified tier band. Useful to see how the engine performs per confidence band."}
         </p>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {CALC_TIERS.map(({ key, label, accent }) => {

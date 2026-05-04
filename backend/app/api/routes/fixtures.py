@@ -647,17 +647,19 @@ async def _load_latest_predictions(
         Prediction.match_id,
         func.max(Prediction.predicted_at).label("latest_at"),
     )
-    if TIER_SYSTEM_ENABLED:
-        # Join Match inside the subquery so trackrecord_filter() (which
-        # references Match.scheduled_at to exclude post-kickoff rows)
-        # has its operand in scope. Without the join the filter raises
-        # at query-planning time.
-        subq_base = subq_base.join(Match, Match.id == Prediction.match_id).where(
+    # H4: trackrecord_filter applies regardless of TIER_SYSTEM_ENABLED so
+    # post-kickoff backfill rows can never win the max(predicted_at)
+    # subquery. The previous code only filtered behind the tier flag;
+    # if the flag was ever flipped off, Backtest mode would silently
+    # include rows where predicted_at > scheduled_at.
+    subq_base = (
+        subq_base
+        .join(Match, Match.id == Prediction.match_id)
+        .where(
             trackrecord_filter(),
             Prediction.match_id.in_(match_ids),
         )
-    else:
-        subq_base = subq_base.where(Prediction.match_id.in_(match_ids))
+    )
     subq = subq_base.group_by(Prediction.match_id).subquery()
 
     from sqlalchemy.orm import noload

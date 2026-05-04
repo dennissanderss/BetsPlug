@@ -112,24 +112,74 @@ export default function StrategyDetailPage() {
         <p className="text-slate-400">Strategy not found.</p>
       )}
 
-      {/* KPI Metrics */}
-      {metrics?.has_data && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 animate-fade-in">
-          {[
-            { label: "Win Rate", value: `${(metrics.winrate * 100).toFixed(1)}%`, color: metrics.winrate >= 0.5 ? "text-[#4ade80]" : "text-amber-400" },
-            { label: "ROI", value: `${metrics.roi >= 0 ? "+" : ""}${(metrics.roi * 100).toFixed(1)}%`, color: metrics.roi >= 0 ? "text-[#4ade80]" : "text-red-400" },
-            { label: "Sample Size", value: String(metrics.sample_size), color: "text-[#60a5fa]" },
-            { label: "Correct", value: String(metrics.correct), color: "text-[#4ade80]" },
-            { label: "Incorrect", value: String(metrics.incorrect), color: "text-red-400" },
-            { label: "Max Drawdown", value: `${metrics.max_drawdown.toFixed(1)}u`, color: "text-red-400" },
-          ].map((kpi) => (
-            <div key={kpi.label} className="glass-panel p-4 space-y-1">
-              <p className="section-label">{kpi.label}</p>
-              <p className={cn("text-stat tabular-nums", kpi.color)}>{kpi.value}</p>
+      {/* Under Investigation banner — fires when the headline winrate /
+          roi were clamped because raw values cleared the leakage tripwire
+          documented in API_CONTRACT.md. Without this banner the user
+          sees clamped 0.0 numbers and no explanation. */}
+      {metrics?.validation_status === "under_investigation" && (
+        <div className="rounded-xl border border-amber-400/30 bg-amber-500/[0.06] p-4 animate-fade-in">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 shrink-0 text-amber-400 mt-0.5" />
+            <div className="space-y-1">
+              <p className="text-sm font-bold text-amber-200">Under Investigation</p>
+              <p className="text-xs leading-relaxed text-amber-200/85">
+                {metrics.validation_notes ?? "Raw winrate or ROI cleared the plausibility ceiling — headline metrics clamped pending a fresh leakage audit."}
+              </p>
+              {(metrics.raw_winrate !== undefined || metrics.raw_roi !== undefined) && (
+                <p className="mt-2 text-[11px] text-amber-300/70 tabular-nums">
+                  Raw values: winrate {((metrics.raw_winrate ?? 0) * 100).toFixed(1)}%
+                  {" · "}
+                  ROI {(metrics.raw_roi ?? 0) >= 0 ? "+" : ""}{((metrics.raw_roi ?? 0) * 100).toFixed(1)}%
+                </p>
+              )}
             </div>
-          ))}
+          </div>
         </div>
       )}
+
+      {/* KPI Metrics */}
+      {metrics?.has_data && (() => {
+        const isUI = metrics.validation_status === "under_investigation";
+        // When clamped, surface the raw numbers in amber + with "raw"
+        // suffix so the disputed metrics aren't silently zeroed.
+        const winrateValue = isUI ? (metrics.raw_winrate ?? 0) : metrics.winrate;
+        const roiValue = isUI ? (metrics.raw_roi ?? 0) : metrics.roi;
+        const winrateColor = isUI ? "text-amber-400" : (winrateValue >= 0.5 ? "text-[#4ade80]" : "text-amber-400");
+        const roiColor = isUI ? "text-amber-400" : (roiValue >= 0 ? "text-[#4ade80]" : "text-red-400");
+        const suffix = isUI ? <span className="text-[10px] font-normal text-amber-300/60 ml-1">raw</span> : null;
+        return (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 animate-fade-in">
+            <div className="glass-panel p-4 space-y-1">
+              <p className="section-label">Win Rate</p>
+              <p className={cn("text-stat tabular-nums", winrateColor)}>
+                {(winrateValue * 100).toFixed(1)}%{suffix}
+              </p>
+            </div>
+            <div className="glass-panel p-4 space-y-1">
+              <p className="section-label">ROI</p>
+              <p className={cn("text-stat tabular-nums", roiColor)}>
+                {roiValue >= 0 ? "+" : ""}{(roiValue * 100).toFixed(1)}%{suffix}
+              </p>
+            </div>
+            <div className="glass-panel p-4 space-y-1">
+              <p className="section-label">Sample Size</p>
+              <p className="text-stat tabular-nums text-[#60a5fa]">{metrics.sample_size}</p>
+            </div>
+            <div className="glass-panel p-4 space-y-1">
+              <p className="section-label">Correct</p>
+              <p className="text-stat tabular-nums text-[#4ade80]">{metrics.correct}</p>
+            </div>
+            <div className="glass-panel p-4 space-y-1">
+              <p className="section-label">Incorrect</p>
+              <p className="text-stat tabular-nums text-red-400">{metrics.incorrect}</p>
+            </div>
+            <div className="glass-panel p-4 space-y-1">
+              <p className="section-label">Max Drawdown</p>
+              <p className="text-stat tabular-nums text-red-400">{metrics.max_drawdown.toFixed(1)}u</p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Equity Curve (simple text-based) */}
       {equityCurve.length > 0 && (
@@ -332,10 +382,11 @@ export default function StrategyDetailPage() {
           <div className="flex items-center gap-2 mb-4">
             <Target className="h-5 w-5 text-[#4ade80]" />
             <h3 className="text-sm font-semibold text-white">Walk-Forward Validation</h3>
-            <Pill tone="win" className="ml-auto">Statistically validated</Pill>
+            <Pill tone="info" className="ml-auto">Rolling out-of-sample test</Pill>
           </div>
           <p className="text-xs text-slate-500 mb-4">
-            Each fold tests the strategy on unseen data to verify it works on new matches, not just historical ones.
+            Each fold tests the static strategy on unseen data. Win rates above 58% are flagged: an honest 1X2 model rarely clears that
+            ceiling without feature leakage, so green = within plausible range, amber = above ceiling (suspect), red = below break-even.
           </p>
           <div className="space-y-2">
             <div className="grid grid-cols-5 gap-2 section-label px-3 py-1">
@@ -345,25 +396,42 @@ export default function StrategyDetailPage() {
               <span className="text-center">ROI</span>
               <span className="text-center">Status</span>
             </div>
-            {walkForward.folds.map((fold: any, i: number) => (
-              <div key={i} className="grid grid-cols-5 gap-2 items-center glass-panel px-3 py-2.5 text-xs">
-                <span className="text-slate-400">Fold {i + 1}</span>
-                <span className="text-center tabular-nums text-slate-300">{fold.sample_size ?? fold.n ?? "—"}</span>
-                <span className={cn("text-center tabular-nums font-medium", (fold.winrate ?? fold.win_rate ?? 0) >= 0.5 ? "text-[#4ade80]" : "text-red-400")}>
-                  {((fold.winrate ?? fold.win_rate ?? 0) * 100).toFixed(1)}%
-                </span>
-                <span className={cn("text-center tabular-nums font-medium", (fold.roi ?? 0) >= 0 ? "text-[#4ade80]" : "text-red-400")}>
-                  {fold.roi != null ? `${(fold.roi * 100).toFixed(1)}%` : "—"}
-                </span>
-                <span className="text-center">
-                  {(fold.winrate ?? fold.win_rate ?? 0) >= 0.5 ? (
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80] mx-auto" />
-                  ) : (
-                    <XCircle className="h-3.5 w-3.5 text-red-400 mx-auto" />
-                  )}
-                </span>
-              </div>
-            ))}
+            {walkForward.folds.map((fold: any, i: number) => {
+              // M3: align thresholds with backend _LEAKAGE_WINRATE_CEILING
+              // (0.58). Plausible range = [0.50, 0.58]; above that is
+              // amber (suspect), below is red. The old `>= 0.5 ? green : red`
+              // gave 65% folds a green check while the backend treated
+              // them as suspicious — opposite stories on one screen.
+              const wr = fold.winrate ?? fold.win_rate ?? 0;
+              const inPlausibleRange = wr >= 0.5 && wr <= 0.58;
+              const aboveCeiling = wr > 0.58;
+              const wrColor = inPlausibleRange
+                ? "text-[#4ade80]"
+                : aboveCeiling
+                  ? "text-amber-400"
+                  : "text-red-400";
+              return (
+                <div key={i} className="grid grid-cols-5 gap-2 items-center glass-panel px-3 py-2.5 text-xs">
+                  <span className="text-slate-400">Fold {i + 1}</span>
+                  <span className="text-center tabular-nums text-slate-300">{fold.sample_size ?? fold.n ?? "—"}</span>
+                  <span className={cn("text-center tabular-nums font-medium", wrColor)}>
+                    {(wr * 100).toFixed(1)}%
+                  </span>
+                  <span className={cn("text-center tabular-nums font-medium", (fold.roi ?? 0) >= 0 ? "text-[#4ade80]" : "text-red-400")}>
+                    {fold.roi != null ? `${(fold.roi * 100).toFixed(1)}%` : "—"}
+                  </span>
+                  <span className="text-center" title={aboveCeiling ? "Above 58% leakage ceiling — suspect" : inPlausibleRange ? "Plausible range" : "Below break-even"}>
+                    {inPlausibleRange ? (
+                      <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80] mx-auto" />
+                    ) : aboveCeiling ? (
+                      <AlertTriangle className="h-3.5 w-3.5 text-amber-400 mx-auto" />
+                    ) : (
+                      <XCircle className="h-3.5 w-3.5 text-red-400 mx-auto" />
+                    )}
+                  </span>
+                </div>
+              );
+            })}
           </div>
           {walkForward.summary && (
             <div className="mt-4 glass-panel px-4 py-3">

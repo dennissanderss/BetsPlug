@@ -14,6 +14,7 @@ import {
   TrendingUp,
   Target,
   ChevronRight,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
@@ -91,8 +92,39 @@ function humanizeRule(rule: { feature: string; operator: string; value: unknown 
   return `${feat} ${op} ${val}`;
 }
 
-// Color based on ROI
-function getStrategyColor(roi: number | undefined) {
+// validation_status enum from backend/API_CONTRACT.md.
+// "under_investigation" means the displayed winrate / roi were clamped
+// to 0 because raw values cleared the leakage tripwire — frontend MUST
+// not render a "Profitable" / "Unprofitable" verdict on those.
+type ValidationStatus =
+  | "validated"
+  | "under_investigation"
+  | "rejected"
+  | "break_even"
+  | "insufficient_data";
+
+interface StrategyMetrics {
+  has_data?: boolean;
+  sample_size?: number;
+  winrate?: number;
+  roi?: number;
+  raw_winrate?: number;
+  raw_roi?: number;
+  validation_status?: ValidationStatus;
+  validation_notes?: string;
+  max_drawdown?: number;
+  odds_coverage_pct?: number;
+}
+
+// Color based on ROI + validation status. Under-investigation ALWAYS
+// renders amber even if the clamped roi is 0 (which would otherwise
+// fall through to "break-even").
+function getStrategyColor(metrics: StrategyMetrics | undefined) {
+  if (!metrics) return { accent: "text-[#60a5fa]" };
+  if (metrics.validation_status === "under_investigation") {
+    return { accent: "text-amber-400" };
+  }
+  const roi = metrics.roi;
   if (roi === undefined) return { accent: "text-[#60a5fa]" };
   if (roi > 0.05) return { accent: "text-[#4ade80]" };
   if (roi > -0.02) return { accent: "text-amber-400" };
@@ -101,7 +133,7 @@ function getStrategyColor(roi: number | undefined) {
 
 function RealStrategyCard({ strategy, index }: { strategy: StrategyResponse; index: number }) {
   const { t } = useTranslations();
-  const { data: metrics, isLoading } = useQuery({
+  const { data: metrics, isLoading } = useQuery<StrategyMetrics>({
     queryKey: ["strategy-metrics", strategy.id],
     queryFn: async () => {
       const resp = await fetch(
@@ -117,9 +149,10 @@ function RealStrategyCard({ strategy, index }: { strategy: StrategyResponse; ind
     return null;
   }
 
-  const c = getStrategyColor(metrics?.roi);
+  const c = getStrategyColor(metrics);
   const cardVariant = CARD_VARIANTS[index % CARD_VARIANTS.length];
   const hexVariant = HEX_VARIANTS[index % HEX_VARIANTS.length];
+  const isUnderInvestigation = metrics?.validation_status === "under_investigation";
 
   return (
     <div className={cn("card-neon flex flex-col overflow-hidden animate-fade-in", cardVariant)}>
@@ -134,15 +167,38 @@ function RealStrategyCard({ strategy, index }: { strategy: StrategyResponse; ind
               <h3 className="text-base font-semibold text-white truncate">{strategy.name}</h3>
             </div>
           </div>
-          {metrics?.roi !== undefined && metrics?.roi > 0 ? (
+          {/* Badge precedence: validation_status (the documented contract)
+              wins over the roi-sign heuristic. Without this, strategies
+              clamped to roi=0.0 by the leakage tripwire silently fell
+              through to "Unprofitable" — wrong story, wrong colour. */}
+          {isLoading ? (
+            <Pill tone="draw"><Clock className="h-3 w-3" /> {t("strategy.loading")}</Pill>
+          ) : isUnderInvestigation ? (
+            <span
+              className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-500/[0.10] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-200"
+              title={metrics?.validation_notes ?? "Under Investigation"}
+            >
+              <AlertTriangle className="h-3 w-3" />
+              Under Investigation
+            </span>
+          ) : metrics?.validation_status === "validated" ? (
+            <Pill tone="win"><TrendingUp className="h-3 w-3" /> {t("strategy.profitable")}</Pill>
+          ) : metrics?.validation_status === "break_even" ? (
+            <Pill tone="draw">Break-Even</Pill>
+          ) : metrics?.validation_status === "rejected" ? (
+            <Pill tone="loss"><TrendingUp className="h-3 w-3 rotate-180" /> {t("strategy.unprofitable")}</Pill>
+          ) : metrics?.has_data && metrics.roi !== undefined && metrics.roi > 0 ? (
             <Pill tone="win"><TrendingUp className="h-3 w-3" /> {t("strategy.profitable")}</Pill>
           ) : metrics?.has_data ? (
             <Pill tone="loss"><TrendingUp className="h-3 w-3 rotate-180" /> {t("strategy.unprofitable")}</Pill>
-          ) : isLoading ? (
-            <Pill tone="draw"><Clock className="h-3 w-3" /> {t("strategy.loading")}</Pill>
           ) : null}
         </div>
         <p className="text-xs leading-relaxed text-slate-400">{strategy.description}</p>
+        {isUnderInvestigation && metrics?.validation_notes && (
+          <p className="mt-2 text-[11px] leading-relaxed text-amber-300/80">
+            {metrics.validation_notes}
+          </p>
+        )}
       </div>
 
       {/* Metrics */}
@@ -151,13 +207,25 @@ function RealStrategyCard({ strategy, index }: { strategy: StrategyResponse; ind
           <div className="grid grid-cols-2 gap-3">
             <div className="glass-panel p-3 space-y-0.5">
               <p className="section-label" title={t("strategy.winRateTooltip")}>{t("strategy.winRate")}</p>
-              <p className={cn("text-stat tabular-nums", c.accent)}>{(metrics.winrate * 100).toFixed(1)}%</p>
+              {isUnderInvestigation ? (
+                <p className="text-stat tabular-nums text-amber-400" title="Raw winrate clamped — see Under Investigation note">
+                  {((metrics.raw_winrate ?? 0) * 100).toFixed(1)}%<span className="text-[10px] font-normal text-amber-300/60 ml-1">raw</span>
+                </p>
+              ) : (
+                <p className={cn("text-stat tabular-nums", c.accent)}>{((metrics.winrate ?? 0) * 100).toFixed(1)}%</p>
+              )}
             </div>
             <div className="glass-panel p-3 space-y-0.5">
               <p className="section-label" title={t("strategy.roiTooltip")}>ROI</p>
-              <p className={cn("text-stat tabular-nums", metrics.roi >= 0 ? "text-[#4ade80]" : "text-red-400")}>
-                {metrics.roi >= 0 ? "+" : ""}{(metrics.roi * 100).toFixed(1)}%
-              </p>
+              {isUnderInvestigation ? (
+                <p className="text-stat tabular-nums text-amber-400" title="Raw ROI clamped — see Under Investigation note">
+                  {(metrics.raw_roi ?? 0) >= 0 ? "+" : ""}{((metrics.raw_roi ?? 0) * 100).toFixed(1)}%<span className="text-[10px] font-normal text-amber-300/60 ml-1">raw</span>
+                </p>
+              ) : (
+                <p className={cn("text-stat tabular-nums", (metrics.roi ?? 0) >= 0 ? "text-[#4ade80]" : "text-red-400")}>
+                  {(metrics.roi ?? 0) >= 0 ? "+" : ""}{((metrics.roi ?? 0) * 100).toFixed(1)}%
+                </p>
+              )}
             </div>
             <div className="glass-panel p-3 space-y-0.5">
               <p className="section-label" title={t("strategy.sampleSizeTooltip")}>{t("strategy.sampleSize")}</p>
@@ -165,7 +233,7 @@ function RealStrategyCard({ strategy, index }: { strategy: StrategyResponse; ind
             </div>
             <div className="glass-panel p-3 space-y-0.5">
               <p className="section-label" title={t("strategy.maxDrawdownTooltip")}>{t("strategy.maxDrawdown")}</p>
-              <p className="text-stat tabular-nums text-red-400">{metrics.max_drawdown.toFixed(1)}u</p>
+              <p className="text-stat tabular-nums text-red-400">{(metrics.max_drawdown ?? 0).toFixed(1)}u</p>
             </div>
           </div>
         </div>
@@ -227,7 +295,7 @@ export default function StrategyPage() {
 
   // Build a map of strategy id -> metrics
   const metricsMap = React.useMemo(() => {
-    const map = new Map<string, { roi: number; has_data: boolean; sample_size: number }>();
+    const map = new Map<string, StrategyMetrics>();
     (realStrategies ?? []).forEach((s, i) => {
       const q = metricsQueries[i];
       if (q?.data) map.set(s.id, q.data);
@@ -235,11 +303,32 @@ export default function StrategyPage() {
     return map;
   }, [realStrategies, metricsQueries]);
 
-  // Split strategies into profitable and archived
+  // Bucket strategies by validation_status. The previous implementation
+  // split on roi sign, which routed every "under_investigation" strategy
+  // (clamped roi=0) into Archived. Now they get their own visible
+  // section so users see the "raw numbers tripped a leakage gate"
+  // story instead of seeing them disappear.
   const profitableStrategies = React.useMemo(
     () => (realStrategies ?? []).filter((s) => {
       const m = metricsMap.get(s.id);
-      return m?.has_data && m.sample_size > 0 && m.roi > 0;
+      if (!m?.has_data || (m.sample_size ?? 0) === 0) return false;
+      if (m.validation_status === "validated") return true;
+      // Backwards-compat: when validation_status is missing (older
+      // backend builds), fall back to the old roi-sign rule.
+      if (!m.validation_status && (m.roi ?? 0) > 0) return true;
+      return false;
+    }),
+    [realStrategies, metricsMap]
+  );
+
+  const investigationStrategies = React.useMemo(
+    () => (realStrategies ?? []).filter((s) => {
+      const m = metricsMap.get(s.id);
+      return (
+        m?.has_data &&
+        (m.sample_size ?? 0) > 0 &&
+        m.validation_status === "under_investigation"
+      );
     }),
     [realStrategies, metricsMap]
   );
@@ -247,7 +336,14 @@ export default function StrategyPage() {
   const archivedStrategies = React.useMemo(
     () => (realStrategies ?? []).filter((s) => {
       const m = metricsMap.get(s.id);
-      return m?.has_data && m.sample_size > 0 && m.roi <= 0;
+      if (!m?.has_data || (m.sample_size ?? 0) === 0) return false;
+      if (
+        m.validation_status === "rejected" ||
+        m.validation_status === "break_even"
+      ) return true;
+      // Backwards-compat fallback for older backend builds.
+      if (!m.validation_status && (m.roi ?? 0) <= 0) return true;
+      return false;
     }),
     [realStrategies, metricsMap]
   );
@@ -325,6 +421,30 @@ export default function StrategyPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {profitableStrategies.map((s, i) => (
+              <RealStrategyCard key={s.id} strategy={s} index={i} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* ── Under Investigation ──────────────────────────────────────────── */}
+      {investigationStrategies.length > 0 && (
+        <>
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="h-5 w-5 text-amber-400" />
+            <div>
+              <h2 className="text-lg font-semibold text-white">Under Investigation</h2>
+              <p className="text-xs text-slate-500">
+                Raw numbers tripped a leakage tripwire (winrate &gt; 58% or ROI &gt; 8%). Headline metrics clamped pending review.
+              </p>
+            </div>
+            <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-500/[0.10] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-200">
+              <AlertTriangle className="h-3 w-3" />
+              Disputed
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {investigationStrategies.map((s, i) => (
               <RealStrategyCard key={s.id} strategy={s} index={i} />
             ))}
           </div>
