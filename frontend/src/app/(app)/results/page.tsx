@@ -1625,7 +1625,12 @@ function LockedSection({
 
 function ResultsPageContent() {
   const { t } = useTranslations();
-  const { tier: userTier, isAdmin } = useTier();
+  const { tier: userTier, isAdmin, isTestingTier } = useTier();
+  // Treat admins-in-tier-preview as non-admin for the live-measurement
+  // lock so they can verify the locked experience matches what real
+  // users will see. Switching the admin testing tier toggles the lock
+  // immediately because useTier hydrates on the storage event.
+  const adminUnlocked = isAdmin && !isTestingTier;
   // Free users keep access but several controls / columns are gated.
   const isFree = userTier === "free";
   // Which tiers is the user allowed to actually select in Step 1?
@@ -1673,15 +1678,17 @@ function ResultsPageContent() {
   // the live window has enough data to be representative. Admin can
   // toggle freely; non-admin can only see Backtest.
   const [dataSource, setDataSource] = useState<DataSource>(
-    isAdmin ? initialDataSource : "backtest",
+    adminUnlocked ? initialDataSource : "backtest",
   );
   // If we boot with a stale "live" mode and the user turns out to be
-  // non-admin (auth resolves async), force-flip to backtest.
+  // non-admin (auth resolves async, or admin enters tier-preview mode),
+  // force-flip to backtest so the gated state can never silently leak
+  // through.
   useEffect(() => {
-    if (!isAdmin && dataSource === "live") {
+    if (!adminUnlocked && dataSource === "live") {
       setDataSource("backtest");
     }
-  }, [isAdmin, dataSource]);
+  }, [adminUnlocked, dataSource]);
   // useTier() starts as "free" before localStorage hydrates, then
   // settles on the real subscription tier asynchronously after
   // /subscriptions/me resolves. Earlier we snapped tierFilter once
@@ -1917,7 +1924,7 @@ function ResultsPageContent() {
         dataSource={dataSource}
         setDataSource={setDataSource}
         userTier={userTier}
-        isAdmin={isAdmin}
+        isAdmin={adminUnlocked}
       />
 
       {/* ── Weekly Summary ── */}

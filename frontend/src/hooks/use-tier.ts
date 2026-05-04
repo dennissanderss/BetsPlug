@@ -36,7 +36,11 @@ const API_TIER_MAP: Record<string, Tier> = {
   platinum: "platinum",
 };
 
-function readTierFromStorage(): { tier: Tier; isAdmin: boolean } {
+function readTierFromStorage(): {
+  tier: Tier;
+  isAdmin: boolean;
+  isTestingTier: boolean;
+} {
   try {
     const rawUser = window.localStorage.getItem(USER_KEY);
     const user = rawUser ? JSON.parse(rawUser) : null;
@@ -48,13 +52,14 @@ function readTierFromStorage(): { tier: Tier; isAdmin: boolean } {
     const testing = isAdmin
       ? (window.localStorage.getItem(TESTING_KEY) as Tier | null)
       : null;
-    if (isAdmin && !testing) return { tier: "platinum", isAdmin: true };
+    const isTestingTier = isAdmin && Boolean(testing);
+    if (isAdmin && !testing) return { tier: "platinum", isAdmin: true, isTestingTier: false };
 
     const stored = window.localStorage.getItem(TIER_KEY) as Tier | null;
-    if (stored && stored in TIER_RANK) return { tier: stored, isAdmin };
-    return { tier: "free", isAdmin };
+    if (stored && stored in TIER_RANK) return { tier: stored, isAdmin, isTestingTier };
+    return { tier: "free", isAdmin, isTestingTier };
   } catch {
-    return { tier: "free", isAdmin: false };
+    return { tier: "free", isAdmin: false, isTestingTier: false };
   }
 }
 
@@ -62,6 +67,11 @@ export interface UseTierResult {
   tier: Tier;
   rank: number;
   isAdmin: boolean;
+  /** True when an admin is impersonating a non-default tier via the
+   *  testing-tier switcher (`betsplug_admin_testing_tier`). UI gates
+   *  that should preview the non-admin experience can use this to hide
+   *  admin-only affordances while in preview. */
+  isTestingTier: boolean;
   ready: boolean;
   hasAccess: (required: Tier) => boolean;
   refresh: () => Promise<void>;
@@ -70,12 +80,14 @@ export interface UseTierResult {
 export function useTier(): UseTierResult {
   const [tier, setTier] = useState<Tier>("free");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isTestingTier, setIsTestingTier] = useState(false);
   const [ready, setReady] = useState(false);
 
   const hydrate = useCallback(() => {
     const snap = readTierFromStorage();
     setTier(snap.tier);
     setIsAdmin(snap.isAdmin);
+    setIsTestingTier(snap.isTestingTier);
   }, []);
 
   const refresh = useCallback(async () => {
@@ -142,5 +154,5 @@ export function useTier(): UseTierResult {
     [rank],
   );
 
-  return { tier, rank, isAdmin, ready, hasAccess, refresh };
+  return { tier, rank, isAdmin, isTestingTier, ready, hasAccess, refresh };
 }
