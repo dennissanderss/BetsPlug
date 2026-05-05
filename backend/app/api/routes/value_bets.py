@@ -1100,7 +1100,7 @@ class ComboHistoryItem(BaseModel):
 
 @router.get("/combo-history", response_model=list[ComboHistoryItem])
 async def get_combo_history(
-    limit: int = Query(default=20, ge=1, le=100),
+    limit: int = Query(default=20, ge=1, le=1000),
     db: AsyncSession = Depends(get_db),
 ) -> list[ComboHistoryItem]:
     """Return the most recent persisted combos (live + backfill mixed),

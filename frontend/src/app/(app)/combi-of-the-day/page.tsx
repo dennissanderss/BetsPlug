@@ -61,11 +61,11 @@ export default function CombiOfTheDayPage() {
     staleTime: 5 * 60_000,
   });
 
-  // Backend caps at 100 (le=100) — request the max so weekly/monthly/quarterly
-  // views see all the body we have. With ~50 combos total today this is plenty.
+  // Backend cap raised to 1000. Pull all so backtest + live can both
+  // be displayed in full. With ~250 combos today the response is small.
   const historyQ = useQuery({
-    queryKey: ["combo-history", 100],
-    queryFn: () => api.getComboHistory(100),
+    queryKey: ["combo-history", 500],
+    queryFn: () => api.getComboHistory(500),
     staleTime: 60_000,
   });
 
