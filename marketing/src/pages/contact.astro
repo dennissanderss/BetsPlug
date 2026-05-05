@@ -1,7 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 
 interface ContactRow {
@@ -29,13 +27,11 @@ const contacts: ContactRow[] = [
 ];
 ---
 
-<Layout
+<MarketingLayout
   title="Contact — BetsPlug"
   description="Get in touch with the BetsPlug team — product questions, privacy requests, press and partnerships."
+  canonicalPath="/contact"
 >
-  <SiteNav />
-
-  <main>
     <PageHeader
       kicker="Contact"
       title="Talk to the <span class='gradient-text-green'>actual team</span>."
@@ -92,7 +88,4 @@ const contacts: ContactRow[] = [
         Postal address (NL): available on request.
       </p>
     </section>
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>

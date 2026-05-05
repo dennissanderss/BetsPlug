@@ -1,7 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import SiteNav from "../../components/SiteNav.astro";
-import Footer from "../../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import Prose from "../../components/Prose.astro";
 import {
@@ -76,10 +74,11 @@ function localisedPortableText(value: any, locale = "en"): unknown {
 }
 ---
 
-<Layout title={metaTitle} description={metaDescription}>
-  <SiteNav />
-
-  <main>
+<MarketingLayout
+  title={metaTitle}
+  description={metaDescription}
+  canonicalPath={`/match-predictions/${hub.slug.current}`}
+>
     <PageHeader
       kicker={country ? `${country} · Football` : "Football"}
       title={`${hub.countryFlag ? hub.countryFlag + " " : ""}${title}`}
@@ -128,7 +127,4 @@ function localisedPortableText(value: any, locale = "en"): unknown {
         </div>
       </section>
     )}
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>

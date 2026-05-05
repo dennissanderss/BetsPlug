@@ -1,7 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 
 interface Step {
@@ -50,13 +48,11 @@ const steps: Step[] = [
 ];
 ---
 
-<Layout
+<MarketingLayout
   title="How BetsPlug works — six steps from raw fixtures to a graded pick"
   description="Six steps from a raw football fixture to a graded prediction on your dashboard. Pure pipeline transparency — no marketing fluff."
+  canonicalPath="/how-it-works"
 >
-  <SiteNav />
-
-  <main>
     <PageHeader
       kicker="How it works"
       title="From fixture list to graded pick — <span class='gradient-text-green'>six steps</span>."
@@ -91,7 +87,4 @@ const steps: Step[] = [
         <a href="/engine" class="btn-ghost">Engine internals →</a>
       </div>
     </section>
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>

@@ -1,7 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 
 // ────────────────────────────────────────────────────────────────
 // Live tier accuracy — pulled server-side from the FastAPI backend.
@@ -140,13 +138,11 @@ const plans: PlanDefinition[] = [
 ];
 ---
 
-<Layout
+<MarketingLayout
   title="Pricing — BetsPlug"
   description="Free picks every day, paid plans from €9.99/month or €199 lifetime. Compare Free / Silver / Gold / Platinum tiers with live accuracy from our public track record."
+  canonicalPath="/pricing"
 >
-  <SiteNav />
-
-  <main>
     {/* Hero ─────────────────────────────────────────────────── */}
     <section
       class="relative mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8"
@@ -266,7 +262,4 @@ const plans: PlanDefinition[] = [
         indicative of future results. No financial or betting advice.
       </p>
     </section>
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>

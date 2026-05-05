@@ -1,7 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 
 const API_BASE =
@@ -48,13 +46,11 @@ const tierAccent: Record<PricingTier["pick_tier"], string> = {
 };
 ---
 
-<Layout
+<MarketingLayout
   title="Engine — how the BetsPlug forecaster actually works"
   description="The v8.1 BetsPlug engine — XGBoost + calibrated logistic across 30+ leagues. Live tier accuracy from the same evaluation table as the dashboard."
+  canonicalPath="/engine"
 >
-  <SiteNav />
-
-  <main>
     <PageHeader
       kicker="Engine"
       title="The model, in <span class='gradient-text-green'>plain English</span>."
@@ -178,7 +174,4 @@ const tierAccent: Record<PricingTier["pick_tier"], string> = {
       Educational simulation only. 18+. Past model performance is not
       indicative of future results. No financial or betting advice.
     </p>
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>

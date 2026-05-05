@@ -1,18 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import SiteNav from "../components/SiteNav.astro";
-import Footer from "../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Prose from "../components/Prose.astro";
 ---
 
-<Layout
+<MarketingLayout
   title="About BetsPlug — sports intelligence with a public track record"
   description="We build AI football predictions and publish every result. No black boxes, no edited highlight reel — just a model with its homework on display."
+  canonicalPath="/about-us"
 >
-  <SiteNav />
-
-  <main>
     <PageHeader
       kicker="About BetsPlug"
       title="Sports intelligence, with the <span class='gradient-text-green'>homework on display</span>."
@@ -78,7 +74,4 @@ import Prose from "../components/Prose.astro";
         two working days.
       </p>
     </Prose>
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>

@@ -1,7 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import SiteNav from "../../components/SiteNav.astro";
-import Footer from "../../components/Footer.astro";
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import { sanity, localised } from "../../lib/sanity";
 
@@ -29,13 +27,11 @@ try {
 }
 ---
 
-<Layout
+<MarketingLayout
   title="Football match predictions — every league we cover"
   description="AI predictions across 30+ football competitions worldwide. Pick a league for upcoming fixtures, the model's call, and pre-match odds context."
+  canonicalPath="/match-predictions"
 >
-  <SiteNav />
-
-  <main>
     <PageHeader
       kicker="Match predictions"
       title="Pick a <span class='gradient-text-green'>competition</span>."
@@ -74,7 +70,4 @@ try {
         </div>
       )}
     </section>
-
-    <Footer />
-  </main>
-</Layout>
+</MarketingLayout>
