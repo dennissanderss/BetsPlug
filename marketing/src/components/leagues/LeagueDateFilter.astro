@@ -1,7 +1,11 @@
 ---
 /**
  * LeagueDateFilter — Today / This Week / All Upcoming tabs.
- * URL param-driven (?date=week|upcoming).
+ *
+ * Today is free; This Week + All Upcoming are gated behind register
+ * on every league page (mirrors the gating on the /predictions hub
+ * for Tomorrow + This Week). Locked tabs show a padlock and route
+ * logged-out visitors to app.betsplug.com/register?next=/predictions/{slug}.
  */
 import type { Locale } from "@/lib/i18n";
 import { getLocalizedPath } from "@/lib/i18n";
@@ -19,14 +23,17 @@ interface Props {
 
 const { locale, leagueSlug, content, active } = Astro.props;
 
-// Build base path: /predictions/{slug} on EN, /{locale}/{folder}/{slug} on others.
+// Today still uses the URL param; locked tabs redirect to register
+// with a ?next= deep link so the dashboard returns the user to the
+// right league page after sign-up.
 const folder = getLocalizedPath("predictions", locale).replace(/^\//, "");
 const baseHref = locale === "en" ? `/${folder}/${leagueSlug}` : `/${folder}/${leagueSlug}`;
+const registerUrl = `https://app.betsplug.com/register?next=/${folder}/${leagueSlug}`;
 
-const tabs: { key: ActiveTab; label: string; href: string }[] = [
-  { key: "today",    label: content.today,       href: baseHref },
-  { key: "week",     label: content.thisWeek,    href: `${baseHref}?date=week` },
-  { key: "upcoming", label: content.allUpcoming, href: `${baseHref}?date=upcoming` },
+const tabs: { key: ActiveTab; label: string; href: string; locked: boolean }[] = [
+  { key: "today",    label: content.today,       href: baseHref,    locked: false },
+  { key: "week",     label: content.thisWeek,    href: registerUrl, locked: true  },
+  { key: "upcoming", label: content.allUpcoming, href: registerUrl, locked: true  },
 ];
 ---
 
@@ -37,13 +44,27 @@ const tabs: { key: ActiveTab; label: string; href: string }[] = [
       role="tab"
       aria-selected={tab.key === active}
       class={[
-        "inline-flex items-center justify-center h-9 px-4 rounded-full text-sm font-semibold transition-colors duration-150",
+        "inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full text-sm font-semibold transition-colors duration-150",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy-900",
         tab.key === active
           ? "bg-pitch-green-500 text-deep-navy-950"
           : "text-white-soft hover:text-white-pure hover:bg-white-pure/5",
       ].join(" ")}
     >
+      {tab.locked && (
+        <svg
+          class="h-3.5 w-3.5 opacity-90"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 1a4 4 0 00-4 4v3H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zm2 7V5a2 2 0 10-4 0v3h4z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      )}
       {tab.label}
     </a>
   ))}
