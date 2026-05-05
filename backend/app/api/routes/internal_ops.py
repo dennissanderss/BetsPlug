@@ -1242,25 +1242,17 @@ async def audit_phase4(db: AsyncSession = Depends(get_db)) -> dict:
         SELECT
             m.id AS match_id,
             ht.name AS home, at.name AS away, l.name AS league,
-            m.scheduled_at, m.status::text AS status,
+            m.scheduled_at,
             mr.home_score, mr.away_score,
             p.id AS pid,
             p.confidence,
             p.home_win_prob, p.draw_prob, p.away_win_prob,
             p.predicted_at,
-            p.closing_odds_snapshot,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snapshot_text,
             (
                 SELECT COUNT(*) FROM odds_history oh
                 WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2')
             ) AS odds_history_rows,
-            (
-                SELECT json_build_object(
-                    'home', home_odds, 'draw', draw_odds, 'away', away_odds,
-                    'source', source, 'recorded_at', recorded_at
-                ) FROM odds_history oh
-                WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2')
-                ORDER BY recorded_at DESC LIMIT 1
-            ) AS latest_odds,
             (SELECT pe.is_correct FROM prediction_evaluations pe WHERE pe.prediction_id = p.id) AS is_correct
         FROM matches m
         JOIN predictions p ON p.match_id = m.id
@@ -1268,22 +1260,52 @@ async def audit_phase4(db: AsyncSession = Depends(get_db)) -> dict:
         JOIN teams at ON at.id = m.away_team_id
         JOIN leagues l ON l.id = m.league_id
         LEFT JOIN match_results mr ON mr.match_id = m.id
-        WHERE m.status = 'finished'
-          AND m.scheduled_at >= NOW() - INTERVAL '30 days'
+        WHERE m.scheduled_at >= NOW() - INTERVAL '30 days'
           AND p.created_at >= '2026-04-16'
           AND p.predicted_at <= m.scheduled_at
           AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2'))
         ORDER BY RANDOM() LIMIT 5
     """))
+    rows = qchain.all()
+
     chain_audits = []
-    for r in qchain.all():
-        snapshot = r.closing_odds_snapshot or {}
-        bm_in_snap = snapshot.get("bookmaker_odds") if isinstance(snapshot, dict) else None
-        latest = r.latest_odds or {}
-        # Compare snapshot odds vs latest odds_history
+    for r in rows:
+        # Parse snapshot JSON
+        import json as _json
+        bm_in_snap = None
+        try:
+            snap = _json.loads(r.snapshot_text) if r.snapshot_text else {}
+            bm_in_snap = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+        except Exception:
+            bm_in_snap = None
+
+        # Fetch latest odds row separately
+        ql = await db.execute(
+            text("""
+                SELECT home_odds, draw_odds, away_odds, source, recorded_at
+                FROM odds_history
+                WHERE match_id = :mid AND market IN ('1x2','1X2')
+                ORDER BY recorded_at DESC LIMIT 1
+            """),
+            {"mid": r.match_id},
+        )
+        latest = ql.first()
+        latest_dict = None
+        if latest:
+            latest_dict = {
+                "home": float(latest[0]),
+                "draw": float(latest[1]),
+                "away": float(latest[2]),
+                "source": latest[3],
+                "recorded_at": latest[4].isoformat(),
+            }
+
         snap_home = (bm_in_snap or {}).get("home")
-        snap_draw = (bm_in_snap or {}).get("draw")
-        snap_away = (bm_in_snap or {}).get("away")
+        snapshot_match = (
+            snap_home is not None and latest_dict is not None and
+            abs(float(snap_home) - latest_dict["home"]) < 0.01
+        )
+
         chain_audits.append({
             "match": f"{r.home} vs {r.away}",
             "league": r.league,
@@ -1297,12 +1319,9 @@ async def audit_phase4(db: AsyncSession = Depends(get_db)) -> dict:
                 "confidence": float(r.confidence),
             },
             "odds_history_count": r.odds_history_rows,
-            "latest_odds_history": dict(latest) if latest else None,
+            "latest_odds_history": latest_dict,
             "snapshot_bookmaker_odds": bm_in_snap,
-            "snapshot_match_history": (
-                snap_home is not None and latest and
-                abs(float(snap_home) - float(latest.get("home", 0))) < 0.01
-            ),
+            "snapshot_match_history": snapshot_match,
         })
     out["chain_integrity_5_random_matches"] = chain_audits
 
