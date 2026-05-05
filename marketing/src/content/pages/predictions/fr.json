@@ -41,6 +41,7 @@
     "thisWeek": "Cette Semaine",
     "todayActiveAria": "Afficher les pronostics du jour"
   },
+  "emptyToday": "Aucun match programmé aujourd'hui — nouvelle liste chaque matin.",
   "cards": {
     "locked": "Verrouillé",
     "freePick": "Pick gratuit",

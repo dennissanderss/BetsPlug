@@ -37,7 +37,7 @@ import {
 
 const locale = "en" as const;
 const content = await loadHubContent(locale);
-const hub = await loadHubData(Astro.site);
+const hub = await loadHubData(Astro.site, locale);
 
 // Date filter from URL param
 const dateParam = (Astro.url.searchParams.get("date") ?? "today").toLowerCase();
@@ -139,7 +139,17 @@ const faqSchema = {
     </Container>
   </Section>
 
-  <PaywallTease locale={locale} content={content.paywall} totalCount={hub.today.totalCount} />
+  <PaywallTease
+    locale={locale}
+    content={content.paywall}
+    totalCount={hub.today.totalCount}
+    featured={hub.today.predictions[0] ? {
+      homeTeamName: hub.today.predictions[0].homeTeam.name,
+      awayTeamName: hub.today.predictions[0].awayTeam.name,
+      prediction: hub.today.predictions[0].prediction,
+      confidence: hub.today.predictions[0].confidence,
+    } : null}
+  />
 
   <LeagueGrid locale={locale} content={content.leagueGrid} dailyCounts={dailyCountsByLeague()} />
 

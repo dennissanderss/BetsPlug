@@ -45,15 +45,27 @@ const weekCtaHref = getLocalizedPath(content.weekTab.cta.canonical, locale);
 ---
 
 <div id="hub-cards-grid">
-  {active === "today" && (
+  {active === "today" && todayPredictions.length === 0 && (
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+      class="rounded-2xl border border-deep-navy-600 bg-charcoal-700 p-10 text-center text-sm text-white-muted"
+      data-grid="today-empty"
+    >
+      {content.emptyToday}
+    </div>
+  )}
+
+  {active === "today" && todayPredictions.length > 0 && (
+    <div
+      class={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${
+        todayPredictions.length >= 3
+          ? "lg:grid-cols-3"
+          : todayPredictions.length === 2
+            ? "lg:grid-cols-2"
+            : "lg:grid-cols-1"
+      }`}
       data-grid="today"
     >
-      {todayPredictions.length === 0 && [0, 1, 2, 3, 4].map(() => (
-        <PredictionCard variant="skeleton" locale={locale} labels={cardLabels} />
-      ))}
-      {todayPredictions.length > 0 && todayPredictions.slice(0, 5).map((p) => (
+      {todayPredictions.slice(0, 3).map((p) => (
         <PredictionCard
           variant="free"
           locale={locale}

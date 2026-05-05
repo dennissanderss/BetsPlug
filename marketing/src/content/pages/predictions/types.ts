@@ -34,6 +34,8 @@ export interface PredictionsHubContent {
     thisWeek: string;
     todayActiveAria: string; // "Showing today's predictions"
   };
+  emptyToday: string; // shown when the live API returns 0 picks for today
+
   cards: {
     /** Card-component labels — passed into <PredictionCard /> labels prop. */
     locked: string;

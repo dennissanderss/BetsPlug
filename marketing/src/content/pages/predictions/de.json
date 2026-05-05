@@ -41,6 +41,7 @@
     "thisWeek": "Diese Woche",
     "todayActiveAria": "Heutige Vorhersagen anzeigen"
   },
+  "emptyToday": "Heute keine Spiele angesetzt — jeden Morgen eine frische Liste.",
   "cards": {
     "locked": "Gesperrt",
     "freePick": "Kostenlos",

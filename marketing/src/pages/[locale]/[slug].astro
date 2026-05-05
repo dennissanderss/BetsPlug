@@ -136,7 +136,7 @@ const SITE = "https://betsplug.com";
 
 // ── Predictions hub ──────────────────────────────────────────
 const hubContent = canonical === "predictions" ? await loadHubContent(locale) : null;
-const hubData    = canonical === "predictions" ? await loadHubData(Astro.site) : null;
+const hubData    = canonical === "predictions" ? await loadHubData(Astro.site, locale) : null;
 const formattedDate = canonical === "predictions" ? formatTodayForLocale(locale) : "";
 const dateParam = (Astro.url.searchParams.get("date") ?? "today").toLowerCase();
 const active: "today" | "tomorrow" | "week" =
@@ -448,7 +448,17 @@ const faqBreadcrumbSchema = faqContent ? {
       </Container>
     </Section>
 
-    <PaywallTease locale={locale} content={hubContent.paywall} totalCount={hubData.today.totalCount} />
+    <PaywallTease
+      locale={locale}
+      content={hubContent.paywall}
+      totalCount={hubData.today.totalCount}
+      featured={hubData.today.predictions[0] ? {
+        homeTeamName: hubData.today.predictions[0].homeTeam.name,
+        awayTeamName: hubData.today.predictions[0].awayTeam.name,
+        prediction: hubData.today.predictions[0].prediction,
+        confidence: hubData.today.predictions[0].confidence,
+      } : null}
+    />
 
     <LeagueGrid locale={locale} content={hubContent.leagueGrid} dailyCounts={dailyCountsByLeague()} />
 
