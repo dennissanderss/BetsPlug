@@ -34,22 +34,24 @@ log = logging.getLogger(__name__)
 # this service has no incoming dependency on routes. Keep both in
 # sync; a unit test asserts equality.
 #
-# v4 tuning (2026-05-05): v3 produced +11.3% backtest ROI on 40
-# combos = solid quality but too sparse (1 combo per 16 days).
-# Loosened on edge floor + odds ceiling to fire more often while
-# keeping the quality bar high enough to maintain positive ROI.
+# v5 tuning (2026-05-06): v4 only fired 81 combos in 1354 days =
+# 1 combo per 16 days. Way below the "weekly fire" target. Loosened
+# further:
 #   - 2 legs (unchanged)
-#   - conf ≥ 0.68 (was 0.70 — pulls in slightly broader Gold pool)
-#   - leg odds [1.35, 4.00] (was [1.40, 3.50] — wider sweet spot)
-#   - min leg edge ≥ 0.025 (was 0.04 — captures more marginal+EV)
-# Expectation: 80-130 backtest combos at ROI 5-10%, more steady fire.
+#   - conf ≥ 0.62 (Silver tier 0.60 + thin margin) — Silver back in scope
+#   - leg odds [1.30, 4.50] — wider odds range
+#   - min leg edge ≥ 0.02 (2% — was 4%)
+# Expectation: 250-400 backtest combos = ~1 per 4 days = weekly+ fire.
+# ROI may dip from v4's +11% to ~+3-7% — wider net catches lower edges
+# but more samples. Trade-off: hit-rate stability vs per-pick edge.
 COMBO_LEG_COUNT = 2
-COMBO_MIN_CONFIDENCE = 0.68
-COMBO_MIN_LEG_ODDS = 1.35
-COMBO_MAX_LEG_ODDS = 4.00
-COMBO_MIN_LEG_EDGE = 0.025
+COMBO_MIN_CONFIDENCE = 0.62
+COMBO_MIN_LEG_ODDS = 1.30
+COMBO_MAX_LEG_ODDS = 4.50
+COMBO_MIN_LEG_EDGE = 0.02
 PLATINUM_TIER_BONUS = 1.3
-GOLD_TIER_BONUS = 1.0
+GOLD_TIER_BONUS = 1.1
+SILVER_TIER_BONUS = 1.0
 COMBO_LIVE_TRACKING_START = date(2026, 4, 16)
 
 
@@ -99,7 +101,7 @@ def select_combo_legs(preds: list[Prediction]) -> list[dict]:
         if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
             continue
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("gold", "platinum"):
+        if tier not in ("silver", "gold", "platinum"):
             continue
 
         odds_h = book.get("home")
@@ -122,7 +124,8 @@ def select_combo_legs(preds: list[Prediction]) -> list[dict]:
             continue
         tier_bonus = (
             PLATINUM_TIER_BONUS if tier == "platinum"
-            else GOLD_TIER_BONUS
+            else GOLD_TIER_BONUS if tier == "gold"
+            else SILVER_TIER_BONUS
         )
         score = float(p.confidence or 0.0) * tier_bonus * (1.0 + leg_edge)
         candidates.append(
