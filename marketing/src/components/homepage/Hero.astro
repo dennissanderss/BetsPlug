@@ -63,6 +63,8 @@ interface FeaturedMatch {
   available: boolean;
   home_team?: string | null;
   away_team?: string | null;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   league?: string | null;
   kickoff?: string | null;
   confidence?: number | null;
@@ -71,6 +73,8 @@ interface FeaturedMatch {
 let league = content.visual.league;
 let homeTeam = content.visual.homeTeam;
 let awayTeam = content.visual.awayTeam;
+let homeTeamLogo: string | null = null;
+let awayTeamLogo: string | null = null;
 let kickoff = content.visual.kickoff;
 let confidencePct = content.visual.confidence;
 
@@ -85,6 +89,8 @@ try {
       league = data.league ?? league;
       homeTeam = data.home_team;
       awayTeam = data.away_team;
+      homeTeamLogo = data.home_team_logo ?? null;
+      awayTeamLogo = data.away_team_logo ?? null;
       if (data.kickoff) kickoff = formatKickoff(data.kickoff, locale);
       if (typeof data.confidence === "number") {
         confidencePct = Math.round(data.confidence * 100);
@@ -228,15 +234,39 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
               <!-- Teams -->
               <div class="mt-6 space-y-3">
                 <div class="flex items-center gap-3">
-                  <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
-                    {homeTeam.slice(0, 2).toUpperCase()}
-                  </div>
+                  {homeTeamLogo ? (
+                    <img
+                      src={homeTeamLogo}
+                      alt={`${homeTeam} logo`}
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-10 w-10 shrink-0 object-contain"
+                    />
+                  ) : (
+                    <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
+                      {homeTeam.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   <p class="text-base font-semibold text-white-pure">{homeTeam}</p>
                 </div>
                 <div class="flex items-center gap-3">
-                  <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
-                    {awayTeam.slice(0, 2).toUpperCase()}
-                  </div>
+                  {awayTeamLogo ? (
+                    <img
+                      src={awayTeamLogo}
+                      alt={`${awayTeam} logo`}
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-10 w-10 shrink-0 object-contain"
+                    />
+                  ) : (
+                    <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
+                      {awayTeam.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   <p class="text-base font-semibold text-white-pure">{awayTeam}</p>
                 </div>
               </div>
