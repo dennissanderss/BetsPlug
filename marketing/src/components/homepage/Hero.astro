@@ -205,6 +205,54 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
       <!-- Visual (40%) -->
       <div class="lg:col-span-5 lg:flex lg:justify-end">
         <div class="relative w-full max-w-md mx-auto lg:max-w-none">
+          <!-- Floating value chips — engine credibility around the card.
+               Hidden on mobile so the card stays the focal point. -->
+          <div class="hero-chip hero-chip--top-left" aria-hidden="true">
+            <div class="hero-chip-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v3a3 3 0 0 0 3 3h1v3a4 4 0 0 0 4 4 4 4 0 0 0 4-4v-3h1a3 3 0 0 0 3-3v-3a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z" />
+                <circle cx="9" cy="11" r="1" fill="currentColor" />
+                <circle cx="15" cy="11" r="1" fill="currentColor" />
+              </svg>
+            </div>
+            <div class="hero-chip-body">
+              <p class="hero-chip-value">Elo + Poisson + ML</p>
+              <p class="hero-chip-label">Ensemble engine</p>
+            </div>
+          </div>
+
+          <div class="hero-chip hero-chip--right" aria-hidden="true">
+            <div class="hero-chip-icon hero-chip-icon--accent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 17l6-6 4 4 8-8" />
+                <path d="M14 7h7v7" />
+              </svg>
+            </div>
+            <div class="hero-chip-body">
+              <p class="hero-chip-value">
+                <span class="font-mono">40+</span>
+              </p>
+              <p class="hero-chip-label">Variables per match</p>
+            </div>
+          </div>
+
+          <div class="hero-chip hero-chip--bottom-left" aria-hidden="true">
+            <div class="hero-chip-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M2 12h20" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+            </div>
+            <div class="hero-chip-body">
+              <p class="hero-chip-value">
+                <span class="font-mono">30+</span>
+                <span class="hero-chip-suffix">leagues</span>
+              </p>
+              <p class="hero-chip-label">Tracked daily</p>
+            </div>
+          </div>
+
           <!-- Floating motion wrapper -->
           <div class="hero-card-float">
             <!-- Prediction card mockup -->
@@ -328,6 +376,112 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
     .hero-confidence-bar {
       animation: none;
     }
+  }
+
+  /* ── Floating value chips ──────────────────────────────────────
+     Three glassy chips that orbit the hero card with very subtle
+     drift animations. Hidden under lg so they never compete with
+     the card on small viewports. */
+  .hero-chip {
+    display: none;
+    position: absolute;
+    z-index: 20;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 12px;
+    background: rgba(19, 24, 41, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 8px 24px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(0, 210, 106, 0.06);
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-chip { display: inline-flex; }
+  }
+
+  .hero-chip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-white-soft);
+    flex-shrink: 0;
+  }
+  .hero-chip-icon svg { width: 16px; height: 16px; }
+
+  .hero-chip-icon--accent {
+    background: rgba(0, 210, 106, 0.12);
+    color: var(--color-pitch-green-400);
+    box-shadow: inset 0 0 0 1px rgba(0, 210, 106, 0.25);
+  }
+
+  .hero-chip-body { display: flex; flex-direction: column; gap: 1px; line-height: 1; }
+
+  .hero-chip-value {
+    font-size: 0.8125rem;     /* 13px */
+    font-weight: 700;
+    color: var(--color-white-pure);
+    letter-spacing: -0.01em;
+  }
+  .hero-chip-suffix {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--color-white-muted);
+    margin-left: 0.25rem;
+  }
+  .hero-chip-label {
+    font-size: 0.625rem;      /* 10px */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-white-muted);
+  }
+
+  /* Position + drift — each chip drifts on its own rhythm so the
+     scene reads as alive, not synchronized. */
+  .hero-chip--top-left {
+    top: -8%;
+    left: -12%;
+    animation: chip-drift-a 7s ease-in-out infinite;
+  }
+  .hero-chip--right {
+    top: 38%;
+    right: -10%;
+    animation: chip-drift-b 9s ease-in-out infinite;
+  }
+  .hero-chip--bottom-left {
+    bottom: -6%;
+    left: -8%;
+    animation: chip-drift-c 8s ease-in-out infinite;
+  }
+
+  @keyframes chip-drift-a {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(-3px, -5px); }
+  }
+  @keyframes chip-drift-b {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(4px, -4px); }
+  }
+  @keyframes chip-drift-c {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(-4px, 3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-chip--top-left,
+    .hero-chip--right,
+    .hero-chip--bottom-left { animation: none; }
   }
 </style>
 
