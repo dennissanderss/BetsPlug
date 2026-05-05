@@ -1650,3 +1650,173 @@ async def trigger_retrain(
 
     # TODO: task_id = retrain_model.delay(sport_slug, config).id
     return RetrainResponse(accepted=True, message=msg, task_id=None)
+
+
+# ---------------------------------------------------------------------------
+# Regenerate v8.1 historical predictions on Railway's internal network
+# ---------------------------------------------------------------------------
+# Executes the same logic as backend/scripts/regenerate_historical_predictions.py
+# but synchronously inside the Railway-deployed FastAPI process. Local script
+# was bottlenecked at ~6 matches/min by Railway proxy round-trip latency
+# (~150-200ms × ~10 RTTs per match). Inside Railway the latency is ~1ms,
+# yielding 50-100 matches/min. 16k matches process in under 30 minutes
+# instead of ~46 hours.
+#
+# Use a generous batch size (500-2000) per call. The endpoint returns when
+# the batch is done. Idempotent — re-running picks up where the last batch
+# left off. Long-running but FastAPI has no built-in timeout; the proxy
+# might cut at 10 min (Railway default).
+
+
+class RegenV81Request(BaseModel):
+    start: str  # YYYY-MM-DD
+    end: str    # YYYY-MM-DD
+    limit: int = 1000
+
+
+class RegenV81Response(BaseModel):
+    matches_found: int
+    generated: int
+    failed: int
+    evaluated: int
+    elapsed_seconds: float
+    finished: bool  # True when no more matches left in window
+
+
+@router.post(
+    "/regenerate-v81-historical",
+    response_model=RegenV81Response,
+    summary="Regenerate v8.1-clean predictions for finished matches in a date window",
+)
+async def regenerate_v81_historical(
+    body: RegenV81Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Run the v8.1 regenerate logic inside Railway. Internal-network speed.
+
+    Body params:
+      - start: YYYY-MM-DD inclusive (match scheduled_at)
+      - end: YYYY-MM-DD inclusive
+      - limit: max matches to process this call (default 1000)
+
+    The call is synchronous — it processes up to ``limit`` matches and
+    returns. Set Railway's request timeout high or call repeatedly with
+    smaller limits if needed. ``finished=true`` when fewer matches than
+    ``limit`` were found (= window is empty).
+    """
+    import time
+    from datetime import date as _date, datetime as _dt, timedelta as _td
+    from sqlalchemy import and_, exists as _exists
+    from app.core.prediction_filters import V81_DEPLOYMENT_CUTOFF
+    from app.forecasting.forecast_service import ForecastService
+    from app.models.match import Match, MatchResult, MatchStatus
+    from app.models.model_version import ModelVersion
+    from app.models.prediction import Prediction, PredictionEvaluation
+
+    t0 = time.monotonic()
+    try:
+        start_d = _dt.strptime(body.start, "%Y-%m-%d").date()
+        end_d = _dt.strptime(body.end, "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"Bad date format: {exc}")
+
+    start_dt = _dt.combine(start_d, _dt.min.time(), tzinfo=timezone.utc)
+    end_dt = _dt.combine(end_d + _td(days=1), _dt.min.time(), tzinfo=timezone.utc)
+
+    # Active model version required
+    mv = (await db.execute(
+        select(ModelVersion).where(ModelVersion.is_active.is_(True)).limit(1)
+    )).scalar_one_or_none()
+    if mv is None:
+        raise HTTPException(status_code=500, detail="No active ModelVersion in DB")
+
+    v81_pred_exists = _exists().where(
+        and_(
+            Prediction.match_id == Match.id,
+            Prediction.created_at >= V81_DEPLOYMENT_CUTOFF,
+            Prediction.predicted_at <= Match.scheduled_at,
+        )
+    )
+    match_q = (
+        select(Match.id, Match.scheduled_at)
+        .where(
+            Match.status == MatchStatus.FINISHED,
+            Match.scheduled_at >= start_dt,
+            Match.scheduled_at <= end_dt,
+            ~v81_pred_exists,
+        )
+        .order_by(Match.scheduled_at)
+        .limit(body.limit)
+    )
+    targets = (await db.execute(match_q)).all()
+
+    svc = ForecastService()
+    generated = 0
+    failed = 0
+
+    for match_id, scheduled_at in targets:
+        try:
+            pred = await svc.generate_forecast(match_id, db, source="backtest")
+            pred.predicted_at = scheduled_at
+            pred.match_scheduled_at = scheduled_at
+            pred.lead_time_hours = 0.0
+            pred.locked_at = None
+            generated += 1
+            if generated % 50 == 0:
+                await db.commit()
+        except Exception:
+            failed += 1
+    await db.commit()
+
+    # Evaluate any new predictions in the window
+    eval_stmt = (
+        select(Prediction, MatchResult)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(MatchResult, MatchResult.match_id == Match.id)
+        .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .where(
+            Prediction.created_at >= V81_DEPLOYMENT_CUTOFF,
+            Prediction.predicted_at <= Match.scheduled_at,
+            PredictionEvaluation.id.is_(None),
+            Match.scheduled_at >= start_dt,
+            Match.scheduled_at <= end_dt,
+        )
+    )
+    eval_rows = (await db.execute(eval_stmt)).all()
+    evaluated = 0
+    for pred, result in eval_rows:
+        try:
+            hs, as_ = result.home_score, result.away_score
+            actual = "home" if hs > as_ else ("away" if as_ > hs else "draw")
+            probs = {
+                "home": pred.home_win_prob or 0.0,
+                "draw": pred.draw_prob or 0.0,
+                "away": pred.away_win_prob or 0.0,
+            }
+            pick = max(probs, key=probs.get)
+            is_correct = pick == actual
+            actual_vec = {"home": 0, "draw": 0, "away": 0, actual: 1}
+            brier = sum(
+                (probs[k] - actual_vec[k]) ** 2 for k in ("home", "draw", "away")
+            ) / 3
+            db.add(PredictionEvaluation(
+                prediction_id=pred.id,
+                actual_outcome=actual,
+                is_correct=is_correct,
+                brier_score=brier,
+                evaluated_at=datetime.now(timezone.utc),
+            ))
+            evaluated += 1
+        except Exception:
+            pass
+    await db.commit()
+
+    elapsed = round(time.monotonic() - t0, 2)
+    return RegenV81Response(
+        matches_found=len(targets),
+        generated=generated,
+        failed=failed,
+        evaluated=evaluated,
+        elapsed_seconds=elapsed,
+        finished=len(targets) < body.limit,
+    )
