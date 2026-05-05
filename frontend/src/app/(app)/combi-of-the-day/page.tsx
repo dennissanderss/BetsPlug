@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useTier } from "@/hooks/use-tier";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import type {
   ComboOfTheDay,
   ComboStats,
@@ -113,6 +114,7 @@ export default function CombiOfTheDayPage() {
   const computedStats = useMemo(() => computeAggregateStats(filteredHistory, statsScope, periodFilter), [filteredHistory, statsScope, periodFilter]);
 
   return (
+    <PaywallOverlay feature="combi_of_the_day" requiredTier="gold">
     <div className="relative mx-auto max-w-6xl px-3 sm:px-4 py-5 md:py-7 animate-fade-in">
       <div className="space-y-5">
         {/* Header */}
@@ -155,6 +157,7 @@ export default function CombiOfTheDayPage() {
         />
       </div>
     </div>
+    </PaywallOverlay>
   );
 }
 

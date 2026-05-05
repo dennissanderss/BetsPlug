@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Trophy,
   Lock,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
@@ -67,6 +68,9 @@ const navSections: NavSection[] = [
       // clickable for Free users and only paywalls on arrival —
       // inconsistent state between sidebar and page.
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, requiredTier: "gold" },
+      // Combi van de Dag = Gold/Platinum only — multi-leg edge product,
+      // not a Free/Silver feature.
+      { labelKey: "nav.combi_of_the_day", fallback: "Combi of the Day", href: "/combi-of-the-day", icon: Layers, requiredTier: "gold" },
       { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
     ],
   },
