@@ -1,8 +1,13 @@
 ---
+/**
+ * Track Record final CTA — primary pushes to /pricing,
+ * secondary opens the app's track record (external).
+ */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
 import type { TrackRecordContent } from "@/content/pages/track-record/types";
 
 interface Props {
@@ -10,24 +15,33 @@ interface Props {
   content: TrackRecordContent["finalCta"];
 }
 const { locale, content } = Astro.props;
-const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
 ---
 
 <Section surface="conversion" spacing="xl" ariaLabelledby="tr-final-cta-h2">
-  <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]" style="background: radial-gradient(circle, rgba(0,210,106,0.45) 0%, rgba(0,210,106,0) 70%);"></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]"
+    style="background: radial-gradient(circle, rgba(0,210,106,0.45) 0%, rgba(0,210,106,0) 70%);"
+  ></div>
 
   <Container size="md" class="relative">
     <div class="text-center">
-      <h2 id="tr-final-cta-h2" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white-pure">
-        {content.h2}
-      </h2>
-      <p class="mt-5 text-lg leading-relaxed text-white-soft">{content.body}</p>
+      <h2
+        id="tr-final-cta-h2"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-white-pure"
+        set:html={parseAccent(content.h2)}
+      ></h2>
+      <p class="mt-3 text-lg sm:text-xl text-white-soft">{content.subH2}</p>
+      <p class="mt-5 text-base lg:text-lg leading-relaxed text-white-soft max-w-2xl mx-auto">
+        {content.body}
+      </p>
 
       <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <Button href={content.ctaPrimary.href} variant="primary" size="lg" surface="dark" external>
+        <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">
           {content.ctaPrimary.label}
         </Button>
-        <Button href={ctaSecondaryHref} variant="secondary" size="lg" surface="dark">
+        <Button href={content.ctaSecondary.href} variant="secondary" size="lg" surface="dark" external>
           {content.ctaSecondary.label}
         </Button>
       </div>

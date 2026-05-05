@@ -1,0 +1,34 @@
+---
+/**
+ * Section 2 — "The prediction industry has a credibility problem."
+ *
+ * Sets up the trust narrative: industry pattern (curated wins,
+ * edited predictions, fake testimonials) → BetsPlug position
+ * (architectural, not policy).
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import { parseAccent } from "@/lib/parseAccent";
+import type { TrackRecordContent } from "@/content/pages/track-record/types";
+
+interface Props { content: TrackRecordContent["whyTransparency"] }
+const { content } = Astro.props;
+---
+
+<Section surface="light-soft" spacing="lg" ariaLabelledby="tr-why-transparency-h2">
+  <Container size="md">
+    <header class="text-center">
+      <h2
+        id="tr-why-transparency-h2"
+        class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900"
+        set:html={parseAccent(content.h2)}
+      ></h2>
+    </header>
+
+    <div class="mt-8 space-y-5 text-base lg:text-lg leading-relaxed text-charcoal-700">
+      {content.paragraphs.map((p) => (
+        <p>{p}</p>
+      ))}
+    </div>
+  </Container>
+</Section>

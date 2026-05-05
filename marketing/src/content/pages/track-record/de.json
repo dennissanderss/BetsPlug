@@ -2,110 +2,123 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-02"
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "BetsPlug Track Record — Jede Vorhersage öffentlich | BetsPlug",
-    "description": "Sieh jede BetsPlug KI-Vorhersage, die je veröffentlicht wurde — Gewinne und Verluste. Live Track Record täglich aktualisiert.",
-    "ogImage": "/og-images/track-record-de.jpg"
+    "title": "Track Record — öffentlich, für immer | BetsPlug",
+    "description": "Jede BetsPlug-Vorhersage wird vor dem Anpfiff gesperrt und bleibt für immer in unserem öffentlichen Register — Gewinne und Verluste gleichermaßen. Sieh den vollständigen Track Record in unserer App.",
+    "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
-    "h1": "Jede Vorhersage. {{accent}}Öffentlich. Für Immer.{{/accent}}",
-    "subheadline": "Die meisten Vorhersage-Sites zeigen nur ihre Gewinner. Wir veröffentlichen alles — Gewinne, Verluste, exakte Vorhersagen und Zeitstempel. Verifiziere jede Vorhersage, die wir je gemacht haben.",
+    "h1": "Jede Vorhersage. {{accent}}Öffentlich. Für immer.{{/accent}}",
+    "subheadline": "Die meisten Vorhersage-Sites verstecken ihre Verluste. Wir nicht. Jede BetsPlug-Vorhersage wird vor dem Anpfiff gesperrt und bleibt für immer in unserem öffentlichen Register — Gewinne und Verluste gleichermaßen.",
     "trustStrip": [
-      "Vor dem Anpfiff gesperrt",
-      "Nicht editierbar",
-      "Gewinne und Verluste"
+      { "icon": "lock",   "text": "Vor dem Anpfiff gesperrt" },
+      { "icon": "eye",    "text": "Immer öffentlich" },
+      { "icon": "shield", "text": "Kann nicht bearbeitet werden" }
     ],
-    "ctaPrimary": {
-      "label": "So funktioniert's",
-      "canonical": "methodology"
-    },
-    "ctaSecondary": {
-      "label": "Vorhersagen ansehen",
-      "canonical": "predictions"
-    }
+    "ctaPrimary":   { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Vollständigen Track Record in der App", "href": "https://app.betsplug.com/track-record" }
   },
-  "widget": {
-    "h2": "Live Track Record",
-    "subhead": "Automatisch aktualisiert, sobald Spiele enden. Klicke auf eine Vorhersage für vollständige Details.",
-    "rangeLabel": "Zeitraum",
-    "range30": "Letzte 30 Tage",
-    "range90": "Letzte 90 Tage",
-    "rangeAll": "Alle Zeit",
-    "leagueLabel": "Liga",
-    "leagueAll": "Alle Ligen",
-    "statsTotal": "Vorhersagen gesamt",
-    "statsWins": "Gewinne",
-    "statsLosses": "Verluste",
-    "statsVoids": "Ungültig",
-    "legendWin": "Gewinn",
-    "legendLoss": "Verlust",
-    "legendVoid": "Ungültig / verschoben",
-    "explanationH3": "Wie Diese Daten Zu Lesen Sind",
-    "explanationBody": "Jede Kachel repräsentiert eine veröffentlichte Vorhersage. Farbe zeigt das Ergebnis: grün für korrekt, rot für falsch, grau für ungültig. Klicke auf eine Kachel für die vollständigen Vorhersagedetails inkl. Sperrzeitstempel.",
-    "loadingLabel": "Track Record wird geladen. Bitte gleich aktualisieren.",
-    "errorLabel": "Track Record vorübergehend nicht verfügbar.",
-    "tooltipPattern": "{result}: {home} vs {away}, {prediction}, gesperrt {date}"
-  },
-  "whyPublishLosses": {
-    "h2": "Warum wir auch Verluste veröffentlichen",
+  "whyTransparency": {
+    "h2": "Die Vorhersage-Branche hat ein {{accent}}Glaubwürdigkeitsproblem{{/accent}}",
     "paragraphs": [
-      "Die Vorhersage-Branche hat ein Integritätsproblem. Die meisten Sites zeigen selektiv gewinnende Vorhersagen, während sie still Verluste entfernen. Wir haben diesen Ansatz von Tag eins abgelehnt.",
-      "Jede BetsPlug-Vorhersage wird mit öffentlichem Zeitstempel vor dem Anpfiff gesperrt. Einmal veröffentlicht, kann sie nicht bearbeitet, gelöscht oder versteckt werden. Gewinn oder Verlust, die Vorhersage bleibt für immer in unserem öffentlichen Register.",
-      "Unser Track Record ist der Beweis hinter unserer Methodik. Wenn wir 90% Genauigkeit ohne jede Vorhersage zu zeigen behaupten würden, hättest du keinen Grund uns zu glauben. Indem wir alles zeigen, spricht unsere echte Leistung für sich."
+      "Die meisten Fußball-Vorhersage-Sites tun etwas Einfaches, um zuverlässig zu wirken: Sie entfernen still und leise ihre verlierenden Vorhersagen. Nach ein paar Wochen selektiver Veröffentlichung zeigt ihr 'Track Record' überwiegend Gewinne. Das Ergebnis: Wettende, die diesen Sites folgen, verlieren Geld auf Basis irreführender Informationen.",
+      "Manche Sites gehen weiter. Sie bearbeiten Vorhersagen nach dem Anpfiff so, dass sie zum tatsächlichen Ergebnis passen. Sie behaupten '85 % Genauigkeit', ohne dass Nutzer das überprüfen können. Sie verwenden Testimonials von Konten, die nicht existieren. Die gesamte Branche hat ein Vertrauensproblem, weil es keinen Mechanismus gibt, um diese Behauptungen zu beweisen oder zu widerlegen.",
+      "Wir haben diesen Ansatz vom ersten Tag an abgelehnt. Nicht weil wir ehrlicher sind als die Konkurrenz — sondern weil wir unser System so gebaut haben, dass Manipulation unmöglich ist. Die Transparenz ist keine Marketing-Aussage. Sie ist die Funktionsweise der Plattform."
+    ]
+  },
+  "pillars": {
+    "h2": "Wie wir {{accent}}Transparenz garantieren{{/accent}}",
+    "subH2": "Drei Mechanismen machen unseren Track Record überprüfbar — nicht nur behauptet.",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Gesperrte Zeitstempel",
+        "body": "Jede Vorhersage wird mit einem öffentlichen Zeitstempel vor dem Anpfiff in unserer Datenbank festgehalten. Nach diesem Moment kann die Vorhersage weder bearbeitet, gelöscht noch ersetzt werden — weder von uns noch von jemand anderem. Das ist keine Richtlinie. Es ist Architektur. Das System hat keine 'Bearbeiten'-Funktion für gesperrte Vorhersagen."
+      },
+      {
+        "icon": "scale",
+        "title": "Gewinne und Verluste",
+        "body": "Wir veröffentlichen jede Vorhersage, die wir generieren. Gewinne, Verluste und Pushes kommen alle in dasselbe öffentliche Register. Keine Auswahl, keine selektive Anzeige. Wenn unser Modell bei einem Spiel falsch liegt, bleibt dieser Verlust dauerhaft neben unseren Gewinnen sichtbar. Cherry-Picking ist unmöglich, weil nichts versteckt wird."
+      },
+      {
+        "icon": "book-open",
+        "title": "Methodik öffentlich",
+        "body": "Unsere Vorhersage-Methodik ist vollständig dokumentiert: welche statistischen Modelle wir verwenden (Elo + Poisson), welcher Machine-Learning-Ansatz zum Einsatz kommt, welche 40+ Variablen in jede Vorhersage einfließen. Keine 'Geheim-Algorithmus'-Behauptungen. Du kannst die gesamte Methodik lesen und überprüfen, dass dieselbe Logik auf jedes Spiel in unserem Track Record angewendet wurde."
+      }
+    ]
+  },
+  "whatYouCanVerify": {
+    "h2": "Was du {{accent}}selbst überprüfen kannst{{/accent}}",
+    "subH2": "Der vollständige Track Record liegt in der App. Offener Zugang — kein Konto zum Browsen erforderlich.",
+    "features": [
+      { "icon": "database",   "text": "Jede jemals erzeugte Vorhersage, alle 30+ Ligen" },
+      { "icon": "clock",      "text": "Sperr-Zeitstempel auf jeder Vorhersage (nachweislich vor Anpfiff)" },
+      { "icon": "sliders",    "text": "Filter nach Liga, Markt und Zeitraum" },
+      { "icon": "check",      "text": "Ergebnis pro Vorhersage mit Spielresultat" },
+      { "icon": "line-chart", "text": "Aggregierte Statistiken pro Liga oder Zeitraum" },
+      { "icon": "git-branch", "text": "Daten für eigene Analyse exportieren" }
     ],
-    "panel": {
-      "totalLabel": "Vorhersagen je veröffentlicht",
-      "daysLabel": "Tage kontinuierliches Tracking",
-      "leaguesLabel": "Abgedeckte Ligen",
-      "lastAddedLabel": "Letzte Vorhersage hinzugefügt",
-      "leaguesValue": "30+"
+    "cta": { "label": "Track Record in der App öffnen", "href": "https://app.betsplug.com/track-record" },
+    "noteUnderCta": "Den Track Record zu durchsuchen ist kostenlos. Kein Konto erforderlich.",
+    "mockup": {
+      "urlLabel":         "app.betsplug.com/track-record",
+      "filterAllLeagues": "Alle Ligen",
+      "filterRange":      "Letzte 90 Tage",
+      "filterAllMarkets": "Alle Märkte",
+      "statTotal":  "Vorhersagen gesamt",
+      "statWins":   "Gewinne",
+      "statLosses": "Verluste",
+      "statVoids":  "Void",
+      "gridLabel":  "Letzte 90 Tage",
+      "lockedLabel": "Gesperrt",
+      "winLabel":   "Gewinn",
+      "lossLabel":  "Verlust"
     }
   },
-  "methodologyLink": {
-    "h2": "Die Methodik hinter diesen Zahlen",
-    "body": "Jede Vorhersage in unserem Track Record wurde von derselben KI-Engine erstellt: Elo-Bewertungen, Poisson-Tor-Modelle und Machine Learning kombiniert.",
-    "cta": {
-      "label": "Vollständige Methodik lesen",
-      "canonical": "methodology"
-    }
+  "methodologyConnection": {
+    "h2": "Dieselbe Engine erzeugt {{accent}}jede Vorhersage{{/accent}}",
+    "paragraphs": [
+      "Unser Track Record ist der Beweis hinter unserer Methodik. Wenn du nicht weißt, wie die Vorhersagen entstehen, kannst du nicht bewerten, ob der Track Record etwas bedeutet. Deshalb veröffentlichen wir beides: die Methodik, die Vorhersagen erstellt, und das historische Register, wie diese Vorhersagen abgeschnitten haben.",
+      "Lies die vollständige Methodik, um zu verstehen, welche Variablen wir verarbeiten, welche Modelle wir kombinieren und warum wir Vorhersagen vor dem Anpfiff sperren. Überprüfe es dann selbst im Track Record — derselbe Ansatz, angewendet auf jede einzelne Vorhersage."
+    ],
+    "cta": { "label": "Methodik lesen", "canonical": "methodology" }
   },
   "faq": {
     "h2": "Track Record FAQ",
     "questions": [
       {
-        "q": "Können Vorhersagen aus dem Track Record entfernt werden?",
-        "a": "Nein. Jede Vorhersage wird mit einem unveränderlichen Zeitstempel vor dem Anpfiff gesperrt. Architektonisch, nicht per Richtlinie."
+        "q": "Wo kann ich den vollständigen Track Record sehen?",
+        "a": "Der vollständige Track Record liegt in unserer App unter app.betsplug.com/track-record. Kein Konto zum Browsen erforderlich — du kannst jede Vorhersage, die wir je gemacht haben, überprüfen, bevor du dich für ein Abo entscheidest."
       },
       {
-        "q": "Was bedeutet 'ungültig' im Track Record?",
-        "a": "Ungültiger Status gilt für Vorhersagen, bei denen das Spiel verschoben oder abgesagt wurde. Wir zählen diese nicht als Gewinne oder Verluste."
+        "q": "Können Vorhersagen wirklich nicht nach der Veröffentlichung bearbeitet werden?",
+        "a": "Korrekt. Sobald eine Vorhersage mit ihrem Anpfiff-Zeitstempel gesperrt ist, hat unser System keinen Mechanismus, sie zu ändern. Das ist in der Architektur verankert, nicht als Versprechen, dem wir folgen. Selbst wir können gesperrte Vorhersagen nicht ändern."
       },
       {
-        "q": "Warum zeigt ihr keine spezifischen Genauigkeitsprozentsätze prominent?",
-        "a": "Genauigkeit variiert dramatisch je nach Liga, Markttyp und Zeitraum. Wir bevorzugen es, die Rohdaten zu zeigen."
+        "q": "Wie überprüfe ich, dass eine bestimmte Vorhersage vor dem Anpfiff gesperrt war?",
+        "a": "Klicke im App-Track-Record auf eine beliebige Vorhersage. Die Detailseite zeigt den Sperr-Zeitstempel — den exakten Moment der Festlegung. Vergleiche ihn mit der tatsächlichen Anpfiffzeit. Der Sperr-Zeitstempel liegt immer vor dem Anpfiff."
       },
       {
-        "q": "Kann ich die Track-Record-Daten herunterladen?",
-        "a": "Track-Record-Daten sind über unsere API für zahlende Abonnenten verfügbar."
+        "q": "Warum zeigt ihr keine konkreten Genauigkeits-Prozentsätze auf dieser Seite?",
+        "a": "Genauigkeit variiert stark je nach Liga, Markttyp und Zeitraum. Eine einzige Schlagzeile verbirgt diese Schwankungen. Die App zeigt Rohdaten, damit du die tatsächliche Leistung im Kontext sehen kannst — bei welchen Wettbewerben, Märkten und Zeiträumen wir am besten und schlechtesten abgeschnitten haben."
       },
       {
-        "q": "Wie verifiziere ich eine bestimmte Vorhersage?",
-        "a": "Klicke auf eine Vorhersage. Die Detailseite zeigt den Sperrzeitstempel im Vergleich zur Anpfiffzeit."
+        "q": "Brauche ich ein Abo, um den Track Record zu sehen?",
+        "a": "Nein. Den historischen Track Record zu durchsuchen ist kostenlos und erfordert kein Konto. Du kannst unsere Aussagen selbst überprüfen, bevor du dich für ein Abo für tägliche Vorhersagen entscheidest."
+      },
+      {
+        "q": "Was hindert euch daran, verlierende Vorhersagen zu entfernen?",
+        "a": "Architektur. Unsere Datenbank hat keine 'Gesperrte Vorhersage löschen'-Funktion. Wir können Vorhersagen buchstäblich nicht entfernen, sobald sie gesperrt sind. Das war eine bewusste Designentscheidung beim Aufbau der Plattform — um den Track Record nachweislich unveränderbar zu machen, nicht nur richtlinienbedingt geschützt."
       }
     ]
   },
   "finalCta": {
-    "h2": "Bereit für die heutigen Vorhersagen?",
-    "body": "Dieselbe Engine, dieselbe Transparenz. Probiere unsere kostenlosen Vorhersagen heute.",
-    "ctaPrimary": {
-      "label": "Kostenlose Picks erhalten",
-      "href": "https://app.betsplug.com/register?source=track_record_final"
-    },
-    "ctaSecondary": {
-      "label": "Pläne vergleichen",
-      "canonical": "pricing"
-    }
+    "h2": "Von der Transparenz {{accent}}überzeugt{{/accent}}?",
+    "subH2": "Sieh dir jetzt die Vorhersagen selbst an.",
+    "body": "Du hast gesehen, wie wir Transparenz garantieren. Der nächste Schritt ist, die Vorhersagen zu sehen, die unsere Methodik produziert — und zu entscheiden, ob sie dein Abo wert sind.",
+    "ctaPrimary":   { "label": "Preise ansehen", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Track Record in der App", "href": "https://app.betsplug.com/track-record" }
   }
 }

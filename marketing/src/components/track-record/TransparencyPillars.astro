@@ -1,0 +1,49 @@
+---
+/**
+ * Section 3 — Three transparency pillars (Locked Timestamps,
+ * Wins and Losses Both, Methodology Public).
+ *
+ * Each pillar gets a hex-frame icon, title, and body. Layout is
+ * 3-column desktop / stacked mobile, on a dark-glow surface.
+ */
+import Container from "@/components/ui/Container.astro";
+import Section from "@/components/ui/Section.astro";
+import Icon from "@/components/ui/Icon.astro";
+import type { IconName } from "@/components/ui/icon-types";
+import { parseAccent } from "@/lib/parseAccent";
+import type { TrackRecordContent } from "@/content/pages/track-record/types";
+
+interface Props { content: TrackRecordContent["pillars"] }
+const { content } = Astro.props;
+---
+
+<Section surface="dark-glow" spacing="lg" ariaLabelledby="tr-pillars-h2">
+  <Container size="xl">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2
+        id="tr-pillars-h2"
+        class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-white-pure"
+        set:html={parseAccent(content.h2)}
+      ></h2>
+      <p class="mt-4 text-base lg:text-lg leading-relaxed text-white-soft">
+        {content.subH2}
+      </p>
+    </header>
+
+    <ul class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      {content.items.map((pillar) => (
+        <li class="relative rounded-2xl border border-deep-navy-600 bg-charcoal-700/60 p-6 lg:p-8 backdrop-blur-sm">
+          <span class="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-pitch-green-500/15 text-pitch-green-500">
+            <Icon name={pillar.icon as IconName} size={24} />
+          </span>
+          <h3 class="mt-5 text-xl lg:text-2xl font-bold leading-tight text-white-pure">
+            {pillar.title}
+          </h3>
+          <p class="mt-3 text-base leading-relaxed text-white-soft">
+            {pillar.body}
+          </p>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</Section>

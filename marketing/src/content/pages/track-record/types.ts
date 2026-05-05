@@ -1,9 +1,28 @@
 /**
  * Type contract for /track-record content JSON.
+ *
+ * The page no longer renders live data — it is a trust-building
+ * narrative. Every CTA is either a canonical site path or an
+ * external app URL (browse track record in the dashboard).
  */
 
 export interface CtaCanonical { label: string; canonical: string }
-export interface CtaHref { label: string; href: string }
+export interface CtaHref      { label: string; href: string }
+
+export interface TrustStripItem { icon: string; text: string }
+
+export interface PillarItem {
+  icon: string;
+  title: string;
+  body: string;
+}
+
+export interface VerifyFeature {
+  icon: string;
+  text: string;
+}
+
+export interface FaqItem { q: string; a: string }
 
 export interface TrackRecordContent {
   _meta: {
@@ -11,60 +30,66 @@ export interface TrackRecordContent {
     needsReview: boolean;
     lastUpdated: string;
   };
+
   meta: { title: string; description: string; ogImage: string };
+
   hero: {
     h1: string;
     subheadline: string;
-    trustStrip: string[];
-    ctaPrimary: CtaCanonical;
-    ctaSecondary: CtaCanonical;
+    trustStrip: TrustStripItem[];
+    ctaPrimary:   CtaCanonical;
+    ctaSecondary: CtaHref;
   };
-  widget: {
-    h2: string;
-    subhead: string;
-    rangeLabel: string;
-    range30: string;
-    range90: string;
-    rangeAll: string;
-    leagueLabel: string;
-    leagueAll: string;
-    statsTotal: string;
-    statsWins: string;
-    statsLosses: string;
-    statsVoids: string;
-    legendWin: string;
-    legendLoss: string;
-    legendVoid: string;
-    explanationH3: string;
-    explanationBody: string;
-    loadingLabel: string;
-    errorLabel: string;
-    tooltipPattern: string;
-  };
-  whyPublishLosses: {
+
+  whyTransparency: {
     h2: string;
     paragraphs: string[];
-    panel: {
-      totalLabel: string;
-      daysLabel: string;
-      leaguesLabel: string;
-      lastAddedLabel: string;
-      leaguesValue: string;
+  };
+
+  pillars: {
+    h2: string;
+    subH2: string;
+    items: PillarItem[];
+  };
+
+  whatYouCanVerify: {
+    h2: string;
+    subH2: string;
+    features: VerifyFeature[];
+    cta: CtaHref;
+    noteUnderCta: string;
+    mockup: {
+      urlLabel:        string;
+      filterAllLeagues: string;
+      filterRange:      string;
+      filterAllMarkets: string;
+      statTotal:  string;
+      statWins:   string;
+      statLosses: string;
+      statVoids:  string;
+      gridLabel:  string;
+      lockedLabel: string;
+      winLabel:   string;
+      lossLabel:  string;
     };
   };
-  methodologyLink: {
+
+  methodologyConnection: {
     h2: string;
-    body: string;
+    paragraphs: string[];
     cta: CtaCanonical;
   };
+
   faq: {
     h2: string;
-    questions: { q: string; a: string }[];
+    questions: FaqItem[];
   };
+
   finalCta: {
     h2: string;
+    subH2: string;
     body: string;
-    ctaPrimary: CtaHref;
-    ctaSecondary: CtaCanonical;
+    ctaPrimary:   CtaCanonical;
+    ctaSecondary: CtaHref;
   };
 }

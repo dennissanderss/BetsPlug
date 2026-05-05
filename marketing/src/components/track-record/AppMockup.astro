@@ -1,0 +1,296 @@
+---
+/**
+ * Stylized representation of the app's track-record interface.
+ *
+ * NOT real data — the tile mix is a deterministic hash so SSR
+ * stays stable across renders. Dots (●●●) replace team names and
+ * numbers because we are showing the format, not the data. The
+ * browser-chrome with `app.betsplug.com/track-record` makes it
+ * unambiguous that this is the dashboard, not the marketing site.
+ */
+import Icon from "@/components/ui/Icon.astro";
+import type { TrackRecordContent } from "@/content/pages/track-record/types";
+
+interface Props { content: TrackRecordContent["whatYouCanVerify"]["mockup"] }
+const { content } = Astro.props;
+
+const tileCount = 90;
+const tiles = Array.from({ length: tileCount }, (_, i) => {
+  const r = (i * 7919) % 100;
+  if (r < 5)  return "void";
+  if (r < 70) return "win";
+  return "loss";
+});
+---
+
+<div class="app-mockup" aria-hidden="true">
+  <div class="mockup-chrome">
+    <div class="mockup-dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+    <div class="mockup-url">{content.urlLabel}</div>
+  </div>
+
+  <div class="mockup-content">
+    <div class="mockup-filters">
+      <div class="mockup-filter">
+        <span>{content.filterAllLeagues}</span>
+        <Icon name="chevron-right" size={12} class="chevron" />
+      </div>
+      <div class="mockup-filter">
+        <span>{content.filterRange}</span>
+        <Icon name="chevron-right" size={12} class="chevron" />
+      </div>
+      <div class="mockup-filter">
+        <span>{content.filterAllMarkets}</span>
+        <Icon name="chevron-right" size={12} class="chevron" />
+      </div>
+    </div>
+
+    <div class="mockup-stats">
+      <div class="stat">
+        <span class="stat-label">{content.statTotal}</span>
+        <span class="stat-value">●●●</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">{content.statWins}</span>
+        <span class="stat-value stat-value--win">●●●</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">{content.statLosses}</span>
+        <span class="stat-value stat-value--loss">●●●</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">{content.statVoids}</span>
+        <span class="stat-value">●●</span>
+      </div>
+    </div>
+
+    <div class="mockup-grid-label">{content.gridLabel}</div>
+    <div class="mockup-grid">
+      {tiles.map((cls) => (
+        <div class={`mockup-tile mockup-tile--${cls}`}></div>
+      ))}
+    </div>
+
+    {[0, 1, 2].map((i) => (
+      <div class="mockup-prediction">
+        <div class="prediction-status">
+          <Icon name="lock" size={10} />
+          <span>{content.lockedLabel}</span>
+        </div>
+        <div class="prediction-teams">●●● vs ●●●</div>
+        <div class="prediction-pick">●●● ●.●</div>
+        <div class={`prediction-result prediction-result--${i === 1 ? "loss" : "win"}`}>
+          {i === 1 ? content.lossLabel : content.winLabel}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .app-mockup {
+    background: var(--deep-navy-900, #0f1419);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 20px 25px rgba(15, 20, 25, 0.15),
+      0 10px 10px rgba(15, 20, 25, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    width: 100%;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .mockup-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mockup-dots {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .mockup-url {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.02em;
+  }
+
+  .mockup-content {
+    padding: 1.25rem;
+  }
+
+  .mockup-filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .mockup-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .mockup-filter :global(.chevron) {
+    transform: rotate(90deg);
+    opacity: 0.6;
+  }
+
+  .mockup-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.625rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-value {
+    display: block;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.1em;
+  }
+
+  .stat-value--win {
+    color: rgba(0, 210, 106, 0.85);
+  }
+
+  .stat-value--loss {
+    color: rgba(220, 38, 38, 0.85);
+  }
+
+  .mockup-grid-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.5rem;
+  }
+
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 3px;
+    margin-bottom: 1.25rem;
+  }
+
+  .mockup-tile {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .mockup-tile--win {
+    background: rgba(0, 210, 106, 0.55);
+  }
+
+  .mockup-tile--loss {
+    background: rgba(220, 38, 38, 0.55);
+  }
+
+  .mockup-tile--void {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .mockup-prediction {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px 64px;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    align-items: center;
+  }
+
+  .prediction-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.625rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .prediction-teams,
+  .prediction-pick {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.1em;
+  }
+
+  .prediction-result {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .prediction-result--win {
+    background: rgba(0, 210, 106, 0.18);
+    color: rgba(0, 210, 106, 0.95);
+  }
+
+  .prediction-result--loss {
+    background: rgba(220, 38, 38, 0.18);
+    color: rgba(220, 38, 38, 0.95);
+  }
+
+  @media (max-width: 768px) {
+    .mockup-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .mockup-grid {
+      grid-template-columns: repeat(10, 1fr);
+    }
+    .mockup-prediction {
+      grid-template-columns: 70px 1fr 60px;
+    }
+    .prediction-pick {
+      display: none;
+    }
+  }
+</style>

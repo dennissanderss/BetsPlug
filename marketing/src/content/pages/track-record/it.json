@@ -2,110 +2,123 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-02"
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "Track record BetsPlug — ogni pronostico pubblico | BetsPlug",
-    "description": "Vedi ogni pronostico IA BetsPlug mai pubblicato — vittorie e sconfitte. Track record live aggiornato quotidianamente.",
-    "ogImage": "/og-images/track-record-it.jpg"
+    "title": "Track record — pubblico, per sempre | BetsPlug",
+    "description": "Ogni pronostico BetsPlug viene bloccato prima del fischio d'inizio e resta per sempre nel nostro registro pubblico — vittorie e sconfitte insieme. Vedi il track record completo nella nostra app.",
+    "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
     "h1": "Ogni pronostico. {{accent}}Pubblico. Per sempre.{{/accent}}",
-    "subheadline": "La maggior parte dei siti di pronostici mostra solo i loro vincenti. Noi pubblichiamo tutto — vittorie, sconfitte, pronostici esatti e timestamp. Verifica ogni pronostico che abbiamo mai fatto.",
+    "subheadline": "La maggior parte dei siti di pronostici nasconde le proprie sconfitte. Noi no. Ogni pronostico BetsPlug viene bloccato prima del fischio d'inizio e resta per sempre nel nostro registro pubblico — vittorie e sconfitte insieme.",
     "trustStrip": [
-      "Bloccato prima del calcio d'inizio",
-      "Non modificabile",
-      "Vittorie e sconfitte"
+      { "icon": "lock",   "text": "Bloccato prima del fischio d'inizio" },
+      { "icon": "eye",    "text": "Sempre pubblico" },
+      { "icon": "shield", "text": "Non può essere modificato" }
     ],
-    "ctaPrimary": {
-      "label": "Come funziona",
-      "canonical": "methodology"
-    },
-    "ctaSecondary": {
-      "label": "Vedi pronostici",
-      "canonical": "predictions"
-    }
+    "ctaPrimary":   { "label": "Vedi i prezzi", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Track record completo nell'app", "href": "https://app.betsplug.com/track-record" }
   },
-  "widget": {
-    "h2": "Track record in diretta",
-    "subhead": "Aggiornato automaticamente quando le partite finiscono. Clicca su un pronostico per dettagli completi.",
-    "rangeLabel": "Periodo",
-    "range30": "Ultimi 30 giorni",
-    "range90": "Ultimi 90 giorni",
-    "rangeAll": "Tutto il tempo",
-    "leagueLabel": "Campionato",
-    "leagueAll": "Tutti i campionati",
-    "statsTotal": "Totale pronostici",
-    "statsWins": "Vittorie",
-    "statsLosses": "Sconfitte",
-    "statsVoids": "Annullati",
-    "legendWin": "Vittoria",
-    "legendLoss": "Sconfitta",
-    "legendVoid": "Annullato / rinviato",
-    "explanationH3": "Come Leggere Questi Dati",
-    "explanationBody": "Ogni tassello rappresenta un pronostico pubblicato. Il colore indica l'esito: verde per corretto, rosso per errato, grigio per annullato. Clicca su un tassello per vedere i dettagli completi.",
-    "loadingLabel": "Caricamento track record. Aggiorna a breve.",
-    "errorLabel": "Track record temporaneamente non disponibile.",
-    "tooltipPattern": "{result}: {home} vs {away}, {prediction}, bloccato {date}"
-  },
-  "whyPublishLosses": {
-    "h2": "Perché pubblichiamo anche le perdite",
+  "whyTransparency": {
+    "h2": "Il settore dei pronostici ha un {{accent}}problema di credibilità{{/accent}}",
     "paragraphs": [
-      "L'industria dei pronostici ha un problema di integrità. La maggior parte dei siti mostra selettivamente i pronostici vincenti mentre rimuove silenziosamente le perdite. Abbiamo rifiutato questo approccio dal primo giorno.",
-      "Ogni pronostico BetsPlug viene bloccato con timestamp pubblico prima del calcio d'inizio. Una volta pubblicato, non può essere modificato, eliminato o nascosto. Vittoria o sconfitta, il pronostico rimane per sempre nel nostro registro pubblico.",
-      "Il nostro track record è la prova dietro la nostra metodologia. Se sostenessimo il 90% di accuratezza senza mostrare ogni pronostico, non avresti motivo di crederci. Mostrando tutto, la nostra performance reale parla da sola."
+      "La maggior parte dei siti di pronostici calcistici fa una cosa semplice per sembrare affidabile: rimuove silenziosamente i pronostici perdenti. Dopo qualche settimana di pubblicazione selettiva, il loro 'track record' mostra prevalentemente vittorie. Risultato: chi segue questi siti perde denaro basandosi su informazioni fuorvianti.",
+      "Alcuni siti vanno oltre. Modificano i pronostici dopo il fischio d'inizio per farli combaciare con il risultato reale. Dichiarano un '85 % di precisione' senza alcun modo per gli utenti di verificarlo. Usano testimonianze da account inesistenti. L'intero settore ha un problema di fiducia perché non esiste alcun meccanismo per provare o smentire queste affermazioni.",
+      "Abbiamo rifiutato questo approccio fin dal primo giorno. Non perché siamo più onesti dei concorrenti — ma perché abbiamo costruito il nostro sistema per rendere la manipolazione impossibile. La trasparenza non è una promessa di marketing. È il modo in cui la piattaforma funziona."
+    ]
+  },
+  "pillars": {
+    "h2": "Come {{accent}}garantiamo la trasparenza{{/accent}}",
+    "subH2": "Tre meccanismi rendono il nostro track record verificabile, non solo dichiarato.",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Timestamp bloccati",
+        "body": "Ogni pronostico viene salvato nel nostro database con un timestamp pubblico prima del fischio d'inizio. Dopo quel momento, il pronostico non può essere modificato, eliminato o sostituito — né da noi né da nessun altro. Non è una policy. È architettura. Il sistema non ha una funzione 'modifica' per i pronostici bloccati."
+      },
+      {
+        "icon": "scale",
+        "title": "Vittorie e sconfitte insieme",
+        "body": "Pubblichiamo ogni pronostico che generiamo. Vittorie, sconfitte e push finiscono tutti nello stesso registro pubblico. Nessuna selezione, nessuna esposizione mirata. Se il nostro modello sbaglia su una partita, quella sconfitta resta visibile in modo permanente accanto alle nostre vittorie. Il cherry-picking è impossibile perché nulla viene nascosto."
+      },
+      {
+        "icon": "book-open",
+        "title": "Metodologia pubblica",
+        "body": "La nostra metodologia di pronostico è completamente documentata: quali modelli statistici usiamo (Elo + Poisson), quale approccio di machine learning si applica, quali oltre 40 variabili entrano in ogni pronostico. Niente affermazioni di 'algoritmo segreto'. Puoi leggere l'intera metodologia e verificare che la stessa logica sia stata applicata a ogni partita nel nostro track record."
+      }
+    ]
+  },
+  "whatYouCanVerify": {
+    "h2": "Cosa puoi {{accent}}verificare tu stesso{{/accent}}",
+    "subH2": "Il track record completo vive nell'app. Accesso aperto — nessun account richiesto per la consultazione.",
+    "features": [
+      { "icon": "database",   "text": "Ogni pronostico mai generato, in oltre 30 leghe" },
+      { "icon": "clock",      "text": "Timestamp di blocco su ogni pronostico (dimostrabilmente prima del fischio)" },
+      { "icon": "sliders",    "text": "Filtra per lega, mercato e intervallo di date" },
+      { "icon": "check",      "text": "Esito per pronostico con risultato della partita" },
+      { "icon": "line-chart", "text": "Statistiche aggregate per lega o per periodo" },
+      { "icon": "git-branch", "text": "Esporta i dati per la tua analisi" }
     ],
-    "panel": {
-      "totalLabel": "Totale pronostici mai pubblicati",
-      "daysLabel": "Giorni di tracking continuo",
-      "leaguesLabel": "Campionati coperti",
-      "lastAddedLabel": "Ultimo pronostico aggiunto",
-      "leaguesValue": "30+"
+    "cta": { "label": "Apri il track record nell'app", "href": "https://app.betsplug.com/track-record" },
+    "noteUnderCta": "Consultare il track record è gratuito. Nessun account richiesto.",
+    "mockup": {
+      "urlLabel":         "app.betsplug.com/track-record",
+      "filterAllLeagues": "Tutte le leghe",
+      "filterRange":      "Ultimi 90 giorni",
+      "filterAllMarkets": "Tutti i mercati",
+      "statTotal":  "Pronostici totali",
+      "statWins":   "Vittorie",
+      "statLosses": "Sconfitte",
+      "statVoids":  "Annullati",
+      "gridLabel":  "Ultimi 90 giorni",
+      "lockedLabel": "Bloccato",
+      "winLabel":   "Vittoria",
+      "lossLabel":  "Sconfitta"
     }
   },
-  "methodologyLink": {
-    "h2": "La metodologia dietro questi numeri",
-    "body": "Ogni pronostico nel nostro track record è stato generato dallo stesso motore IA: classifiche Elo, modelli Poisson di gol e machine learning combinati.",
-    "cta": {
-      "label": "Leggi metodologia completa",
-      "canonical": "methodology"
-    }
+  "methodologyConnection": {
+    "h2": "Lo stesso motore genera {{accent}}ogni pronostico{{/accent}}",
+    "paragraphs": [
+      "Il nostro track record è la prova dietro la nostra metodologia. Se non sai come vengono generati i pronostici, non puoi valutare se il track record significhi qualcosa. Per questo pubblichiamo entrambe le cose: la metodologia che crea i pronostici e il registro storico di come quei pronostici hanno performato.",
+      "Leggi la metodologia completa per capire quali variabili elaboriamo, quali modelli combiniamo e perché blocchiamo i pronostici prima del fischio. Poi verifica tu stesso nel track record — lo stesso approccio applicato a ogni singolo pronostico."
+    ],
+    "cta": { "label": "Leggi la metodologia", "canonical": "methodology" }
   },
   "faq": {
     "h2": "FAQ track record",
     "questions": [
       {
-        "q": "I pronostici possono essere rimossi dal track record?",
-        "a": "No. Ogni pronostico viene bloccato con un timestamp immutabile prima del calcio d'inizio. Architetturalmente, non per politica."
+        "q": "Dove posso vedere il track record completo?",
+        "a": "Il track record completo vive nella nostra app su app.betsplug.com/track-record. Nessun account richiesto per la consultazione — puoi verificare ogni pronostico che abbiamo mai pubblicato prima di decidere se sottoscrivere."
       },
       {
-        "q": "Cosa significa 'annullato' nel track record?",
-        "a": "Lo stato annullato si applica a pronostici dove la partita è stata rinviata o cancellata. Non li contiamo né come vittorie né come sconfitte."
+        "q": "I pronostici davvero non possono essere modificati dopo la pubblicazione?",
+        "a": "Esatto. Una volta che un pronostico è bloccato con il timestamp del fischio d'inizio, il nostro sistema non ha alcun meccanismo per modificarlo. È integrato nell'architettura, non è una policy che promettiamo di rispettare. Nemmeno noi possiamo modificare pronostici bloccati."
       },
       {
-        "q": "Perché non mostrate percentuali di accuratezza specifiche in primo piano?",
-        "a": "L'accuratezza varia drasticamente per campionato, tipo di mercato e periodo. Preferiamo mostrare i dati grezzi."
+        "q": "Come verifico che un pronostico specifico sia stato bloccato prima del fischio?",
+        "a": "Nel track record dell'app, clicca su un pronostico qualsiasi. La pagina di dettaglio mostra il timestamp di blocco — il momento esatto in cui il pronostico è stato registrato. Confrontalo con l'orario reale del fischio d'inizio. Il timestamp di blocco è sempre antecedente."
       },
       {
-        "q": "Posso scaricare i dati del track record?",
-        "a": "I dati del track record sono disponibili tramite la nostra API per gli abbonati paganti."
+        "q": "Perché non mostrate percentuali di precisione specifiche su questa pagina?",
+        "a": "La precisione varia molto in base a lega, tipo di mercato e periodo. Una singola percentuale di intestazione nasconde questa varianza. L'app mostra i dati grezzi così vedi le prestazioni reali in contesto — in quali competizioni, mercati e periodi abbiamo reso meglio e peggio."
       },
       {
-        "q": "Come verifico che un pronostico specifico sia stato bloccato prima del calcio d'inizio?",
-        "a": "Clicca su un pronostico. La pagina dei dettagli mostra il timestamp di blocco rispetto all'orario del calcio d'inizio."
+        "q": "Devo abbonarmi per vedere il track record?",
+        "a": "No. Consultare lo storico del track record è gratuito e non richiede alcun account. Puoi verificare le nostre affermazioni tu stesso prima di decidere se abbonarti per i pronostici quotidiani."
+      },
+      {
+        "q": "Cosa vi impedisce di rimuovere i pronostici perdenti?",
+        "a": "L'architettura. Il nostro database non ha una funzione 'elimina pronostico bloccato'. Letteralmente non possiamo rimuovere i pronostici una volta bloccati. È stata una scelta di design intenzionale durante la costruzione della piattaforma — per rendere il track record dimostrabilmente immutabile, non solo protetto da policy."
       }
     ]
   },
   "finalCta": {
-    "h2": "Pronto a vedere i pronostici di oggi?",
-    "body": "Stesso motore, stessa trasparenza. Prova i nostri pronostici gratuiti oggi.",
-    "ctaPrimary": {
-      "label": "Ottieni pick gratuiti",
-      "href": "https://app.betsplug.com/register?source=track_record_final"
-    },
-    "ctaSecondary": {
-      "label": "Confronta i piani",
-      "canonical": "pricing"
-    }
+    "h2": "{{accent}}Convinto{{/accent}} dalla trasparenza?",
+    "subH2": "Ora vedi i pronostici stessi.",
+    "body": "Hai visto come garantiamo la trasparenza. Il passo successivo è vedere i pronostici che la nostra metodologia produce — e decidere se valgono il tuo abbonamento.",
+    "ctaPrimary":   { "label": "Vedi i prezzi", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Track record nell'app", "href": "https://app.betsplug.com/track-record" }
   }
 }

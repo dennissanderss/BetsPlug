@@ -1,4 +1,9 @@
 ---
+/**
+ * Track Record Hero — trust-building hero for /track-record.
+ * Primary CTA pushes to /pricing (conversion).
+ * Secondary CTA links to the app's full track record (external).
+ */
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
@@ -7,18 +12,18 @@ import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
 import type { TrackRecordContent } from "@/content/pages/track-record/types";
 
-const TRUST_ICONS: IconName[] = ["lock", "shield", "scale"];
-
 interface Props {
   locale: Locale;
   content: TrackRecordContent["hero"];
 }
 const { locale, content } = Astro.props;
 const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
-const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
 ---
 
-<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[40vh] py-16 md:py-20" aria-labelledby="track-record-hero-h1">
+<section
+  class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[40vh] py-16 md:py-20"
+  aria-labelledby="track-record-hero-h1"
+>
   <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-dark);"></div>
   <svg aria-hidden="true" class="absolute inset-0 h-full w-full opacity-[0.025] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -28,18 +33,29 @@ const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale
     </defs>
     <rect width="100%" height="100%" fill="url(#tr-grid)" />
   </svg>
-  <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-[-10%] h-[480px] w-[480px] rounded-full opacity-30 blur-[100px]" style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-24 right-[-10%] h-[480px] w-[480px] rounded-full opacity-30 blur-[100px]"
+    style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"
+  ></div>
 
   <Container size="md" class="relative text-center">
-    <h1 id="track-record-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl xl:text-[64px] font-bold leading-[1.0] tracking-tight text-white-pure" set:html={parseAccent(content.h1)}></h1>
-    <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white-soft max-w-2xl mx-auto">{content.subheadline}</p>
+    <h1
+      id="track-record-hero-h1"
+      class="text-3xl sm:text-4xl lg:text-5xl xl:text-[64px] font-bold leading-[1.0] tracking-tight text-white-pure"
+      set:html={parseAccent(content.h1)}
+    ></h1>
+
+    <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white-soft max-w-2xl mx-auto">
+      {content.subheadline}
+    </p>
 
     <ul class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm">
-      {content.trustStrip.map((item, i) => (
+      {content.trustStrip.map((item) => (
         <li>
           <USPItem
-            icon={TRUST_ICONS[i] ?? "check"}
-            text={item}
+            icon={item.icon as IconName}
+            text={item.text}
             size="sm"
             surface="dark"
           />
@@ -48,8 +64,12 @@ const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale
     </ul>
 
     <div class="mt-10 flex flex-wrap justify-center gap-3">
-      <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">{content.ctaPrimary.label}</Button>
-      <Button href={ctaSecondaryHref} variant="secondary" size="lg" surface="dark">{content.ctaSecondary.label}</Button>
+      <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">
+        {content.ctaPrimary.label}
+      </Button>
+      <Button href={content.ctaSecondary.href} variant="secondary" size="lg" surface="dark" external>
+        {content.ctaSecondary.label}
+      </Button>
     </div>
   </Container>
 </section>

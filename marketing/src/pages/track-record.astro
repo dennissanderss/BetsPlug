@@ -3,71 +3,56 @@
  * Track Record — English root.
  * URL: /track-record
  *
- * Spec: docs/specs/07-track-record.md
- *
- * Sections:
+ * Trust-building page (no live data). Sections:
  *   1. TrackRecordHero
- *   2. TrackRecordWidget — 90-day calendar grid + range/league filters
- *   3. WhyPublishLossesSection
- *   4. MethodologyLink
- *   5. TrackRecordFAQ
- *   6. TrackRecordFinalCTA
+ *   2. WhyTransparencyMatters
+ *   3. TransparencyPillars
+ *   4. WhatYouCanVerify (with stylized AppMockup)
+ *   5. MethodologyConnection
+ *   6. TrackRecordFAQ
+ *   7. TrackRecordFinalCTA
  */
 import MarketingLayout from "@/layouts/MarketingLayout.astro";
-import Container from "@/components/ui/Container.astro";
-import Section from "@/components/ui/Section.astro";
+import { getContent } from "@/lib/i18n";
+import { stripAccent } from "@/lib/parseAccent";
+import type { TrackRecordContent } from "@/content/pages/track-record/types";
 
-import TrackRecordHero          from "@/components/track-record/TrackRecordHero.astro";
-import TrackRecordWidget        from "@/components/track-record/TrackRecordWidget.astro";
-import WhyPublishLossesSection  from "@/components/track-record/WhyPublishLossesSection.astro";
-import MethodologyLink          from "@/components/track-record/MethodologyLink.astro";
-import TrackRecordFAQ           from "@/components/track-record/TrackRecordFAQ.astro";
-import TrackRecordFinalCTA      from "@/components/track-record/TrackRecordFinalCTA.astro";
-
-import {
-  loadTrackRecordContent,
-  loadTrackRecordSummary,
-  filterByRange,
-  type TrackRecordSummary,
-} from "@/lib/track-record-page";
+import TrackRecordHero        from "@/components/track-record/TrackRecordHero.astro";
+import WhyTransparencyMatters from "@/components/track-record/WhyTransparencyMatters.astro";
+import TransparencyPillars    from "@/components/track-record/TransparencyPillars.astro";
+import WhatYouCanVerify       from "@/components/track-record/WhatYouCanVerify.astro";
+import MethodologyConnection  from "@/components/track-record/MethodologyConnection.astro";
+import TrackRecordFAQ         from "@/components/track-record/TrackRecordFAQ.astro";
+import TrackRecordFinalCTA    from "@/components/track-record/TrackRecordFinalCTA.astro";
 
 const locale = "en" as const;
-const content = await loadTrackRecordContent(locale);
-const summary = await loadTrackRecordSummary(Astro.site);
-
-const rangeParam = Astro.url.searchParams.get("range");
-const range: 30 | 90 | "all" = rangeParam === "30" ? 30 : rangeParam === "all" ? "all" : 90;
-const leagueParam = Astro.url.searchParams.get("league");
-const league = leagueParam && leagueParam.length > 0 ? leagueParam : null;
-
-const filteredSummary: TrackRecordSummary | null = summary ? filterByRange(summary, range) : null;
-const topLeagues = ["Premier League", "La Liga", "Bundesliga"];
+const content = await getContent<TrackRecordContent>("track-record", locale);
 
 const SITE = "https://betsplug.com";
 const canonicalPath = "/track-record";
 
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: stripAccent(content.hero.h1),
+  description: content.meta.description,
+  url: `${SITE}${canonicalPath}`,
+  inLanguage: locale,
+};
 const breadcrumbSchema = {
-  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home",         item: `${SITE}/` },
     { "@type": "ListItem", position: 2, name: "Track Record", item: `${SITE}${canonicalPath}` },
   ],
 };
-const datasetSchema = summary ? {
-  "@context": "https://schema.org",
-  "@type": "Dataset",
-  name: "BetsPlug Prediction Track Record",
-  description: "Public record of all AI football predictions made by BetsPlug, including outcomes, lock timestamps, and league coverage.",
-  creator: { "@type": "Organization", name: "BetsPlug" },
-  url: `${SITE}${canonicalPath}`,
-  inLanguage: locale,
-  variableMeasured: ["prediction", "result", "lockedAt", "league", "confidence"],
-  isAccessibleForFree: true,
-} : null;
 const faqSchema = {
-  "@context": "https://schema.org", "@type": "FAQPage",
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
   mainEntity: content.faq.questions.map((q) => ({
-    "@type": "Question", name: q.q,
+    "@type": "Question",
+    name: q.q,
     acceptedAnswer: { "@type": "Answer", text: q.a },
   })),
 };
@@ -80,45 +65,16 @@ const faqSchema = {
   canonicalPath={canonicalPath}
 >
   <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-    {datasetSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(datasetSchema)} />}
     <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </Fragment>
 
-  <TrackRecordHero locale={locale} content={content.hero} />
-
-  <Section surface="light" spacing="lg">
-    <Container size="xl">
-      <header class="mb-8 text-center">
-        <h2 class="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-charcoal-900">
-          {content.widget.h2}
-        </h2>
-        <p class="mt-3 text-base lg:text-lg leading-relaxed text-charcoal-700 max-w-2xl mx-auto">
-          {content.widget.subhead}
-        </p>
-      </header>
-
-      <TrackRecordWidget
-        content={content.widget}
-        summary={filteredSummary}
-        range={range}
-        league={league}
-        topLeagues={topLeagues}
-        baseHref={canonicalPath}
-      />
-    </Container>
-  </Section>
-
-  <WhyPublishLossesSection
-    content={content.whyPublishLosses}
-    totalEverPublished={summary?.totalCount ?? 0}
-    daysOfTracking={summary?.daysOfTracking ?? 0}
-    lastAddedAt={summary?.lastAddedAt ?? new Date().toISOString()}
-  />
-
-  <MethodologyLink locale={locale} content={content.methodologyLink} />
-
-  <TrackRecordFAQ content={content.faq} />
-
-  <TrackRecordFinalCTA locale={locale} content={content.finalCta} />
+  <TrackRecordHero        locale={locale} content={content.hero} />
+  <WhyTransparencyMatters content={content.whyTransparency} />
+  <TransparencyPillars    content={content.pillars} />
+  <WhatYouCanVerify       content={content.whatYouCanVerify} />
+  <MethodologyConnection  locale={locale} content={content.methodologyConnection} />
+  <TrackRecordFAQ         content={content.faq} />
+  <TrackRecordFinalCTA    locale={locale} content={content.finalCta} />
 </MarketingLayout>

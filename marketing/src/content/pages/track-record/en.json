@@ -2,110 +2,123 @@
   "_meta": {
     "translationStatus": "source",
     "needsReview": false,
-    "lastUpdated": "2026-05-02"
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "BetsPlug track record — every prediction public | BetsPlug",
-    "description": "View every BetsPlug AI prediction ever published — wins and losses both. Live track record updates daily. Locked timestamps prove transparency.",
+    "title": "Track record — public, forever | BetsPlug",
+    "description": "Every BetsPlug prediction is locked before kickoff and stays in our public record forever — wins and losses both. See the full track record in our app.",
     "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
     "h1": "Every prediction. {{accent}}Public. Forever.{{/accent}}",
-    "subheadline": "Most prediction sites only show their winners. We publish everything — wins, losses, exact predictions, and timestamps. Verify any prediction we've ever made.",
+    "subheadline": "Most prediction sites hide their losses. We don't. Every BetsPlug prediction is locked before kickoff and stays in our public record forever — wins and losses both.",
     "trustStrip": [
-      "Locked before kickoff",
-      "Cannot be edited",
-      "Wins and losses both"
+      { "icon": "lock",   "text": "Locked before kickoff" },
+      { "icon": "eye",    "text": "Always public" },
+      { "icon": "shield", "text": "Cannot be edited" }
     ],
-    "ctaPrimary": {
-      "label": "How It Works",
-      "canonical": "methodology"
-    },
-    "ctaSecondary": {
-      "label": "View Predictions",
-      "canonical": "predictions"
-    }
+    "ctaPrimary":   { "label": "View pricing", "canonical": "pricing" },
+    "ctaSecondary": { "label": "See full track record in app", "href": "https://app.betsplug.com/track-record" }
   },
-  "widget": {
-    "h2": "Live track record",
-    "subhead": "Updated automatically as matches conclude. Click any prediction for full match details.",
-    "rangeLabel": "Range",
-    "range30": "Last 30 days",
-    "range90": "Last 90 days",
-    "rangeAll": "All time",
-    "leagueLabel": "League",
-    "leagueAll": "All leagues",
-    "statsTotal": "Total predictions",
-    "statsWins": "Wins",
-    "statsLosses": "Losses",
-    "statsVoids": "Void",
-    "legendWin": "Win",
-    "legendLoss": "Loss",
-    "legendVoid": "Void / postponed",
-    "explanationH3": "How To Read This",
-    "explanationBody": "Each tile represents one published prediction. Color indicates outcome: green for correct prediction, red for incorrect, gray for void (postponed match or push). Click any tile to see the full prediction details, including the lock timestamp proving it was published before kickoff.",
-    "loadingLabel": "Track record loading. Refresh in a moment.",
-    "errorLabel": "Track record temporarily unavailable. Please refresh.",
-    "tooltipPattern": "{result}: {home} vs {away}, {prediction}, locked {date}"
-  },
-  "whyPublishLosses": {
-    "h2": "Why we publish losses too",
+  "whyTransparency": {
+    "h2": "The prediction industry has a {{accent}}credibility problem{{/accent}}",
     "paragraphs": [
-      "The prediction industry has an integrity problem. Most sites selectively show winning predictions while quietly removing losses, making their accuracy claims meaningless. We rejected this approach from day one.",
-      "Every BetsPlug prediction is locked with a public timestamp before kickoff. Once published, it cannot be edited, deleted, or hidden. Win or lose, the prediction stays in our public record forever. This is the only way to make accuracy claims verifiable.",
-      "Our track record is the proof behind our methodology. If we claimed 90% accuracy without showing every prediction, you'd have no reason to believe us. By showing everything, our real performance speaks for itself — better than any marketing copy could."
+      "Most football prediction sites do something simple to look reliable: they quietly remove their losing predictions. After a few weeks of selective publishing, their 'track record' shows mostly wins. The result: bettors who follow these sites lose money based on misleading information.",
+      "Some sites go further. They edit predictions after kickoff to match the actual result. They claim '85% accuracy' without any way for users to verify. They use testimonials from accounts that don't exist. The entire industry has a trust problem because there's no mechanism to prove or disprove these claims.",
+      "We rejected this approach from day one. Not because we're more honest than competitors — but because we built our system to make manipulation impossible. The transparency isn't a marketing claim. It's how the platform works."
+    ]
+  },
+  "pillars": {
+    "h2": "How we {{accent}}guarantee transparency{{/accent}}",
+    "subH2": "Three mechanisms make our track record verifiable, not just claimed.",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Locked Timestamps",
+        "body": "Every prediction is committed to our database with a public timestamp before kickoff. After this moment, the prediction cannot be edited, deleted, or replaced — not by us, not by anyone. This isn't policy. It's architectural. The system doesn't have an 'edit' function for locked predictions."
+      },
+      {
+        "icon": "scale",
+        "title": "Wins and Losses Both",
+        "body": "We publish every prediction we generate. Wins, losses, and pushes all go into the same public record. There's no curation, no selective showing. If our model is wrong about a match, that loss is permanently visible alongside our wins. Cherry-picking is impossible because nothing is hidden."
+      },
+      {
+        "icon": "book-open",
+        "title": "Methodology Public",
+        "body": "Our prediction methodology is fully documented: which statistical models we use (Elo + Poisson), which machine learning approach applies, which 40+ variables go into each prediction. No 'secret algorithm' claims. You can read the entire methodology and verify that the same logic applied to every match in our track record."
+      }
+    ]
+  },
+  "whatYouCanVerify": {
+    "h2": "What you can {{accent}}verify yourself{{/accent}}",
+    "subH2": "The full track record lives in the app. Open access — no signup required for browsing.",
+    "features": [
+      { "icon": "database",   "text": "Every prediction ever generated, all 30+ leagues" },
+      { "icon": "clock",      "text": "Lock timestamp on each prediction (provably before kickoff)" },
+      { "icon": "sliders",    "text": "Filter by league, by market, by date range" },
+      { "icon": "check",      "text": "Per-prediction outcome with match result" },
+      { "icon": "line-chart", "text": "Aggregate stats per league or per period" },
+      { "icon": "git-branch", "text": "Export data for your own analysis" }
     ],
-    "panel": {
-      "totalLabel": "Total predictions ever published",
-      "daysLabel": "Days of continuous tracking",
-      "leaguesLabel": "Leagues covered",
-      "lastAddedLabel": "Last prediction added",
-      "leaguesValue": "30+"
+    "cta": { "label": "Open track record in app", "href": "https://app.betsplug.com/track-record" },
+    "noteUnderCta": "Browsing the track record is free. No account required.",
+    "mockup": {
+      "urlLabel":         "app.betsplug.com/track-record",
+      "filterAllLeagues": "All leagues",
+      "filterRange":      "Last 90 days",
+      "filterAllMarkets": "All markets",
+      "statTotal":  "Total predictions",
+      "statWins":   "Wins",
+      "statLosses": "Losses",
+      "statVoids":  "Voids",
+      "gridLabel":  "Last 90 days",
+      "lockedLabel": "Locked",
+      "winLabel":   "Win",
+      "lossLabel":  "Loss"
     }
   },
-  "methodologyLink": {
-    "h2": "The methodology behind these numbers",
-    "body": "Every prediction in our track record was generated by the same AI engine: Elo ratings, Poisson goal models, and machine learning combined. No editorial picks, no manual overrides.",
-    "cta": {
-      "label": "Read full methodology",
-      "canonical": "methodology"
-    }
+  "methodologyConnection": {
+    "h2": "The same engine generates {{accent}}every prediction{{/accent}}",
+    "paragraphs": [
+      "Our track record is the proof behind our methodology. If you don't know how the predictions are generated, you can't evaluate whether the track record means anything. That's why we publish both: the methodology that creates predictions, and the historical record of how those predictions performed.",
+      "Read the full methodology to understand what variables we process, which models we combine, and why we lock predictions before kickoff. Then verify it for yourself in the track record — the same approach applied to every single prediction."
+    ],
+    "cta": { "label": "Read methodology", "canonical": "methodology" }
   },
   "faq": {
     "h2": "Track record FAQ",
     "questions": [
       {
-        "q": "Can predictions be removed from the track record?",
-        "a": "No. Every prediction is locked with an immutable timestamp before kickoff. We have no mechanism to delete or hide predictions after publication, even if we wanted to. This is architectural, not policy — it can't be changed."
+        "q": "Where can I see the full track record?",
+        "a": "The complete track record lives in our app at app.betsplug.com/track-record. No signup required for browsing — you can verify any prediction we've ever made before deciding whether to subscribe."
       },
       {
-        "q": "What does 'void' mean in the track record?",
-        "a": "Void status applies to predictions where the match was postponed, cancelled, or otherwise didn't reach a normal conclusion. We don't count these as wins or losses since the prediction couldn't be evaluated."
-      },
-      {
-        "q": "Why don't you show specific accuracy percentages prominently?",
-        "a": "Accuracy varies dramatically by league, market type, and time period. A single headline percentage hides this variance. We prefer to show the raw data so you can see actual performance in context — which competitions, which markets, which periods we've performed best and worst."
-      },
-      {
-        "q": "Can I download the track record data?",
-        "a": "Track record data is available through our API for paid subscribers. The visual track record on this page is publicly accessible for verification purposes."
+        "q": "Can predictions really not be edited after publication?",
+        "a": "Correct. Once a prediction is locked with its kickoff timestamp, our system has no mechanism to modify it. This is built into the architecture, not a policy we promise to follow. Even we cannot change locked predictions."
       },
       {
         "q": "How do I verify a specific prediction was locked before kickoff?",
-        "a": "Click any prediction in the track record. The detail page shows the lock timestamp — the exact moment the prediction was committed. Compare this with the actual match kickoff time (also shown). Lock timestamp is always before kickoff."
+        "a": "In the app track record, click any prediction. The detail page shows the lock timestamp — the exact moment the prediction was committed. Compare this with the actual match kickoff time. The lock timestamp is always before kickoff."
+      },
+      {
+        "q": "Why don't you show specific accuracy percentages on this page?",
+        "a": "Accuracy varies dramatically by league, market type, and time period. A single headline percentage hides this variance. The app shows raw data so you can see actual performance in context — which competitions, which markets, which periods we've performed best and worst."
+      },
+      {
+        "q": "Do I need to subscribe to see the track record?",
+        "a": "No. Browsing the historical track record is free and requires no account. You can verify our claims yourself before deciding whether to subscribe for daily predictions."
+      },
+      {
+        "q": "What stops you from removing losing predictions?",
+        "a": "Architecture. Our database doesn't have a 'delete locked prediction' function. We literally cannot remove predictions once they're locked. This was an intentional design choice when we built the platform — to make the track record provably immutable, not just policy-protected."
       }
     ]
   },
   "finalCta": {
-    "h2": "Ready to see today's predictions?",
-    "body": "Same engine, same transparency. Try our free predictions today.",
-    "ctaPrimary": {
-      "label": "Get Free Picks",
-      "href": "https://app.betsplug.com/register?source=track_record_final"
-    },
-    "ctaSecondary": {
-      "label": "Compare Plans",
-      "canonical": "pricing"
-    }
+    "h2": "{{accent}}Convinced{{/accent}} by the transparency?",
+    "subH2": "Now see the predictions themselves.",
+    "body": "You've seen how we guarantee transparency. The next step is to see the predictions our methodology produces — and decide whether they're worth your subscription.",
+    "ctaPrimary":   { "label": "View pricing", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Browse track record in app", "href": "https://app.betsplug.com/track-record" }
   }
 }
