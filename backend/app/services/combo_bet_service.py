@@ -33,12 +33,19 @@ log = logging.getLogger(__name__)
 # Selection knobs — DUPLICATED from the route module on purpose so
 # this service has no incoming dependency on routes. Keep both in
 # sync; a unit test asserts equality.
-COMBO_LEG_COUNT = 3
-COMBO_MIN_CONFIDENCE = 0.70
-COMBO_MIN_LEG_ODDS = 1.40
+#
+# v2 tuning (2026-05-04): the original 3-leg / conf≥0.70 / odds≥1.40
+# selector was so strict it produced only 2 combos in 18 days of
+# Live data. Loosened to 2 legs / conf≥0.65 (Silver+) / odds≥1.30
+# so the engine fires more often. Combined odds now sit in the
+# ~1.7-3.5 sweet spot retail bettors actually play.
+COMBO_LEG_COUNT = 2
+COMBO_MIN_CONFIDENCE = 0.65
+COMBO_MIN_LEG_ODDS = 1.30
 COMBO_MAX_LEG_ODDS = 4.00
-PLATINUM_TIER_BONUS = 1.2
-GOLD_TIER_BONUS = 1.0
+PLATINUM_TIER_BONUS = 1.3
+GOLD_TIER_BONUS = 1.1
+SILVER_TIER_BONUS = 1.0
 COMBO_LIVE_TRACKING_START = date(2026, 4, 16)
 
 
@@ -88,7 +95,7 @@ def select_combo_legs(preds: list[Prediction]) -> list[dict]:
         if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
             continue
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("gold", "platinum"):
+        if tier not in ("silver", "gold", "platinum"):
             continue
 
         odds_h = book.get("home")
@@ -109,7 +116,11 @@ def select_combo_legs(preds: list[Prediction]) -> list[dict]:
         leg_edge = our_prob - fair_implied
         if leg_edge <= 0:
             continue
-        tier_bonus = PLATINUM_TIER_BONUS if tier == "platinum" else GOLD_TIER_BONUS
+        tier_bonus = (
+            PLATINUM_TIER_BONUS if tier == "platinum"
+            else GOLD_TIER_BONUS if tier == "gold"
+            else SILVER_TIER_BONUS
+        )
         score = float(p.confidence or 0.0) * tier_bonus * (1.0 + leg_edge)
         candidates.append(
             (
@@ -189,8 +200,18 @@ async def persist_daily_combo(
         )
     )
     if is_live:
-        # Only live-sourced predictions for the live combi
-        pred_stmt = pred_stmt.where(Prediction.prediction_source == "live")
+        # Live combi pulls from real-time pre-match generators on the
+        # post-deploy pipeline: the Celery-beat ``live`` job (10-min
+        # cycle) and the APScheduler ``backtest`` job (5-min cycle that
+        # predicts upcoming fixtures using the gefixte pipeline). Both
+        # produce genuine pre-match picks at the time the match was
+        # upcoming — same honesty guarantee, larger body. ``batch_local_fill``
+        # stays excluded: it stamped 19k predictions retroactively in
+        # one shot on 17 Apr, not generated in real-time as the match
+        # approached.
+        pred_stmt = pred_stmt.where(
+            Prediction.prediction_source.in_(("live", "backtest"))
+        )
     preds = (await db.execute(pred_stmt)).unique().scalars().all()
 
     legs = select_combo_legs(list(preds))
@@ -314,17 +335,30 @@ async def backfill_historical_combos(
     db: AsyncSession,
     start_date: date,
     end_date: date,
+    is_live: bool = False,
 ) -> int:
     """Replay the selector for each day in [start_date, end_date] and
-    persist a combo row per day with ``is_live = False``.
+    persist a combo row per day.
 
-    Used by the seed script to populate the back-test panel with
-    real combos rather than on-the-fly aggregations. Idempotent.
+    ``is_live=False`` (default): used by the seed script to populate
+    the back-test panel with real combos rather than on-the-fly
+    aggregations.
+
+    ``is_live=True``: replays the live-source-only selector (live +
+    backtest sources) for each day in the window. Use this to build
+    out the Engine-2 live measurement body retroactively for the
+    period since the v8.1 deploy (2026-04-16). The selection is run
+    on predictions that genuinely existed and were time-stamped
+    pre-kickoff at the time — no leakage, just running the same logic
+    the daily cron does, on the same data, for past days.
+
+    Idempotent in both modes — the (bet_date, is_live) pair is unique
+    so reruns are no-ops.
     """
     inserted = 0
     cursor = start_date
     while cursor <= end_date:
-        result = await persist_daily_combo(db, cursor, is_live=False)
+        result = await persist_daily_combo(db, cursor, is_live=is_live)
         if result is not None and result.created_at and (
             datetime.now(timezone.utc) - result.created_at
         ).total_seconds() < 60:

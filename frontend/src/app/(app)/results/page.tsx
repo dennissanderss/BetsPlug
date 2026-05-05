@@ -1776,221 +1776,404 @@ function ResultsPageContent() {
   const isLoading = resultsQuery.isLoading;
   const hasError = resultsQuery.isError;
 
+  // Per-tier KPI data — fetched from the same /trackrecord/live-measurement
+  // endpoint Track Record uses, so the four tiles on Results show exactly
+  // the same numbers users see on /trackrecord. Without this, the Results
+  // page would compute its own per-tier numbers from a different filter
+  // chain (different prediction_source set, different boundary semantics)
+  // and end up disagreeing with Track Record on the same label — Free
+  // 56% on TR vs Free 31% on Results was the giveaway.
+  const liveMeasurementQuery = useQuery({
+    queryKey: ["live-measurement-tiers"],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const r = await fetch(`${API}/trackrecord/live-measurement`);
+      if (!r.ok) throw new Error("live-measurement fetch failed");
+      return (await r.json()) as {
+        per_tier: Record<string, { total: number; correct: number; accuracy: number }>;
+        start_date: string;
+      };
+    },
+    staleTime: 5 * 60_000,
+  });
+
+  const tierKpis = useMemo(() => {
+    const t = liveMeasurementQuery.data?.per_tier ?? {};
+    const empty = { total: 0, correct: 0, accuracy: 0 };
+    return {
+      free: t.free ?? empty,
+      silver: t.silver ?? empty,
+      gold: t.gold ?? empty,
+      platinum: t.platinum ?? empty,
+    };
+  }, [liveMeasurementQuery.data]);
+
+  const liveDays = daysOfLiveData();
+  const progressPct = Math.min(100, Math.round((liveDays / 90) * 100));
+
+  const TIER_META: Record<CalcTier, {
+    label: string;
+    accent: string;
+    floor: string;
+    roman: string;
+    glow: string;
+    border: string;
+    pillBg: string;
+    pillText: string;
+  }> = {
+    free: {
+      label: "Free Access",
+      accent: "#e8a864",
+      floor: "45-59%",
+      roman: "I",
+      glow: "rgba(232, 168, 100, 0.18)",
+      border: "rgba(232, 168, 100, 0.30)",
+      pillBg: "rgba(232, 168, 100, 0.12)",
+      pillText: "#e8a864",
+    },
+    silver: {
+      label: "Silver",
+      accent: "#d7d9dc",
+      floor: "60-69%",
+      roman: "II",
+      glow: "rgba(215, 217, 220, 0.10)",
+      border: "rgba(215, 217, 220, 0.22)",
+      pillBg: "rgba(215, 217, 220, 0.08)",
+      pillText: "#d7d9dc",
+    },
+    gold: {
+      label: "Gold",
+      accent: "#f5d67a",
+      floor: "70-84%",
+      roman: "III",
+      glow: "rgba(245, 214, 122, 0.18)",
+      border: "rgba(245, 214, 122, 0.30)",
+      pillBg: "rgba(245, 214, 122, 0.12)",
+      pillText: "#f5d67a",
+    },
+    platinum: {
+      label: "Platinum",
+      accent: "#d9f0ff",
+      floor: "85%+",
+      roman: "IV",
+      glow: "rgba(217, 240, 255, 0.18)",
+      border: "rgba(217, 240, 255, 0.30)",
+      pillBg: "rgba(217, 240, 255, 0.10)",
+      pillText: "#d9f0ff",
+    },
+  };
+
   return (
-    <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
-      <div className="relative space-y-6">
+    <div className="relative mx-auto max-w-6xl px-3 sm:px-4 py-5 md:py-7 animate-fade-in">
+      <div className="space-y-5">
 
-      {/* ── Header ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <HexBadge variant="green" size="lg">
-            <Trophy className="h-6 w-6" />
-          </HexBadge>
-          <div>
-            <span className="section-label">Results</span>
-            <h1 className="text-heading mt-3">
-              {t("results.title")}
-            </h1>
-            <p className="mt-2 text-sm text-slate-400">
-              {t("results.subtitle")}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Live-tracking-since chip (the scope selector lives inside the calculator) ── */}
-      <div className="flex items-center justify-end">
-        <span className="text-[10px] uppercase tracking-widest text-slate-500">
-          Live tracking since{" "}
-          <span className="text-slate-300 font-semibold tabular-nums">
-            {LIVE_TRACKING_START}
-          </span>
-        </span>
-      </div>
-
-      {/* ── ROI Calculator — open for all tiers, matching the
-          Track Record live-measurement section. */}
-      <RoiCalculatorCard
-        fixtures={allResults}
-        isLoading={isLoading}
-        stake={stake}
-        setStake={setStake}
-        calcTier={tierFilter}
-        setCalcTier={(v) => {
-          // Any manual click freezes the auto-snap effect so the
-          // user's choice wins over the server-confirmed default.
-          setManualTierOverride(true);
-          setTierFilter(v);
-        }}
-        calcPeriod={calcPeriod}
-        setCalcPeriod={setCalcPeriod}
-        stream={stream}
-        setStream={setStream}
-        dataSource={dataSource}
-        setDataSource={setDataSource}
-        userTier={userTier}
-        isAdmin={adminUnlocked}
-      />
-
-      {/* ── Filtered-period Summary ── */}
-      <WeeklySummaryCard
-        data={computedSummary ?? undefined}
-        isLoading={isLoading}
-        isError={hasError}
-        isFree={isFree}
-        scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${tierFilter.charAt(0).toUpperCase()}${tierFilter.slice(1)} tier · Live`}
-      />
-
-      {/* ── Streak Stats ── */}
-      {filtered.length > 0 && (() => {
-        // Compute streaks from the visible results
-        const evaluated = filtered.filter(f => f.prediction && f.result);
-        let currentStreak = 0;
-        let maxWinStreak = 0;
-        let maxLoseStreak = 0;
-        let tempWin = 0;
-        let tempLose = 0;
-        for (const f of evaluated) {
-          const pick = derivePickSide(f.prediction);
-          const winner = f.result!.home_score > f.result!.away_score ? "home" : f.result!.home_score < f.result!.away_score ? "away" : "draw";
-          const correct = pick === winner;
-          if (correct) { tempWin++; tempLose = 0; maxWinStreak = Math.max(maxWinStreak, tempWin); }
-          else { tempLose++; tempWin = 0; maxLoseStreak = Math.max(maxLoseStreak, tempLose); }
-        }
-        // Current streak from most recent match (index 0 = newest)
-        currentStreak = 0;
-        for (let i = 0; i < evaluated.length; i++) {
-          const f = evaluated[i];
-          const pick = derivePickSide(f.prediction);
-          const winner = f.result!.home_score > f.result!.away_score ? "home" : f.result!.home_score < f.result!.away_score ? "away" : "draw";
-          if (pick === winner) currentStreak++;
-          else break;
-        }
-        return (
-          <div className="grid grid-cols-3 gap-3">
-            <div className="glass-card p-3 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("results.currentStreak")}</p>
-              <p className={`text-xl font-extrabold tabular-nums ${currentStreak > 0 ? "text-emerald-400" : "text-slate-400"}`}>
-                {currentStreak > 0 ? `🔥 ${currentStreak}` : "0"}
+        {/* ── Compact header with day counter + progress bar ── */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                Results
+              </h1>
+              <p className="mt-1 text-xs text-slate-500">
+                Live tracking — Day{" "}
+                <span className="font-bold tabular-nums text-emerald-400">{liveDays}</span>{" "}
+                of 90 (real pre-match odds, started 16 Apr 2026)
               </p>
             </div>
-            <div className="glass-card p-3 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("results.bestStreak")}</p>
-              <p className="text-xl font-extrabold tabular-nums text-emerald-400">{maxWinStreak}</p>
-            </div>
-            <div className="glass-card p-3 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("results.maxLoseStreak")}</p>
-              <p className="text-xl font-extrabold tabular-nums text-red-400">{maxLoseStreak}</p>
+            <div className="w-full max-w-[280px]">
+              <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-slate-500 mb-1">
+                <span>Progress to ROI claims</span>
+                <span className="tabular-nums text-slate-300">{progressPct}%</span>
+              </div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.05]">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-300 transition-all"
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
             </div>
           </div>
-        );
-      })()}
-
-      {/* ── Filter bar ── */}
-      <ResultsFilterBar
-        period={period}
-        setPeriod={setPeriod}
-        resultFilter={resultFilter}
-        setResultFilter={setResultFilter}
-        leagueFilter={leagueFilter}
-        setLeagueFilter={setLeagueFilter}
-        leagues={leagues}
-        total={filtered.length}
-        dataSource={dataSource}
-      />
-
-      {/* ── Error banner ── */}
-      {hasError && (
-        <div
-          className="rounded-xl border p-4 flex items-start gap-3"
-          style={{ background: "rgba(239,68,68,0.04)", borderColor: "rgba(239,68,68,0.25)" }}
-        >
-          <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
-          <p className="text-sm text-slate-400">
-            {t("results.errorLoading")}
-          </p>
         </div>
-      )}
 
-      {/* ── Content ── */}
-      {isLoading ? (
-        <div className="space-y-3">
-          {[1, 2, 3, 4, 5].map((i) => <SkeletonCard key={i} />)}
+        {/* ── Tier KPI tiles — click to filter the table below.
+            Numbers come from /trackrecord/live-measurement so they
+            match the Per-tier cards on Track Record exactly. */}
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+          {(["free", "silver", "gold", "platinum"] as const).map((tier) => {
+            const kpi = tierKpis[tier];
+            const wr = kpi.total > 0 ? kpi.accuracy * 100 : null;
+            const lost = kpi.total - kpi.correct;
+            const meta = TIER_META[tier];
+            const active = tierFilter === tier;
+            const locked = !canAccessTier(tier, userTier);
+            return (
+              <button
+                key={tier}
+                type="button"
+                onClick={() => {
+                  setManualTierOverride(true);
+                  setTierFilter(tier);
+                }}
+                className="group relative overflow-hidden rounded-xl border p-3.5 text-left transition-all"
+                style={{
+                  borderColor: active ? meta.accent : meta.border,
+                  background: `radial-gradient(circle at 50% 0%, ${meta.glow}, transparent 70%), hsl(230 22% 9% / 0.6)`,
+                  boxShadow: active ? `0 0 0 1px ${meta.accent}, 0 8px 24px ${meta.glow}` : undefined,
+                }}
+              >
+                {/* Top-row: Roman badge + tier label + lock */}
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold tabular-nums"
+                      style={{
+                        background: meta.pillBg,
+                        color: meta.accent,
+                        border: `1px solid ${meta.border}`,
+                      }}
+                    >
+                      {meta.roman}
+                    </span>
+                    <span
+                      className="text-[10px] font-bold uppercase tracking-widest"
+                      style={{ color: meta.accent }}
+                    >
+                      {meta.label}
+                    </span>
+                  </div>
+                  {locked && <Lock className="h-3 w-3 text-slate-600" />}
+                </div>
+
+                {/* Big WR % */}
+                <p className="text-3xl font-extrabold leading-none tabular-nums text-white sm:text-4xl">
+                  {wr !== null ? `${wr.toFixed(1)}%` : "—"}
+                </p>
+
+                {/* PLAYED / WON / LOST pills */}
+                <div className="mt-3 flex items-center gap-1.5">
+                  <span
+                    className="rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider tabular-nums"
+                    style={{
+                      background: meta.pillBg,
+                      color: meta.pillText,
+                      border: `1px solid ${meta.border}`,
+                    }}
+                  >
+                    {kpi.total} played
+                  </span>
+                  <span
+                    className="rounded-md border border-emerald-500/25 bg-emerald-500/[0.10] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider tabular-nums text-emerald-300"
+                  >
+                    {kpi.correct} won
+                  </span>
+                  <span
+                    className="rounded-md border border-red-500/25 bg-red-500/[0.08] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider tabular-nums text-red-300"
+                  >
+                    {lost} lost
+                  </span>
+                </div>
+
+                {/* Footer */}
+                <p className="mt-2 text-[10px] uppercase tracking-widest text-slate-500">
+                  Floor {meta.floor}
+                  {kpi.total < 10 && kpi.total > 0 && (
+                    <span className="ml-1 text-amber-400">· small sample</span>
+                  )}
+                </p>
+              </button>
+            );
+          })}
         </div>
-      ) : allResults.filter((f) => f.status === "finished" && f.result).length === 0 ? (
-        <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
-          <Trophy className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">{t("results.noResults")}</p>
-          <p className="text-sm text-slate-600">
-            {t("results.noResultsHint")}
-          </p>
-          {period < 30 && (
+
+        {/* ── Compact filter row ── */}
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            Period
+          </span>
+          {[7, 14, 30, 90].map((p) => (
             <button
-              onClick={() => setPeriod(30)}
-              className="btn-primary mt-2"
+              key={p}
+              type="button"
+              onClick={() => setPeriod(p)}
+              className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors ${
+                period === p
+                  ? "bg-blue-600/80 text-white"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
             >
-              {t("results.expandTo30Days")}
+              {p}d
             </button>
-          )}
+          ))}
+          <span className="mx-2 h-4 w-px bg-white/[0.06]" />
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            Result
+          </span>
+          {(["All", "Correct", "Incorrect"] as const).map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setResultFilter(r)}
+              className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors ${
+                resultFilter === r
+                  ? r === "Correct"
+                    ? "bg-emerald-600/80 text-white"
+                    : r === "Incorrect"
+                    ? "bg-red-600/80 text-white"
+                    : "bg-blue-600/80 text-white"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              {r}
+            </button>
+          ))}
+          <span className="ml-auto text-[10px] text-slate-500 tabular-nums">
+            {filtered.length} {filtered.length === 1 ? "pick" : "picks"} · {TIER_META[tierFilter].label} tier
+          </span>
         </div>
-      ) : filtered.length === 0 ? (
-        <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
-          <Trophy className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">{t("results.noResultsMatchFilters")}</p>
-          <p className="text-sm text-slate-600">
-            {t("results.noResultsMatchFiltersHint")}
-          </p>
-          <button
-            onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
-            className="btn-primary mt-2"
+
+        {/* ── Error banner ── */}
+        {hasError && (
+          <div
+            className="rounded-xl border p-3 flex items-start gap-3"
+            style={{ background: "rgba(239,68,68,0.04)", borderColor: "rgba(239,68,68,0.25)" }}
           >
-            {t("results.clearFilters")}
-          </button>
-        </div>
-      ) : (
-        <div className="glass-card overflow-hidden">
-          {/* Column headers */}
-          <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.05] text-[9px] uppercase tracking-widest text-slate-600">
-            <span className="w-12 sm:w-16 shrink-0">{t("results.dateColumn")}</span>
-            <span className="flex-1">{t("results.homeColumn")}</span>
-            <span className="w-10 sm:w-14 text-center">{t("results.scoreColumn")}</span>
-            <span className="flex-1">{t("results.awayColumn")}</span>
-            <span className="hidden sm:inline w-8 text-center">{t("results.pickColumn")}</span>
-            <span className="hidden sm:inline w-20 text-center">{t("results.oddsColumn")}{isFree && <LockPill requiredTier="silver" className="ml-1" />}</span>
-            <span className="hidden sm:inline w-20 text-right">
-              {isFree ? <>{t("results.returnColumn")} <LockPill requiredTier="silver" className="ml-1" /></> : `${t("results.returnColumn")} · €${stake.toFixed(0)}`}
+            <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
+            <p className="text-sm text-slate-400">{t("results.errorLoading")}</p>
+          </div>
+        )}
+
+        {/* ── Recent picks table ── */}
+        {isLoading ? (
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map((i) => <SkeletonCard key={i} />)}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="glass-card flex flex-col items-center justify-center gap-3 py-16 text-center">
+            <Trophy className="h-8 w-8 text-slate-600" />
+            <p className="text-base font-medium text-slate-400">
+              No picks match your filters
+            </p>
+            <p className="text-sm text-slate-600">
+              {tierKpis[tierFilter].total === 0
+                ? `No ${TIER_META[tierFilter].label} picks in the last ${period} days yet.`
+                : "Try a wider period or different result filter."}
+            </p>
+            {period < 30 && (
+              <button onClick={() => setPeriod(30)} className="btn-primary mt-2">
+                Try 30 days
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="glass-card overflow-hidden">
+            <div className="flex items-center gap-3 border-b border-white/[0.05] bg-white/[0.03] px-4 py-2.5 text-[9px] uppercase tracking-widest text-slate-600">
+              <span className="w-12 sm:w-16 shrink-0">{t("results.dateColumn")}</span>
+              <span className="flex-1">{t("results.homeColumn")}</span>
+              <span className="w-10 sm:w-14 text-center">{t("results.scoreColumn")}</span>
+              <span className="flex-1">{t("results.awayColumn")}</span>
+              <span className="hidden w-8 text-center sm:inline">{t("results.pickColumn")}</span>
+              <span className="hidden w-20 text-center sm:inline">
+                {t("results.oddsColumn")}
+                {isFree && <LockPill requiredTier="silver" className="ml-1" />}
+              </span>
+              <span className="hidden w-20 text-right sm:inline">
+                {isFree ? (
+                  <>
+                    {t("results.returnColumn")} <LockPill requiredTier="silver" className="ml-1" />
+                  </>
+                ) : (
+                  `${t("results.returnColumn")} · €${stake.toFixed(0)}`
+                )}
+              </span>
+              <span className="w-6 sm:w-8 text-center">{t("results.resultColumn")}</span>
+            </div>
+            <div className="divide-y divide-white/[0.03]">
+              {filtered.slice(0, 50).map((fixture) => (
+                <ResultCard
+                  key={fixture.id}
+                  fixture={fixture}
+                  stake={stake}
+                  isFree={isFree}
+                />
+              ))}
+            </div>
+            {filtered.length > 50 && (
+              <div className="border-t border-white/[0.05] bg-white/[0.02] px-4 py-2.5 text-center text-[10px] uppercase tracking-widest text-slate-500">
+                Showing first 50 of {filtered.length} — open Advanced simulation for full table
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Advanced simulation — collapsed by default ── */}
+        <details className="group rounded-xl border border-white/[0.06] bg-white/[0.02] open:bg-white/[0.03]">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-slate-300 hover:text-white">
+            <span className="flex items-center gap-2">
+              <Calculator className="h-4 w-4 text-emerald-400" />
+              Advanced simulation
+              <span className="text-[10px] font-normal uppercase tracking-widest text-slate-500">
+                Custom stake · period · BotD stream · per-tier €-comparison
+              </span>
             </span>
-            <span className="w-6 sm:w-8 text-center">{t("results.resultColumn")}</span>
+            <ChevronDown className="h-4 w-4 text-slate-500 transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="space-y-5 border-t border-white/[0.06] p-4 sm:p-5">
+            <RoiCalculatorCard
+              fixtures={allResults}
+              isLoading={isLoading}
+              stake={stake}
+              setStake={setStake}
+              calcTier={tierFilter}
+              setCalcTier={(v) => {
+                setManualTierOverride(true);
+                setTierFilter(v);
+              }}
+              calcPeriod={calcPeriod}
+              setCalcPeriod={setCalcPeriod}
+              stream={stream}
+              setStream={setStream}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              userTier={userTier}
+              isAdmin={adminUnlocked}
+            />
+            <WeeklySummaryCard
+              data={computedSummary ?? undefined}
+              isLoading={isLoading}
+              isError={hasError}
+              isFree={isFree}
+              scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${TIER_META[tierFilter].label} tier · Live`}
+            />
           </div>
-          {/* Rows */}
-          <div className="divide-y divide-white/[0.03]">
-            {filtered.map((fixture) => (
-              <ResultCard key={fixture.id} fixture={fixture} stake={stake} isFree={isFree} />
-            ))}
-          </div>
-          {/* Footer: sum of visible rows' returns so the user can verify the headline */}
-          <ResultsTableFooter fixtures={filtered} stake={stake} isFree={isFree} />
-        </div>
-      )}
+        </details>
 
-      {/* Upsell: Platinum lifetime */}
-      <UpsellBanner
-        targetTier="platinum"
-        headline={t("results.upsellHeadline")}
-        subtext={t("results.upsellSubtext")}
-        variant="inline"
-      />
-
-      {/* Related pages */}
-      <RelatedLinks
-        title={t("related.title")}
-        links={[
-          { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
-          { label: t("related.trackRecord"), href: "/trackrecord", description: t("related.trackRecordDesc"), icon: ClipboardList },
-        ]}
-      />
+        {/* Related pages */}
+        <RelatedLinks
+          title={t("related.title")}
+          links={[
+            {
+              label: t("related.predictions"),
+              href: "/predictions",
+              description: t("related.predictionsDesc"),
+              icon: Sparkles,
+            },
+            {
+              label: t("related.trackRecord"),
+              href: "/trackrecord",
+              description: t("related.trackRecordDesc"),
+              icon: ClipboardList,
+            },
+          ]}
+        />
 
       </div>
     </div>
   );
+}
+
+// Helper — checks whether the user's subscription tier covers a target
+// CalcTier band, mirroring USER_TIER_RANK semantics.
+function canAccessTier(target: CalcTier, userTier: Tier): boolean {
+  const rank: Record<string, number> = { free: 0, silver: 1, gold: 2, platinum: 3 };
+  return rank[target] <= rank[userTier];
 }

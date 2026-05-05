@@ -807,11 +807,16 @@ async def get_backtest_proof(
 # the fly. A daily cron + dedicated combo_bets table follows in a later
 # pass once we have a few weeks of live data to evaluate.
 
-PLATINUM_TIER_BONUS = 1.2
-GOLD_TIER_BONUS = 1.0
-COMBO_LEG_COUNT = 3
-COMBO_MIN_CONFIDENCE = 0.70
-COMBO_MIN_LEG_ODDS = 1.40
+# v2 tuning (2026-05-04) — must mirror combo_bet_service.py.
+# 2 legs / conf≥0.65 / odds≥1.30 produces a much larger body than the
+# original 3-leg / conf≥0.70 / odds≥1.40 selector while keeping the
+# combined-odds sweet spot for retail bettors.
+PLATINUM_TIER_BONUS = 1.3
+GOLD_TIER_BONUS = 1.1
+SILVER_TIER_BONUS = 1.0
+COMBO_LEG_COUNT = 2
+COMBO_MIN_CONFIDENCE = 0.65
+COMBO_MIN_LEG_ODDS = 1.30
 COMBO_MAX_LEG_ODDS = 4.00
 
 # Master kill-switch — Combi van de Dag is locked behind a "coming soon"
@@ -938,7 +943,12 @@ async def get_combo_of_the_day(
         )
         .join(Match, Match.id == Prediction.match_id)
         .where(
-            Prediction.prediction_source == "live",
+            # Combo engine pulls from real-time pre-match generators on
+            # the post-deploy pipeline (the Celery-beat ``live`` job and
+            # the APScheduler ``backtest`` job that predicts upcoming
+            # fixtures). ``batch_local_fill`` excluded — those rows were
+            # stamped retroactively, not generated as the match approached.
+            Prediction.prediction_source.in_(("live", "backtest")),
             Prediction.closing_odds_snapshot.is_not(None),
             Prediction.confidence >= COMBO_MIN_CONFIDENCE,
             Match.scheduled_at >= now,
@@ -976,7 +986,7 @@ async def get_combo_of_the_day(
             continue
 
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("gold", "platinum"):
+        if tier not in ("silver", "gold", "platinum"):
             continue
 
         # Bookmaker-implied (raw 1/odds) and fair-implied (overround-removed)
@@ -1003,7 +1013,11 @@ async def get_combo_of_the_day(
             # holds if every leg is at least neutral.
             continue
 
-        tier_bonus = PLATINUM_TIER_BONUS if tier == "platinum" else GOLD_TIER_BONUS
+        tier_bonus = (
+            PLATINUM_TIER_BONUS if tier == "platinum"
+            else GOLD_TIER_BONUS if tier == "gold"
+            else SILVER_TIER_BONUS
+        )
         score = float(p.confidence or 0.0) * tier_bonus * (1.0 + max(leg_edge, 0.0))
 
         leg = ComboLeg(
@@ -1208,7 +1222,7 @@ def _select_combo_legs_from_predictions(
         if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
             continue
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("gold", "platinum"):
+        if tier not in ("silver", "gold", "platinum"):
             continue
         odds_h = book.get("home")
         odds_d = book.get("draw")
