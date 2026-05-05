@@ -43,6 +43,8 @@ from app.api.routes.admin_telegram import router as admin_telegram_router
 from app.api.routes.telegram import router as telegram_router
 # Value-bet engine (v9)
 from app.api.routes.value_bets import router as value_bets_router, admin_router as value_bets_admin_router
+# Public marketing-site endpoints (slug-keyed teams + leagues)
+from app.api.routes.public_teams import router as public_teams_router
 
 router = APIRouter()
 
@@ -97,3 +99,6 @@ router.include_router(telegram_router, prefix="/telegram", tags=["telegram"])
 # Value-bet engine (v9)
 router.include_router(value_bets_router, prefix="/value-bets", tags=["value-bets"])
 router.include_router(value_bets_admin_router, prefix="/admin/value-bets", tags=["admin-value-bets"], dependencies=_ADMIN_AUTH)
+# Public marketing-site endpoints — slug-keyed, no API-Football key exposure,
+# CORS-allowed for betsplug.com + localhost:4321 (see app/main.py).
+router.include_router(public_teams_router, prefix="/public", tags=["public"])
