@@ -2,7 +2,7 @@
   "_meta": {
     "translationStatus": "source",
     "needsReview": false,
-    "lastUpdated": "2026-05-02"
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
     "title": "AI football predictions built on real data | BetsPlug",
@@ -39,28 +39,28 @@
   },
   "howItWorks": {
     "h2": "How BetsPlug {{accent}}works{{/accent}}",
-    "subhead": "From data to prediction in three steps. Transparent. Reproducible. Locked.",
+    "subhead": "From match to pick in three steps. No tipsters, no hunches.",
     "steps": [
       {
         "number": "01",
         "icon": "database",
-        "h3": "Data collection",
-        "body": "We aggregate match results, xG, possession, lineups, transfers and weather data from licensed providers across 30+ leagues.",
-        "microDetail": "Updated every minute"
+        "h3": "We collect every match",
+        "body": "We pull in fixtures and recent results from 30+ leagues. The data refreshes constantly so we always work with what just happened on the pitch.",
+        "microDetail": "Refreshed every minute"
       },
       {
         "number": "02",
         "icon": "cpu",
-        "h3": "AI engine analysis",
-        "body": "Our engine combines Elo ratings, Poisson goal models and machine learning to evaluate every match across 40+ variables.",
-        "microDetail": "No human bias, no editorial picks"
+        "h3": "Our engine does the math",
+        "body": "For every upcoming match, our engine compares team strength, recent form and historical patterns. No editor, no fan bias — just numbers.",
+        "microDetail": "Same engine for every pick"
       },
       {
         "number": "03",
         "icon": "lock",
-        "h3": "Locked prediction",
-        "body": "Each prediction is generated and locked before kickoff. Once published, it cannot be modified — verifiable in our public track record.",
-        "microDetail": "Track record publicly accessible"
+        "h3": "Picks lock before kickoff",
+        "body": "Each prediction is published and locked before the whistle. Once it's out, it cannot be changed. Wins and losses both stay on the public track record.",
+        "microDetail": "Public track record, no edits"
       }
     ],
     "cta": {
@@ -70,15 +70,16 @@
   },
   "livePredictions": {
     "h2": "Today's free AI predictions",
-    "subhead": "Five free predictions, refreshed every minute. Locked before kickoff, exactly as our paid subscribers receive them.",
+    "subhead": "Free picks for today's matches, refreshed every minute. Locked before kickoff — exactly what our paying subscribers see.",
     "liveLabel": "Updated",
     "liveSecondsAgo": "{seconds}s ago",
     "lockedLabel": "Locked",
     "loadingLabel": "Loading predictions…",
     "errorLabel": "Predictions unavailable. Please refresh.",
+    "emptyLabel": "No matches scheduled for today — fresh slate every morning.",
     "ctaSection": {
-      "h3": "Want unlimited predictions?",
-      "body": "Get all daily predictions across 30+ leagues, full statistics, and the same AI used by our paid subscribers.",
+      "h3": "Want every pick, every day?",
+      "body": "Subscribers see the full slate across every league we cover, with win probability per match.",
       "ctaPrimary": {
         "label": "View Pricing",
         "canonical": "pricing"
@@ -90,11 +91,11 @@
     }
   },
   "methodology": {
-    "h2": "Built on {{accent}}mathematics{{/accent}}, not hunches",
+    "h2": "Built on {{accent}}numbers{{/accent}}, not hunches",
     "paragraphs": [
-      "BetsPlug combines three statistical disciplines into one prediction engine. Elo ratings rank team strength based on every match played. Poisson goal models calculate the probability of specific score outcomes. Machine learning identifies patterns across thousands of historical matches that humans miss.",
-      "The engine processes 40+ variables per match: recent form, head-to-head history, lineups, injuries, expected goals, possession trends, weather conditions, and more. No editorial input. No emotional bias. Just mathematics.",
-      "Every prediction is generated and locked before kickoff. We publish both wins and losses. The full track record is publicly accessible — because transparency is the only proof that matters."
+      "Every pick on BetsPlug starts the same way: the engine looks at how strong each team is right now, how they've been playing lately, and what usually happens when these two sides — or sides like them — meet.",
+      "There's no editor, no favourite team and no last-minute gut call. The model treats every match the same way and turns the picture into a single, simple verdict with a confidence score.",
+      "We publish wins and losses side by side on a public track record. If a pick goes wrong, you can see it. That's the only honest way to do this."
     ],
     "stats": [
       {
@@ -102,29 +103,29 @@
         "label": "Leagues covered"
       },
       {
-        "value": "40+",
-        "label": "Variables per match"
-      },
-      {
-        "value": "3",
-        "label": "Statistical models"
+        "value": "1 min",
+        "label": "Data refresh"
       },
       {
         "value": "100%",
-        "label": "Predictions locked"
+        "label": "Picks locked"
+      },
+      {
+        "value": "0",
+        "label": "Editor opinions"
       }
     ],
     "diagram": {
-      "input": "Input Layer",
+      "input": "What we look at",
       "inputItems": [
-        "Match Stats",
-        "Team Form",
-        "External Data"
+        "Match results",
+        "Team form",
+        "Head-to-head"
       ],
       "models": [
-        "Elo Ratings",
-        "Poisson Goals",
-        "Machine Learning"
+        "Team strength",
+        "Goal patterns",
+        "Historical signals"
       ],
       "output": "Locked Prediction"
     },
@@ -213,11 +214,11 @@
         "name": "Free",
         "price": "€0",
         "period": "/month",
-        "description": "5 daily predictions, 3 leagues",
+        "description": "Daily picks, no card needed",
         "features": [
-          "5 free predictions per day",
-          "Top 3 leagues only",
-          "Basic track record access"
+          "Free daily picks",
+          "Top leagues only",
+          "Public track record access"
         ],
         "cta": {
           "label": "Get Started",
@@ -228,19 +229,18 @@
       {
         "id": "silver",
         "name": "Silver",
-        "price": "€[X]",
+        "price": "€9.99",
         "period": "/month",
-        "description": "Unlimited daily predictions, all leagues",
+        "description": "All daily picks, win-probability stats",
         "badge": "Most Popular",
         "features": [
-          "Unlimited daily predictions",
-          "All 30+ leagues",
-          "Full statistics per match",
-          "Telegram notifications",
-          "Priority support"
+          "All daily picks",
+          "Win probability per match",
+          "Pick of the Day highlights",
+          "Email support"
         ],
         "cta": {
-          "label": "Start Free Trial",
+          "label": "Start Silver",
           "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
         },
         "highlighted": true
@@ -248,18 +248,17 @@
       {
         "id": "gold",
         "name": "Gold",
-        "price": "€[X]",
+        "price": "€14.99",
         "period": "/month",
-        "description": "Pro features + early access",
+        "description": "Everything in Silver + strategy tools",
         "features": [
           "Everything in Silver",
-          "Early access (predictions 24h ahead)",
-          "Advanced filters & insights",
-          "API access (coming soon)",
-          "VIP support"
+          "Strategy backtesting",
+          "Sharper picks, top leagues",
+          "Priority support"
         ],
         "cta": {
-          "label": "Start Free Trial",
+          "label": "Start Gold",
           "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
         },
         "highlighted": false

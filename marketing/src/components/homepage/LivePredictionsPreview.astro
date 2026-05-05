@@ -3,9 +3,11 @@
  * Homepage LivePredictionsPreview — Section 3.
  * See docs/specs/02-homepage.md → "SECTIE 3: LIVE PREDICTIONS PREVIEW".
  *
- * Server-side fetch of 5 mock predictions at build/request time, plus
- * client-side polling every 30s to refresh in-place. ISR target is
- * revalidate=60 (TODO once moved to SSR/hybrid output mode).
+ * Pulls today's free-tier picks from the live backend at build/request
+ * time and renders up to 5 cards. Filters to matches scheduled today
+ * (visitor's UTC day) so the section reflects what's actually on the
+ * pitch right now — not next week's slate. Falls back to an empty
+ * state if the API is unreachable; never crashes the homepage.
  *
  * Cards are rendered through the shared PredictionCard so the
  * homepage and the predictions hub stay visually identical.
@@ -15,7 +17,6 @@ import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
 import PredictionCard from "@/components/predictions/PredictionCard.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
-import { HOMEPAGE_SAMPLE } from "@/lib/predictions-mock";
 import type { HomepageContent } from "@/content/pages/homepage/types";
 
 interface Props {
@@ -25,16 +26,125 @@ interface Props {
 
 const { locale, content } = Astro.props;
 
-// Direct import (no fetch) keeps SSG deterministic. The 30s client
-// polling loop below still hits /api/predictions/homepage-sample.json
-// for runtime updates once the real backend is wired up.
-const initialPredictions = HOMEPAGE_SAMPLE;
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+
+interface BackendFreePick {
+  id: string;
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
+  league: string;
+  scheduled_at: string;
+  pick?: "HOME" | "DRAW" | "AWAY" | null;
+  home_win_prob?: number | null;
+  draw_prob?: number | null;
+  away_win_prob?: number | null;
+  confidence?: number | null;
+  status: string;
+}
+
+interface BackendFreePicksResponse {
+  today?: BackendFreePick[];
+  yesterday?: BackendFreePick[];
+  stats?: { total: number; correct: number; winrate: number };
+}
+
+interface CardPick {
+  id: string;
+  league: { name: string; slug: string };
+  kickoff: string;
+  homeTeam: { name: string; logoUrl?: string };
+  awayTeam: { name: string; logoUrl?: string };
+  prediction: string;
+  market: string;
+  confidence: number;
+  matchUrl: string;
+}
+
+function slugify(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+function pickLabel(p: BackendFreePick): string {
+  if (p.pick === "HOME") return p.home_team;
+  if (p.pick === "AWAY") return p.away_team;
+  return "Draw";
+}
+
+function isToday(iso: string): boolean {
+  const d = new Date(iso);
+  const now = new Date();
+  return (
+    d.getUTCFullYear() === now.getUTCFullYear() &&
+    d.getUTCMonth() === now.getUTCMonth() &&
+    d.getUTCDate() === now.getUTCDate()
+  );
+}
+
+const BCP47: Record<Locale, string> = {
+  en: "en-GB",
+  nl: "nl-NL",
+  de: "de-DE",
+  fr: "fr-FR",
+  es: "es-ES",
+  it: "it-IT",
+};
+
+function formatKickoff(iso: string, loc: Locale): string {
+  try {
+    return new Date(iso).toLocaleString(BCP47[loc] ?? "en-GB", {
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  } catch {
+    return iso;
+  }
+}
+
+let livePicks: CardPick[] = [];
+
+try {
+  const res = await fetch(`${API_BASE}/api/homepage/free-picks`, {
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(4000),
+  });
+  if (res.ok) {
+    const data = (await res.json()) as BackendFreePicksResponse;
+    const today = (data.today ?? []).filter((p) => isToday(p.scheduled_at));
+    livePicks = today.slice(0, 5).map((p) => {
+      // Best-side probability — same number rendered on the hero card.
+      const probs = [
+        p.home_win_prob ?? 0,
+        p.draw_prob ?? 0,
+        p.away_win_prob ?? 0,
+      ];
+      const maxProb = Math.max(...probs);
+      const conf = Math.round(maxProb * 100);
+      return {
+        id: p.id,
+        league: { name: p.league, slug: slugify(p.league) },
+        kickoff: formatKickoff(p.scheduled_at, locale),
+        homeTeam: { name: p.home_team, logoUrl: p.home_team_logo ?? undefined },
+        awayTeam: { name: p.away_team, logoUrl: p.away_team_logo ?? undefined },
+        prediction: pickLabel(p),
+        market: "Match Result",
+        confidence: conf,
+        matchUrl: `https://app.betsplug.com/predictions/${p.match_id}`,
+      };
+    });
+  }
+} catch {
+  // Swallow — fall through to empty state below.
+}
 
 const ctaPrimaryHref = getLocalizedPath(content.ctaSection.ctaPrimary.canonical, locale);
 
-const skeletonSlots = [0, 1, 2, 3, 4];
-const visiblePredictions = initialPredictions.slice(0, 5);
-const showSkeleton = visiblePredictions.length === 0;
+const showEmpty = livePicks.length === 0;
 
 // Localised labels for the shared PredictionCard. The homepage content
 // JSON only has a subset of the predictions-hub label set, so we pad
@@ -74,32 +184,45 @@ const cardLabels = {
       </p>
     </header>
 
-    <div
-      id="live-predictions-grid"
-      class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
-      data-locked-label={content.lockedLabel}
-      data-loading-label={content.loadingLabel}
-      data-error-label={content.errorLabel}
-    >
-      {showSkeleton && skeletonSlots.map(() => (
-        <PredictionCard variant="skeleton" locale={locale} labels={cardLabels} />
-      ))}
-      {!showSkeleton && visiblePredictions.map((p) => (
-        <PredictionCard
-          variant="free"
-          locale={locale}
-          league={p.league}
-          kickoff={p.kickoff}
-          homeTeam={p.homeTeam}
-          awayTeam={p.awayTeam}
-          prediction={p.prediction}
-          market={p.market}
-          confidence={p.confidence}
-          matchUrl={p.matchUrl}
-          labels={cardLabels}
-        />
-      ))}
-    </div>
+    {showEmpty ? (
+      <div class="mt-12 rounded-2xl border border-deep-navy-600 bg-charcoal-700 p-10 text-center text-sm text-white-muted">
+        {content.emptyLabel}
+      </div>
+    ) : (
+      <div
+        id="live-predictions-grid"
+        class={`mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 ${
+          livePicks.length >= 5
+            ? "lg:grid-cols-5"
+            : livePicks.length === 4
+              ? "lg:grid-cols-4"
+              : livePicks.length === 3
+                ? "lg:grid-cols-3"
+                : livePicks.length === 2
+                  ? "lg:grid-cols-2"
+                  : "lg:grid-cols-1"
+        }`}
+        data-locked-label={content.lockedLabel}
+        data-loading-label={content.loadingLabel}
+        data-error-label={content.errorLabel}
+      >
+        {livePicks.map((p) => (
+          <PredictionCard
+            variant="free"
+            locale={locale}
+            league={p.league}
+            kickoff={p.kickoff}
+            homeTeam={p.homeTeam}
+            awayTeam={p.awayTeam}
+            prediction={p.prediction}
+            market={p.market}
+            confidence={p.confidence}
+            matchUrl={p.matchUrl}
+            labels={cardLabels}
+          />
+        ))}
+      </div>
+    )}
 
     {/* CTA strip below cards */}
     <div class="mt-12 rounded-2xl border border-deep-navy-600 bg-deep-navy-800 p-8 lg:p-10 text-center">
@@ -133,37 +256,18 @@ const cardLabels = {
 </Section>
 
 <script>
-  // Client-side polling — refresh predictions every 30s.
+  // "Updated Xs ago" ticker. The grid itself is server-rendered at
+  // build/request time; visitors get a fresh slate per page load via
+  // ISR. Live in-place refresh is intentionally out of scope here —
+  // the previous polling loop hit a mock endpoint that no longer
+  // reflects reality.
   (function () {
-    const grid = document.getElementById("live-predictions-grid");
     const liveSecondsEl = document.querySelector("[data-live-seconds]");
-    if (!grid || !liveSecondsEl) return;
-
-    let lastFetch = Date.now();
-
+    if (!liveSecondsEl) return;
+    const start = Date.now();
     setInterval(() => {
-      const seconds = Math.floor((Date.now() - lastFetch) / 1000);
+      const seconds = Math.floor((Date.now() - start) / 1000);
       liveSecondsEl.textContent = String(seconds);
     }, 1000);
-
-    async function refresh() {
-      if (!grid) return;
-      try {
-        const res = await fetch("/api/predictions/homepage-sample.json", {
-          headers: { Accept: "application/json" },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!Array.isArray(data) || data.length === 0) return;
-        lastFetch = Date.now();
-        for (const p of data) {
-          grid.querySelector(`[data-prediction-id="${p.id}"]`);
-        }
-      } catch {
-        // Swallow — UI stays as-is; counter keeps ticking.
-      }
-    }
-
-    setInterval(refresh, 30_000);
   })();
 </script>

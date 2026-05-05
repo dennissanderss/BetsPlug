@@ -2,7 +2,7 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-02",
+    "lastUpdated": "2026-05-05",
     "_note": "TODO: Native speaker review needed for es. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
   },
   "meta": {
@@ -40,28 +40,28 @@
   },
   "howItWorks": {
     "h2": "Cómo {{accent}}funciona{{/accent}} BetsPlug",
-    "subhead": "De los datos al pronóstico en tres pasos. Transparente. Reproducible. Bloqueado.",
+    "subhead": "Del partido al pronóstico en tres pasos. Sin tipsters, sin corazonadas.",
     "steps": [
       {
         "number": "01",
         "icon": "database",
-        "h3": "Recolección de datos",
-        "body": "Agregamos resultados de partidos, xG, posesión, alineaciones, traspasos y datos meteorológicos de proveedores con licencia en 30+ ligas.",
+        "h3": "Recogemos cada partido",
+        "body": "Recopilamos calendarios y resultados de más de 30 ligas. Los datos se refrescan continuamente, así trabajamos siempre con lo que acaba de pasar en el campo.",
         "microDetail": "Actualizado cada minuto"
       },
       {
         "number": "02",
         "icon": "cpu",
-        "h3": "Análisis del motor IA",
-        "body": "Nuestro motor combina puntuaciones Elo, modelos Poisson de goles y machine learning para evaluar cada partido en 40+ variables.",
-        "microDetail": "Sin sesgo humano, sin selecciones editoriales"
+        "h3": "Nuestro motor calcula",
+        "body": "Para cada partido próximo, el motor compara la fuerza de los equipos, la forma reciente y los patrones históricos. Sin redacción, sin equipo favorito — solo números.",
+        "microDetail": "El mismo motor para cada pronóstico"
       },
       {
         "number": "03",
         "icon": "lock",
-        "h3": "Pronóstico bloqueado",
-        "body": "Cada pronóstico se genera y bloquea antes del inicio. Una vez publicado, no se puede modificar — verificable en nuestro historial público.",
-        "microDetail": "Historial accesible públicamente"
+        "h3": "Pronósticos bloqueados antes del inicio",
+        "body": "Cada pronóstico se publica y se bloquea antes del pitido inicial. Una vez fuera, no se puede cambiar. Aciertos y fallos quedan juntos en el historial público.",
+        "microDetail": "Historial público, sin retoques"
       }
     ],
     "cta": {
@@ -71,15 +71,16 @@
   },
   "livePredictions": {
     "h2": "Pronósticos IA gratuitos de hoy",
-    "subhead": "Cinco pronósticos gratuitos, actualizados cada minuto. Bloqueados antes del inicio, exactamente como los reciben nuestros suscriptores de pago.",
+    "subhead": "Pronósticos gratis para los partidos de hoy, actualizados cada minuto. Bloqueados antes del inicio — exactamente lo que ven nuestros suscriptores de pago.",
     "liveLabel": "Actualizado",
     "liveSecondsAgo": "hace {seconds}s",
     "lockedLabel": "Bloqueado",
     "loadingLabel": "Cargando pronósticos…",
     "errorLabel": "Pronósticos no disponibles. Por favor actualiza.",
+    "emptyLabel": "Hoy no hay partidos programados — lista nueva cada mañana.",
     "ctaSection": {
-      "h3": "¿Pronósticos ilimitados?",
-      "body": "Obtén todos los pronósticos diarios de 30+ ligas, estadísticas completas y la misma IA que usan nuestros suscriptores de pago.",
+      "h3": "¿Todos los pronósticos, cada día?",
+      "body": "Los suscriptores ven el programa completo en todas las ligas que cubrimos, con probabilidad de victoria por partido.",
       "ctaPrimary": {
         "label": "Ver Precios",
         "canonical": "pricing"
@@ -91,11 +92,11 @@
     }
   },
   "methodology": {
-    "h2": "Construido sobre {{accent}}matemáticas{{/accent}}, no sobre corazonadas",
+    "h2": "Construido sobre {{accent}}números{{/accent}}, no sobre corazonadas",
     "paragraphs": [
-      "BetsPlug combina tres disciplinas estadísticas en un único motor de pronóstico. Las puntuaciones Elo clasifican la fuerza de los equipos según cada partido jugado. Los modelos Poisson de goles calculan la probabilidad de resultados específicos. El machine learning identifica patrones en miles de partidos históricos que los humanos pasan por alto.",
-      "El motor procesa 40+ variables por partido: forma reciente, historial de enfrentamientos, alineaciones, lesiones, expected goals, tendencias de posesión, condiciones meteorológicas y más. Sin aporte editorial. Sin sesgo emocional. Solo matemáticas.",
-      "Cada pronóstico se genera y bloquea antes del inicio. Publicamos tanto victorias como derrotas. El historial completo es accesible públicamente — porque la transparencia es la única prueba que importa."
+      "Cada pronóstico en BetsPlug empieza igual: el motor mira cómo de fuerte está cada equipo ahora, cómo ha jugado últimamente, y qué suele pasar cuando estos dos — o equipos parecidos — se enfrentan.",
+      "Sin redacción, sin equipo favorito, sin corazonadas de última hora. El modelo trata cada partido por igual y convierte la imagen en un veredicto claro con un nivel de confianza.",
+      "Publicamos aciertos y fallos lado a lado en un historial público. Si un pronóstico falla, lo ves. No hay otra forma honesta de hacerlo."
     ],
     "stats": [
       {
@@ -103,29 +104,29 @@
         "label": "Ligas cubiertas"
       },
       {
-        "value": "40+",
-        "label": "Variables por partido"
-      },
-      {
-        "value": "3",
-        "label": "Modelos estadísticos"
+        "value": "1 min",
+        "label": "Refresco de datos"
       },
       {
         "value": "100%",
         "label": "Pronósticos bloqueados"
+      },
+      {
+        "value": "0",
+        "label": "Opiniones editoriales"
       }
     ],
     "diagram": {
-      "input": "Capa de entrada",
+      "input": "Lo que miramos",
       "inputItems": [
-        "Estadísticas de partido",
+        "Resultados de partidos",
         "Forma del equipo",
-        "Datos externos"
+        "Enfrentamientos directos"
       ],
       "models": [
-        "Puntuaciones Elo",
-        "Goles Poisson",
-        "Machine learning"
+        "Fuerza del equipo",
+        "Patrones de goles",
+        "Señales históricas"
       ],
       "output": "Pronóstico bloqueado"
     },
@@ -214,11 +215,11 @@
         "name": "Gratis",
         "price": "€0",
         "period": "/mes",
-        "description": "5 pronósticos diarios, 3 ligas",
+        "description": "Pronósticos diarios, sin tarjeta",
         "features": [
-          "5 pronósticos gratuitos por día",
-          "Solo top 3 ligas",
-          "Acceso básico al historial"
+          "Pronósticos gratis cada día",
+          "Solo ligas top",
+          "Acceso al historial público"
         ],
         "cta": {
           "label": "Empezar",
@@ -229,19 +230,18 @@
       {
         "id": "silver",
         "name": "Silver",
-        "price": "€[X]",
+        "price": "€9,99",
         "period": "/mes",
-        "description": "Pronósticos diarios ilimitados, todas las ligas",
+        "description": "Todos los pronósticos diarios, probabilidad de victoria",
         "badge": "Más popular",
         "features": [
-          "Pronósticos diarios ilimitados",
-          "Todas las 30+ ligas",
-          "Estadísticas completas por partido",
-          "Notificaciones por Telegram",
-          "Soporte prioritario"
+          "Todos los pronósticos diarios",
+          "Probabilidad de victoria por partido",
+          "Pick of the Day destacado",
+          "Soporte por correo"
         ],
         "cta": {
-          "label": "Prueba gratuita 7 días",
+          "label": "Empezar Silver",
           "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
         },
         "highlighted": true
@@ -249,18 +249,17 @@
       {
         "id": "gold",
         "name": "Gold",
-        "price": "€[X]",
+        "price": "€14,99",
         "period": "/mes",
-        "description": "Funciones pro + acceso anticipado",
+        "description": "Todo Silver + herramientas de estrategia",
         "features": [
           "Todo lo de Silver",
-          "Acceso anticipado (pronósticos 24h antes)",
-          "Filtros e insights avanzados",
-          "Acceso API (próximamente)",
-          "Soporte VIP"
+          "Backtesting de estrategias",
+          "Pronósticos más afinados, ligas top",
+          "Soporte prioritario"
         ],
         "cta": {
-          "label": "Prueba gratuita 7 días",
+          "label": "Empezar Gold",
           "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
         },
         "highlighted": false

@@ -2,7 +2,7 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-02",
+    "lastUpdated": "2026-05-05",
     "_note": "TODO: Native speaker review needed for de. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
   },
   "meta": {
@@ -40,28 +40,28 @@
   },
   "howItWorks": {
     "h2": "Wie BetsPlug {{accent}}funktioniert{{/accent}}",
-    "subhead": "Von Daten zur Vorhersage in drei Schritten. Transparent. Reproduzierbar. Gesperrt.",
+    "subhead": "Vom Spiel zur Vorhersage in drei Schritten. Keine Tipster, kein Bauchgefühl.",
     "steps": [
       {
         "number": "01",
         "icon": "database",
-        "h3": "Datensammlung",
-        "body": "Wir sammeln Spielergebnisse, xG, Ballbesitz, Aufstellungen, Transfers und Wetterdaten von lizenzierten Anbietern aus 30+ Ligen.",
+        "h3": "Wir erfassen jedes Spiel",
+        "body": "Wir holen Spielpläne und Ergebnisse aus 30+ Ligen ab. Die Daten werden ständig aktualisiert, damit wir immer mit dem arbeiten, was gerade auf dem Platz passiert ist.",
         "microDetail": "Jede Minute aktualisiert"
       },
       {
         "number": "02",
         "icon": "cpu",
-        "h3": "KI-Engine-Analyse",
-        "body": "Unsere Engine kombiniert Elo-Bewertungen, Poisson-Tor-Modelle und Machine Learning, um jedes Spiel anhand von 40+ Variablen zu bewerten.",
-        "microDetail": "Keine menschliche Voreingenommenheit, keine redaktionelle Auswahl"
+        "h3": "Unsere Engine rechnet",
+        "body": "Für jedes anstehende Spiel vergleicht unsere Engine Teamstärke, aktuelle Form und historische Muster. Keine Redaktion, keine Vorlieben — nur Zahlen.",
+        "microDetail": "Dieselbe Engine für jeden Pick"
       },
       {
         "number": "03",
         "icon": "lock",
-        "h3": "Gesperrte Vorhersage",
-        "body": "Jede Vorhersage wird vor dem Anpfiff erstellt und gesperrt. Einmal veröffentlicht, kann sie nicht mehr geändert werden — überprüfbar in unserem öffentlichen Track Record.",
-        "microDetail": "Track Record öffentlich zugänglich"
+        "h3": "Picks vor dem Anpfiff gesperrt",
+        "body": "Jede Vorhersage wird vor dem Anpfiff veröffentlicht und gesperrt. Einmal draussen, nicht mehr zu ändern. Gewinne und Verluste bleiben beide im öffentlichen Track Record sichtbar.",
+        "microDetail": "Öffentlicher Track Record, keine Änderungen"
       }
     ],
     "cta": {
@@ -71,15 +71,16 @@
   },
   "livePredictions": {
     "h2": "Heutige kostenlose KI-Vorhersagen",
-    "subhead": "Fünf kostenlose Vorhersagen, jede Minute aktualisiert. Vor dem Anpfiff gesperrt — genau wie unsere zahlenden Abonnenten sie erhalten.",
+    "subhead": "Kostenlose Picks für die heutigen Spiele, jede Minute aktualisiert. Vor dem Anpfiff gesperrt — genau das, was unsere zahlenden Abonnenten sehen.",
     "liveLabel": "Aktualisiert",
     "liveSecondsAgo": "vor {seconds}s",
     "lockedLabel": "Gesperrt",
     "loadingLabel": "Vorhersagen laden…",
     "errorLabel": "Vorhersagen nicht verfügbar. Bitte aktualisieren.",
+    "emptyLabel": "Heute keine Spiele angesetzt — jeden Morgen eine frische Liste.",
     "ctaSection": {
-      "h3": "Unbegrenzte Vorhersagen?",
-      "body": "Erhalte alle täglichen Vorhersagen für 30+ Ligen, vollständige Statistiken und dieselbe KI, die unsere zahlenden Abonnenten nutzen.",
+      "h3": "Jeder Pick, jeden Tag?",
+      "body": "Abonnenten sehen das vollständige Programm aus allen abgedeckten Ligen, mit Siegwahrscheinlichkeit pro Spiel.",
       "ctaPrimary": {
         "label": "Preise anzeigen",
         "canonical": "pricing"
@@ -91,11 +92,11 @@
     }
   },
   "methodology": {
-    "h2": "Auf {{accent}}Mathematik{{/accent}} gebaut, nicht auf Bauchgefühl",
+    "h2": "Auf {{accent}}Zahlen{{/accent}} gebaut, nicht auf Bauchgefühl",
     "paragraphs": [
-      "BetsPlug kombiniert drei statistische Disziplinen in einer Vorhersage-Engine. Elo-Bewertungen ranken die Teamstärke basierend auf jedem gespielten Spiel. Poisson-Tor-Modelle berechnen die Wahrscheinlichkeit spezifischer Ergebnisausgänge. Machine Learning identifiziert Muster in Tausenden historischen Spielen, die Menschen übersehen.",
-      "Die Engine verarbeitet 40+ Variablen pro Spiel: aktuelle Form, direkte Begegnungen, Aufstellungen, Verletzungen, Expected Goals, Ballbesitz-Trends, Wetterbedingungen und mehr. Keine redaktionelle Eingabe. Keine emotionale Voreingenommenheit. Nur Mathematik.",
-      "Jede Vorhersage wird vor dem Anpfiff erstellt und gesperrt. Wir veröffentlichen sowohl Gewinne als auch Verluste. Der vollständige Track Record ist öffentlich zugänglich — denn Transparenz ist der einzige Beweis, der zählt."
+      "Jeder Pick auf BetsPlug beginnt gleich: Die Engine schaut, wie stark jedes Team gerade ist, wie es zuletzt gespielt hat und was meistens passiert, wenn diese beiden — oder Mannschaften wie sie — aufeinandertreffen.",
+      "Keine Redaktion, keine Lieblingsmannschaft, kein Bauchgefühl in letzter Sekunde. Das Modell behandelt jedes Spiel gleich und macht aus dem Bild ein klares Ergebnis mit einem Vertrauenswert.",
+      "Wir veröffentlichen Gewinne und Verluste nebeneinander in einem öffentlichen Track Record. Geht ein Pick daneben, sieht man das. Anders ist es nicht ehrlich."
     ],
     "stats": [
       {
@@ -103,29 +104,29 @@
         "label": "Abgedeckte Ligen"
       },
       {
-        "value": "40+",
-        "label": "Variablen pro Spiel"
-      },
-      {
-        "value": "3",
-        "label": "Statistische Modelle"
+        "value": "1 Min",
+        "label": "Datenaktualisierung"
       },
       {
         "value": "100%",
-        "label": "Vorhersagen gesperrt"
+        "label": "Picks gesperrt"
+      },
+      {
+        "value": "0",
+        "label": "Redaktionelle Meinungen"
       }
     ],
     "diagram": {
-      "input": "Eingabeschicht",
+      "input": "Was wir betrachten",
       "inputItems": [
-        "Spielstatistiken",
+        "Spielergebnisse",
         "Teamform",
-        "Externe Daten"
+        "Direkter Vergleich"
       ],
       "models": [
-        "Elo-Bewertungen",
-        "Poisson-Tore",
-        "Machine Learning"
+        "Teamstärke",
+        "Tormuster",
+        "Historische Signale"
       ],
       "output": "Gesperrte Vorhersage"
     },
@@ -214,11 +215,11 @@
         "name": "Kostenlos",
         "price": "€0",
         "period": "/Monat",
-        "description": "5 tägliche Vorhersagen, 3 Ligen",
+        "description": "Tägliche Picks, keine Karte erforderlich",
         "features": [
-          "5 kostenlose Vorhersagen pro Tag",
-          "Nur Top 3 Ligen",
-          "Basis-Zugriff auf Track Record"
+          "Kostenlose tägliche Picks",
+          "Nur Top-Ligen",
+          "Zugang zum öffentlichen Track Record"
         ],
         "cta": {
           "label": "Loslegen",
@@ -229,19 +230,18 @@
       {
         "id": "silver",
         "name": "Silver",
-        "price": "€[X]",
+        "price": "€9,99",
         "period": "/Monat",
-        "description": "Unbegrenzte tägliche Vorhersagen, alle Ligen",
+        "description": "Alle täglichen Picks, Siegwahrscheinlichkeit",
         "badge": "Beliebteste",
         "features": [
-          "Unbegrenzte tägliche Vorhersagen",
-          "Alle 30+ Ligen",
-          "Vollständige Statistiken pro Spiel",
-          "Telegram-Benachrichtigungen",
-          "Priorisierter Support"
+          "Alle täglichen Picks",
+          "Siegwahrscheinlichkeit pro Spiel",
+          "Pick of the Day Highlights",
+          "E-Mail-Support"
         ],
         "cta": {
-          "label": "Kostenlose Testphase starten",
+          "label": "Silver starten",
           "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
         },
         "highlighted": true
@@ -249,18 +249,17 @@
       {
         "id": "gold",
         "name": "Gold",
-        "price": "€[X]",
+        "price": "€14,99",
         "period": "/Monat",
-        "description": "Pro-Funktionen + früher Zugriff",
+        "description": "Alles aus Silver + Strategie-Tools",
         "features": [
           "Alles aus Silver",
-          "Früher Zugriff (Vorhersagen 24h im Voraus)",
-          "Erweiterte Filter & Einblicke",
-          "API-Zugriff (bald verfügbar)",
-          "VIP-Support"
+          "Strategie-Backtesting",
+          "Schärfere Picks, Top-Ligen",
+          "Priorisierter Support"
         ],
         "cta": {
-          "label": "Kostenlose Testphase starten",
+          "label": "Gold starten",
           "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
         },
         "highlighted": false

@@ -3,12 +3,15 @@
  * Homepage PricingTeaser — Section 7.
  * See docs/specs/02-homepage.md → "SECTIE 7: PRICING TEASER".
  *
- * 3 tier cards (Free / Silver / Gold) with Silver highlighted via
- * "Most Popular" badge + 2px green border. Prices for Silver and
- * Gold are placeholders ([€X]) — see TODOs.
+ * 3 tier cards (Free / Silver / Gold). Each tier carries its own
+ * accent colour (warm-bronze / silver / gold) drawn from the shared
+ * tier palette used by the standalone /pricing page, so the homepage
+ * teaser and the full plans page stay visually consistent.
  *
- * TODO: Replace [€X] with actual Silver pricing once confirmed.
- * TODO: Replace [€X] with actual Gold pricing once confirmed.
+ * Prices are pulled from the locale content JSON and reflect the
+ * Stripe price book (Silver €9.99 / Gold €14.99 / Free €0) — when
+ * the Stripe price changes, update both the locale JSON and the
+ * Stripe lookup-key target.
  */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -24,6 +27,40 @@ interface Props {
 const { locale, content } = Astro.props;
 
 const compareHref = getLocalizedPath(content.compareLink.canonical, locale);
+
+// Tier colour palette — mirrors marketing/src/pages/pricing.astro so the
+// homepage teaser feels like the same product as the full pricing page.
+type TierVisual = {
+  accent: string; // text + check + border-tint
+  borderRgba: string; // semi-transparent border colour
+  glowRgba: string; // accent for box-shadow on highlighted card
+  badgeBg: string; // pill background when this tier is "Most Popular"
+  badgeText: string; // text colour on the badge
+};
+const TIER_VISUALS: Record<string, TierVisual> = {
+  free: {
+    accent: "text-[#e8a864]",
+    borderRgba: "rgba(232,168,100,0.30)",
+    glowRgba: "rgba(232,168,100,0.18)",
+    badgeBg: "#e8a864",
+    badgeText: "#1a120a",
+  },
+  silver: {
+    accent: "text-[#d7d9dc]",
+    borderRgba: "rgba(229,228,226,0.34)",
+    glowRgba: "rgba(229,228,226,0.18)",
+    badgeBg: "#d7d9dc",
+    badgeText: "#1a1d22",
+  },
+  gold: {
+    accent: "text-[#f5d67a]",
+    borderRgba: "rgba(245,214,122,0.40)",
+    glowRgba: "rgba(245,214,122,0.22)",
+    badgeBg: "#f5d67a",
+    badgeText: "#1a160a",
+  },
+};
+const FALLBACK_VISUAL: TierVisual = TIER_VISUALS.free;
 ---
 
 <Section surface="dark-charcoal" spacing="lg" ariaLabelledby="pricing-teaser-h2">
@@ -41,60 +78,73 @@ const compareHref = getLocalizedPath(content.compareLink.canonical, locale);
     </header>
 
     <div class="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto items-stretch">
-      {content.tiers.map((tier) => (
-        <div
-          class={[
-            "relative rounded-2xl p-8 flex flex-col transition-all duration-200",
-            tier.highlighted
-              ? "border-2 border-pitch-green-500 bg-charcoal-700 lg:scale-[1.02] shadow-[var(--shadow-md)]"
-              : "border border-deep-navy-600 bg-charcoal-700",
-          ].join(" ")}
-        >
-          {tier.badge && (
-            <span class="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-pitch-green-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-deep-navy-950">
-              {tier.badge}
-            </span>
-          )}
-
-          <!-- Header -->
-          <header>
-            <h3 class="text-xl font-bold text-white-pure">{tier.name}</h3>
-            <p class="mt-2 text-sm text-white-muted">{tier.description}</p>
-            <div class="mt-6 flex items-baseline gap-1">
-              <span class="font-mono text-4xl lg:text-5xl font-bold text-white-pure">
-                {tier.price}
+      {content.tiers.map((tier) => {
+        const visual = TIER_VISUALS[tier.id] ?? FALLBACK_VISUAL;
+        const highlightedShadow = tier.highlighted
+          ? `box-shadow: 0 0 0 1px ${visual.borderRgba} inset, 0 12px 40px ${visual.glowRgba};`
+          : undefined;
+        return (
+          <div
+            class={[
+              "relative rounded-2xl p-8 flex flex-col transition-all duration-200 bg-charcoal-700",
+              tier.highlighted
+                ? "lg:scale-[1.02] shadow-[var(--shadow-md)]"
+                : "",
+            ].join(" ")}
+            style={[
+              `border: ${tier.highlighted ? "2px" : "1px"} solid ${visual.borderRgba};`,
+              highlightedShadow,
+            ].filter(Boolean).join(" ")}
+          >
+            {tier.badge && (
+              <span
+                class="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
+                style={`background-color: ${visual.badgeBg}; color: ${visual.badgeText};`}
+              >
+                {tier.badge}
               </span>
-              <span class="text-sm text-white-muted">{tier.period}</span>
+            )}
+
+            <!-- Header -->
+            <header>
+              <h3 class={`text-xl font-bold ${visual.accent}`}>{tier.name}</h3>
+              <p class="mt-2 text-sm text-white-muted">{tier.description}</p>
+              <div class="mt-6 flex items-baseline gap-1">
+                <span class="font-mono text-4xl lg:text-5xl font-bold text-white-pure">
+                  {tier.price}
+                </span>
+                <span class="text-sm text-white-muted">{tier.period}</span>
+              </div>
+            </header>
+
+            <!-- Features -->
+            <ul class="mt-8 space-y-3 flex-1">
+              {tier.features.map((feature) => (
+                <li class="flex items-start gap-2 text-sm text-white-soft">
+                  <svg class={`h-4 w-4 shrink-0 mt-0.5 ${visual.accent}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <!-- CTA -->
+            <div class="mt-8">
+              <Button
+                href={tier.cta.href}
+                variant={tier.highlighted ? "primary" : "secondary"}
+                size="md"
+                surface="dark"
+                external
+                class="w-full"
+              >
+                {tier.cta.label}
+              </Button>
             </div>
-          </header>
-
-          <!-- Features -->
-          <ul class="mt-8 space-y-3 flex-1">
-            {tier.features.map((feature) => (
-              <li class="flex items-start gap-2 text-sm text-white-soft">
-                <svg class="h-4 w-4 text-pitch-green-400 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M16.704 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.29-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                </svg>
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-
-          <!-- CTA -->
-          <div class="mt-8">
-            <Button
-              href={tier.cta.href}
-              variant={tier.highlighted ? "primary" : "secondary"}
-              size="md"
-              surface="dark"
-              external
-              class="w-full"
-            >
-              {tier.cta.label}
-            </Button>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
 
     <div class="mt-10 text-center space-y-3">

@@ -68,6 +68,7 @@ export interface HomepageContent {
     lockedLabel: string;
     loadingLabel: string;
     errorLabel: string;
+    emptyLabel: string;
     ctaSection: {
       h3: string;
       body: string;

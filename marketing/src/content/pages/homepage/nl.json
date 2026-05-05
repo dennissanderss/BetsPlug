@@ -2,7 +2,7 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-02",
+    "lastUpdated": "2026-05-05",
     "_note": "TODO: Native speaker review needed for nl. Hand-authored by Claude based on en.json source. Compliance terminology applied per docs/specs/00-context-and-goals.md."
   },
   "meta": {
@@ -40,28 +40,28 @@
   },
   "howItWorks": {
     "h2": "Hoe BetsPlug {{accent}}werkt{{/accent}}",
-    "subhead": "Van data naar voorspelling in drie stappen. Transparant. Reproduceerbaar. Vergrendeld.",
+    "subhead": "Van wedstrijd naar voorspelling in drie stappen. Geen tipsters, geen onderbuikgevoel.",
     "steps": [
       {
         "number": "01",
         "icon": "database",
-        "h3": "Data-verzameling",
-        "body": "We verzamelen wedstrijduitslagen, xG, balbezit, opstellingen, transfers en weerdata van gelicenseerde leveranciers in 30+ competities.",
-        "microDetail": "Elke minuut bijgewerkt"
+        "h3": "We verzamelen elke wedstrijd",
+        "body": "We halen wedstrijden en uitslagen op uit 30+ competities. De data wordt continu ververst, zodat we altijd werken met wat er net op het veld is gebeurd.",
+        "microDetail": "Elke minuut ververst"
       },
       {
         "number": "02",
         "icon": "cpu",
-        "h3": "AI-engine analyse",
-        "body": "Onze engine combineert Elo-ratings, Poisson-doelpuntmodellen en machine learning om elke wedstrijd te beoordelen op 40+ variabelen.",
-        "microDetail": "Geen menselijke bias, geen redactionele keuzes"
+        "h3": "Onze engine rekent",
+        "body": "Voor elke aankomende wedstrijd vergelijkt onze engine teamsterkte, recente vorm en historische patronen. Geen redactie, geen voorkeur voor een team — alleen cijfers.",
+        "microDetail": "Dezelfde engine voor elke pick"
       },
       {
         "number": "03",
         "icon": "lock",
-        "h3": "Vergrendelde voorspelling",
-        "body": "Elke voorspelling wordt gegenereerd en vergrendeld vóór de aftrap. Eenmaal gepubliceerd kan deze niet worden aangepast — verifieerbaar in ons publieke track record.",
-        "microDetail": "Track record openbaar toegankelijk"
+        "h3": "Voorspellingen vergrendelen vóór de aftrap",
+        "body": "Elke voorspelling wordt vóór het fluitsignaal gepubliceerd en vergrendeld. Eenmaal gepubliceerd, niet meer aan te passen. Winst én verlies blijven zichtbaar in het publieke track record.",
+        "microDetail": "Publiek track record, geen aanpassingen"
       }
     ],
     "cta": {
@@ -71,15 +71,16 @@
   },
   "livePredictions": {
     "h2": "Gratis AI-voorspellingen van vandaag",
-    "subhead": "Vijf gratis voorspellingen, elke minuut ververst. Vergrendeld vóór de aftrap, precies zoals onze betalende leden ze ontvangen.",
+    "subhead": "Gratis picks voor de wedstrijden van vandaag, elke minuut ververst. Vergrendeld vóór de aftrap — precies wat onze betalende leden zien.",
     "liveLabel": "Bijgewerkt",
     "liveSecondsAgo": "{seconds}s geleden",
     "lockedLabel": "Vergrendeld",
     "loadingLabel": "Voorspellingen laden…",
     "errorLabel": "Voorspellingen niet beschikbaar. Vernieuw de pagina.",
+    "emptyLabel": "Geen wedstrijden gepland voor vandaag — elke ochtend een schone lei.",
     "ctaSection": {
-      "h3": "Onbeperkte voorspellingen?",
-      "body": "Krijg alle dagelijkse voorspellingen voor 30+ competities, volledige statistieken en dezelfde AI als onze betalende leden.",
+      "h3": "Elke pick, elke dag?",
+      "body": "Leden zien het volledige aanbod over alle competities die we dekken, met winkans per wedstrijd.",
       "ctaPrimary": {
         "label": "Bekijk Prijzen",
         "canonical": "pricing"
@@ -91,11 +92,11 @@
     }
   },
   "methodology": {
-    "h2": "Gebouwd op {{accent}}wiskunde{{/accent}}, niet op onderbuikgevoel",
+    "h2": "Gebouwd op {{accent}}cijfers{{/accent}}, niet op onderbuikgevoel",
     "paragraphs": [
-      "BetsPlug combineert drie statistische disciplines in één voorspellingsengine. Elo-ratings rangschikken teamsterkte op basis van elke gespeelde wedstrijd. Poisson-doelpuntmodellen berekenen de waarschijnlijkheid van specifieke score-uitkomsten. Machine learning identificeert patronen in duizenden historische wedstrijden die mensen missen.",
-      "De engine verwerkt 40+ variabelen per wedstrijd: recente vorm, onderlinge geschiedenis, opstellingen, blessures, expected goals, balbezit-trends, weersomstandigheden en meer. Geen redactionele input. Geen emotionele bias. Alleen wiskunde.",
-      "Elke voorspelling wordt gegenereerd en vergrendeld vóór de aftrap. We publiceren zowel winst als verlies. Het volledige track record is openbaar toegankelijk — want transparantie is het enige bewijs dat telt."
+      "Elke pick op BetsPlug start hetzelfde: de engine kijkt hoe sterk elke ploeg op dit moment is, hoe ze de laatste tijd spelen, en wat er meestal gebeurt als deze twee — of teams zoals deze — tegen elkaar spelen.",
+      "Geen redactie, geen favoriete club, geen last-minute gevoel. Het model behandelt elke wedstrijd hetzelfde en zet het beeld om in één duidelijke uitkomst met een betrouwbaarheidscore.",
+      "We publiceren winst en verlies naast elkaar in een publiek track record. Gaat een pick mis, dan zie je dat. Anders kun je het niet eerlijk doen."
     ],
     "stats": [
       {
@@ -103,29 +104,29 @@
         "label": "Competities gedekt"
       },
       {
-        "value": "40+",
-        "label": "Variabelen per wedstrijd"
-      },
-      {
-        "value": "3",
-        "label": "Statistische modellen"
+        "value": "1 min",
+        "label": "Data-verversing"
       },
       {
         "value": "100%",
-        "label": "Voorspellingen vergrendeld"
+        "label": "Picks vergrendeld"
+      },
+      {
+        "value": "0",
+        "label": "Redactionele meningen"
       }
     ],
     "diagram": {
-      "input": "Invoerlaag",
+      "input": "Wat we bekijken",
       "inputItems": [
-        "Wedstrijdstatistieken",
+        "Wedstrijduitslagen",
         "Teamvorm",
-        "Externe data"
+        "Onderlinge duels"
       ],
       "models": [
-        "Elo-ratings",
-        "Poisson-doelpunten",
-        "Machine learning"
+        "Teamsterkte",
+        "Doelpuntpatronen",
+        "Historische signalen"
       ],
       "output": "Vergrendelde voorspelling"
     },
@@ -214,11 +215,11 @@
         "name": "Gratis",
         "price": "€0",
         "period": "/maand",
-        "description": "5 dagelijkse voorspellingen, 3 competities",
+        "description": "Dagelijkse picks, geen creditcard nodig",
         "features": [
-          "5 gratis voorspellingen per dag",
-          "Alleen top 3 competities",
-          "Basis-toegang tot track record"
+          "Gratis dagelijkse picks",
+          "Alleen topcompetities",
+          "Toegang tot publiek track record"
         ],
         "cta": {
           "label": "Aan de slag",
@@ -229,19 +230,18 @@
       {
         "id": "silver",
         "name": "Silver",
-        "price": "€[X]",
+        "price": "€9,99",
         "period": "/maand",
-        "description": "Onbeperkte dagelijkse voorspellingen, alle competities",
+        "description": "Alle dagelijkse picks, winkans per wedstrijd",
         "badge": "Populairst",
         "features": [
-          "Onbeperkte dagelijkse voorspellingen",
-          "Alle 30+ competities",
-          "Volledige statistieken per wedstrijd",
-          "Telegram-meldingen",
-          "Voorrang bij support"
+          "Alle dagelijkse picks",
+          "Winkans per wedstrijd",
+          "Pick of the Day-uitlichting",
+          "E-mail support"
         ],
         "cta": {
-          "label": "Start gratis proefperiode",
+          "label": "Start Silver",
           "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
         },
         "highlighted": true
@@ -249,18 +249,17 @@
       {
         "id": "gold",
         "name": "Gold",
-        "price": "€[X]",
+        "price": "€14,99",
         "period": "/maand",
-        "description": "Pro-functies + vroege toegang",
+        "description": "Alles van Silver + strategie-tools",
         "features": [
           "Alles van Silver",
-          "Vroege toegang (voorspellingen 24u vooraf)",
-          "Geavanceerde filters & inzichten",
-          "API-toegang (binnenkort)",
-          "VIP-support"
+          "Strategie-backtesting",
+          "Scherpere picks, topcompetities",
+          "Voorrang bij support"
         ],
         "cta": {
-          "label": "Start gratis proefperiode",
+          "label": "Start Gold",
           "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
         },
         "highlighted": false
