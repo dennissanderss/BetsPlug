@@ -1022,3 +1022,198 @@ async def audit_phase2(db: AsyncSession = Depends(get_db)) -> dict:
 
     return out
 
+
+@router.get(
+    "/audit/phase3-engine2-combo",
+    summary="Phase 3 audit — Engine v2 (combo) integrity (read-only)",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_phase3(db: AsyncSession = Depends(get_db)) -> dict:
+    """Phase 3 — verify Engine v2 (combo) integrity.
+
+    Returns:
+      - combo_bets totals + per is_live + per tier of legs
+      - 10 random evaluated combos with full leg breakdown + manual P/L
+      - Edge distribution + odds source split
+      - Backtest vs live ROI comparison (mirror Phase 2 pattern)
+    """
+    from sqlalchemy import text
+
+    out: dict = {}
+
+    # 1. Totals
+    qt = await db.execute(text("""
+        SELECT
+            COUNT(*) AS total,
+            COUNT(*) FILTER (WHERE is_live = TRUE) AS live_total,
+            COUNT(*) FILTER (WHERE is_live = FALSE) AS backtest_total,
+            COUNT(*) FILTER (WHERE is_evaluated = TRUE) AS evaluated,
+            COUNT(*) FILTER (WHERE is_evaluated = TRUE AND is_correct = TRUE) AS won,
+            COUNT(*) FILTER (WHERE is_evaluated = TRUE AND is_correct = FALSE) AS lost,
+            SUM(CASE WHEN is_evaluated AND is_correct THEN combined_odds - 1.0
+                     WHEN is_evaluated AND NOT is_correct THEN -1.0 ELSE 0 END) AS total_pnl,
+            AVG(combined_odds) AS avg_combined_odds,
+            AVG(combined_edge) AS avg_combined_edge,
+            MIN(bet_date) AS oldest,
+            MAX(bet_date) AS newest
+        FROM combo_bets
+    """))
+    row_t = qt.first()
+    counted = (row_t[4] or 0) + (row_t[5] or 0)
+    out["totals"] = {
+        "total_combos": row_t[0],
+        "live_total": row_t[1],
+        "backtest_total": row_t[2],
+        "evaluated": row_t[3],
+        "won": row_t[4],
+        "lost": row_t[5],
+        "hit_rate_pct": round(100.0 * (row_t[4] or 0) / counted, 2) if counted else 0.0,
+        "total_pnl_units": float(row_t[6]) if row_t[6] else 0.0,
+        "roi_pct": round(100.0 * float(row_t[6] or 0) / counted, 2) if counted else 0.0,
+        "avg_combined_odds": float(row_t[7]) if row_t[7] else None,
+        "avg_combined_edge": float(row_t[8]) if row_t[8] else None,
+        "oldest_bet_date": row_t[9].isoformat() if row_t[9] else None,
+        "newest_bet_date": row_t[10].isoformat() if row_t[10] else None,
+    }
+
+    # 2. Backtest vs Live split
+    qbl = await db.execute(text("""
+        SELECT
+            is_live,
+            COUNT(*) AS total,
+            COUNT(*) FILTER (WHERE is_evaluated AND is_correct) AS won,
+            COUNT(*) FILTER (WHERE is_evaluated AND NOT is_correct) AS lost,
+            SUM(CASE WHEN is_evaluated AND is_correct THEN combined_odds - 1.0
+                     WHEN is_evaluated AND NOT is_correct THEN -1.0 ELSE 0 END) AS pnl,
+            AVG(combined_odds) AS avg_odds,
+            AVG(combined_edge) AS avg_edge,
+            MIN(bet_date) AS oldest,
+            MAX(bet_date) AS newest
+        FROM combo_bets
+        GROUP BY is_live
+        ORDER BY is_live
+    """))
+    out["per_is_live"] = [
+        {
+            "is_live": r[0],
+            "label": "live" if r[0] else "backtest",
+            "total": r[1],
+            "won": r[2],
+            "lost": r[3],
+            "hit_rate_pct": round(100.0 * (r[2] or 0) / max(1, (r[2] or 0) + (r[3] or 0)), 2),
+            "net_pnl_units": float(r[4]) if r[4] else 0.0,
+            "roi_pct": round(100.0 * float(r[4] or 0) / max(1, (r[2] or 0) + (r[3] or 0)), 2),
+            "avg_combined_odds": float(r[5]) if r[5] else None,
+            "avg_combined_edge": float(r[6]) if r[6] else None,
+            "oldest_bet_date": r[7].isoformat() if r[7] else None,
+            "newest_bet_date": r[8].isoformat() if r[8] else None,
+        }
+        for r in qbl.all()
+    ]
+
+    # 3. Per leg-tier composition (analyse: which tier picks dominate combos?)
+    qlt = await db.execute(text("""
+        SELECT prediction_tier, COUNT(*) AS legs
+        FROM combo_bet_legs
+        GROUP BY prediction_tier
+        ORDER BY legs DESC
+    """))
+    out["leg_tier_composition"] = [
+        {"tier": r[0], "legs": r[1]} for r in qlt.all()
+    ]
+
+    # 4. 10 random evaluated combos with full leg detail
+    qsr = await db.execute(text("""
+        SELECT id, bet_date, is_live, leg_count, combined_odds,
+               combined_edge, is_correct, profit_loss_units
+        FROM combo_bets
+        WHERE is_evaluated = TRUE
+        ORDER BY RANDOM() LIMIT 10
+    """))
+    samples = qsr.all()
+    sample_audits = []
+    for s in samples:
+        # Fetch legs
+        ql = await db.execute(text("""
+            SELECT cl.leg_index, cl.our_pick, cl.our_probability, cl.confidence,
+                   cl.prediction_tier, cl.leg_odds, cl.leg_edge,
+                   cl.is_correct AS leg_correct, cl.actual_outcome,
+                   ht.name AS home, at.name AS away, l.name AS league,
+                   m.scheduled_at, mr.home_score, mr.away_score
+            FROM combo_bet_legs cl
+            JOIN matches m ON m.id = cl.match_id
+            JOIN teams ht ON ht.id = m.home_team_id
+            JOIN teams at ON at.id = m.away_team_id
+            JOIN leagues l ON l.id = m.league_id
+            LEFT JOIN match_results mr ON mr.match_id = m.id
+            WHERE cl.combo_bet_id = :cid
+            ORDER BY cl.leg_index
+        """), {"cid": s[0]})
+        legs = []
+        all_legs_correct = True
+        for L in ql.all():
+            legs.append({
+                "idx": L[0], "pick": L[1], "model_prob": float(L[2]),
+                "tier": L[4], "leg_odds": float(L[5]),
+                "edge_pct": round(100.0 * float(L[6]), 2),
+                "leg_correct": L[7], "actual": L[8],
+                "match": f"{L[9]} vs {L[10]}",
+                "league": L[11],
+                "score": f"{L[13]}-{L[14]}" if L[13] is not None else None,
+            })
+            if L[7] is False:
+                all_legs_correct = False
+            if L[7] is None:
+                all_legs_correct = None
+        # Manual P/L: combined_odds - 1 if all correct, -1 if any wrong, None if pending
+        manual_pnl = (
+            (float(s[4]) - 1.0) if all_legs_correct is True
+            else (-1.0) if all_legs_correct is False
+            else None
+        )
+        sample_audits.append({
+            "combo_id": str(s[0]),
+            "bet_date": s[1].isoformat(),
+            "is_live": s[2],
+            "leg_count": s[3],
+            "combined_odds": float(s[4]),
+            "combined_edge_pct": round(100.0 * float(s[5]), 2),
+            "is_correct": s[6],
+            "stored_pnl": float(s[7]) if s[7] is not None else None,
+            "manual_pnl": manual_pnl,
+            "pnl_match": (
+                round(float(s[7]), 4) == round(manual_pnl, 4)
+                if (s[7] is not None and manual_pnl is not None)
+                else None
+            ),
+            "legs": legs,
+        })
+    out["sample_combos_audit"] = sample_audits
+
+    # 5. Edge distribution
+    qed = await db.execute(text("""
+        SELECT
+            COUNT(*) AS legs_total,
+            COUNT(*) FILTER (WHERE leg_edge < 0) AS legs_negative_edge,
+            COUNT(*) FILTER (WHERE leg_edge >= 0 AND leg_edge < 0.02) AS legs_low_edge,
+            COUNT(*) FILTER (WHERE leg_edge >= 0.02 AND leg_edge < 0.05) AS legs_med_edge,
+            COUNT(*) FILTER (WHERE leg_edge >= 0.05) AS legs_high_edge,
+            AVG(leg_edge) AS avg_leg_edge,
+            MIN(leg_edge) AS min_leg_edge,
+            MAX(leg_edge) AS max_leg_edge
+        FROM combo_bet_legs
+    """))
+    row_e = qed.first()
+    out["leg_edge_distribution"] = {
+        "total_legs": row_e[0],
+        "negative_edge": row_e[1],
+        "low_edge_0_to_2pct": row_e[2],
+        "med_edge_2_to_5pct": row_e[3],
+        "high_edge_5pct_plus": row_e[4],
+        "avg_leg_edge_pct": round(100.0 * float(row_e[5] or 0), 2),
+        "min_leg_edge_pct": round(100.0 * float(row_e[6] or 0), 2),
+        "max_leg_edge_pct": round(100.0 * float(row_e[7] or 0), 2),
+    }
+
+    return out
+

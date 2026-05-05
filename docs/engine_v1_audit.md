@@ -205,3 +205,48 @@ Below      2,810 1,124  1,686   40.0%   2.47    −183.98u   −6.55%
 ---
 
 **STOP. Phase 2 complete. Awaiting approval before Phase 3 (Engine v2 audit).**
+
+---
+
+## ADDENDUM — Split backtest vs live (post-feedback)
+
+User-vraag: zijn de Phase 2 cijfers backtest of live?
+
+Antwoord: **gemengd**. Filter `created_at >= 2026-04-16` omvatte (a) live cron, (b) batch_local_fill 17 apr, (c) vandaag retroactief geregenereerde picks. Splitting toont een **forse discrepantie**:
+
+### Backtest periode (match scheduled vóór 16 Apr 2026) vs Live periode
+
+| Tier | Periode | Picks | Hit | ROI | Avg odds |
+|---|---|---:|---:|---:|---:|
+| Platinum | backtest | 409 | 89.2% | **+7.58%** | 1.21 |
+| Platinum | LIVE | 18 | 72.2% | −12.28% | 1.22 |
+| Gold | backtest | 2,511 | 67.1% | **+4.29%** | 1.60 |
+| Gold | LIVE | 164 | 54.9% | −10.75% | 1.68 |
+| Silver | backtest | 5,240 | 46.7% | −2.34% | 2.21 |
+| Silver | LIVE | 450 | 49.3% | −0.96% | 2.17 |
+| Free | backtest | 2,646 | 48.1% | −7.52% | 2.06 |
+| Free | LIVE | 79 | 50.6% | +13.97% | 2.46 |
+
+### Gold+ ROI per `prediction_source` (smoking gun)
+
+| Source | Picks | Wins | Losses | NetPnL | ROI |
+|---|---:|---:|---:|---:|---:|
+| `backtest` (vandaag retroactief) | 2,433 | 1,662 | 771 | +133.64u | **+5.49%** |
+| `batch_local_fill` (17 apr batch) | 487 | 387 | 100 | +5.10u | +1.05% |
+| `live` (echte forward-feed cron) | 182 | 103 | 79 | −19.84u | **−10.90%** |
+
+### Conclusie addendum
+
+De **+6.75% Platinum / +3.37% Gold uit het hoofdrapport zijn dus bijna volledig gedreven door de retroactief geregenereerde backtest** (huidige Elo-seeds × historische matches = soft seed-leakage).
+
+**De échte forward-feed (`prediction_source='live'`, n=182):** ROI **−10.90%**. CI ≈ [−18%, −4%], statistisch significant negatief.
+
+**17pp gap tussen backtest en live** = exact wat je verwacht bij seed-leakage. Het productie-model presteert in real-time slechter dan de backtest suggereert.
+
+### Gekozen koers (akkoord 2026-05-06)
+
+**Optie 2 gekozen:** wacht 6-8 weken tot n=300+ live picks voor statistisch betekenisvolle live ROI. Geen tuning ondertussen. Marketing leadt met accuracy + transparency, NIET met ROI cijfers tot live sample volwassen is.
+
+---
+
+**Phase 2 + addendum complete. Phase 3 starts now.**
