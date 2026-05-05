@@ -27,7 +27,7 @@ interface Props {
 const { locale, content } = Astro.props;
 
 const API_BASE =
-  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+  import.meta.env.PUBLIC_API_BASE ?? "https://betsplug-production.up.railway.app";
 
 interface BackendFreePick {
   id: string;

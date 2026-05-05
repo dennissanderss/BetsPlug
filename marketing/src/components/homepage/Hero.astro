@@ -35,7 +35,7 @@ const secondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
 // public backend. Falls back to the JSON `visual` block on any
 // failure so a backend hiccup never breaks the marketing site.
 const API_BASE =
-  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+  import.meta.env.PUBLIC_API_BASE ?? "https://betsplug-production.up.railway.app";
 
 const BCP47: Record<Locale, string> = {
   en: "en-GB",

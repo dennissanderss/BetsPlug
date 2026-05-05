@@ -5,7 +5,7 @@
 // instant LCP on mobile. Falls back gracefully if the API is
 // down so a backend hiccup never breaks the marketing site.
 const API_BASE =
-  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+  import.meta.env.PUBLIC_API_BASE ?? "https://betsplug-production.up.railway.app";
 
 interface FreePick {
   match_id: string;

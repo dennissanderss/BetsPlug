@@ -1,16 +1,18 @@
 ---
 /**
  * TeamLogo — render the real club crest when we have a logoUrl, else
- * fall back to a coloured PlaceholderShield monogram.
+ * resolve one via the backend `/api/public/teams/{slug}` endpoint at
+ * SSR time. Falls back to a coloured PlaceholderShield monogram when
+ * neither is available.
  *
- * Real logos arrive once the API-Football integration on
- * app.betsplug.com is wired up — until then every render uses the
- * placeholder. The component is API-shape-stable, so flipping in real
- * URLs is a pure data change.
+ * Wired up to the public proxy on 2026-05-05 so every component that
+ * passes a slug gets the API-Football crest automatically — mock data,
+ * live free picks, and league hub pages all benefit without a per-page
+ * change. A module-level cache dedupes fetches across the build.
  *
  * Pass either a full team object (preferred — gives colours) or a
- * minimal `{ name, slug, logoUrl }`. We resolve colours from the
- * teams config when slug or name matches; otherwise charcoal fallback.
+ * minimal `{ name, slug, logoUrl }`. Colours resolve from the teams
+ * config when slug or name matches; otherwise charcoal fallback.
  */
 import PlaceholderShield from "@/components/ui/PlaceholderShield.astro";
 import { getTeamColors } from "@/config/teams";
@@ -33,12 +35,48 @@ const { team, size = "md", class: extraClass = "" } = Astro.props as Props;
 const dimensions = { sm: 32, md: 48, lg: 64 } as const;
 const px = dimensions[size];
 
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://betsplug-production.up.railway.app";
+
+// Build-time cache: dedupe slug→logoUrl across SSR. Prevents a single
+// page that renders the same team twice (home + away across cards) from
+// hitting the backend twice. Cleared per Node process / per build.
+const _logoCache = (globalThis as any).__betsplug_team_logo_cache__ ?? new Map<string, string | null>();
+(globalThis as any).__betsplug_team_logo_cache__ = _logoCache;
+
+async function resolveLogo(slug: string): Promise<string | null> {
+  if (_logoCache.has(slug)) return _logoCache.get(slug)!;
+  try {
+    const res = await fetch(`${API_BASE}/api/public/teams/${slug}`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!res.ok) {
+      _logoCache.set(slug, null);
+      return null;
+    }
+    const data = (await res.json()) as { logoUrl?: string | null };
+    const url = data.logoUrl ?? null;
+    _logoCache.set(slug, url);
+    return url;
+  } catch {
+    _logoCache.set(slug, null);
+    return null;
+  }
+}
+
+let logoUrl: string | undefined = team.logoUrl;
+if (!logoUrl && team.slug) {
+  const resolved = await resolveLogo(team.slug);
+  if (resolved) logoUrl = resolved;
+}
+
 const colors = team.colors ?? getTeamColors(team.slug, team.name);
 ---
 
-{team.logoUrl ? (
+{logoUrl ? (
   <img
-    src={team.logoUrl}
+    src={logoUrl}
     alt={`${team.name} logo`}
     width={px}
     height={px}
