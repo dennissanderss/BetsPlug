@@ -10,6 +10,7 @@ import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import type { LeagueConfig } from "@/config/leagues";
+import { leagueLogoUrl } from "@/config/leagues";
 import type { LeaguePageContent } from "@/content/leagues/types";
 
 interface Props {
@@ -110,11 +111,19 @@ const trustStripWeek = content.trustStripPredictionsThisWeek.replace(
           <!-- Big league mark -->
           <div class="flex items-center gap-4">
             <div
-              class="h-16 w-16 shrink-0 rounded-2xl flex items-center justify-center text-white text-xl font-bold"
-              style={`background: linear-gradient(135deg, ${league.primaryColor} 0%, ${league.primaryColor}cc 100%);`}
+              class="h-16 w-16 shrink-0 rounded-2xl flex items-center justify-center p-2"
+              style={`background: linear-gradient(135deg, ${league.primaryColor}33 0%, ${league.primaryColor}1a 100%); box-shadow: 0 0 0 1px ${league.primaryColor}55 inset;`}
               aria-hidden="true"
             >
-              {league.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+              <img
+                src={leagueLogoUrl(league)}
+                alt=""
+                width="48"
+                height="48"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-contain"
+              />
             </div>
             <div>
               <p class="text-base font-bold text-white-pure">{league.name}</p>
