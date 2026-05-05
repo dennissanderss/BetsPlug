@@ -62,6 +62,105 @@ class RegenResponse(BaseModel):
     finished: bool
 
 
+class ComboBackfillRequest(BaseModel):
+    start: str  # YYYY-MM-DD
+    end: str    # YYYY-MM-DD
+    mode: str = "backtest"  # "backtest" or "live"
+    force: bool = True
+    limit_days: int = 200
+
+
+class ComboBackfillResponse(BaseModel):
+    days_replayed: int
+    deleted: int
+    inserted: int
+    graded: int
+    elapsed_seconds: float
+    finished: bool
+
+
+@router.post(
+    "/combo-backfill",
+    response_model=ComboBackfillResponse,
+    summary="Backfill combo_bets in chunks (env-var key auth)",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def combo_backfill(
+    body: ComboBackfillRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Backfill combo_bets over a date range — chunked to fit Railway's
+    proxy timeout. Same selector + persistence as
+    backfill_live_combos.py but inside Railway = ~20× faster."""
+    from sqlalchemy import and_, delete, select as _select
+    from app.models.combo_bet import ComboBet
+    from app.services.combo_bet_service import (
+        persist_daily_combo,
+        evaluate_pending_combos,
+    )
+
+    t0 = time.monotonic()
+    try:
+        start_d = datetime.strptime(body.start, "%Y-%m-%d").date()
+        end_d = datetime.strptime(body.end, "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=f"Bad date format: {exc}")
+
+    is_live_mode = body.mode == "live"
+
+    deleted = 0
+    if body.force:
+        del_stmt = delete(ComboBet).where(
+            and_(
+                ComboBet.is_live.is_(is_live_mode),
+                ComboBet.bet_date >= start_d,
+                ComboBet.bet_date <= end_d,
+            )
+        )
+        res = await db.execute(del_stmt)
+        await db.commit()
+        deleted = res.rowcount or 0
+
+    existing_dates_q = _select(ComboBet.bet_date).where(
+        and_(
+            ComboBet.is_live.is_(is_live_mode),
+            ComboBet.bet_date >= start_d,
+            ComboBet.bet_date <= end_d,
+        )
+    )
+    existing_dates = set(
+        (await db.execute(existing_dates_q)).scalars().all()
+    )
+
+    cursor = start_d
+    inserted = 0
+    days_replayed = 0
+    while cursor <= end_d and days_replayed < body.limit_days:
+        if cursor in existing_dates:
+            cursor += timedelta(days=1)
+            continue
+        result = await persist_daily_combo(db, cursor, is_live=is_live_mode)
+        if result is not None and result.created_at and (
+            datetime.now(timezone.utc) - result.created_at
+        ).total_seconds() < 60:
+            inserted += 1
+        days_replayed += 1
+        cursor += timedelta(days=1)
+
+    graded = await evaluate_pending_combos(db)
+
+    finished = cursor > end_d
+    elapsed = round(time.monotonic() - t0, 2)
+    return ComboBackfillResponse(
+        days_replayed=days_replayed,
+        deleted=deleted,
+        inserted=inserted,
+        graded=graded,
+        elapsed_seconds=elapsed,
+        finished=finished,
+    )
+
+
 @router.post(
     "/regenerate-v81",
     response_model=RegenResponse,
