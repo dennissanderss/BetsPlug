@@ -304,6 +304,14 @@ async def sync_teams(
             total_inserted += inserted
             total_updated += updated
 
+    # Drop the in-memory cache used by /api/public/* so the next request
+    # sees fresh DB rows instead of pre-sync responses.
+    try:
+        from app.api.routes.public_teams import cache_clear as _public_cache_clear
+        _public_cache_clear()
+    except Exception:
+        pass
+
     return SyncTeamsResponse(
         leagues=results,
         total_fetched=total_fetched,

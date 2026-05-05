@@ -63,6 +63,63 @@ _TTL_SECONDS = 3600.0  # 1 hour
 _cache: dict[str, tuple[float, Any]] = {}
 
 
+# Marketing-friendly slug → canonical DB slug. API-Football's slugify is
+# strict about official long names ("1899 Hoffenheim", "FC Augsburg",
+# "Athletic Club"), but the marketing site uses the short, common slug.
+# This map preserves Cas's sitemap URLs without an ingestion rewrite.
+SLUG_ALIASES: dict[str, str] = {
+    # Bundesliga
+    "hoffenheim": "1899-hoffenheim",
+    "heidenheim": "1-fc-heidenheim",
+    "mainz": "fsv-mainz-05",
+    "augsburg": "fc-augsburg",
+    "koln": "1-fc-köln",
+    "cologne": "1-fc-köln",
+    "borussia-monchengladbach": "borussia-mönchengladbach",
+    "monchengladbach": "borussia-mönchengladbach",
+    # La Liga
+    "athletic-bilbao": "athletic-club",
+    # Serie A
+    "inter-milan": "inter",
+    "inter": "inter",
+    "as-roma": "roma",
+    "ac-milan": "ac-milan",
+    # Ligue 1
+    "psg": "paris-saint-germain",
+    "paris-saint-germain": "paris-saint-germain",
+    # Eredivisie
+    "fc-twente": "twente",
+    "twente": "twente",
+    "nec-nijmegen": "nec",
+    "heracles-almelo": "heracles",
+    "rkc-waalwijk": "rkc",
+    # Primeira Liga
+    "porto": "fc-porto",
+    "fc-porto": "fc-porto",
+    "braga": "sc-braga",
+    "sc-braga": "sc-braga",
+    "sporting-cp": "sporting-cp",
+}
+
+
+def _resolve_slug(slug: str) -> str:
+    """Return the canonical DB slug for a marketing-friendly slug.
+
+    Falls through to ``slug`` itself if no alias is defined, so direct
+    DB-canonical lookups still work.
+    """
+    return SLUG_ALIASES.get(slug, slug)
+
+
+def cache_clear() -> int:
+    """Wipe the in-memory cache. Returns the number of entries dropped.
+    Called by /api/internal-ops/sync-teams after re-syncing the teams table.
+    """
+    n = len(_cache)
+    _cache.clear()
+    return n
+
+
 def _cache_get(key: str) -> Optional[Any]:
     entry = _cache.get(key)
     if entry is None:
@@ -334,10 +391,11 @@ async def get_team(
     if cached is not None:
         return TeamModel.model_validate(cached)
 
+    canonical = _resolve_slug(slug)
     result = await db.execute(
         select(Team)
         .options(selectinload(Team.league))
-        .where(Team.slug == slug)
+        .where(Team.slug == canonical)
     )
     team = result.scalar_one_or_none()
     if team is None:
