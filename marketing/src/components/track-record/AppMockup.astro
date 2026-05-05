@@ -1,12 +1,13 @@
 ---
 /**
- * Stylized representation of the app's track-record interface.
+ * Stylized representation of a locked prediction record.
  *
  * NOT real data — the tile mix is a deterministic hash so SSR
  * stays stable across renders. Dots (●●●) replace team names and
  * numbers because we are showing the format, not the data. The
- * browser-chrome with `app.betsplug.com/track-record` makes it
- * unambiguous that this is the dashboard, not the marketing site.
+ * chrome shows a lock badge ("Prediction record · Locked") instead
+ * of a fake URL — the previous app.betsplug.com/track-record route
+ * does not exist and would have implied a working destination.
  */
 import Icon from "@/components/ui/Icon.astro";
 import type { TrackRecordContent } from "@/content/pages/track-record/types";
@@ -30,7 +31,10 @@ const tiles = Array.from({ length: tileCount }, (_, i) => {
       <span class="dot"></span>
       <span class="dot"></span>
     </div>
-    <div class="mockup-url">{content.urlLabel}</div>
+    <div class="mockup-url">
+      <Icon name="lock" size={10} />
+      <span>{content.urlLabel}</span>
+    </div>
   </div>
 
   <div class="mockup-content">
@@ -126,10 +130,14 @@ const tiles = Array.from({ length: tileCount }, (_, i) => {
   }
 
   .mockup-url {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
     font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   .mockup-content {

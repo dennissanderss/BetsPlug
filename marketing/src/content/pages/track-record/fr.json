@@ -6,7 +6,7 @@
   },
   "meta": {
     "title": "Track record — public, pour toujours | BetsPlug",
-    "description": "Chaque pronostic BetsPlug est verrouillé avant le coup d'envoi et reste pour toujours dans notre registre public — gains et pertes confondus. Consulte le track record complet dans notre app.",
+    "description": "Chaque pronostic BetsPlug est verrouillé avant le coup d'envoi et reste pour toujours dans notre registre public — gains et pertes confondus. Découvre comment fonctionne le mécanisme de verrouillage.",
     "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
@@ -18,7 +18,7 @@
       { "icon": "shield", "text": "Ne peut pas être modifié" }
     ],
     "ctaPrimary":   { "label": "Voir les tarifs", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Voir le track record dans l'app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "Voir les pronostics du jour", "canonical": "predictions" }
   },
   "whyTransparency": {
     "h2": "Le secteur des pronostics a un {{accent}}problème de crédibilité{{/accent}}",
@@ -50,20 +50,20 @@
     ]
   },
   "whatYouCanVerify": {
-    "h2": "Ce que tu peux {{accent}}vérifier toi-même{{/accent}}",
-    "subH2": "Le track record complet vit dans l'app. Accès libre — aucun compte requis pour la consultation.",
+    "h2": "Comment les pronostics deviennent {{accent}}permanents{{/accent}}",
+    "subH2": "Dès qu'un pronostic est généré, le système l'enregistre avec un horodatage public. Après ce moment, personne — pas même nous — ne peut le modifier.",
     "features": [
-      { "icon": "database",   "text": "Chaque pronostic jamais généré, dans plus de 30 ligues" },
-      { "icon": "clock",      "text": "Horodatage de verrouillage sur chaque pronostic (avant coup d'envoi prouvé)" },
-      { "icon": "sliders",    "text": "Filtrer par ligue, par marché, par période" },
-      { "icon": "check",      "text": "Résultat par pronostic avec score du match" },
-      { "icon": "line-chart", "text": "Statistiques agrégées par ligue ou par période" },
-      { "icon": "git-branch", "text": "Exporter les données pour ta propre analyse" }
+      { "icon": "lock",       "text": "Pronostic généré et enregistré dans la base de données" },
+      { "icon": "clock",      "text": "L'horodatage public capte le moment exact" },
+      { "icon": "shield",     "text": "La base de données n'a pas de fonction d'édition pour les enregistrements verrouillés" },
+      { "icon": "eye",        "text": "Le pronostic original reste visible pour toujours — gain ou perte" },
+      { "icon": "database",   "text": "Les pronostics historiques s'accumulent au fil du temps" },
+      { "icon": "line-chart", "text": "Les schémas agrégés deviennent visibles dans nos données de méthodologie" }
     ],
-    "cta": { "label": "Ouvrir le track record dans l'app", "href": "https://app.betsplug.com/track-record" },
-    "noteUnderCta": "Consulter le track record est gratuit. Aucun compte requis.",
+    "cta": { "label": "Lire la méthodologie complète", "canonical": "methodology" },
+    "noteUnderCta": "Notre page méthodologie détaille les garanties techniques.",
     "mockup": {
-      "urlLabel":         "app.betsplug.com/track-record",
+      "urlLabel":         "Enregistrement de pronostic · Verrouillé",
       "filterAllLeagues": "Toutes les ligues",
       "filterRange":      "90 derniers jours",
       "filterAllMarkets": "Tous les marchés",
@@ -81,7 +81,7 @@
     "h2": "Le même moteur génère {{accent}}chaque pronostic{{/accent}}",
     "paragraphs": [
       "Notre track record est la preuve derrière notre méthodologie. Si tu ne sais pas comment les pronostics sont générés, tu ne peux pas évaluer si le track record signifie quelque chose. C'est pourquoi nous publions les deux : la méthodologie qui crée les pronostics, et le registre historique de leur performance.",
-      "Lis la méthodologie complète pour comprendre quelles variables nous traitons, quels modèles nous combinons, et pourquoi nous verrouillons les pronostics avant le coup d'envoi. Puis vérifie-le toi-même dans le track record — la même approche appliquée à chaque pronostic."
+      "Lis la méthodologie complète pour comprendre quelles variables nous traitons, quels modèles nous combinons, et pourquoi nous verrouillons les pronostics avant le coup d'envoi. Vois ensuite les pronostics du jour pour observer la même approche appliquée en temps réel."
     ],
     "cta": { "label": "Lire la méthodologie", "canonical": "methodology" }
   },
@@ -89,8 +89,8 @@
     "h2": "FAQ track record",
     "questions": [
       {
-        "q": "Où puis-je voir le track record complet ?",
-        "a": "Le track record complet vit dans notre app sur app.betsplug.com/track-record. Aucun compte requis pour la consultation — tu peux vérifier chaque pronostic que nous avons publié avant de décider de t'abonner."
+        "q": "Où vois-je les pronostics du jour ?",
+        "a": "Les pronostics du jour vivent sur notre page /pronostics — un aperçu gratuit chaque jour, avec les pronostics quotidiens complets derrière l'abonnement. Le mécanisme de verrouillage est partout le même : chaque pronostic est enregistré avec un horodatage public avant le coup d'envoi."
       },
       {
         "q": "Les pronostics ne peuvent-ils vraiment pas être modifiés après publication ?",
@@ -98,15 +98,15 @@
       },
       {
         "q": "Comment vérifier qu'un pronostic spécifique a été verrouillé avant le coup d'envoi ?",
-        "a": "Dans le track record de l'app, clique sur n'importe quel pronostic. La page de détail affiche l'horodatage de verrouillage — le moment exact où le pronostic a été enregistré. Compare-le avec l'heure réelle du coup d'envoi. L'horodatage de verrouillage est toujours antérieur."
+        "a": "Chaque pronostic publié porte un horodatage de verrouillage — le moment exact où il a été enregistré. Compare-le avec l'heure réelle du coup d'envoi. L'horodatage de verrouillage est toujours antérieur."
       },
       {
         "q": "Pourquoi n'affichez-vous pas de pourcentages de précision spécifiques sur cette page ?",
-        "a": "La précision varie fortement selon la ligue, le type de marché et la période. Un seul pourcentage cache cette variance. L'app affiche les données brutes pour que tu voies la performance réelle en contexte — quelles compétitions, quels marchés, quelles périodes ont été nos meilleures et nos pires."
+        "a": "La précision varie fortement selon la ligue, le type de marché et la période. Un seul pourcentage cache cette variance. Notre page méthodologie montre la performance en contexte — quelles compétitions, quels marchés, quelles périodes ont été nos meilleures et nos pires."
       },
       {
-        "q": "Dois-je m'abonner pour voir le track record ?",
-        "a": "Non. Consulter le track record historique est gratuit et ne nécessite aucun compte. Tu peux vérifier nos affirmations toi-même avant de décider de t'abonner pour les pronostics quotidiens."
+        "q": "Dois-je m'abonner pour voir comment fonctionne le système ?",
+        "a": "Non. La méthodologie complète est publique — lis /methodologie pour comprendre exactement comment les pronostics sont générés et verrouillés. Un abonnement débloque les pronostics quotidiens ; comprendre le processus est gratuit."
       },
       {
         "q": "Qu'est-ce qui vous empêche de retirer les pronostics perdants ?",
@@ -119,6 +119,6 @@
     "subH2": "Vois maintenant les pronostics eux-mêmes.",
     "body": "Tu as vu comment nous garantissons la transparence. L'étape suivante est de voir les pronostics que produit notre méthodologie — et de décider s'ils valent ton abonnement.",
     "ctaPrimary":   { "label": "Voir les tarifs", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Track record dans l'app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "Voir les pronostics du jour", "canonical": "predictions" }
   }
 }

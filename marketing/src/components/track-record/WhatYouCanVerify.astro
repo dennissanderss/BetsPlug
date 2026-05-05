@@ -1,7 +1,14 @@
 ---
 /**
- * Section 4 — Two-column: feature list + stylized app mockup.
- * Pushes users into the dashboard where the real track record lives.
+ * Section 4 — "How predictions become permanent."
+ *
+ * Two-column: feature list explaining the lock mechanism + a
+ * stylized mockup of a locked prediction record. CTA bridges to
+ * /methodology so the reader can dig into the technical guarantees.
+ *
+ * The component is still called WhatYouCanVerify (and the JSON key
+ * still `whatYouCanVerify`) so the content schema stays stable;
+ * only the copy and the CTA target moved.
  */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
@@ -9,11 +16,16 @@ import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
 import AppMockup from "@/components/track-record/AppMockup.astro";
 import type { IconName } from "@/components/ui/icon-types";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
 import type { TrackRecordContent } from "@/content/pages/track-record/types";
 
-interface Props { content: TrackRecordContent["whatYouCanVerify"] }
-const { content } = Astro.props;
+interface Props {
+  locale: Locale;
+  content: TrackRecordContent["whatYouCanVerify"];
+}
+const { locale, content } = Astro.props;
+const ctaHref = getLocalizedPath(content.cta.canonical, locale);
 ---
 
 <Section surface="light-grid" spacing="lg" ariaLabelledby="tr-verify-h2">
@@ -43,7 +55,7 @@ const { content } = Astro.props;
         </ul>
 
         <div class="mt-8 flex flex-wrap gap-3">
-          <Button href={content.cta.href} variant="primary" size="lg" surface="light" external>
+          <Button href={ctaHref} variant="primary" size="lg" surface="light">
             {content.cta.label}
           </Button>
         </div>

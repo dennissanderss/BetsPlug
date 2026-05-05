@@ -6,7 +6,7 @@
   },
   "meta": {
     "title": "Track record — publiek, voor altijd | BetsPlug",
-    "description": "Elke BetsPlug-voorspelling wordt vastgezet vóór de aftrap en blijft voor altijd in ons publieke register staan — winst en verlies allebei. Bekijk het volledige track record in onze app.",
+    "description": "Elke BetsPlug-voorspelling wordt vóór de aftrap vastgezet en blijft voor altijd in ons publieke register — winst en verlies allebei. Bekijk hoe het lock-mechanisme werkt.",
     "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
@@ -18,7 +18,7 @@
       { "icon": "shield", "text": "Kan niet aangepast worden" }
     ],
     "ctaPrimary":   { "label": "Bekijk prijzen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Volledig track record in app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "Bekijk voorspellingen van vandaag", "canonical": "predictions" }
   },
   "whyTransparency": {
     "h2": "De voorspellingsindustrie heeft een {{accent}}geloofwaardigheidsprobleem{{/accent}}",
@@ -50,20 +50,20 @@
     ]
   },
   "whatYouCanVerify": {
-    "h2": "Wat je {{accent}}zelf kunt verifiëren{{/accent}}",
-    "subH2": "Het volledige track record staat in de app. Open toegang — geen account nodig om te bladeren.",
+    "h2": "Hoe voorspellingen {{accent}}permanent worden{{/accent}}",
+    "subH2": "Zodra een voorspelling is gegenereerd, registreert het systeem hem met een publieke tijdstempel. Vanaf dat moment kan niemand — ook wij niet — hem nog wijzigen.",
     "features": [
-      { "icon": "database",   "text": "Elke ooit gegenereerde voorspelling, alle 30+ competities" },
-      { "icon": "clock",      "text": "Lock-tijdstempel op elke voorspelling (aantoonbaar vóór aftrap)" },
-      { "icon": "sliders",    "text": "Filter op competitie, markt en datumbereik" },
-      { "icon": "check",      "text": "Uitslag per voorspelling met wedstrijdresultaat" },
-      { "icon": "line-chart", "text": "Geaggregeerde statistieken per competitie of periode" },
-      { "icon": "git-branch", "text": "Exporteer data voor je eigen analyse" }
+      { "icon": "lock",       "text": "Voorspelling wordt gegenereerd en in de database vastgelegd" },
+      { "icon": "clock",      "text": "Publieke tijdstempel registreert het exacte moment" },
+      { "icon": "shield",     "text": "Database heeft geen bewerkfunctie voor vastgezette records" },
+      { "icon": "eye",        "text": "Originele voorspelling blijft voor altijd zichtbaar — winst of verlies" },
+      { "icon": "database",   "text": "Historische voorspellingen stapelen zich op in de tijd" },
+      { "icon": "line-chart", "text": "Geaggregeerde patronen worden zichtbaar in onze methodologie-data" }
     ],
-    "cta": { "label": "Open track record in app", "href": "https://app.betsplug.com/track-record" },
-    "noteUnderCta": "Het track record bekijken is gratis. Geen account nodig.",
+    "cta": { "label": "Lees volledige methodologie", "canonical": "methodology" },
+    "noteUnderCta": "Onze methodologie-pagina legt de technische garanties in detail uit.",
     "mockup": {
-      "urlLabel":         "app.betsplug.com/track-record",
+      "urlLabel":         "Voorspelling-record · Vastgezet",
       "filterAllLeagues": "Alle competities",
       "filterRange":      "Laatste 90 dagen",
       "filterAllMarkets": "Alle markten",
@@ -81,7 +81,7 @@
     "h2": "Dezelfde engine genereert {{accent}}elke voorspelling{{/accent}}",
     "paragraphs": [
       "Ons track record is het bewijs achter onze methodologie. Als je niet weet hoe de voorspellingen tot stand komen, kun je niet beoordelen of het track record iets betekent. Daarom publiceren we beide: de methodologie die voorspellingen creëert en het historische register van hoe die voorspellingen presteerden.",
-      "Lees de volledige methodologie om te begrijpen welke variabelen we verwerken, welke modellen we combineren en waarom we voorspellingen vóór de aftrap vastzetten. Verifieer het daarna zelf in het track record — dezelfde aanpak toegepast op elke afzonderlijke voorspelling."
+      "Lees de volledige methodologie om te begrijpen welke variabelen we verwerken, welke modellen we combineren en waarom we voorspellingen vóór de aftrap vastzetten. Bekijk daarna de voorspellingen van vandaag om dezelfde aanpak in real-time toegepast te zien."
     ],
     "cta": { "label": "Lees methodologie", "canonical": "methodology" }
   },
@@ -89,8 +89,8 @@
     "h2": "Track record FAQ",
     "questions": [
       {
-        "q": "Waar kan ik het volledige track record zien?",
-        "a": "Het volledige track record staat in onze app op app.betsplug.com/track-record. Geen account nodig om te bladeren — je kunt elke voorspelling die we ooit maakten verifiëren voordat je beslist om een abonnement te nemen."
+        "q": "Waar zie ik de voorspellingen van vandaag?",
+        "a": "De voorspellingen van vandaag staan op onze /voorspellingen-pagina — elke dag een gratis preview, met de volledige dagelijkse picks achter het abonnement. Het lock-mechanisme is overal hetzelfde: elke voorspelling wordt vóór de aftrap met een publieke tijdstempel vastgelegd."
       },
       {
         "q": "Kunnen voorspellingen écht niet aangepast worden na publicatie?",
@@ -98,15 +98,15 @@
       },
       {
         "q": "Hoe verifieer ik dat een specifieke voorspelling vóór de aftrap is vastgezet?",
-        "a": "Klik in het app-track record op een voorspelling. De detailpagina toont de lock-tijdstempel — het exacte moment waarop de voorspelling werd vastgelegd. Vergelijk dit met de werkelijke aftraptijd van de wedstrijd. De lock-tijdstempel ligt altijd vóór de aftrap."
+        "a": "Elke gepubliceerde voorspelling draagt een lock-tijdstempel — het exacte moment waarop hij werd vastgelegd. Vergelijk dit met de werkelijke aftraptijd. De lock-tijdstempel ligt altijd vóór de aftrap."
       },
       {
         "q": "Waarom tonen jullie geen specifieke accuratesse-percentages op deze pagina?",
-        "a": "Accuratesse varieert sterk per competitie, markttype en periode. Eén kop-percentage verbergt deze variantie. De app toont ruwe data zodat je werkelijke prestaties in context ziet — bij welke competities, welke markten en welke periodes we het beste en slechtste presteerden."
+        "a": "Accuratesse varieert sterk per competitie, markttype en periode. Eén kop-percentage verbergt deze variantie. Onze methodologie-pagina toont prestaties in context — bij welke competities, welke markten en welke periodes we het beste en slechtste presteerden."
       },
       {
-        "q": "Heb ik een abonnement nodig om het track record te zien?",
-        "a": "Nee. Het historische track record bekijken is gratis en vereist geen account. Je kunt onze claims zelf verifiëren voordat je beslist om een abonnement te nemen voor dagelijkse voorspellingen."
+        "q": "Heb ik een abonnement nodig om te zien hoe het systeem werkt?",
+        "a": "Nee. De volledige methodologie is publiek — lees /methodologie om precies te begrijpen hoe voorspellingen worden gegenereerd en vastgezet. Een abonnement ontgrendelt dagelijkse voorspellingen; het proces begrijpen is gratis."
       },
       {
         "q": "Wat weerhoudt jullie ervan om verliezende voorspellingen te verwijderen?",
@@ -119,6 +119,6 @@
     "subH2": "Bekijk nu de voorspellingen zelf.",
     "body": "Je hebt gezien hoe we transparantie garanderen. De volgende stap is om de voorspellingen te zien die onze methodologie produceert — en te beslissen of ze je abonnement waard zijn.",
     "ctaPrimary":   { "label": "Bekijk prijzen", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Bekijk track record in app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "Bekijk voorspellingen van vandaag", "canonical": "predictions" }
   }
 }

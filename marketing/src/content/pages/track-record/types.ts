@@ -1,9 +1,10 @@
 /**
  * Type contract for /track-record content JSON.
  *
- * The page no longer renders live data — it is a trust-building
- * narrative. Every CTA is either a canonical site path or an
- * external app URL (browse track record in the dashboard).
+ * Trust-building narrative — every CTA is a canonical site path.
+ * (Earlier drafts pointed at the dashboard's track-record route,
+ * but that route doesn't exist; we now route users into /predictions
+ * for conversion or /methodology for technical depth.)
  */
 
 export interface CtaCanonical { label: string; canonical: string }
@@ -38,7 +39,7 @@ export interface TrackRecordContent {
     subheadline: string;
     trustStrip: TrustStripItem[];
     ctaPrimary:   CtaCanonical;
-    ctaSecondary: CtaHref;
+    ctaSecondary: CtaCanonical;
   };
 
   whyTransparency: {
@@ -56,7 +57,7 @@ export interface TrackRecordContent {
     h2: string;
     subH2: string;
     features: VerifyFeature[];
-    cta: CtaHref;
+    cta: CtaCanonical;
     noteUnderCta: string;
     mockup: {
       urlLabel:        string;
@@ -90,6 +91,6 @@ export interface TrackRecordContent {
     subH2: string;
     body: string;
     ctaPrimary:   CtaCanonical;
-    ctaSecondary: CtaHref;
+    ctaSecondary: CtaCanonical;
   };
 }

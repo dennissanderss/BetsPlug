@@ -6,7 +6,7 @@
   },
   "meta": {
     "title": "Track record — public, forever | BetsPlug",
-    "description": "Every BetsPlug prediction is locked before kickoff and stays in our public record forever — wins and losses both. See the full track record in our app.",
+    "description": "Every BetsPlug prediction is locked before kickoff and stays in our public record forever — wins and losses both. See how the lock mechanism works.",
     "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
@@ -18,7 +18,7 @@
       { "icon": "shield", "text": "Cannot be edited" }
     ],
     "ctaPrimary":   { "label": "View pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "See full track record in app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "View today's predictions", "canonical": "predictions" }
   },
   "whyTransparency": {
     "h2": "The prediction industry has a {{accent}}credibility problem{{/accent}}",
@@ -50,20 +50,20 @@
     ]
   },
   "whatYouCanVerify": {
-    "h2": "What you can {{accent}}verify yourself{{/accent}}",
-    "subH2": "The full track record lives in the app. Open access — no signup required for browsing.",
+    "h2": "How predictions become {{accent}}permanent{{/accent}}",
+    "subH2": "Once a prediction is generated, the system records it with a public timestamp. After this moment, no one — not even us — can modify it.",
     "features": [
-      { "icon": "database",   "text": "Every prediction ever generated, all 30+ leagues" },
-      { "icon": "clock",      "text": "Lock timestamp on each prediction (provably before kickoff)" },
-      { "icon": "sliders",    "text": "Filter by league, by market, by date range" },
-      { "icon": "check",      "text": "Per-prediction outcome with match result" },
-      { "icon": "line-chart", "text": "Aggregate stats per league or per period" },
-      { "icon": "git-branch", "text": "Export data for your own analysis" }
+      { "icon": "lock",       "text": "Prediction generated and committed to database" },
+      { "icon": "clock",      "text": "Public timestamp records the exact moment" },
+      { "icon": "shield",     "text": "Database has no edit function for locked records" },
+      { "icon": "eye",        "text": "Original prediction stays visible forever — win or lose" },
+      { "icon": "database",   "text": "Historical predictions accumulate over time" },
+      { "icon": "line-chart", "text": "Aggregate patterns become visible in our methodology data" }
     ],
-    "cta": { "label": "Open track record in app", "href": "https://app.betsplug.com/track-record" },
-    "noteUnderCta": "Browsing the track record is free. No account required.",
+    "cta": { "label": "Read full methodology", "canonical": "methodology" },
+    "noteUnderCta": "Our methodology page explains the technical guarantees in detail.",
     "mockup": {
-      "urlLabel":         "app.betsplug.com/track-record",
+      "urlLabel":         "Prediction record · Locked",
       "filterAllLeagues": "All leagues",
       "filterRange":      "Last 90 days",
       "filterAllMarkets": "All markets",
@@ -81,7 +81,7 @@
     "h2": "The same engine generates {{accent}}every prediction{{/accent}}",
     "paragraphs": [
       "Our track record is the proof behind our methodology. If you don't know how the predictions are generated, you can't evaluate whether the track record means anything. That's why we publish both: the methodology that creates predictions, and the historical record of how those predictions performed.",
-      "Read the full methodology to understand what variables we process, which models we combine, and why we lock predictions before kickoff. Then verify it for yourself in the track record — the same approach applied to every single prediction."
+      "Read the full methodology to understand what variables we process, which models we combine, and why we lock predictions before kickoff. Then see today's predictions to watch the same approach applied in real time."
     ],
     "cta": { "label": "Read methodology", "canonical": "methodology" }
   },
@@ -89,8 +89,8 @@
     "h2": "Track record FAQ",
     "questions": [
       {
-        "q": "Where can I see the full track record?",
-        "a": "The complete track record lives in our app at app.betsplug.com/track-record. No signup required for browsing — you can verify any prediction we've ever made before deciding whether to subscribe."
+        "q": "Where can I see today's predictions?",
+        "a": "Today's predictions live on our /predictions page — free preview every day, with full daily picks behind the subscription. The lock mechanism is the same: every prediction is committed with a public timestamp before kickoff."
       },
       {
         "q": "Can predictions really not be edited after publication?",
@@ -98,15 +98,15 @@
       },
       {
         "q": "How do I verify a specific prediction was locked before kickoff?",
-        "a": "In the app track record, click any prediction. The detail page shows the lock timestamp — the exact moment the prediction was committed. Compare this with the actual match kickoff time. The lock timestamp is always before kickoff."
+        "a": "Each published prediction carries a lock timestamp — the exact moment it was committed. Compare this with the actual match kickoff time. The lock timestamp is always before kickoff."
       },
       {
         "q": "Why don't you show specific accuracy percentages on this page?",
-        "a": "Accuracy varies dramatically by league, market type, and time period. A single headline percentage hides this variance. The app shows raw data so you can see actual performance in context — which competitions, which markets, which periods we've performed best and worst."
+        "a": "Accuracy varies dramatically by league, market type, and time period. A single headline percentage hides this variance. Our methodology page shows performance in context — which competitions, which markets, which periods we've performed best and worst."
       },
       {
-        "q": "Do I need to subscribe to see the track record?",
-        "a": "No. Browsing the historical track record is free and requires no account. You can verify our claims yourself before deciding whether to subscribe for daily predictions."
+        "q": "Do I need to subscribe to see how the system works?",
+        "a": "No. The full methodology is public — read /methodology to understand exactly how predictions are generated and locked. A subscription unlocks daily predictions; understanding the process is free."
       },
       {
         "q": "What stops you from removing losing predictions?",
@@ -119,6 +119,6 @@
     "subH2": "Now see the predictions themselves.",
     "body": "You've seen how we guarantee transparency. The next step is to see the predictions our methodology produces — and decide whether they're worth your subscription.",
     "ctaPrimary":   { "label": "View pricing", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Browse track record in app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "View today's predictions", "canonical": "predictions" }
   }
 }

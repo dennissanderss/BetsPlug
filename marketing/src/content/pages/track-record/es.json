@@ -6,7 +6,7 @@
   },
   "meta": {
     "title": "Track record — público, para siempre | BetsPlug",
-    "description": "Cada pronóstico de BetsPlug se bloquea antes del saque inicial y permanece para siempre en nuestro registro público — victorias y derrotas por igual. Consulta el track record completo en nuestra app.",
+    "description": "Cada pronóstico de BetsPlug se bloquea antes del saque inicial y permanece para siempre en nuestro registro público — victorias y derrotas por igual. Descubre cómo funciona el mecanismo de bloqueo.",
     "ogImage": "/og-images/track-record-en.jpg"
   },
   "hero": {
@@ -18,7 +18,7 @@
       { "icon": "shield", "text": "No se puede editar" }
     ],
     "ctaPrimary":   { "label": "Ver precios", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Track record completo en la app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "Ver pronósticos de hoy", "canonical": "predictions" }
   },
   "whyTransparency": {
     "h2": "La industria de pronósticos tiene un {{accent}}problema de credibilidad{{/accent}}",
@@ -50,20 +50,20 @@
     ]
   },
   "whatYouCanVerify": {
-    "h2": "Lo que puedes {{accent}}verificar tú mismo{{/accent}}",
-    "subH2": "El track record completo vive en la app. Acceso abierto — no se requiere cuenta para navegar.",
+    "h2": "Cómo los pronósticos se vuelven {{accent}}permanentes{{/accent}}",
+    "subH2": "Cuando se genera un pronóstico, el sistema lo registra con una marca de tiempo pública. Después de ese momento, nadie — ni siquiera nosotros — puede modificarlo.",
     "features": [
-      { "icon": "database",   "text": "Cada pronóstico generado, en más de 30 ligas" },
-      { "icon": "clock",      "text": "Marca de tiempo de bloqueo en cada pronóstico (demostrable antes del saque)" },
-      { "icon": "sliders",    "text": "Filtra por liga, mercado y rango de fechas" },
-      { "icon": "check",      "text": "Resultado por pronóstico con marcador del partido" },
-      { "icon": "line-chart", "text": "Estadísticas agregadas por liga o por periodo" },
-      { "icon": "git-branch", "text": "Exporta los datos para tu propio análisis" }
+      { "icon": "lock",       "text": "Pronóstico generado y registrado en la base de datos" },
+      { "icon": "clock",      "text": "La marca de tiempo pública captura el momento exacto" },
+      { "icon": "shield",     "text": "La base de datos no tiene función de edición para registros bloqueados" },
+      { "icon": "eye",        "text": "El pronóstico original permanece visible para siempre — victoria o derrota" },
+      { "icon": "database",   "text": "Los pronósticos históricos se acumulan con el tiempo" },
+      { "icon": "line-chart", "text": "Los patrones agregados se hacen visibles en nuestros datos de metodología" }
     ],
-    "cta": { "label": "Abrir track record en la app", "href": "https://app.betsplug.com/track-record" },
-    "noteUnderCta": "Navegar el track record es gratis. No se requiere cuenta.",
+    "cta": { "label": "Leer la metodología completa", "canonical": "methodology" },
+    "noteUnderCta": "Nuestra página de metodología explica las garantías técnicas en detalle.",
     "mockup": {
-      "urlLabel":         "app.betsplug.com/track-record",
+      "urlLabel":         "Registro de pronóstico · Bloqueado",
       "filterAllLeagues": "Todas las ligas",
       "filterRange":      "Últimos 90 días",
       "filterAllMarkets": "Todos los mercados",
@@ -81,7 +81,7 @@
     "h2": "El mismo motor genera {{accent}}cada pronóstico{{/accent}}",
     "paragraphs": [
       "Nuestro track record es la prueba detrás de nuestra metodología. Si no sabes cómo se generan los pronósticos, no puedes evaluar si el track record significa algo. Por eso publicamos ambos: la metodología que crea los pronósticos y el registro histórico de cómo se desempeñaron.",
-      "Lee la metodología completa para entender qué variables procesamos, qué modelos combinamos y por qué bloqueamos los pronósticos antes del saque. Luego verifícalo tú mismo en el track record — el mismo enfoque aplicado a cada pronóstico."
+      "Lee la metodología completa para entender qué variables procesamos, qué modelos combinamos y por qué bloqueamos los pronósticos antes del saque. Luego mira los pronósticos de hoy para ver el mismo enfoque aplicado en tiempo real."
     ],
     "cta": { "label": "Leer metodología", "canonical": "methodology" }
   },
@@ -89,8 +89,8 @@
     "h2": "FAQ del track record",
     "questions": [
       {
-        "q": "¿Dónde puedo ver el track record completo?",
-        "a": "El track record completo vive en nuestra app en app.betsplug.com/track-record. No se requiere cuenta para navegar — puedes verificar cualquier pronóstico que hayamos hecho antes de decidir si te suscribes."
+        "q": "¿Dónde veo los pronósticos de hoy?",
+        "a": "Los pronósticos de hoy viven en nuestra página /pronosticos — vista previa gratuita cada día, con los picks diarios completos detrás de la suscripción. El mecanismo de bloqueo es el mismo en todas partes: cada pronóstico se registra con una marca de tiempo pública antes del saque."
       },
       {
         "q": "¿Realmente no se pueden editar los pronósticos después de publicarlos?",
@@ -98,15 +98,15 @@
       },
       {
         "q": "¿Cómo verifico que un pronóstico concreto se bloqueó antes del saque?",
-        "a": "En el track record de la app, haz clic en cualquier pronóstico. La página de detalle muestra la marca de tiempo de bloqueo — el momento exacto en que se registró el pronóstico. Compáralo con la hora real del saque. La marca de bloqueo es siempre anterior."
+        "a": "Cada pronóstico publicado lleva una marca de tiempo de bloqueo — el momento exacto en que se registró. Compáralo con la hora real del saque. La marca de bloqueo es siempre anterior."
       },
       {
         "q": "¿Por qué no muestran porcentajes de precisión específicos en esta página?",
-        "a": "La precisión varía mucho según liga, tipo de mercado y periodo. Un único porcentaje destacado oculta esa variabilidad. La app muestra los datos brutos para que veas el rendimiento real en contexto — en qué competiciones, mercados y periodos hemos rendido mejor y peor."
+        "a": "La precisión varía mucho según liga, tipo de mercado y periodo. Un único porcentaje destacado oculta esa variabilidad. Nuestra página de metodología muestra el rendimiento en contexto — en qué competiciones, mercados y periodos hemos rendido mejor y peor."
       },
       {
-        "q": "¿Necesito suscribirme para ver el track record?",
-        "a": "No. Navegar el track record histórico es gratis y no requiere cuenta. Puedes verificar nuestras afirmaciones tú mismo antes de decidir si te suscribes a los pronósticos diarios."
+        "q": "¿Necesito suscribirme para ver cómo funciona el sistema?",
+        "a": "No. La metodología completa es pública — lee /metodologia para entender exactamente cómo se generan y bloquean los pronósticos. Una suscripción desbloquea los pronósticos diarios; entender el proceso es gratis."
       },
       {
         "q": "¿Qué les impide eliminar pronósticos perdedores?",
@@ -119,6 +119,6 @@
     "subH2": "Ahora ve los pronósticos en sí.",
     "body": "Has visto cómo garantizamos la transparencia. El siguiente paso es ver los pronósticos que produce nuestra metodología — y decidir si valen tu suscripción.",
     "ctaPrimary":   { "label": "Ver precios", "canonical": "pricing" },
-    "ctaSecondary": { "label": "Track record en la app", "href": "https://app.betsplug.com/track-record" }
+    "ctaSecondary": { "label": "Ver pronósticos de hoy", "canonical": "predictions" }
   }
 }
