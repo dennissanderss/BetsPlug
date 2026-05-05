@@ -8,14 +8,25 @@
  *   - docs/specs/16-i18n.md → hreflang, locale OG tag
  *   - docs/specs/18-performance.md → preload critical font
  *
+ * Canonical strategy (2026-05-05): self-referencing per locale.
+ * Each /{locale}/{localizedSlug} declares ITSELF as the canonical
+ * URL, with hreflang alternates pointing to its sibling locales and
+ * x-default pointing at the EN form. Earlier behaviour pointed every
+ * locale's canonical at the EN URL — that collapsed all locales into
+ * one canonical bucket and meant Google indexed only EN. The new
+ * behaviour matches Google's recommended hreflang+canonical pairing
+ * and is consistent with the cluster-of-equivalents model.
+ *
  * @prop {string} title              <title> + og:title.
  * @prop {string=} description       Meta description + OG. Falls back to global default.
- * @prop {string=} canonical         Absolute canonical URL. If absent, derived from current
- *                                   path. Per spec the EN form is canonical for every locale.
+ * @prop {string=} canonical         Absolute canonical URL override. Rare — only use when a
+ *                                   page MUST consolidate to a different URL (e.g. duplicate
+ *                                   landing pages). Default behaviour is self-canonical.
  * @prop {string=} ogImage           Absolute or root-relative OG image URL (1200×630).
- * @prop {string=} canonicalPath     Canonical (English) path of the current page, with leading
- *                                   slash. Used to build hreflang tags. Defaults to "/" when
- *                                   omitted — pass it on every page that has localized siblings.
+ * @prop {string=} canonicalPath     Canonical (English) page id with leading slash, used as
+ *                                   the lookup key into the locale slug map (e.g. "/predictions"
+ *                                   resolves to "/de/vorhersagen" in DE). Defaults to "/".
+ *                                   Pass it on every page that has localized siblings.
  * @prop {boolean=} noIndex          When true, sets robots="noindex,follow".
  *
  * Slots:
@@ -62,18 +73,26 @@ const locale: Locale = isLocale(localsLocale) ? localsLocale : defaultLocale;
 
 const SITE = "https://betsplug.com";
 
-// Per spec, canonical always points to the EN URL form regardless
-// of which locale is rendering. Build it from canonicalPath.
-const canonicalUrl =
-  canonical ?? `${SITE}${canonicalPath}`;
+// All locale alternates for hreflang. Each entry is the absolute URL
+// for the current page rendered in that locale (with the localized
+// slug). We reuse this set to derive both canonical (current locale)
+// and x-default (EN).
+const localeVersions = getAllLocaleVersions(canonicalPath, SITE);
+
+// Self-referencing canonical: this page in this locale points at
+// itself. Falls back to the EN URL if the current locale somehow
+// isn't in the version list (defensive — shouldn't happen).
+const selfLocaleUrl =
+  localeVersions.find((v) => v.locale === locale)?.url
+  ?? `${SITE}${canonicalPath}`;
+const canonicalUrl = canonical ?? selfLocaleUrl;
 
 // Resolve absolute OG image URL.
 const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${SITE}${ogImage}`;
 
-// All locale alternates for hreflang.
-const localeVersions = getAllLocaleVersions(canonicalPath, SITE);
 const xDefaultUrl =
-  localeVersions.find((v) => v.locale === defaultLocale)?.url ?? canonicalUrl;
+  localeVersions.find((v) => v.locale === defaultLocale)?.url
+  ?? `${SITE}${canonicalPath}`;
 
 const robotsContent = noIndex
   ? "noindex, follow"
