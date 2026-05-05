@@ -34,20 +34,20 @@ log = logging.getLogger(__name__)
 # this service has no incoming dependency on routes. Keep both in
 # sync; a unit test asserts equality.
 #
-# v3 tuning (2026-05-05): v2 was too lenient. Backtest +16.9% ROI
-# was acceptable but live -34% on n=9 showed selector was firing on
-# marginal edges that don't survive variance. Tightened to:
-#   - 2 legs (kept — drops to 1 are pure singles, drops to 3 reduce
-#     hit rate too fast)
-#   - conf ≥ 0.70 (Gold/Platinum only; Silver too noisy)
-#   - leg odds [1.40, 3.50] (skip super-favorites <1.40 and bombs >3.50)
-#   - min leg edge ≥ 0.04 (4% — skip marginal +0.5% edges)
-# Goal: weekly positive ROI on the live feed within 4-6 weeks.
+# v4 tuning (2026-05-05): v3 produced +11.3% backtest ROI on 40
+# combos = solid quality but too sparse (1 combo per 16 days).
+# Loosened on edge floor + odds ceiling to fire more often while
+# keeping the quality bar high enough to maintain positive ROI.
+#   - 2 legs (unchanged)
+#   - conf ≥ 0.68 (was 0.70 — pulls in slightly broader Gold pool)
+#   - leg odds [1.35, 4.00] (was [1.40, 3.50] — wider sweet spot)
+#   - min leg edge ≥ 0.025 (was 0.04 — captures more marginal+EV)
+# Expectation: 80-130 backtest combos at ROI 5-10%, more steady fire.
 COMBO_LEG_COUNT = 2
-COMBO_MIN_CONFIDENCE = 0.70
-COMBO_MIN_LEG_ODDS = 1.40
-COMBO_MAX_LEG_ODDS = 3.50
-COMBO_MIN_LEG_EDGE = 0.04
+COMBO_MIN_CONFIDENCE = 0.68
+COMBO_MIN_LEG_ODDS = 1.35
+COMBO_MAX_LEG_ODDS = 4.00
+COMBO_MIN_LEG_EDGE = 0.025
 PLATINUM_TIER_BONUS = 1.3
 GOLD_TIER_BONUS = 1.0
 COMBO_LIVE_TRACKING_START = date(2026, 4, 16)
@@ -185,6 +185,19 @@ async def persist_daily_combo(
     window_start = datetime.combine(bet_date, datetime.min.time(), tzinfo=timezone.utc)
     window_end = window_start + timedelta(hours=48)
 
+    # Only use v8.1-clean predictions (post-deploy created_at) — for
+    # historical match dates the broken pre-deploy rows otherwise win
+    # the leg-selection by score because their confidence is leakage-
+    # inflated. Match created_at >= V81_DEPLOYMENT_CUTOFF (2026-04-16)
+    # picks up:
+    #   - The 'live' Celery-beat rows (post-deploy by definition)
+    #   - The 'backtest' APScheduler rows (post-deploy ongoing job)
+    #   - The 'batch_local_fill' rows from 17 Apr (post-deploy batch)
+    #   - regenerate_historical_predictions.py output (post-deploy now)
+    # And excludes:
+    #   - Pre-deploy rows with broken feature pipeline (the leakage
+    #     source we deliberately exclude in trackrecord_filter too).
+    from app.core.prediction_filters import V81_DEPLOYMENT_CUTOFF
     pred_stmt = (
         select(Prediction)
         .options(
@@ -197,6 +210,7 @@ async def persist_daily_combo(
             Prediction.closing_odds_snapshot.is_not(None),
             Prediction.confidence >= COMBO_MIN_CONFIDENCE,
             Prediction.predicted_at <= Match.scheduled_at,
+            Prediction.created_at >= V81_DEPLOYMENT_CUTOFF,
             Match.scheduled_at >= window_start,
             Match.scheduled_at <= window_end,
             Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE, MatchStatus.FINISHED]),

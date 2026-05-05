@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -39,10 +39,21 @@ import type {
  *   - Leg edge > 0 (model_p > vig-removed implied_p)
  *   - Top-3 by score = confidence × tier_bonus × (1 + edge)
  */
+type PeriodFilter = "1d" | "7d" | "30d" | "90d" | "all";
+
+const PERIOD_LABELS: Record<PeriodFilter, { short: string; full: string; days: number | null }> = {
+  "1d": { short: "Today", full: "Last 24 hours of data", days: 1 },
+  "7d": { short: "Weekly", full: "Last 7 days of data", days: 7 },
+  "30d": { short: "Monthly", full: "Last 30 days of data", days: 30 },
+  "90d": { short: "Quarterly", full: "Last 90 days of data", days: 90 },
+  "all": { short: "All time", full: "Full window (Live: since 16 Apr 2026 · Backtest: since 1 Aug 2024)", days: null },
+};
+
 export default function CombiOfTheDayPage() {
   const { isAdmin } = useTier();
 
   const [statsScope, setStatsScope] = useState<"backtest" | "live">("backtest");
+  const [periodFilter, setPeriodFilter] = useState<PeriodFilter>("7d");
 
   const todayQ = useQuery({
     queryKey: ["combo-today"],
@@ -50,21 +61,56 @@ export default function CombiOfTheDayPage() {
     staleTime: 5 * 60_000,
   });
 
-  const statsQ = useQuery({
-    queryKey: ["combo-stats", statsScope],
-    queryFn: () => api.getComboStats(statsScope),
-    staleTime: 5 * 60_000,
-  });
-
+  // Backend caps at 100 (le=100) — request the max so weekly/monthly/quarterly
+  // views see all the body we have. With ~50 combos total today this is plenty.
   const historyQ = useQuery({
-    queryKey: ["combo-history", 30],
-    queryFn: () => api.getComboHistory(30),
-    staleTime: 5 * 60_000,
+    queryKey: ["combo-history", 100],
+    queryFn: () => api.getComboHistory(100),
+    staleTime: 60_000,
   });
 
   const today = todayQ.data;
-  const stats = statsQ.data;
-  const history = historyQ.data ?? [];
+  const allHistory = historyQ.data ?? [];
+
+  // Filter by scope (live vs backtest) AND by period (1d / 7d / 30d / 90d / all).
+  // Stats card numbers are computed client-side from this filtered set so the
+  // toggle is instant and consistent with the visible history list.
+  //
+  // Period anchor:
+  //   - LIVE scope: anchor = today (real wall-clock).
+  //   - BACKTEST scope: anchor = the LATEST bet_date in backtest data
+  //     (typically 15 Apr 2026, the day before live measurement opened).
+  //     This makes "Weekly" mean "last 7 days OF backtest data" instead
+  //     of "last 7 calendar days" (which is empty for historical data).
+  const filteredHistory = useMemo(() => {
+    const scopeMatched = allHistory.filter((h) => h.is_live === (statsScope === "live"));
+    const days = PERIOD_LABELS[periodFilter].days;
+    if (days === null) return scopeMatched;
+
+    // Determine anchor timestamp
+    let anchorMs: number;
+    if (statsScope === "live") {
+      anchorMs = Date.now();
+    } else {
+      // Backtest: pick the latest bet_date in scope
+      let latest = 0;
+      for (const h of scopeMatched) {
+        const t = new Date(h.bet_date + "T00:00:00Z").getTime();
+        if (Number.isFinite(t) && t > latest) latest = t;
+      }
+      // Day-after the latest so "Today" includes the final backtest day
+      anchorMs = latest > 0 ? latest + 24 * 60 * 60 * 1000 : Date.now();
+    }
+    const cutoffMs = anchorMs - days * 24 * 60 * 60 * 1000;
+    return scopeMatched.filter((h) => {
+      const t = new Date(h.bet_date + "T00:00:00Z").getTime();
+      return Number.isFinite(t) && t >= cutoffMs && t < anchorMs;
+    });
+  }, [allHistory, statsScope, periodFilter]);
+
+  // Aggregate stats from the filtered history. Replaces the /combo-stats
+  // endpoint call so the numbers always reflect what's visible below.
+  const computedStats = useMemo(() => computeAggregateStats(filteredHistory, statsScope, periodFilter), [filteredHistory, statsScope, periodFilter]);
 
   return (
     <div className="relative mx-auto max-w-6xl px-3 sm:px-4 py-5 md:py-7 animate-fade-in">
@@ -90,20 +136,22 @@ export default function CombiOfTheDayPage() {
         {/* Today's combo */}
         <TodayComboCard data={today} loading={todayQ.isLoading} />
 
-        {/* Stats — backtest vs live toggle */}
+        {/* Stats — scope (backtest/live) + period (daily/weekly/monthly/all) */}
         <StatsBlock
           scope={statsScope}
           setScope={setStatsScope}
-          stats={stats}
-          loading={statsQ.isLoading}
+          period={periodFilter}
+          setPeriod={setPeriodFilter}
+          stats={computedStats}
+          loading={historyQ.isLoading}
         />
 
-        {/* Recent history — filter by current stats scope so the list
-            never shows Backtest combos on the Live tab and vice versa. */}
+        {/* Recent history — filtered by both scope and period */}
         <HistoryBlock
-          items={history.filter((h) => h.is_live === (statsScope === "live"))}
+          items={filteredHistory}
           loading={historyQ.isLoading}
           scope={statsScope}
+          period={periodFilter}
         />
       </div>
     </div>
@@ -321,11 +369,15 @@ function LegRow({ leg, index }: { leg: ComboLeg; index: number }) {
 function StatsBlock({
   scope,
   setScope,
+  period,
+  setPeriod,
   stats,
   loading,
 }: {
   scope: "backtest" | "live";
   setScope: (s: "backtest" | "live") => void;
+  period: PeriodFilter;
+  setPeriod: (p: PeriodFilter) => void;
   stats: ComboStats | undefined;
   loading: boolean;
 }) {
@@ -337,7 +389,7 @@ function StatsBlock({
             Combo track record
           </p>
           <p className="mt-0.5 text-[11px] text-slate-500">
-            {stats?.window_start ?? "—"} → {stats?.window_end ?? "—"}
+            {PERIOD_LABELS[period].full}
           </p>
         </div>
         <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5 text-[10px]">
@@ -358,6 +410,24 @@ function StatsBlock({
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Period filter — Daily / Weekly / Monthly / Quarterly / All */}
+      <div className="mt-3 inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5 text-[10px]">
+        {(["1d", "7d", "30d", "90d", "all"] as const).map((p) => (
+          <button
+            key={p}
+            type="button"
+            onClick={() => setPeriod(p)}
+            className={`rounded-md px-2.5 py-1 font-semibold uppercase tracking-widest transition-colors ${
+              period === p
+                ? "bg-blue-600/80 text-white"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            {PERIOD_LABELS[p].short}
+          </button>
+        ))}
       </div>
 
       {loading ? (
@@ -435,10 +505,12 @@ function HistoryBlock({
   items,
   loading,
   scope,
+  period,
 }: {
   items: ComboHistoryItem[];
   loading: boolean;
   scope: "backtest" | "live";
+  period: PeriodFilter;
 }) {
   if (loading) {
     return (
@@ -470,7 +542,7 @@ function HistoryBlock({
     <div className="rounded-xl border border-white/[0.06] bg-white/[0.02]">
       <div className="flex items-center justify-between border-b border-white/[0.05] px-4 py-3">
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          Recent combos · <span className={scope === "live" ? "text-emerald-300" : "text-amber-300"}>{scope}</span>
+          Recent combos · <span className={scope === "live" ? "text-emerald-300" : "text-amber-300"}>{scope}</span> · <span className="text-blue-300">{PERIOD_LABELS[period].short.toLowerCase()}</span>
         </p>
         <span className="text-[10px] tabular-nums text-slate-500">{items.length} shown</span>
       </div>
@@ -568,4 +640,67 @@ function AdminGenerateButton({ onDone }: { onDone: () => void }) {
       </button>
     </div>
   );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Client-side aggregation — computes the same shape as ComboStats from the
+// filtered history list. Lets us scope by Daily/Weekly/Monthly without
+// extra backend calls; the toggle is instant.
+// ────────────────────────────────────────────────────────────────────────────
+function computeAggregateStats(
+  items: ComboHistoryItem[],
+  scope: "backtest" | "live",
+  period: PeriodFilter,
+): ComboStats {
+  const evaluated = items.filter((h) => h.is_evaluated);
+  const wins = evaluated.filter((h) => h.is_correct === true).length;
+  const total = evaluated.length;
+  const accuracy = total > 0 ? wins / total : 0;
+  const totalPnl = evaluated.reduce((sum, h) => sum + (h.profit_loss_units ?? 0), 0);
+  const avgOdds = total > 0
+    ? evaluated.reduce((sum, h) => sum + h.combined_odds, 0) / total
+    : 0;
+  const avgLegs = total > 0
+    ? evaluated.reduce((sum, h) => sum + h.leg_count, 0) / total
+    : 0;
+  // Wilson 95% CI for the binomial proportion
+  const z = 1.96;
+  let lower = 0;
+  let upper = 0;
+  if (total > 0) {
+    const p = accuracy;
+    const denom = 1 + (z * z) / total;
+    const center = (p + (z * z) / (2 * total)) / denom;
+    const margin = (z / denom) * Math.sqrt((p * (1 - p)) / total + (z * z) / (4 * total * total));
+    lower = Math.max(0, center - margin);
+    upper = Math.min(1, center + margin);
+  }
+  // ROI as percentage on flat 1-unit stake
+  const roiPct = total > 0 ? (totalPnl / total) * 100 : 0;
+
+  // Window labels — pulled from the filtered set itself if not empty
+  const sorted = [...items].sort((a, b) => a.bet_date.localeCompare(b.bet_date));
+  const windowStart = sorted[0]?.bet_date ?? "—";
+  const windowEnd = sorted[sorted.length - 1]?.bet_date ?? "—";
+
+  return {
+    scope,
+    window_start: windowStart,
+    window_end: windowEnd,
+    total_combos: items.length,
+    evaluated_combos: total,
+    hit_combos: wins,
+    accuracy,
+    avg_combined_odds: avgOdds,
+    avg_legs_per_combo: avgLegs,
+    total_units_pnl: totalPnl,
+    roi_percentage: roiPct,
+    wilson_ci_lower: lower,
+    wilson_ci_upper: upper,
+    sample_size_warning: total < 30,
+    explainer:
+      total === 0
+        ? `Geen ${scope === "live" ? "live" : "backtest"} combos in deze periode (${PERIOD_LABELS[period].full}).`
+        : `${PERIOD_LABELS[period].full} · ${scope === "live" ? "Live measurement" : "Backtest replay"} · ${total} geëvalueerde combo${total === 1 ? "" : "s"}.`,
+  };
 }

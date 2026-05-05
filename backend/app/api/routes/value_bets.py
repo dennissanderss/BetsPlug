@@ -807,16 +807,16 @@ async def get_backtest_proof(
 # the fly. A daily cron + dedicated combo_bets table follows in a later
 # pass once we have a few weeks of live data to evaluate.
 
-# v3 tuning (2026-05-05) — must mirror combo_bet_service.py.
-# Tightened from v2 to chase positive weekly ROI on the live feed:
-# Gold/Platinum only, leg odds [1.40, 3.50], min edge per leg 4%.
+# v4 tuning (2026-05-05) — must mirror combo_bet_service.py.
+# Loosened from v3 (40 combos at +11% ROI was too sparse). Now:
+# Gold/Platinum only, leg odds [1.35, 4.00], min edge per leg 2.5%.
 PLATINUM_TIER_BONUS = 1.3
 GOLD_TIER_BONUS = 1.0
 COMBO_LEG_COUNT = 2
-COMBO_MIN_CONFIDENCE = 0.70
-COMBO_MIN_LEG_ODDS = 1.40
-COMBO_MAX_LEG_ODDS = 3.50
-COMBO_MIN_LEG_EDGE = 0.04
+COMBO_MIN_CONFIDENCE = 0.68
+COMBO_MIN_LEG_ODDS = 1.35
+COMBO_MAX_LEG_ODDS = 4.00
+COMBO_MIN_LEG_EDGE = 0.025
 
 # Master kill-switch — Combi van de Dag is locked behind a "coming soon"
 # overlay until the product is fully validated against backtest + live
