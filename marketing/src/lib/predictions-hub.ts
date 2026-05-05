@@ -70,16 +70,6 @@ function slugify(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-function isToday(iso: string): boolean {
-  const d = new Date(iso);
-  const now = new Date();
-  return (
-    d.getUTCFullYear() === now.getUTCFullYear() &&
-    d.getUTCMonth() === now.getUTCMonth() &&
-    d.getUTCDate() === now.getUTCDate()
-  );
-}
-
 function pickLabel(p: BackendFreePick): string {
   if (p.pick === "HOME") return p.home_team;
   if (p.pick === "AWAY") return p.away_team;
@@ -164,10 +154,14 @@ export async function loadHubData(
     });
     if (!res.ok) return EMPTY_HUB;
     const data = (await res.json()) as BackendFreePicksResponse;
+    // The backend's `today` field is misleadingly named — it's the
+    // "next-N-upcoming Free-tier picks" feed (up to 45 days out),
+    // mirroring what the dashboard surfaces to a logged-out / Free
+    // visitor. We render it as-is so the marketing page reflects what
+    // the app actually shows, instead of strict-filtering to today's
+    // calendar day and rendering empty most weekdays.
     const all = data.today ?? [];
-    const todayPicks = all
-      .filter((p) => isToday(p.scheduled_at))
-      .map((p) => shapePick(p, locale));
+    const todayPicks = all.map((p) => shapePick(p, locale));
     return {
       today: {
         freeCount: todayPicks.length,

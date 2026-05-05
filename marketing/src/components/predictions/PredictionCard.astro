@@ -230,17 +230,9 @@ const cls = [baseSurface, extraClass].join(" ");
       </div>
     )}
 
-    {/* Whole-card link for free + fixture variants */}
-    {(variant === "free" || variant === "fixture") && matchUrl && (
-      <a
-        href={matchUrl}
-        class="absolute inset-0 rounded-xl
-               focus-visible:outline-none focus-visible:ring-2
-               focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
-               focus-visible:ring-offset-deep-navy-900"
-        aria-label={`${homeTeamProp?.name ?? ""} vs ${awayTeamProp?.name ?? ""} ${variant === "free" ? labels.viewAnalysis : labels.subscribeToView}`}
-      ></a>
-    )}
+    {/* Whole-card link disabled until app.betsplug.com/predictions/{slug}
+        match-detail pages exist. Re-enable by passing a real matchUrl
+        once those routes ship — until then the click would 404. */}
   </article>
 )}
 

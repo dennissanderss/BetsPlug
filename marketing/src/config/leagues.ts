@@ -40,12 +40,23 @@ export interface LeagueConfig {
   primaryColor: string;
   /** SVG asset under /public/leagues/. TODO: add real assets. */
   logo: string;
+  /**
+   * API-Football league ID. Used to render the real crest from
+   * https://media.api-sports.io/football/leagues/{id}.png — added
+   * 2026-05-05 to replace the initials placeholder on the league grid.
+   */
+  apiFootballId: number;
   teams: number;
   isTopThree: boolean;
   topTeams: string[];
   season: string;
   /** Locales that should display the "Featured" badge for this league. */
   featuredFor: Locale[];
+}
+
+/** Build the API-Football CDN URL for a league crest. */
+export function leagueLogoUrl(cfg: LeagueConfig): string {
+  return `https://media.api-sports.io/football/leagues/${cfg.apiFootballId}.png`;
 }
 
 export const leagues: Record<LeagueSlug, LeagueConfig> = {
@@ -56,6 +67,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "GB",
     primaryColor: "#3D195B",
     logo: "/leagues/premier-league.svg",
+    apiFootballId: 39,
     teams: 20,
     isTopThree: true,
     topTeams: [
@@ -78,6 +90,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "ES",
     primaryColor: "#FF4B44",
     logo: "/leagues/la-liga.svg",
+    apiFootballId: 140,
     teams: 20,
     isTopThree: true,
     topTeams: [
@@ -100,6 +113,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "DE",
     primaryColor: "#D20515",
     logo: "/leagues/bundesliga.svg",
+    apiFootballId: 78,
     teams: 18,
     isTopThree: true,
     topTeams: [
@@ -122,6 +136,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "IT",
     primaryColor: "#008FD7",
     logo: "/leagues/serie-a.svg",
+    apiFootballId: 135,
     teams: 20,
     isTopThree: false,
     topTeams: [
@@ -144,6 +159,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "FR",
     primaryColor: "#091C3E",
     logo: "/leagues/ligue-1.svg",
+    apiFootballId: 61,
     teams: 18,
     isTopThree: false,
     topTeams: [
@@ -166,6 +182,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "EU",
     primaryColor: "#0E1E5B",
     logo: "/leagues/champions-league.svg",
+    apiFootballId: 2,
     teams: 36,
     isTopThree: false,
     topTeams: [
@@ -188,6 +205,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "EU",
     primaryColor: "#FF6700",
     logo: "/leagues/europa-league.svg",
+    apiFootballId: 3,
     teams: 36,
     isTopThree: false,
     topTeams: [
@@ -210,6 +228,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "NL",
     primaryColor: "#FF6900",
     logo: "/leagues/eredivisie.svg",
+    apiFootballId: 88,
     teams: 18,
     isTopThree: false,
     topTeams: [
@@ -230,6 +249,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "PT",
     primaryColor: "#006B3F",
     logo: "/leagues/primeira-liga.svg",
+    apiFootballId: 94,
     teams: 18,
     isTopThree: false,
     topTeams: [
@@ -250,6 +270,7 @@ export const leagues: Record<LeagueSlug, LeagueConfig> = {
     countryCode: "GB",
     primaryColor: "#003B71",
     logo: "/leagues/championship.svg",
+    apiFootballId: 40,
     teams: 24,
     isTopThree: false,
     topTeams: [

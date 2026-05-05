@@ -74,16 +74,6 @@ function pickLabel(p: BackendFreePick): string {
   return "Draw";
 }
 
-function isToday(iso: string): boolean {
-  const d = new Date(iso);
-  const now = new Date();
-  return (
-    d.getUTCFullYear() === now.getUTCFullYear() &&
-    d.getUTCMonth() === now.getUTCMonth() &&
-    d.getUTCDate() === now.getUTCDate()
-  );
-}
-
 const BCP47: Record<Locale, string> = {
   en: "en-GB",
   nl: "nl-NL",
@@ -115,7 +105,11 @@ try {
   });
   if (res.ok) {
     const data = (await res.json()) as BackendFreePicksResponse;
-    const today = (data.today ?? []).filter((p) => isToday(p.scheduled_at));
+    // Backend's `today` array is the "next-N-upcoming Free-tier picks"
+    // feed (up to 45 days out) — same source the dashboard uses. We
+    // render it as-is to match what the app shows, not strict
+    // calendar-today filtered (which would empty the grid most days).
+    const today = data.today ?? [];
     livePicks = today.slice(0, 3).map((p) => {
       // Best-side probability — same number rendered on the hero card.
       const probs = [
