@@ -63,42 +63,49 @@ _TTL_SECONDS = 3600.0  # 1 hour
 _cache: dict[str, tuple[float, Any]] = {}
 
 
-# Marketing-friendly slug → canonical DB slug. API-Football's slugify is
-# strict about official long names ("1899 Hoffenheim", "FC Augsburg",
-# "Athletic Club"), but the marketing site uses the short, common slug.
-# This map preserves Cas's sitemap URLs without an ingestion rewrite.
+# Marketing-friendly slug → canonical DB slug. API-Football's slugify uses
+# the official long name (e.g. "1899 Hoffenheim", "FC Augsburg", "Athletic
+# Club", "Inter", "Paris Saint Germain", "FC Porto"), often including
+# umlauts (`bayern-münchen`, `1-fc-köln`). The marketing site uses the
+# short colloquial ASCII slug. This map resolves the marketing slug to
+# the row stored in DB without re-ingesting. Verified against the actual
+# /api/public/leagues/{slug}/teams listings on 2026-05-05.
 SLUG_ALIASES: dict[str, str] = {
-    # Bundesliga
+    # ── Bundesliga ────────────────────────────────────────────────────────
+    "bayern-munich": "bayern-münchen",
+    "munich": "bayern-münchen",
     "hoffenheim": "1899-hoffenheim",
     "heidenheim": "1-fc-heidenheim",
     "mainz": "fsv-mainz-05",
     "augsburg": "fc-augsburg",
     "koln": "1-fc-köln",
     "cologne": "1-fc-köln",
+    "freiburg": "sc-freiburg",
+    "wolfsburg": "vfl-wolfsburg",
     "borussia-monchengladbach": "borussia-mönchengladbach",
     "monchengladbach": "borussia-mönchengladbach",
-    # La Liga
+    "st-pauli": "fc-st-pauli",
+    # ── La Liga ───────────────────────────────────────────────────────────
     "athletic-bilbao": "athletic-club",
-    # Serie A
+    "rayo": "rayo-vallecano",
+    # ── Serie A ───────────────────────────────────────────────────────────
     "inter-milan": "inter",
-    "inter": "inter",
-    "as-roma": "roma",
-    "ac-milan": "ac-milan",
-    # Ligue 1
+    "roma": "as-roma",
+    "verona": "hellas-verona",
+    # ── Ligue 1 ───────────────────────────────────────────────────────────
     "psg": "paris-saint-germain",
-    "paris-saint-germain": "paris-saint-germain",
-    # Eredivisie
+    "brest": "stade-brestois-29",
+    # ── Eredivisie ────────────────────────────────────────────────────────
     "fc-twente": "twente",
-    "twente": "twente",
-    "nec-nijmegen": "nec",
     "heracles-almelo": "heracles",
-    "rkc-waalwijk": "rkc",
-    # Primeira Liga
+    "rkc-waalwijk": "waalwijk",
+    "rkc": "waalwijk",
+    "volendam": "fc-volendam",
+    "almere-city": "almere-city-fc",
+    "almere": "almere-city-fc",
+    # ── Primeira Liga ─────────────────────────────────────────────────────
     "porto": "fc-porto",
-    "fc-porto": "fc-porto",
     "braga": "sc-braga",
-    "sc-braga": "sc-braga",
-    "sporting-cp": "sporting-cp",
 }
 
 
