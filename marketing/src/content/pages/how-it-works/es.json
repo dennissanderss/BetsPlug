@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "_note": "TODO: Native speaker review needed for es. Hand-authored by Claude based on en.json source."
+  },
+  "meta": {
+    "title": "Cómo funciona BetsPlug — del calendario al pronóstico evaluado",
+    "description": "Seis pasos desde un partido bruto hasta un pronóstico evaluado en tu panel. Transparencia total del proceso — sin marketing inflado."
+  },
+  "hero": {
+    "kicker": "Cómo funciona",
+    "title": "Del calendario al pronóstico evaluado — {{accent}}seis pasos{{/accent}}.",
+    "subtitle": "Sin misterios de tipster. Cada pronóstico sigue la misma cadena de seis pasos. El mismo motor para todos — solo cambia la severidad del filtro por nivel."
+  },
+  "steps": [
+    {
+      "number": "01",
+      "icon": "database",
+      "title": "Recogemos cada partido",
+      "body": "Cada mañana traemos calendarios frescos, resultados recientes, forma de los equipos e historial de enfrentamientos de más de 30 ligas — Premier League y Champions League arriba, hasta llegar a la MLS y la J1 League. Los datos se refrescan cada minuto, así el motor siempre trabaja con la imagen más reciente."
+    },
+    {
+      "number": "02",
+      "icon": "cpu",
+      "title": "Nuestro motor puntúa cada partido",
+      "body": "Para cada partido próximo, el motor compara fuerza del equipo, forma reciente y patrones históricos, y convierte todo en una única puntuación de confianza. Todo lo que esté por debajo del 55% se descarta — si el motor no está seguro, no lo publicamos."
+    },
+    {
+      "number": "03",
+      "icon": "layers",
+      "title": "Los pronósticos se clasifican en niveles",
+      "body": "Cada pronóstico que sobrevive aterriza en uno de los cuatro niveles, según la confianza del motor y la solidez de la liga. Free muestra 45%+ de precisión histórica, Silver 60%+, Gold 70%+, Platinum 85%+. Siempre ves pronósticos de tu nivel y por debajo — nunca al revés."
+    },
+    {
+      "number": "04",
+      "icon": "lock",
+      "title": "Los pronósticos se bloquean antes del inicio",
+      "body": "En el instante en que se publica un pronóstico, recibe una marca de tiempo pública. Después del inicio esa fila es de solo lectura. Sin ediciones retroactivas, sin borrados silenciosos de fallos — el listón que ponemos es el mismo listón que reportamos."
+    },
+    {
+      "number": "05",
+      "icon": "check",
+      "title": "Termina el partido, se evalúa el resultado",
+      "body": "Al pitido final, nuestro programador evalúa el pronóstico frente al resultado real. Acierto o fallo, ambos quedan registrados. Los números en la página de precios, el panel y el historial público leen todos de la misma tabla de evaluación."
+    },
+    {
+      "number": "06",
+      "icon": "eye",
+      "title": "Lo ves, lo puedes verificar",
+      "body": "Los visitantes gratuitos reciben tres pronósticos al día en la página principal. Los planes de pago desbloquean el feed completo con probabilidad de victoria por partido, el Pick of the Day, backtesting de estrategias y (Platinum vitalicio) un canal privado de Telegram. El historial completo siempre es público."
+    }
+  ],
+  "ctaPrimary": {
+    "label": "Ver los niveles",
+    "canonical": "pricing"
+  },
+  "ctaSecondary": {
+    "label": "Leer la metodología",
+    "canonical": "methodology"
+  }
+}

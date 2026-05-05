@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "_note": "TODO: Native speaker review needed for fr. Hand-authored by Claude based on en.json source."
+  },
+  "meta": {
+    "title": "Comment ça marche — de la liste des matchs au pronostic noté",
+    "description": "Six étapes d'un match de football brut à un pronostic noté sur votre tableau de bord. Transparence de bout en bout — aucun discours marketing."
+  },
+  "hero": {
+    "kicker": "Comment ça marche",
+    "title": "De la liste des matchs au pronostic noté — {{accent}}six étapes{{/accent}}.",
+    "subtitle": "Aucun mystère de pronostiqueur. Chaque pronostic suit la même pipeline en six étapes. Le même moteur pour tout le monde — seule la sévérité du filtre change selon le palier."
+  },
+  "steps": [
+    {
+      "number": "01",
+      "icon": "database",
+      "title": "Nous collectons chaque match",
+      "body": "Chaque matin, nous récupérons les nouvelles rencontres, les résultats récents, la forme des équipes et l'historique des confrontations dans plus de 30 ligues — Premier League et Ligue des Champions en tête, jusqu'à la MLS et la J1 League. Les données se rafraîchissent chaque minute, le moteur travaille donc toujours avec l'image la plus récente."
+    },
+    {
+      "number": "02",
+      "icon": "cpu",
+      "title": "Notre moteur note chaque match",
+      "body": "Pour chaque match à venir, le moteur compare la force des équipes, la forme récente et les schémas historiques, et transforme le tout en un seul score de confiance. Tout ce qui est en dessous de 55% est écarté — si le moteur n'est pas sûr, nous ne publions pas."
+    },
+    {
+      "number": "03",
+      "icon": "layers",
+      "title": "Les pronostics sont classés en paliers",
+      "body": "Chaque pronostic retenu atterrit dans l'un des quatre paliers, selon la confiance du moteur et la solidité de la ligue. Free affiche 45%+ de précision historique, Silver 60%+, Gold 70%+, Platinum 85%+. Vous voyez toujours les pronostics de votre palier et en dessous — jamais l'inverse."
+    },
+    {
+      "number": "04",
+      "icon": "lock",
+      "title": "Les pronostics se verrouillent avant le coup d'envoi",
+      "body": "Dès qu'un pronostic est publié, il reçoit un horodatage public. Après le coup d'envoi, cette ligne devient en lecture seule. Pas de modifications après-coup, pas de suppressions discrètes des ratés — la barre que l'on se fixe est la barre que l'on rapporte."
+    },
+    {
+      "number": "05",
+      "icon": "check",
+      "title": "Le match se termine, le résultat est noté",
+      "body": "Au coup de sifflet final, notre planificateur note le pronostic par rapport au résultat réel. Gagné ou perdu, les deux entrent dans le registre. Les chiffres sur la page tarifs, le tableau de bord et l'historique public proviennent tous de la même table d'évaluation."
+    },
+    {
+      "number": "06",
+      "icon": "eye",
+      "title": "Vous le voyez, vous pouvez le vérifier",
+      "body": "Les visiteurs gratuits reçoivent trois pronostics par jour sur la page d'accueil. Les forfaits payants débloquent le flux complet avec la probabilité de victoire par match, le Pick of the Day, le backtesting de stratégies et (Platinum à vie) un canal Telegram privé. L'historique complet reste toujours public."
+    }
+  ],
+  "ctaPrimary": {
+    "label": "Voir les paliers",
+    "canonical": "pricing"
+  },
+  "ctaSecondary": {
+    "label": "Lire la méthodologie",
+    "canonical": "methodology"
+  }
+}

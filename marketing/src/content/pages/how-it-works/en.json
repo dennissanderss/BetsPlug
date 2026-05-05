@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "translationStatus": "source",
+    "needsReview": false,
+    "lastUpdated": "2026-05-05"
+  },
+  "meta": {
+    "title": "How BetsPlug works — from fixture list to graded pick",
+    "description": "Six steps from a raw football fixture to a graded prediction on your dashboard. Plain-language pipeline, no marketing fluff."
+  },
+  "hero": {
+    "kicker": "How it works",
+    "title": "From fixture list to graded pick — {{accent}}six steps{{/accent}}.",
+    "subtitle": "No tipster mystery. Every prediction follows the same six-step pipeline. Same engine for everyone — only the strictness of the filter changes per tier."
+  },
+  "steps": [
+    {
+      "number": "01",
+      "icon": "database",
+      "title": "We collect every match",
+      "body": "Each morning we pull fresh fixtures, recent results, team form and head-to-head history from 30+ leagues — Premier League and Champions League at the top, all the way down to MLS and J1 League. The data refreshes every minute so the engine always works with the latest picture."
+    },
+    {
+      "number": "02",
+      "icon": "cpu",
+      "title": "Our engine scores every match",
+      "body": "For each upcoming match the engine compares team strength, recent form and historical patterns, and turns the picture into a single confidence score. Anything below 55% gets dropped — if the engine isn't sure, we don't publish it."
+    },
+    {
+      "number": "03",
+      "icon": "layers",
+      "title": "Picks are sorted into tiers",
+      "body": "Every surviving pick lands in one of four tiers based on how confident the engine is and how strong the league is. Free shows 45%+ historical accuracy, Silver 60%+, Gold 70%+, Platinum 85%+. You always see picks at your tier and below — never the inverse."
+    },
+    {
+      "number": "04",
+      "icon": "lock",
+      "title": "Picks lock before kickoff",
+      "body": "The instant a pick is published it gets a public timestamp. After kickoff that row is read-only. No retroactive edits, no quiet deletions of misses — the bar we set is the bar we report."
+    },
+    {
+      "number": "05",
+      "icon": "check",
+      "title": "Match settles, the result is graded",
+      "body": "When the final whistle goes, our scheduler grades the prediction against the real result. Win or loss, both go on the record. The numbers on the pricing page, the dashboard and the public track record all read from this same evaluation table."
+    },
+    {
+      "number": "06",
+      "icon": "eye",
+      "title": "You see it, you can verify it",
+      "body": "Free visitors get three picks a day on the homepage. Paid plans unlock the full feed with win probability per match, the Pick of the Day, strategy backtesting, and (Platinum lifetime) a private Telegram channel. The full track record is always public to scroll."
+    }
+  ],
+  "ctaPrimary": {
+    "label": "See the tiers",
+    "canonical": "pricing"
+  },
+  "ctaSecondary": {
+    "label": "Read the methodology",
+    "canonical": "methodology"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "_note": "TODO: Native speaker review needed for it. Hand-authored by Claude based on en.json source."
+  },
+  "meta": {
+    "title": "Come funziona BetsPlug — dalla lista partite al pronostico valutato",
+    "description": "Sei passaggi da una partita di calcio grezza a un pronostico valutato sulla tua dashboard. Trasparenza pura della pipeline — niente fronzoli di marketing."
+  },
+  "hero": {
+    "kicker": "Come funziona",
+    "title": "Dalla lista partite al pronostico valutato — {{accent}}sei passaggi{{/accent}}.",
+    "subtitle": "Nessun mistero da tipster. Ogni pronostico segue la stessa pipeline in sei passaggi. Lo stesso motore per tutti — cambia solo la severità del filtro per livello."
+  },
+  "steps": [
+    {
+      "number": "01",
+      "icon": "database",
+      "title": "Raccogliamo ogni partita",
+      "body": "Ogni mattina recuperiamo calendari freschi, risultati recenti, forma delle squadre e scontri diretti da oltre 30 campionati — Premier League e Champions League in cima, fino a MLS e J1 League. I dati si aggiornano ogni minuto, così il motore lavora sempre con il quadro più recente."
+    },
+    {
+      "number": "02",
+      "icon": "cpu",
+      "title": "Il nostro motore valuta ogni partita",
+      "body": "Per ogni partita in arrivo, il motore confronta forza della squadra, forma recente e schemi storici, e trasforma il quadro in un singolo punteggio di confidenza. Tutto ciò che sta sotto il 55% viene scartato — se il motore non è sicuro, non lo pubblichiamo."
+    },
+    {
+      "number": "03",
+      "icon": "layers",
+      "title": "I pronostici vengono ordinati nei livelli",
+      "body": "Ogni pronostico sopravvissuto finisce in uno dei quattro livelli, in base alla confidenza del motore e alla solidità del campionato. Free mostra 45%+ di accuratezza storica, Silver 60%+, Gold 70%+, Platinum 85%+. Vedi sempre i pronostici del tuo livello e sotto — mai al contrario."
+    },
+    {
+      "number": "04",
+      "icon": "lock",
+      "title": "I pronostici si bloccano prima del fischio",
+      "body": "Nell'istante in cui un pronostico viene pubblicato, riceve un timestamp pubblico. Dopo il calcio d'inizio quella riga è in sola lettura. Niente modifiche a posteriori, niente cancellazioni silenziose degli errori — l'asticella che ci poniamo è la stessa che riportiamo."
+    },
+    {
+      "number": "05",
+      "icon": "check",
+      "title": "La partita finisce, il risultato viene valutato",
+      "body": "Al fischio finale, il nostro scheduler valuta il pronostico rispetto al risultato reale. Vittoria o sconfitta, entrambi finiscono nel registro. I numeri sulla pagina prezzi, sulla dashboard e sul track record pubblico leggono tutti dalla stessa tabella di valutazione."
+    },
+    {
+      "number": "06",
+      "icon": "eye",
+      "title": "Lo vedi, lo puoi verificare",
+      "body": "I visitatori gratuiti ricevono tre pronostici al giorno sulla home. I piani a pagamento sbloccano il feed completo con probabilità di vittoria per partita, Pick of the Day, backtesting di strategie e (Platinum lifetime) un canale Telegram privato. Il track record completo è sempre consultabile pubblicamente."
+    }
+  ],
+  "ctaPrimary": {
+    "label": "Vedi i livelli",
+    "canonical": "pricing"
+  },
+  "ctaSecondary": {
+    "label": "Leggi la metodologia",
+    "canonical": "methodology"
+  }
+}

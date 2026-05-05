@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "_note": "TODO: Native speaker review needed for de. Hand-authored by Claude based on en.json source."
+  },
+  "meta": {
+    "title": "Wie BetsPlug funktioniert — von der Spielliste zum bewerteten Pick",
+    "description": "Sechs Schritte von einer rohen Fußballbegegnung bis zur bewerteten Vorhersage auf Ihrem Dashboard. Klare Pipeline-Transparenz — keine Marketing-Floskeln."
+  },
+  "hero": {
+    "kicker": "Wie es funktioniert",
+    "title": "Von der Spielliste zum bewerteten Pick — {{accent}}sechs Schritte{{/accent}}.",
+    "subtitle": "Kein Tipster-Geheimnis. Jede Vorhersage durchläuft dieselbe sechsstufige Pipeline. Dieselbe Engine für alle — nur die Strenge des Filters ändert sich pro Tier."
+  },
+  "steps": [
+    {
+      "number": "01",
+      "icon": "database",
+      "title": "Wir erfassen jedes Spiel",
+      "body": "Jeden Morgen holen wir frische Spielpläne, aktuelle Ergebnisse, Teamform und direkte Vergleiche aus 30+ Ligen — Premier League und Champions League an der Spitze, bis hinunter zu MLS und J1 League. Die Daten aktualisieren sich jede Minute, sodass die Engine immer mit dem aktuellen Bild arbeitet."
+    },
+    {
+      "number": "02",
+      "icon": "cpu",
+      "title": "Unsere Engine bewertet jedes Spiel",
+      "body": "Für jedes anstehende Spiel vergleicht die Engine Teamstärke, aktuelle Form und historische Muster und macht aus dem Bild einen einzelnen Vertrauenswert. Alles unter 55% fliegt raus — wenn die Engine sich nicht sicher ist, veröffentlichen wir es nicht."
+    },
+    {
+      "number": "03",
+      "icon": "layers",
+      "title": "Picks werden in Tiers einsortiert",
+      "body": "Jeder verbleibende Pick landet in einem von vier Tiers, abhängig davon, wie sicher die Engine ist und wie stark die Liga ist. Free zeigt 45%+ historische Genauigkeit, Silver 60%+, Gold 70%+, Platinum 85%+. Sie sehen immer Picks Ihres Tiers und darunter — nie umgekehrt."
+    },
+    {
+      "number": "04",
+      "icon": "lock",
+      "title": "Picks werden vor dem Anpfiff gesperrt",
+      "body": "Sobald ein Pick veröffentlicht wird, erhält er einen öffentlichen Zeitstempel. Nach dem Anpfiff ist diese Zeile nur lesbar. Keine nachträglichen Bearbeitungen, keine stillen Löschungen von Fehlern — die Latte, die wir setzen, ist die Latte, die wir berichten."
+    },
+    {
+      "number": "05",
+      "icon": "check",
+      "title": "Spiel endet, das Ergebnis wird bewertet",
+      "body": "Wenn der Schlusspfiff ertönt, bewertet unser Scheduler die Vorhersage gegen das tatsächliche Ergebnis. Gewinn oder Verlust, beide kommen ins Register. Die Zahlen auf der Preisseite, im Dashboard und im öffentlichen Track Record lesen alle aus derselben Bewertungstabelle."
+    },
+    {
+      "number": "06",
+      "icon": "eye",
+      "title": "Sie sehen es, Sie können es überprüfen",
+      "body": "Kostenlose Besucher erhalten drei Picks pro Tag auf der Startseite. Bezahlte Pläne schalten den vollständigen Feed mit Siegwahrscheinlichkeit pro Spiel, dem Pick of the Day, Strategie-Backtesting und (Platinum Lifetime) einem privaten Telegram-Kanal frei. Der vollständige Track Record ist immer öffentlich einsehbar."
+    }
+  ],
+  "ctaPrimary": {
+    "label": "Tiers ansehen",
+    "canonical": "pricing"
+  },
+  "ctaSecondary": {
+    "label": "Methodik lesen",
+    "canonical": "methodology"
+  }
+}

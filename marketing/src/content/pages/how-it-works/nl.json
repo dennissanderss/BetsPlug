@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "_note": "TODO: Native speaker review needed for nl. Hand-authored by Claude based on en.json source."
+  },
+  "meta": {
+    "title": "Hoe BetsPlug werkt — van wedstrijdlijst tot beoordeelde pick",
+    "description": "Zes stappen van een ruwe voetbalwedstrijd tot een beoordeelde voorspelling op je dashboard. Pure pijplijn-transparantie — geen marketingpraat."
+  },
+  "hero": {
+    "kicker": "Hoe het werkt",
+    "title": "Van wedstrijdlijst naar beoordeelde pick — {{accent}}zes stappen{{/accent}}.",
+    "subtitle": "Geen tipster-mysterie. Elke voorspelling volgt dezelfde zes-stappen-pijplijn. Dezelfde engine voor iedereen — alleen de strengheid van het filter verschilt per tier."
+  },
+  "steps": [
+    {
+      "number": "01",
+      "icon": "database",
+      "title": "We verzamelen elke wedstrijd",
+      "body": "Elke ochtend halen we verse wedstrijden, recente uitslagen, teamvorm en onderlinge geschiedenis op uit 30+ competities — Premier League en Champions League bovenaan, helemaal tot MLS en J1 League. De data wordt elke minuut ververst, dus de engine werkt altijd met het laatste beeld."
+    },
+    {
+      "number": "02",
+      "icon": "cpu",
+      "title": "Onze engine scoort elke wedstrijd",
+      "body": "Voor elke aankomende wedstrijd vergelijkt de engine teamsterkte, recente vorm en historische patronen, en zet dat beeld om in één confidence-score. Alles onder de 55% gaat eraf — als de engine niet zeker is, publiceren we het niet."
+    },
+    {
+      "number": "03",
+      "icon": "layers",
+      "title": "Picks worden ingedeeld in tiers",
+      "body": "Elke pick die overblijft, komt in één van de vier tiers terecht op basis van hoe zeker de engine is en hoe sterk de competitie is. Free toont 45%+ historische nauwkeurigheid, Silver 60%+, Gold 70%+, Platinum 85%+. Je ziet altijd picks van jouw tier en lager — nooit andersom."
+    },
+    {
+      "number": "04",
+      "icon": "lock",
+      "title": "Picks vergrendelen vóór de aftrap",
+      "body": "Op het moment dat een pick wordt gepubliceerd, krijgt 'ie een publiek tijdstempel. Na de aftrap is die regel read-only. Geen achteraf bewerken, geen stille verwijderingen van missers — de lat die we leggen is de lat die we rapporteren."
+    },
+    {
+      "number": "05",
+      "icon": "check",
+      "title": "Wedstrijd eindigt, het resultaat wordt beoordeeld",
+      "body": "Als het laatste fluitsignaal klinkt, beoordeelt onze scheduler de voorspelling tegen het echte resultaat. Winst of verlies, beide gaan in het register. De cijfers op de prijspagina, het dashboard en het publieke track record lezen allemaal uit dezelfde evaluatietabel."
+    },
+    {
+      "number": "06",
+      "icon": "eye",
+      "title": "Je ziet het, je kunt het verifiëren",
+      "body": "Gratis bezoekers krijgen drie picks per dag op de homepage. Betaalde plannen ontgrendelen de volledige feed met winkans per wedstrijd, de Pick of the Day, strategie-backtesting, en (Platinum lifetime) een privé Telegram-kanaal. Het volledige track record blijft altijd publiek inzichtelijk."
+    }
+  ],
+  "ctaPrimary": {
+    "label": "Bekijk de tiers",
+    "canonical": "pricing"
+  },
+  "ctaSecondary": {
+    "label": "Lees de methodologie",
+    "canonical": "methodology"
+  }
+}

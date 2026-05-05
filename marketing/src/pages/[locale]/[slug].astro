@@ -61,6 +61,8 @@ import LimitationsSection       from "@/components/methodology/LimitationsSectio
 import MethodologyFAQ           from "@/components/methodology/MethodologyFAQ.astro";
 import MethodologyFinalCTA      from "@/components/methodology/MethodologyFinalCTA.astro";
 import { loadMethodologyContent } from "@/lib/methodology-page";
+import HowItWorksPage from "@/components/how-it-works/HowItWorksPage.astro";
+import { loadHowItWorksContent } from "@/lib/how-it-works-page";
 
 import LearnHero        from "@/components/learn/LearnHero.astro";
 import ArticleGrid      from "@/components/learn/ArticleGrid.astro";
@@ -187,6 +189,29 @@ const hubFaqSchema = hubContent ? {
     name: q.q,
     acceptedAnswer: { "@type": "Answer", text: q.a },
   })),
+} : null;
+
+// ── How It Works ────────────────────────────────────────────
+const hiwContent = canonical === "how-it-works" ? await loadHowItWorksContent(locale) : null;
+const hiwHowToSchema = hiwContent ? {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: hiwContent.meta.title,
+  description: hiwContent.meta.description,
+  inLanguage: locale,
+  step: hiwContent.steps.map((s, i) => ({
+    "@type": "HowToStep",
+    position: i + 1,
+    name: s.title,
+    text: s.body,
+  })),
+} : null;
+const hiwBreadcrumbSchema = hiwContent ? {
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
+    { "@type": "ListItem", position: 2, name: "How it works", item: `${SITE}/${locale}/${slug}` },
+  ],
 } : null;
 
 // ── Methodology ─────────────────────────────────────────────
@@ -467,6 +492,21 @@ const faqBreadcrumbSchema = faqContent ? {
     <PredictionsFAQ locale={locale} content={hubContent.faq} />
 
     <PredictionsFinalCTA locale={locale} content={hubContent.finalCta} />
+  </MarketingLayout>
+)}
+
+{canonical === "how-it-works" && hiwContent && (
+  <MarketingLayout
+    title={hiwContent.meta.title}
+    description={hiwContent.meta.description}
+    canonicalPath="/how-it-works"
+  >
+    <Fragment slot="head">
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hiwHowToSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hiwBreadcrumbSchema)} />
+    </Fragment>
+
+    <HowItWorksPage locale={locale} content={hiwContent} />
   </MarketingLayout>
 )}
 
