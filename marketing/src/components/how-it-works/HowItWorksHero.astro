@@ -3,6 +3,8 @@ import Section from "@/components/ui/Section.astro";
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
+import StadiumLightArc from "@/components/ui/StadiumLightArc.astro";
 import type { IconName } from "@/components/ui/icon-types";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
@@ -18,12 +20,14 @@ const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale
 ---
 
 <Section
-  surface="dark-glow"
+  surface="dark-spotlight"
   spacing="md"
-  glow
   ariaLabelledby="hiw-hero-h1"
 >
-  <Container size="md" class="text-center">
+  <StadiumLightArc position="top-center" intensity="low" />
+  <GlowOrb size="xl" color="pitch-green" position="top-right" intensity="medium" blur={120} />
+
+  <Container size="md" class="relative z-10 text-center">
     {content.kicker && (
       <p class="mb-4 text-xs font-medium uppercase tracking-[0.18em] text-pitch-green-500">
         {content.kicker}

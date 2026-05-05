@@ -10,6 +10,8 @@ import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
 import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
+import StadiumLightArc from "@/components/ui/StadiumLightArc.astro";
 import type { IconName } from "@/components/ui/icon-types";
 import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
@@ -24,14 +26,12 @@ const { content } = Astro.props;
 ---
 
 <Section surface="conversion" spacing="xl" ariaLabelledby="final-cta-h2">
-  <!-- Background pitch-green glow centered -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]"
-    style="background: radial-gradient(circle, rgba(0,210,106,0.45) 0%, rgba(0,210,106,0) 70%);"
-  ></div>
+  <!-- Stadium light arc — climactic close, sport-DNA via floodlight beam -->
+  <StadiumLightArc position="top-center" intensity="medium" color="pitch-green" />
+  <!-- Centered glow for warmth -->
+  <GlowOrb size="xl" color="pitch-green" position="center" intensity="low" blur={150} />
 
-  <Container size="md" class="relative">
+  <Container size="md" class="relative z-10">
     <div class="text-center">
       <h2
         id="final-cta-h2"

@@ -1,0 +1,65 @@
+---
+/**
+ * SectionTransition — soft gradient bridge between adjacent sections
+ * with different surfaces (dark ↔ light). Eliminates the hard edge
+ * a flat colour switch produces, so the page reads as one canvas.
+ *
+ * Place between `<Section>` instances in pages/index.astro. Default
+ * height of 120px is enough to feel like a transition without eating
+ * vertical rhythm. On very narrow viewports (<480px) the height
+ * scales to 80px to keep the page from feeling too "spaced out".
+ */
+type Surface = "dark" | "light";
+
+interface Props {
+  from?: Surface;
+  to?: Surface;
+  /** Strip height in pixels. Default 120. */
+  height?: number;
+  class?: string;
+}
+
+const {
+  from = "dark",
+  to = "light",
+  height = 120,
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const SURFACE_HEX: Record<Surface, string> = {
+  dark: "#0a0e1f",
+  light: "#fafaf9",
+};
+---
+
+<div
+  class:list={["section-transition", extraClass]}
+  style={`
+    --from-color: ${SURFACE_HEX[from]};
+    --to-color: ${SURFACE_HEX[to]};
+    height: ${height}px;
+  `}
+  aria-hidden="true"
+></div>
+
+<style>
+  .section-transition {
+    width: 100%;
+    background: linear-gradient(
+      180deg,
+      var(--from-color) 0%,
+      var(--from-color) 10%,
+      var(--to-color)   90%,
+      var(--to-color)   100%
+    );
+    /* Negative margins prevent sub-pixel hairline gaps between the
+       transition strip and the adjacent section. */
+    margin-top: -1px;
+    margin-bottom: -1px;
+    pointer-events: none;
+  }
+
+  @media (max-width: 480px) {
+    .section-transition { height: 80px !important; }
+  }
+</style>

@@ -29,10 +29,16 @@ type Surface =
   | "light"
   | "light-soft"
   | "light-grid"
+  | "light-warm"
+  | "light-clean"
   | "dark"
   | "dark-glow"
   | "dark-corner-accent"
   | "dark-charcoal"
+  | "dark-spotlight"
+  | "dark-glow-left"
+  | "dark-glow-right"
+  | "dark-dual-glow"
   | "hero"
   | "conversion";
 type Spacing = "sm" | "md" | "lg" | "xl";
@@ -63,10 +69,16 @@ const surfaceClasses: Record<Surface, string> = {
   light:               "bg-stadium-white-50 text-charcoal-900",
   "light-soft":        "section-light-soft text-charcoal-900",
   "light-grid":        "section-light-grid text-charcoal-900",
+  "light-warm":        "section-light-warm text-charcoal-900",
+  "light-clean":       "section-light-clean text-charcoal-900",
   dark:                "bg-deep-navy-900 text-white-soft",
   "dark-glow":         "section-dark-glow text-white-soft",
   "dark-corner-accent":"section-dark-corner-accent text-white-soft",
   "dark-charcoal":     "section-dark-charcoal text-white-soft",
+  "dark-spotlight":    "section-dark-spotlight text-white-soft",
+  "dark-glow-left":    "section-dark-glow-left text-white-soft",
+  "dark-glow-right":   "section-dark-glow-right text-white-soft",
+  "dark-dual-glow":    "section-dark-dual-glow text-white-soft",
   hero:                "text-white-soft [background:var(--gradient-hero-dark)]",
   conversion:          "text-white-soft [background:var(--gradient-conversion)]",
 };
@@ -110,13 +122,13 @@ const cls = [
     background-image: var(--pattern-section-grid-light);
     background-size: 40px 40px;
   }
-  .section-dark-glow {
-    background: var(--gradient-section-glow);
-  }
-  .section-dark-corner-accent {
-    background: var(--gradient-section-corner-accent);
-  }
-  .section-dark-charcoal {
-    background: var(--gradient-section-charcoal);
-  }
+  .section-light-warm    { background: var(--gradient-section-light-warm); }
+  .section-light-clean   { background: var(--gradient-section-light-clean); }
+  .section-dark-glow     { background: var(--gradient-section-glow); }
+  .section-dark-corner-accent { background: var(--gradient-section-corner-accent); }
+  .section-dark-charcoal { background: var(--gradient-section-charcoal); }
+  .section-dark-spotlight  { background: var(--gradient-section-spotlight); }
+  .section-dark-glow-left  { background: var(--gradient-section-glow-left); }
+  .section-dark-glow-right { background: var(--gradient-section-glow-right); }
+  .section-dark-dual-glow  { background: var(--gradient-section-dual-glow); }
 </style>

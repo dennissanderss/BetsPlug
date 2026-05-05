@@ -1,0 +1,74 @@
+---
+/**
+ * StadiumLightArc — soft elliptical glow at the top of a section that
+ * suggests a floodlight beam without ever drawing literal stadium
+ * imagery. Works on dark surfaces only — on light surfaces the
+ * brightness has nowhere to fall.
+ *
+ * Use sparingly: one per section, only on heroes, conversion sections,
+ * and the final-CTA strip. Multiple stacked arcs read as confused
+ * decoration rather than atmospheric depth.
+ */
+type Position  = "top-left" | "top-right" | "top-center";
+type Intensity = "low" | "medium";
+type Color     = "pitch-green" | "white";
+
+interface Props {
+  position?: Position;
+  intensity?: Intensity;
+  color?: Color;
+  class?: string;
+}
+
+const {
+  position = "top-center",
+  intensity = "low",
+  color = "pitch-green",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const OPACITY: Record<Intensity, number> = { low: 0.06, medium: 0.12 };
+const COLOR_RGB: Record<Color, string> = {
+  "pitch-green": "0, 210, 106",
+  "white":       "255, 255, 255",
+};
+
+// Off-axis arcs translate up-and-out and rotate to suggest a beam
+// hitting from a side. Center stays head-on.
+const TRANSFORM: Record<Position, string> = {
+  "top-left":   "translateX(-30%) translateY(-30%) rotate(-25deg)",
+  "top-right":  "translateX(30%)  translateY(-30%) rotate(25deg)",
+  "top-center": "translateX(-50%) translateY(-30%)",
+};
+
+const cls = ["stadium-light", extraClass].filter(Boolean).join(" ");
+---
+
+<div
+  class={cls}
+  style={`
+    --arc-rgb: ${COLOR_RGB[color]};
+    --arc-opacity: ${OPACITY[intensity]};
+    transform: ${TRANSFORM[position]};
+  `}
+  aria-hidden="true"
+></div>
+
+<style>
+  .stadium-light {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 120%;
+    height: 80%;
+    background: radial-gradient(
+      ellipse 60% 100% at 50% 0%,
+      rgba(var(--arc-rgb), var(--arc-opacity))                        0%,
+      rgba(var(--arc-rgb), calc(var(--arc-opacity) * 0.4))            30%,
+      transparent                                                     70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    transform-origin: top center;
+  }
+</style>

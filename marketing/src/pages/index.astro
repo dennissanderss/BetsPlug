@@ -25,6 +25,7 @@ import ComparisonTable         from "@/components/homepage/ComparisonTable.astro
 import PricingTeaser           from "@/components/homepage/PricingTeaser.astro";
 import HomepageFAQ             from "@/components/homepage/HomepageFAQ.astro";
 import FinalCTA                from "@/components/homepage/FinalCTA.astro";
+import SectionTransition       from "@/components/ui/SectionTransition.astro";
 
 const locale: Locale = defaultLocale;
 const content = await getContent<HomepageContent>("homepage", locale);
@@ -105,13 +106,30 @@ const breadcrumbSchema = {
     <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   </Fragment>
 
+  {/* Section ritme: Hero=dark → HowItWorks=light → Live=dark → Methodology=dark
+      → TrackRecord=light → Comparison=light → Pricing=dark → FAQ=light → FinalCTA=dark.
+      SectionTransition strips bridge dark↔light boundaries so the page reads as
+      one canvas. Same-surface boundaries (e.g. dark→dark) get no strip. */}
+
   <Hero                   locale={locale} content={content.hero} />
+  <SectionTransition from="dark" to="light" />
+
   <HowItWorks             locale={locale} content={content.howItWorks} />
+  <SectionTransition from="light" to="dark" />
+
   <LivePredictionsPreview locale={locale} content={content.livePredictions} />
   <MethodologyHighlight   locale={locale} content={content.methodology} />
+  <SectionTransition from="dark" to="light" />
+
   <TrackRecordProof       locale={locale} content={content.trackRecord} />
   <ComparisonTable        locale={locale} content={content.comparison} />
+  <SectionTransition from="light" to="dark" />
+
   <PricingTeaser          locale={locale} content={content.pricing} />
+  <SectionTransition from="dark" to="light" />
+
   <HomepageFAQ            locale={locale} content={content.faq} />
+  <SectionTransition from="light" to="dark" />
+
   <FinalCTA               content={content.finalCta} />
 </MarketingLayout>

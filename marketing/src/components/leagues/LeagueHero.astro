@@ -8,8 +8,10 @@
  */
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
-import PitchLinePattern from "@/components/ui/PitchLinePattern.astro";
 import ScoreNumber from "@/components/ui/ScoreNumber.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
+import StadiumLightArc from "@/components/ui/StadiumLightArc.astro";
+import AccentGrid from "@/components/ui/AccentGrid.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import type { LeagueConfig } from "@/config/leagues";
 import { leagueLogoUrl } from "@/config/leagues";
@@ -41,25 +43,27 @@ const trustStripWeek = content.trustStripPredictionsThisWeek.replace(
 ---
 
 <section
-  class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[35vh] py-14 md:py-20"
+  class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[35vh] py-14 md:py-20 isolate"
   aria-labelledby="league-hero-h1"
 >
-  <!-- League-color accent gradient -->
+  <!-- Atmospheric base mesh -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 pointer-events-none"
+    style="background: var(--gradient-hero-atmospheric);"
+  ></div>
+  <!-- League-color accent gradient over the base — keeps the per-league brand tint -->
   <div
     aria-hidden="true"
     class="absolute inset-0 pointer-events-none"
     style={`background: linear-gradient(135deg, ${league.primaryColor}22 0%, transparent 60%);`}
   ></div>
-  <!-- Standard hero gradient overlay -->
-  <div
-    aria-hidden="true"
-    class="absolute inset-0 pointer-events-none opacity-80"
-    style="background: var(--gradient-hero-dark);"
-  ></div>
-  <!-- Pitch-line pattern (bold — sport surface) -->
-  <PitchLinePattern variant="bold" position="full" />
+  <StadiumLightArc position="top-center" intensity="medium" />
+  <GlowOrb size="xl" color="pitch-green" position="top-right"   intensity="medium" blur={120} />
+  <GlowOrb size="md" color="navy"        position="bottom-left" intensity="medium" blur={100} />
+  <AccentGrid variant="subtle" position="top-right" fade />
 
-  <Container size="xl" class="relative">
+  <Container size="xl" class="relative z-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
       <!-- Copy (60%) -->
       <div class="lg:col-span-7">

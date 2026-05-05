@@ -8,6 +8,7 @@
  */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
+import AccentGrid from "@/components/ui/AccentGrid.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
@@ -22,7 +23,8 @@ const { locale, content } = Astro.props;
 const ctaHref = getLocalizedPath(content.cta.canonical, locale);
 ---
 
-<Section surface="light-soft" spacing="lg" ariaLabelledby="how-it-works-h2">
+<Section surface="light-warm" spacing="lg" ariaLabelledby="how-it-works-h2">
+  <AccentGrid variant="subtle" position="top-right" fade color="charcoal" />
   <Container size="lg">
     <header class="text-center max-w-2xl mx-auto">
       <h2

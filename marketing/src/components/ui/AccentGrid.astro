@@ -1,0 +1,120 @@
+---
+/**
+ * AccentGrid — abstract dot-grid texture for tech/SaaS aesthetic. Not
+ * sport-iconography; reads as a Linear/Vercel-style geometric texture.
+ * Works on both dark and light surfaces (white dots blend onto either
+ * via low opacity).
+ *
+ * Position controls where the grid lives within its container; `fade`
+ * applies a radial mask so the grid bleeds out at the far edge instead
+ * of cutting hard. Default is `top-right` with fade — the standard
+ * placement on hero/section corners.
+ */
+type Variant  = "subtle" | "medium";
+type Position = "full" | "top-right" | "bottom-left" | "right";
+type Color    = "white" | "charcoal";
+
+interface Props {
+  variant?: Variant;
+  position?: Position;
+  /** Apply a radial/linear mask so the grid fades at the far edge. */
+  fade?: boolean;
+  /** Dot colour. Default white — fits dark surfaces. Use "charcoal"
+   *  on light surfaces. */
+  color?: Color;
+  class?: string;
+}
+
+const {
+  variant = "subtle",
+  position = "top-right",
+  fade = true,
+  color = "white",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const OPACITY: Record<Variant, number> = { subtle: 0.06, medium: 0.10 };
+const COLOR: Record<Color, string> = {
+  white: "white",
+  charcoal: "#0f1419",
+};
+
+const opacity = OPACITY[variant];
+const fillColor = COLOR[color];
+const patternId = `accent-grid-${variant}-${color}`;
+---
+
+<svg
+  class:list={[
+    "accent-grid",
+    `accent-grid--${position}`,
+    fade && "accent-grid--fade",
+    extraClass,
+  ]}
+  xmlns="http://www.w3.org/2000/svg"
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+>
+  <defs>
+    <pattern
+      id={patternId}
+      x="0" y="0" width="40" height="40"
+      patternUnits="userSpaceOnUse"
+    >
+      <circle cx="2" cy="2" r="1.5" fill={fillColor} opacity={opacity} />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+</svg>
+
+<style>
+  .accent-grid {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .accent-grid--full {
+    inset: 0;
+  }
+
+  .accent-grid--top-right {
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 60%;
+  }
+
+  .accent-grid--bottom-left {
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 60%;
+  }
+
+  .accent-grid--right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+  }
+
+  /* Fade masks — bleed the grid out at the far edge so the rectangle
+     never has a visible hard cut. */
+  .accent-grid--fade.accent-grid--top-right {
+    -webkit-mask-image: radial-gradient(ellipse at top right, black 0%, transparent 70%);
+            mask-image: radial-gradient(ellipse at top right, black 0%, transparent 70%);
+  }
+  .accent-grid--fade.accent-grid--bottom-left {
+    -webkit-mask-image: radial-gradient(ellipse at bottom left, black 0%, transparent 70%);
+            mask-image: radial-gradient(ellipse at bottom left, black 0%, transparent 70%);
+  }
+  .accent-grid--fade.accent-grid--right {
+    -webkit-mask-image: linear-gradient(to left, black 0%, transparent 100%);
+            mask-image: linear-gradient(to left, black 0%, transparent 100%);
+  }
+  .accent-grid--fade.accent-grid--full {
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+  }
+</style>

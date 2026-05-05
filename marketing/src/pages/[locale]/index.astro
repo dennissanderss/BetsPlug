@@ -19,6 +19,7 @@ import type { HomepageContent } from "@/content/pages/homepage/types";
 
 import Hero                    from "@/components/homepage/Hero.astro";
 import HowItWorks              from "@/components/homepage/HowItWorks.astro";
+import SectionTransition       from "@/components/ui/SectionTransition.astro";
 import LivePredictionsPreview  from "@/components/homepage/LivePredictionsPreview.astro";
 import MethodologyHighlight    from "@/components/homepage/MethodologyHighlight.astro";
 import TrackRecordProof        from "@/components/homepage/TrackRecordProof.astro";
@@ -89,12 +90,24 @@ const breadcrumbSchema = {
   </Fragment>
 
   <Hero                   locale={locale} content={content.hero} />
+  <SectionTransition from="dark" to="light" />
+
   <HowItWorks             locale={locale} content={content.howItWorks} />
+  <SectionTransition from="light" to="dark" />
+
   <LivePredictionsPreview locale={locale} content={content.livePredictions} />
   <MethodologyHighlight   locale={locale} content={content.methodology} />
+  <SectionTransition from="dark" to="light" />
+
   <TrackRecordProof       locale={locale} content={content.trackRecord} />
   <ComparisonTable        locale={locale} content={content.comparison} />
+  <SectionTransition from="light" to="dark" />
+
   <PricingTeaser          locale={locale} content={content.pricing} />
+  <SectionTransition from="dark" to="light" />
+
   <HomepageFAQ            locale={locale} content={content.faq} />
+  <SectionTransition from="light" to="dark" />
+
   <FinalCTA               content={content.finalCta} />
 </MarketingLayout>

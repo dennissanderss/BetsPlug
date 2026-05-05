@@ -6,9 +6,9 @@ interface Props { content: TelegramContent["hero"] }
 const { content } = Astro.props;
 ---
 
-<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[50vh] py-16 md:py-24" aria-labelledby="telegram-hero-h1">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-dark);"></div>
-  <!-- Telegram-blue accent glow -->
+<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[50vh] py-16 md:py-24 isolate" aria-labelledby="telegram-hero-h1">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-atmospheric);"></div>
+  <!-- Telegram-blue accent glow (intentionally not pitch-green here — telegram brand context) -->
   <div aria-hidden="true" class="pointer-events-none absolute -top-20 right-[-10%] h-[480px] w-[480px] rounded-full opacity-30 blur-[100px]" style="background: radial-gradient(circle, rgba(0,136,204,0.40) 0%, rgba(0,136,204,0) 70%);"></div>
 
   <Container size="md" class="relative text-center">

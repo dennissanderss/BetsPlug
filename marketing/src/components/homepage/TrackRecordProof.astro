@@ -9,6 +9,7 @@
  */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
@@ -40,7 +41,9 @@ const colorMap: Record<number, string> = {
 };
 ---
 
-<Section surface="light-grid" spacing="lg" ariaLabelledby="track-record-h2">
+<Section surface="light-warm" spacing="lg" ariaLabelledby="track-record-h2">
+  <GlowOrb size="lg" color="pitch-green" position="top-left"     intensity="low" blur={120} />
+  <GlowOrb size="md" color="pitch-green" position="bottom-right" intensity="low" blur={100} />
   <Container size="md">
     <div class="text-center">
       <h2

@@ -1,6 +1,7 @@
 ---
 import Container from "@/components/ui/Container.astro";
-import PitchLinePattern from "@/components/ui/PitchLinePattern.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
+import StadiumLightArc from "@/components/ui/StadiumLightArc.astro";
 import { parseAccent } from "@/lib/parseAccent";
 import type { FAQContent } from "@/content/pages/faq/types";
 
@@ -8,11 +9,12 @@ interface Props { content: FAQContent["hero"] }
 const { content } = Astro.props;
 ---
 
-<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[25vh] py-12 md:py-16" aria-labelledby="faq-hero-h1">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-dark);"></div>
-  <PitchLinePattern variant="subtle" position="full" />
+<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[25vh] py-12 md:py-16 isolate" aria-labelledby="faq-hero-h1">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-atmospheric);"></div>
+  <StadiumLightArc position="top-center" intensity="low" />
+  <GlowOrb size="lg" color="pitch-green" position="top-right" intensity="low" blur={120} />
 
-  <Container size="md" class="relative text-center">
+  <Container size="md" class="relative z-10 text-center">
     <h1 id="faq-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white-pure" set:html={parseAccent(content.h1)}></h1>
     <p class="mt-4 text-base sm:text-lg leading-relaxed text-white-soft max-w-2xl mx-auto">{content.subheadline}</p>
   </Container>

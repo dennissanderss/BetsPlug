@@ -1,0 +1,115 @@
+---
+/**
+ * GlowOrb — soft radial glow blob used as an atmospheric layer
+ * inside dark/light sections. Adds depth without competing with
+ * content. Animation is a 12-second drift (translate + slight scale)
+ * that respects prefers-reduced-motion.
+ *
+ * Place inside any element with `position: relative` (or `isolate`).
+ * Render-order matters: orbs go behind the content's stacking
+ * context — wrap the section's actual copy in a higher z-index
+ * container.
+ */
+type Size      = "sm" | "md" | "lg" | "xl";
+type Color     = "pitch-green" | "navy" | "subtle";
+type Position  = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "center";
+type Intensity = "low" | "medium" | "high";
+
+interface Props {
+  size?: Size;
+  color?: Color;
+  position?: Position;
+  intensity?: Intensity;
+  /** Blur radius in pixels — higher = softer. Default 100. */
+  blur?: number;
+  /** Disable the slow drift animation for this instance. */
+  staticOrb?: boolean;
+  class?: string;
+}
+
+const {
+  size = "lg",
+  color = "pitch-green",
+  position = "top-right",
+  intensity = "medium",
+  blur = 100,
+  staticOrb = false,
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const SIZE: Record<Size, number> = { sm: 200, md: 400, lg: 600, xl: 900 };
+const OPACITY: Record<Intensity, number> = { low: 0.05, medium: 0.10, high: 0.18 };
+const COLOR_RGB: Record<Color, string> = {
+  "pitch-green": "0, 210, 106",
+  "navy":        "31, 41, 78",
+  "subtle":      "255, 255, 255",
+};
+
+const orbSize = SIZE[size];
+const orbOpacity = OPACITY[intensity];
+const orbRgb = COLOR_RGB[color];
+
+// Position styles — keep orbs slightly off-canvas so the bright core
+// peeks in without ever centering an obvious circle on screen.
+const POSITION_STYLE: Record<Position, string> = {
+  "top-left":     "top: -10%; left: -10%;",
+  "top-right":    "top: -10%; right: -10%;",
+  "bottom-left":  "bottom: -10%; left: -10%;",
+  "bottom-right": "bottom: -10%; right: -10%;",
+  "center":       "top: 50%; left: 50%; transform: translate(-50%, -50%);",
+};
+
+const cls = ["glow-orb", staticOrb && "glow-orb--static", extraClass]
+  .filter(Boolean).join(" ");
+
+const styleString = `
+  --orb-size: ${orbSize}px;
+  --orb-rgb: ${orbRgb};
+  --orb-opacity: ${orbOpacity};
+  --orb-blur: ${blur}px;
+  ${POSITION_STYLE[position]}
+`;
+---
+
+<div class={cls} style={styleString} aria-hidden="true"></div>
+
+<style>
+  .glow-orb {
+    position: absolute;
+    width: var(--orb-size);
+    height: var(--orb-size);
+    background: radial-gradient(
+      circle,
+      rgba(var(--orb-rgb), var(--orb-opacity)) 0%,
+      transparent 70%
+    );
+    filter: blur(var(--orb-blur));
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform, opacity;
+    animation: orb-drift 12s ease-in-out infinite;
+  }
+
+  /* Center-positioned orbs need to keep the translate(-50%, -50%) in
+     place across the drift animation — override animation with a
+     center-aware variant. */
+  .glow-orb[style*="translate(-50%, -50%)"] {
+    animation: orb-drift-center 14s ease-in-out infinite;
+  }
+
+  .glow-orb--static { animation: none !important; }
+
+  @keyframes orb-drift {
+    0%, 100% { transform: translate(0, 0) scale(1);     opacity: 1; }
+    50%      { transform: translate(20px, -20px) scale(1.05); opacity: 0.85; }
+  }
+
+  @keyframes orb-drift-center {
+    0%, 100% { transform: translate(-50%, -50%) scale(1);     opacity: 1; }
+    50%      { transform: translate(-50%, -50%) scale(1.05);  opacity: 0.85; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glow-orb { animation: none; }
+  }
+</style>

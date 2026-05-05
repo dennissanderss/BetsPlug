@@ -11,7 +11,9 @@
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
-import PitchLinePattern from "@/components/ui/PitchLinePattern.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
+import StadiumLightArc from "@/components/ui/StadiumLightArc.astro";
+import AccentGrid from "@/components/ui/AccentGrid.astro";
 import type { IconName } from "@/components/ui/icon-types";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
@@ -109,29 +111,29 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
 ---
 
 <section
-  class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft
+  class="hero-atmospheric relative w-full overflow-hidden bg-deep-navy-900 text-white-soft
          min-h-[80vh] md:min-h-[640px] lg:min-h-[100vh]
-         flex items-center"
+         flex items-center isolate"
   aria-labelledby="hero-h1"
 >
-  <!-- Background — radial gradient + pitch-line pattern -->
+  <!-- Layer 1: Atmospheric multi-radial base -->
   <div
     aria-hidden="true"
     class="absolute inset-0 pointer-events-none"
-    style="background: var(--gradient-hero-dark);"
+    style="background: var(--gradient-hero-atmospheric);"
   ></div>
 
-  <!-- Sport-DNA pitch-line pattern (subtle on landing surface) -->
-  <PitchLinePattern variant="subtle" position="full" />
+  <!-- Layer 2: Stadium light arc — subtle floodlight beam from top -->
+  <StadiumLightArc position="top-center" intensity="low" color="pitch-green" />
 
-  <!-- Ambient pitch-green glow (top right) -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute -top-20 right-[-12%] h-[560px] w-[560px] rounded-full opacity-50 blur-[100px]"
-    style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"
-  ></div>
+  <!-- Layer 3: Glow orbs for depth -->
+  <GlowOrb size="xl" color="pitch-green" position="top-right"   intensity="medium" blur={120} />
+  <GlowOrb size="lg" color="navy"        position="bottom-left" intensity="medium" blur={100} />
 
-  <Container size="xl" class="relative py-16 md:py-24">
+  <!-- Layer 4: Accent dot grid in top-right corner with fade -->
+  <AccentGrid variant="subtle" position="top-right" fade />
+
+  <Container size="xl" class="relative z-10 py-16 md:py-24">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
       <!-- Content (60%) -->
       <div class="lg:col-span-7">

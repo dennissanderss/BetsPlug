@@ -2,7 +2,9 @@
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
-import PitchLinePattern from "@/components/ui/PitchLinePattern.astro";
+import GlowOrb from "@/components/ui/GlowOrb.astro";
+import StadiumLightArc from "@/components/ui/StadiumLightArc.astro";
+import AccentGrid from "@/components/ui/AccentGrid.astro";
 import type { IconName } from "@/components/ui/icon-types";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
@@ -19,12 +21,14 @@ const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
 const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
 ---
 
-<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[40vh] py-16 md:py-20" aria-labelledby="methodology-hero-h1">
-  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-dark);"></div>
-  <PitchLinePattern variant="medium" position="full" />
-  <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-[-10%] h-[480px] w-[480px] rounded-full opacity-40 blur-[100px]" style="background: radial-gradient(circle, rgba(0,210,106,0.40) 0%, rgba(0,210,106,0) 70%);"></div>
+<section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[40vh] py-16 md:py-20 isolate" aria-labelledby="methodology-hero-h1">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-atmospheric);"></div>
+  <StadiumLightArc position="top-center" intensity="low" />
+  <GlowOrb size="xl" color="pitch-green" position="top-right" intensity="medium" blur={120} />
+  <GlowOrb size="md" color="navy"        position="bottom-left" intensity="medium" blur={100} />
+  <AccentGrid variant="subtle" position="top-right" fade />
 
-  <Container size="md" class="relative text-center">
+  <Container size="md" class="relative z-10 text-center">
     <h1 id="methodology-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl xl:text-[56px] font-bold leading-[1.05] tracking-tight text-white-pure" set:html={parseAccent(content.h1)}></h1>
     <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white-soft max-w-2xl mx-auto">
       {content.subheadline}
