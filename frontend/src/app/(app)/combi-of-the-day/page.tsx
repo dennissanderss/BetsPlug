@@ -124,7 +124,7 @@ export default function CombiOfTheDayPage() {
               Engine
             </p>
             <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              Combi of the Day
+              Combo of the Day
             </h1>
             <p className="mt-1 text-xs text-slate-500">
               3 legs · edge-filtered · live pre-match odds since 16 Apr 2026
