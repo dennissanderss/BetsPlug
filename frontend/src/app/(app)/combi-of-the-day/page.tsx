@@ -98,8 +98,13 @@ export default function CombiOfTheDayPage() {
           loading={statsQ.isLoading}
         />
 
-        {/* Recent history */}
-        <HistoryBlock items={history} loading={historyQ.isLoading} />
+        {/* Recent history — filter by current stats scope so the list
+            never shows Backtest combos on the Live tab and vice versa. */}
+        <HistoryBlock
+          items={history.filter((h) => h.is_live === (statsScope === "live"))}
+          loading={historyQ.isLoading}
+          scope={statsScope}
+        />
       </div>
     </div>
   );
@@ -429,9 +434,11 @@ function StatsBlock({
 function HistoryBlock({
   items,
   loading,
+  scope,
 }: {
   items: ComboHistoryItem[];
   loading: boolean;
+  scope: "backtest" | "live";
 }) {
   if (loading) {
     return (
@@ -449,10 +456,12 @@ function HistoryBlock({
     return (
       <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          Recent combos
+          Recent combos · {scope}
         </p>
         <p className="mt-2 text-sm text-slate-500">
-          No evaluated combos yet. Once today's combo finishes we'll log it here.
+          {scope === "live"
+            ? "No live combos yet — the engine starts logging from 16 Apr 2026 onwards."
+            : "No backtest combos in the current window."}
         </p>
       </div>
     );
@@ -461,7 +470,7 @@ function HistoryBlock({
     <div className="rounded-xl border border-white/[0.06] bg-white/[0.02]">
       <div className="flex items-center justify-between border-b border-white/[0.05] px-4 py-3">
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          Recent combos
+          Recent combos · <span className={scope === "live" ? "text-emerald-300" : "text-amber-300"}>{scope}</span>
         </p>
         <span className="text-[10px] tabular-nums text-slate-500">{items.length} shown</span>
       </div>

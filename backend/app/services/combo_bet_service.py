@@ -34,18 +34,22 @@ log = logging.getLogger(__name__)
 # this service has no incoming dependency on routes. Keep both in
 # sync; a unit test asserts equality.
 #
-# v2 tuning (2026-05-04): the original 3-leg / conf≥0.70 / odds≥1.40
-# selector was so strict it produced only 2 combos in 18 days of
-# Live data. Loosened to 2 legs / conf≥0.65 (Silver+) / odds≥1.30
-# so the engine fires more often. Combined odds now sit in the
-# ~1.7-3.5 sweet spot retail bettors actually play.
+# v3 tuning (2026-05-05): v2 was too lenient. Backtest +16.9% ROI
+# was acceptable but live -34% on n=9 showed selector was firing on
+# marginal edges that don't survive variance. Tightened to:
+#   - 2 legs (kept — drops to 1 are pure singles, drops to 3 reduce
+#     hit rate too fast)
+#   - conf ≥ 0.70 (Gold/Platinum only; Silver too noisy)
+#   - leg odds [1.40, 3.50] (skip super-favorites <1.40 and bombs >3.50)
+#   - min leg edge ≥ 0.04 (4% — skip marginal +0.5% edges)
+# Goal: weekly positive ROI on the live feed within 4-6 weeks.
 COMBO_LEG_COUNT = 2
-COMBO_MIN_CONFIDENCE = 0.65
-COMBO_MIN_LEG_ODDS = 1.30
-COMBO_MAX_LEG_ODDS = 4.00
+COMBO_MIN_CONFIDENCE = 0.70
+COMBO_MIN_LEG_ODDS = 1.40
+COMBO_MAX_LEG_ODDS = 3.50
+COMBO_MIN_LEG_EDGE = 0.04
 PLATINUM_TIER_BONUS = 1.3
-GOLD_TIER_BONUS = 1.1
-SILVER_TIER_BONUS = 1.0
+GOLD_TIER_BONUS = 1.0
 COMBO_LIVE_TRACKING_START = date(2026, 4, 16)
 
 
@@ -95,7 +99,7 @@ def select_combo_legs(preds: list[Prediction]) -> list[dict]:
         if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
             continue
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("silver", "gold", "platinum"):
+        if tier not in ("gold", "platinum"):
             continue
 
         odds_h = book.get("home")
@@ -114,12 +118,11 @@ def select_combo_legs(preds: list[Prediction]) -> list[dict]:
         except Exception:
             continue
         leg_edge = our_prob - fair_implied
-        if leg_edge <= 0:
+        if leg_edge < COMBO_MIN_LEG_EDGE:
             continue
         tier_bonus = (
             PLATINUM_TIER_BONUS if tier == "platinum"
-            else GOLD_TIER_BONUS if tier == "gold"
-            else SILVER_TIER_BONUS
+            else GOLD_TIER_BONUS
         )
         score = float(p.confidence or 0.0) * tier_bonus * (1.0 + leg_edge)
         candidates.append(

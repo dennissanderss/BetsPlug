@@ -807,17 +807,16 @@ async def get_backtest_proof(
 # the fly. A daily cron + dedicated combo_bets table follows in a later
 # pass once we have a few weeks of live data to evaluate.
 
-# v2 tuning (2026-05-04) — must mirror combo_bet_service.py.
-# 2 legs / conf≥0.65 / odds≥1.30 produces a much larger body than the
-# original 3-leg / conf≥0.70 / odds≥1.40 selector while keeping the
-# combined-odds sweet spot for retail bettors.
+# v3 tuning (2026-05-05) — must mirror combo_bet_service.py.
+# Tightened from v2 to chase positive weekly ROI on the live feed:
+# Gold/Platinum only, leg odds [1.40, 3.50], min edge per leg 4%.
 PLATINUM_TIER_BONUS = 1.3
-GOLD_TIER_BONUS = 1.1
-SILVER_TIER_BONUS = 1.0
+GOLD_TIER_BONUS = 1.0
 COMBO_LEG_COUNT = 2
-COMBO_MIN_CONFIDENCE = 0.65
-COMBO_MIN_LEG_ODDS = 1.30
-COMBO_MAX_LEG_ODDS = 4.00
+COMBO_MIN_CONFIDENCE = 0.70
+COMBO_MIN_LEG_ODDS = 1.40
+COMBO_MAX_LEG_ODDS = 3.50
+COMBO_MIN_LEG_EDGE = 0.04
 
 # Master kill-switch — Combi van de Dag is locked behind a "coming soon"
 # overlay until the product is fully validated against backtest + live
@@ -986,7 +985,7 @@ async def get_combo_of_the_day(
             continue
 
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("silver", "gold", "platinum"):
+        if tier not in ("gold", "platinum"):
             continue
 
         # Bookmaker-implied (raw 1/odds) and fair-implied (overround-removed)
@@ -1007,16 +1006,14 @@ async def get_combo_of_the_day(
             continue
 
         leg_edge = our_prob - fair_implied
-        if leg_edge <= 0:
-            # Combo bet leaning into a leg with negative edge dilutes the
-            # whole accumulator. Skip those — the combined-odds story only
-            # holds if every leg is at least neutral.
+        if leg_edge < COMBO_MIN_LEG_EDGE:
+            # v3: require ≥4% edge per leg — skip marginal +0.5% picks
+            # that don't survive variance once two legs multiply.
             continue
 
         tier_bonus = (
             PLATINUM_TIER_BONUS if tier == "platinum"
-            else GOLD_TIER_BONUS if tier == "gold"
-            else SILVER_TIER_BONUS
+            else GOLD_TIER_BONUS
         )
         score = float(p.confidence or 0.0) * tier_bonus * (1.0 + max(leg_edge, 0.0))
 
@@ -1222,7 +1219,7 @@ def _select_combo_legs_from_predictions(
         if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
             continue
         tier = _classify_tier(match.league_id, p.confidence)
-        if tier not in ("silver", "gold", "platinum"):
+        if tier not in ("gold", "platinum"):
             continue
         odds_h = book.get("home")
         odds_d = book.get("draw")
