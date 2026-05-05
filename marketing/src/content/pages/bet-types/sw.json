@@ -1,0 +1,416 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Aina za kamari za mpira wa miguu zimefafanuliwa: mwongozo kamili | BetsPlug",
+    "description": "Mwongozo kamili wa aina za kamari za mpira wa miguu: 1X2, BTTS, Over/Under, Asian Handicap, Bao halisi, na nyinginezo. Jinsi AI inavyotabiri kila aina ya soko.",
+    "ogImage": "/og-images/bet-types-en.jpg"
+  },
+  "hero": {
+    "h1": "Aina za kamari za mpira wa miguu: {{accent}}mwongozo kamili{{/accent}}",
+    "subheadline": "Kila soko kuu la kamari la mpira wa miguu limefafanuliwa: jinsi linavyofanya kazi, lini linaweza kutabirika, na jinsi BetsPlug AI inavyozalisha utabiri kwa kila moja. Hakuna malumbano."
+  },
+  "toc": {
+    "label": "Kwenye Ukurasa Huu",
+    "items": [
+      {
+        "id": "match-result",
+        "label": "Matokeo ya mechi (1X2)"
+      },
+      {
+        "id": "double-chance",
+        "label": "Nafasi mbili"
+      },
+      {
+        "id": "btts",
+        "label": "BTTS — Timu zote mbili kufunga"
+      },
+      {
+        "id": "over-under",
+        "label": "Over/Under (Zaidi/Chini ya mabao)"
+      },
+      {
+        "id": "asian-handicap",
+        "label": "Asian Handicap"
+      },
+      {
+        "id": "correct-score",
+        "label": "Bao halisi"
+      },
+      {
+        "id": "ht-ft",
+        "label": "Mwisho wa kipindi cha kwanza / Mwisho wa mechi"
+      },
+      {
+        "id": "draw-no-bet",
+        "label": "Suluhisho hakuna kamari"
+      },
+      {
+        "id": "coverage",
+        "label": "Ufuatiliaji kwa daraja"
+      }
+    ]
+  },
+  "sectionLabels": {
+    "howItWorks": "Jinsi Inavyofanya Kazi",
+    "whenPredictable": "Lini Soko Hili Linaweza Kutabirika",
+    "howBetsplugPredicts": "Jinsi BetsPlug Inavyotabiri Soko Hili",
+    "tips": "Vidokezo kwa Soko Hili",
+    "exampleTitle": "Mfano wa utabiri"
+  },
+  "betTypes": [
+    {
+      "id": "match-result",
+      "h2": "Matokeo ya mechi (1X2)",
+      "definition": "Kutabiri kama timu ya nyumbani inashinda (1), mechi inakuwa sare (X), au timu ya ugenini inashinda (2).",
+      "howItWorks": [
+        "1X2 ni soko la msingi zaidi la mpira wa miguu. Matokeo matatu yanayowezekana kwa kila mechi, na odds zinatolewa kwa kila moja. Soko linakamilika kulingana na matokeo baada ya dakika 90 pamoja na muda wa nyongeza. Muda wa ziada na penalti hazihesabu kwa 1X2 — hali za muda wa ziada zinatumika tu kwa masoko mahususi ya kombe la kupigwa-toa.",
+        "Odds za kila matokeo zinaakisi uwezekano unaomaanishwa wa bookmaker pamoja na ujira uliojengwa ndani. Mechi ya kawaida ya Premier League ina uwezekano unaomaanishwa unaofikia takribani 105% — ziada ya 5% ni faida ya bookmaker. Ili kushinda soko hili kwa muda mrefu, makadirio yako ya uwezekano yanahitaji kuwa sahihi zaidi kuliko ya soko, kwa kiasi cha kutosha kushinda ujira."
+      ],
+      "whenPredictable": [
+        "Masoko ya 1X2 yanaweza kutabirika zaidi pale tofauti ya Elo kati ya timu ni kubwa. Mwenyeji anayepigania ubingwa dhidi ya mgeni anayepigania kushuka daraja huzalisha mvuto dhahiri wa uwezekano ambao injini zinazotumia data zinaweza kuutumia. Derby zenye usawa wa karibu ni ngumu kitakwimu — kutokuwa na uhakika wa asili kunafunga usahihi wa utabiri.",
+        "Mechi za kombe, hasa mizunguko ya awali yenye vikosi vilivyozungushwa, ni ngumu zaidi kutabiri kuliko mechi za ligi. Mechi za mwisho wa wiki baada ya mapumziko ya kimataifa zinaleta kelele za ziada kutokana na kurudi kuchelewa na uchovu wa safari."
+      ],
+      "howBetsplugPredicts": [
+        "Utabiri wetu wa 1X2 unachanganya tofauti ya Elo, mwelekeo wa hivi karibuni wa xG, makadirio ya nguvu ya kikosi, na faida ya kihistoria ya nyumbani. Mfumo wa Poisson wa mabao huzalisha mgawanyo wa uwezekano juu ya bao, ambao kisha tunajumlisha katika uwezekano wa 1X2. Safu ya ML inarekebisha kwa muktadha: mechi za derby zinapata uvumilivu wa ziada wa kelele, mechi za kombe zinapata vikosi vilivyorekebishwa kwa mzunguko.",
+        "Matokeo ni asilimia moja ya uhakika kwa kila matokeo — kile tunachochapisha kwenye kadi ya utabiri. Wateja wa usajili wanaona uwezekano wote watatu (nyumbani/sare/ugenini)."
+      ],
+      "tips": [
+        "Linganisha uwezekano wa mfumo wako na uwezekano unaomaanishwa wa bookmaker. Tofauti ya 5%+ ndiyo kiwango cha kawaida cha kamari zenye thamani zinazostahili kuwekwa.",
+        "Epuka 1X2 katika mechi zisizo za kawaida: mechi zisizo na maana kabla ya mapumziko ya kimataifa, mechi za mwisho wa msimu zisizo na lolote la kupigania, mechi za kombe zenye mzunguko uliothibitishwa.",
+        "1X2 ni ngumu zaidi kutabiri kuliko Over/Under — muundo wa matokeo matatu unasambaza uwezekano kwa njia tofauti na masoko ya matokeo mawili.",
+        "Fuatilia usahihi wako kwa ligi. Baadhi ya ligi (Bundesliga, Premier League) zina data tajiri zaidi ya kihistoria na kuzalisha matokeo sahihi zaidi ya mfumo kuliko nyingine."
+      ],
+      "example": {
+        "homeTeam": "Manchester City",
+        "awayTeam": "Crystal Palace",
+        "league": "Premier League",
+        "prediction": "Ushindi wa Nyumbani",
+        "confidence": 71
+      }
+    },
+    {
+      "id": "double-chance",
+      "h2": "Nafasi mbili",
+      "definition": "Kufunika matokeo mawili kati ya matatu ya 1X2 kwa kamari moja. Aina: 1X (nyumbani au sare), X2 (sare au ugenini), 12 (nyumbani au ugenini — hakuna timu inayofunga sare).",
+      "howItWorks": [
+        "Nafasi mbili kimsingi ni 1X2 yenye kiwango cha usalama kilichojengwa ndani. Kwa kufunika matokeo mawili, unakubali odds za chini badala ya uwezekano wa juu wa kushinda. Matumizi ya kawaida: kuunga mkono timu yenye nguvu zaidi bila kufichuka kwa sare, au kulinda mgeni dhaifu wakati bado unapata faida ikiwa hawapotezi.",
+        "Kihisabati, odds za Nafasi mbili ni sawa na (1 / jumla ya uwezekano binafsi unaomaanishwa) toa ujira wa bookmaker. Timu yenye uwezekano wa 50% wa kushinda nyumbani na 25% wa sare ina nafasi halisi ya 75% ya \"nyumbani au sare\". Bookmaker hutoa odds zinazoakisi hii toa ujira wao (kwa kawaida 4-7%)."
+      ],
+      "whenPredictable": [
+        "Nafasi mbili inaweza kutabirika zaidi pale matokeo moja (kwa kawaida ushindi wa ugenini) yana uwezekano mdogo sana na mawili yaliyobaki yanaonekana kuwezekana kwa kiasi. Mechi za favorit mkali nyumbani mara nyingi huzalisha fursa nzuri sana za 1X — timu ya ugenini ina nafasi ndogo, hivyo nyumbani-au-sare inafunika matokeo karibu na uhakika.",
+        "Inaweza kutabirika kidogo katika mechi za njia tatu zenye usawa ambapo matokeo yote yana uwezekano sawa unaomaanishwa. Muundo wa soko unatoa makali kidogo katika hali hizi kwa sababu malipo ya odds ndogo yanalingana na hatari ndogo kwa usafi sana."
+      ],
+      "howBetsplugPredicts": [
+        "Uwezekano wa Nafasi mbili unatokana moja kwa moja kutoka mfumo wetu wa 1X2: P(1X) = P(ushindi wa nyumbani) + P(sare); P(X2) = P(sare) + P(ushindi wa ugenini); P(12) = P(ushindi wa nyumbani) + P(ushindi wa ugenini). Hakuna mfumo tofauti unaohitajika — hesabu ya msingi ya Poisson + ML inazalisha hii bure.",
+        "Tunaonyesha fursa za Nafasi mbili pale tofauti ya uwezekano unaomaanishwa ni kubwa zaidi — kwa kawaida favorit wakali wa nyumbani ambapo 1X inatoa usalama mkali wenye odds zinazofaa."
+      ],
+      "tips": [
+        "Nafasi mbili ina manufaa zaidi pale una uhakika wa wastani badala ya uhakika wa juu. Chaguo za uhakika wa juu kwa kawaida zinapaswa kwenda moja kwa moja kwenye 1X2.",
+        "Epuka odds za Nafasi mbili chini ya 1.20 — uwezekano unaomaanishwa ni mkubwa sana hivi kwamba ujira wa bookmaker unatawala thamani ya kutarajiwa ya kamari.",
+        "Inafaa kwa usimamizi wa hatari wakati unapomfuata mtoa-vidokezo ambaye hujampa imani kamili bado — kufunika sare kunalinda dhidi ya upendeleo wa matumaini wa mtoa-vidokezo.",
+        "Usitumie Nafasi mbili kuficha chaguo dhaifu. Odds zilizopunguzwa zinaakisi hatari iliyopunguzwa; uchambuzi mbaya haurekebishwi kwa kulinda."
+      ],
+      "example": {
+        "homeTeam": "Bayern Munich",
+        "awayTeam": "Augsburg",
+        "league": "Bundesliga",
+        "prediction": "1X (Nyumbani au Sare)",
+        "confidence": 86
+      }
+    },
+    {
+      "id": "btts",
+      "h2": "BTTS — Timu zote mbili kufunga",
+      "definition": "Inatabiri kama timu zote mbili zinafunga angalau bao moja kila moja wakati wa muda wa kawaida. Matokeo mawili: Ndiyo (zote mbili zinafunga) au Hapana (moja au zote mbili hazifungi).",
+      "howItWorks": [
+        "BTTS ni soko la binary lililorahisi zaidi ya 1X2 — matokeo mawili tu. Soko linakamilika kulingana na kama timu zote mbili za nyumbani NA ugenini zinafunga angalau mara moja wakati wa muda wa kawaida (dakika 90 pamoja na muda wa nyongeza). Muda wa ziada na penalti hazihesabu. Mabao ya mchezaji mwenyewe yanahesabiwa kwa timu iliyopewa bao.",
+        "BTTS ni mojawapo ya masoko mbadala maarufu zaidi kwa sababu ni rahisi kueleweka: \"je, timu zote mbili zitafunga, ndiyo au hapana?\" Ujira wa bookmaker kwenye BTTS kwa kawaida ni 4-6%, mdogo kidogo kuliko 1X2 kwa sababu muundo wa binary ni bora zaidi katika kuweka bei."
+      ],
+      "whenPredictable": [
+        "Masoko ya BTTS yanaweza kutabirika sana kwa kutumia mifumo ya takwimu kwa sababu yanapunguzwa hadi mgawanyo miwili dhahiri ya uwezekano. Ligi zenye mabao mengi kama Bundesliga na Eredivisie zina viwango vya BTTS Ndiyo karibu 55-60% kihistoria. Ligi za ulinzi kama Serie A kihistoria zilikuwa na viwango vya chini vya BTTS karibu 45-50%, ingawa Serie A ya kisasa imehama kuelekea mchezo wa wazi zaidi.",
+        "BTTS inaweza kutabirika zaidi pale timu moja ina shambulio kali NA ulinzi dhaifu (BTTS Ndiyo inawezekana) au shambulio dhaifu NA ulinzi kali (BTTS Hapana inawezekana). Mchanganyiko kama shambulio-bora-dhidi-ya-ulinzi-bora ni mgumu zaidi — usawa-kasoro huzalisha tofauti."
+      ],
+      "howBetsplugPredicts": [
+        "Mfumo wetu wa Poisson wa mabao unatoa moja kwa moja uwezekano wa BTTS. Tunahesabu mabao yanayotarajiwa (lambda) kwa timu zote mbili, kisha tunatoa uwezekano wa pamoja wa kila moja kufunga angalau mara moja. Marekebisho ya Dixon-Coles yanashughulikia hali za pekee (mechi zenye mabao machache ambapo Poisson safi inakadiria sare chini ya inavyostahili).",
+        "Mwelekeo wa hivi karibuni wa xG una uzito mkubwa — timu zilizo katika umbo la kushambulia huongeza uwezekano wa BTTS. Data ya kikosi pia ni muhimu: kutokuwepo kwa thibitisho kwa washambuliaji wakuu kunabadilisha utabiri wetu wa BTTS sana."
+      ],
+      "tips": [
+        "Angalia mfululizo wa kufunga wa timu zote mbili. BTTS Ndiyo inaaminika zaidi pale timu zote mbili zimefunga katika mechi 3+ za mfululizo.",
+        "Epuka BTTS katika mechi zisizo za kawaida: mechi za kombe zenye vikosi vilivyozungushwa, mechi za mwisho wa msimu zisizo na maana, mechi zilizoathiriwa na jukumu la hivi karibuni la kimataifa.",
+        "BTTS Ndiyo inahusiana na mbinu za shinikizo la juu; angalia umbo zinazotarajiwa.",
+        "Kuwa makini na masoko ya BTTS katika mechi zenye majeraha makubwa ya ulinzi — sampuli kwa hali hiyo mahususi ni ndogo, usahihi wa mfumo ni wa chini."
+      ],
+      "example": {
+        "homeTeam": "Borussia Dortmund",
+        "awayTeam": "Bayer Leverkusen",
+        "league": "Bundesliga",
+        "prediction": "BTTS Ndiyo",
+        "confidence": 74
+      }
+    },
+    {
+      "id": "over-under",
+      "h2": "Over/Under (Zaidi/Chini ya mabao)",
+      "definition": "Inatabiri kama jumla ya mabao iliyounganishwa itazidi au kuwa chini ya kiwango maalum. Mistari ya kawaida zaidi: 0.5, 1.5, 2.5, 3.5, 4.5.",
+      "howItWorks": [
+        "Bookmaker huweka kiwango cha bao (mfano 2.5). Over inashinda ikiwa mechi ina mabao 3 au zaidi; Under inashinda ikiwa mechi ina mabao 2 au pungufu. Kiwango cha sehemu cha 0.5 kinahakikisha mshindi — hakuna matokeo ya \"push\".",
+        "Over 2.5 ni mstari maarufu zaidi kwa sababu unakaa karibu na wastani wa ligi kwa mashindano makuu mengi. Mechi ya kawaida ya Premier League hupiga wastani wa mabao 2.7; Bundesliga huwa karibu 3.0; Serie A kihistoria ilikuwa na wastani wa 2.5; Serie A ya kisasa iko karibu na 2.7."
+      ],
+      "whenPredictable": [
+        "Masoko ya Over/Under ni ya kitakwimu sana — utumiaji wa moja kwa moja wa mgawanyo wa Poisson. Mifumo inaweza kutoa jumla za mabao zinazotarajiwa na uwezekano wa Over/Under kwa uaminifu mkubwa.",
+        "Inaweza kutabirika zaidi pale jumla za mabao zinazotarajiwa zinatofautiana sana na mstari. Mechi yenye mabao 3.4 yanayotarajiwa dhidi ya mstari wa Over/Under 2.5 ni ishara wazi zaidi kuliko mechi yenye mabao 2.6 yanayotarajiwa dhidi ya mstari huo huo.",
+        "Inaweza kutabirika kidogo katika mechi zenye usawa-kasoro mkubwa wa motisha — mechi zinazoamua ubingwa mara nyingi hutoa mwelekeo tofauti wa mabao kuliko ilivyotarajiwa kwa sababu mbinu zinabadilika katikati ya mechi."
+      ],
+      "howBetsplugPredicts": [
+        "Mfumo wetu wa Poisson huzalisha mgawanyo wa uwezekano juu ya jumla ya mabao. P(Over X) = jumla ya matokeo yote ya mechi yenye mabao ya nyumbani + ugenini makubwa zaidi ya X. Tunachapisha utabiri kwa mistari ya 0.5, 1.5, 2.5, na 3.5.",
+        "BetsPlug inajikita katika utabiri wa mstari wa 2.5 kwa sababu kitakwimu huu ndio mstari wenye habari zaidi kwa ligi nyingi. Wateja wa usajili wanaona vigezo vyote vinne vya kawaida; watumiaji wa bure wanaona mstari wa 2.5 tu pale ni chaguo letu lenye uhakika wa juu zaidi."
+      ],
+      "tips": [
+        "Linganisha mabao yanayotarajiwa (xG) na mstari. Tofauti kubwa (jumla ya xG > 3.0 dhidi ya mstari wa Over 2.5) ndiyo ishara kali zaidi.",
+        "Fuatilia wastani wa ligi. Wastani wa Premier League na Bundesliga hubadilika kwa muda; Serie A ya Italia imeelekea juu sana katika misimu ya hivi karibuni.",
+        "Mechi za kombe ni ngumu zaidi kutabiri — mzunguko na motisha husababisha mgawanyo wa Over/Under kupotoka kutoka kanuni za ligi.",
+        "Epuka masoko ya Over/Under ambapo hali ya hewa ni sababu kuu. Mvua kubwa au upepo hupunguza ubadilishaji wa risasi kwa njia ambazo mifumo mingi haichukuli kikamilifu."
+      ],
+      "example": {
+        "homeTeam": "Real Madrid",
+        "awayTeam": "Sevilla",
+        "league": "La Liga",
+        "prediction": "Over 2.5 Goals",
+        "confidence": 68
+      }
+    },
+    {
+      "id": "asian-handicap",
+      "h2": "Asian Handicap",
+      "definition": "Inaondoa matokeo ya sare kwa kutoa timu moja mwanzo wa kawaida (handicap). Handicap za nambari kamili zinaweza kusababisha push (kurudishiwa pesa); handicap za mstari wa nusu zinahakikisha mshindi.",
+      "howItWorks": [
+        "Asian Handicap iliendelezwa katika masoko ya kamari ya Asia na imeenea duniani kwa sababu ya usahihi wake. Handicap za kawaida: -0.5 (favorit lazima ashinde), -1.0 (favorit lazima ashinde kwa 2+; ushindi wa bao 1 ni push), -1.5 (favorit lazima ashinde kwa 2+), na handicap za robo kama -0.75 ambazo hugawa stake kati ya -0.5 na -1.0.",
+        "Handicap za robo kama -0.25 au +0.75 zinagawa stake yako. -0.25 inamaanisha nusu ya stake yako iko kwenye Suluhisho hakuna kamari (kurudishiwa ikiwa sare) na nusu iko kwa timu kushinda kabisa. Usahihi huu hufanya odds za Asian Handicap kuwa shindani zaidi kuliko mbadala wa 1X2 — ujira wa bookmaker ni 2-3% badala ya 5-7%."
+      ],
+      "whenPredictable": [
+        "Asian Handicap inaweza kutabirika zaidi katika mechi zenye favorit wazi. Tofauti kubwa ambapo favorit anatarajiwa kushinda kwa raha ndiyo inayofaa zaidi — handicap zinaakisi matarajio hayo katika mstari.",
+        "Inaweza kutabirika kidogo katika mechi zenye usawa ambapo mstari unakaa kwa 0 au +/-0.25. Soko kimsingi linakuwa 1X2 iliyoboreshwa yenye tofauti zinazofanana.",
+        "Inafaa zaidi kwa mechi za ligi kuliko za kombe kwa sababu ya mzunguko wa kikosi katika kombe."
+      ],
+      "howBetsplugPredicts": [
+        "Utabiri wetu wa Asian Handicap unatokana na mfumo huo huo wa Poisson + ML kama 1X2. Uwezekano wa kufunika handicap ya -1.5 ni uwezekano wa kushinda kwa mabao 2+, uliojumlishwa kutoka matrix ya uwezekano wa bao.",
+        "Tunachapisha utabiri wa Asian Handicap pale tu mfumo una uhakika wa juu — ujira mdogo wa bookmaker kwenye soko hili unamaanisha tofauti ndogo za uwezekano zinajalisha zaidi kwa kutambua thamani."
+      ],
+      "tips": [
+        "Asian Handicap ina manufaa zaidi kwa kuunga mkono favorit wakali kwa odds zilizoboreshwa — handicap inabadilisha malipo huku ikidumisha kiwango bora cha ushindi.",
+        "Handicap za robo zinapunguza tofauti — zinafaa pale huna uhakika kuhusu kiwango halisi lakini una uhakika wa mwelekeo.",
+        "Epuka Asian Handicap katika derby na mechi zenye hisia kali ambapo tofauti ya kiwango ni kubwa zaidi.",
+        "Bookmaker wenye ukali (Pinnacle, exchanges) hutoa mistari bora ya Asian Handicap kuliko bookmaker za burudani — ujira mdogo unajalisha zaidi kwenye soko hili kuliko kwenye 1X2."
+      ],
+      "example": {
+        "homeTeam": "Manchester City",
+        "awayTeam": "Brentford",
+        "league": "Premier League",
+        "prediction": "Man City -1.5",
+        "confidence": 62
+      }
+    },
+    {
+      "id": "correct-score",
+      "h2": "Bao halisi",
+      "definition": "Tabiri bao halisi la mwisho la mechi. Tofauti ya juu zaidi, odds za juu zaidi miongoni mwa masoko ya kawaida.",
+      "howItWorks": [
+        "Bao halisi hutoa odds kwa kila bao linaloweza kufikiwa la mwisho (kwa kawaida 0-0 hadi 5-4, wakati mwingine zaidi). Kila matokeo lina uwezekano mdogo binafsi — hata bao linaloweza zaidi katika mechi mara chache linazidi uwezekano wa 12% — hivyo odds ni ndefu kwa hali hiyo hiyo.",
+        "Ujira wa bookmaker kwenye Bao halisi kwa kawaida ni mkubwa zaidi kuliko masoko mengine (8-12%) kwa sababu matokeo mengi yenye uwezekano mdogo huwapa bookmaker nafasi zaidi ya kubadilisha mistari binafsi bila watumiaji kutambua."
+      ],
+      "whenPredictable": [
+        "Bao halisi kitakwimu ni soko gumu zaidi kutabiri. Asili tofauti ya kufunga mpira wa miguu pamoja na tofauti kubwa hufanya matokeo yoyote mahususi ya bao kuwa hayana uhakika kwa asili.",
+        "Kile KINACHOWEZA kutabiriwa ni kundi la mabao yanayowezekana. Mechi yenye mabao yanayotarajiwa 2.4 dhidi ya 0.9 ina uwezekano wake wa juu zaidi uliokusanywa karibu na mistari ya 2-0, 2-1, 1-0, na 3-0. Matrix ya uwezekano inaonyesha hii wazi.",
+        "Inafaa zaidi inapotumika kama portfolio — kufunika mabao 2-3 yanayowezekana badala ya kamari moja kwa matokeo moja yanayowezekana zaidi."
+      ],
+      "howBetsplugPredicts": [
+        "Mfumo wetu wa Poisson hutoa matrix kamili ya uwezekano kwa kila bao halisi linaloweza kufikiwa. Wateja wa usajili wanaona matrix hii moja kwa moja: kila kisanduku kinaonyesha uwezekano wa bao hilo halisi, na mabao yanayowezekana zaidi yameangaziwa.",
+        "Hatuchapishi \"utabiri wa Bao halisi\" mmoja kwa sababu hakuna bao moja ambalo kweli ni matokeo makuu. Wateja wa usajili wanaweza kutambua kundi la uwezekano wa juu zaidi na kuchagua mabao yapi ya kuunga mkono. Watumiaji wa bure wanaona bao linaloweza zaidi tu pale ni kundi dhahiri sana."
+      ],
+      "tips": [
+        "Usiweke kamari kwa Bao halisi moja — tofauti ni kubwa sana. Funika 2-3 kati ya mabao yanayowezekana zaidi kutoka matokeo ya mfumo.",
+        "Changanya Bao halisi na BTTS kwa kupunguza tofauti — kujua timu zote mbili zitafunga huondoa 0-0, 1-0, na 0-1 kutoka kuzingatia.",
+        "Fuatilia ni mistari gani ya Bao halisi bookmaker hubadilisha zaidi. Mabao yanayoonekana ya kawaida (1-1, 2-1) mara nyingi ni mafupi kuliko uwezekano wao wa mfumo; mabao yanayoonekana yasiyo ya kawaida (2-2, 3-2) mara nyingi ni marefu zaidi.",
+        "Epuka Bao halisi katika mechi zenye tofauti kubwa: mechi za kombe, mechi zilizoathiriwa na mzunguko, mechi za mwisho wa msimu zisizo na maana."
+      ],
+      "example": {
+        "homeTeam": "Bayern Munich",
+        "awayTeam": "Eintracht Frankfurt",
+        "league": "Bundesliga",
+        "prediction": "2-1 Bayern",
+        "confidence": 12
+      }
+    },
+    {
+      "id": "ht-ft",
+      "h2": "Mwisho wa kipindi cha kwanza / Mwisho wa mechi",
+      "definition": "Tabiri matokeo katika mwisho wa kipindi cha kwanza NA katika mwisho wa mechi. Mchanganyiko tisa wa matokeo unaowezekana (HW/HW, HW/D, HW/AW, D/HW, na kadhalika).",
+      "howItWorks": [
+        "HT/FT inahitaji kutabiri kwa usahihi kiongozi wa mwisho wa kipindi cha kwanza (au sare) NA kiongozi wa mwisho wa mechi. Maandishi: HW/HW inamaanisha nyumbani inaongoza katika mwisho wa kipindi cha kwanza na mwisho wa mechi; D/HW inamaanisha sare katika mwisho wa kipindi cha kwanza, ushindi wa nyumbani katika mwisho wa mechi; na kadhalika.",
+        "Odds kwa kawaida ni ndefu — muundo wa matokeo tisa husambaza uwezekano kwa upana. Hata mchanganyiko unaowezekana zaidi mara chache unazidi uwezekano wa 30%. Ujira wa bookmaker ni 6-10%, sawa na masoko mengine ya matokeo mengi."
+      ],
+      "whenPredictable": [
+        "HT/FT inaweza kutabirika zaidi kwa timu zenye favoritismo kubwa zinazotarajiwa kutawala kuanzia mwanzo. Mwenyeji anayepigania ubingwa dhidi ya wageni wanaopigania kushuka daraja mara nyingi huonyesha uwezekano wa HW/HW karibu 35-45%, ukitoa kamari ya matokeo moja inayofaa.",
+        "Inaweza kutabirika kidogo katika mechi ambapo kurudi nyuma ni jambo la kawaida. Baadhi ya ligi na mwelekeo wa mbinu huzalisha drama zaidi za kurudi nyuma kuliko nyingine.",
+        "Soko la kipekee lenye sampuli ndogo kuliko 1X2, hivyo urekebishaji wa mfumo ni dhaifu kidogo."
+      ],
+      "howBetsplugPredicts": [
+        "Tunatumia mfumo wa Poisson uliogawanywa: mabao ya HT yamemodelwa tofauti na mabao ya kipindi cha pili. Hii inazalisha uwezekano wa pamoja kwa kila mchanganyiko wa HT/FT. Lambda iliyogawanywa inazingatia mabadiliko ya kimbinu: timu zinazofuata uongozi hufunga tofauti katika vipindi vya pili kuliko katika vipindi vya kwanza.",
+        "Wateja wa usajili wanaona matrix ya 3x3 ya uwezekano wa HT/FT kwa kila mechi. Watumiaji wa bure kwa kawaida hawaoni utabiri wa HT/FT — utata wa soko unapendelea kina cha mteja wa usajili."
+      ],
+      "tips": [
+        "HT/FT ina tofauti ya juu — punguza hadi 5-10% ya kufuata kwako kwa utabiri.",
+        "Malengo bora: HW/HW au AW/AW kwa favorit wakubwa ambapo utawala unatarajiwa wakati wote.",
+        "Epuka D/HW au D/AW (utabiri wa kurudi nyuma) — kurudi nyuma ni jambo lisilotabirika kwa asili.",
+        "Inafaa kwa wenye kamari za kihisia ambao wanataka kamari za simulizi rahisi — lakini tofauti ni halisi."
+      ],
+      "example": {
+        "homeTeam": "Real Madrid",
+        "awayTeam": "Almeria",
+        "league": "La Liga",
+        "prediction": "Madrid HT/FT",
+        "confidence": 38
+      }
+    },
+    {
+      "id": "draw-no-bet",
+      "h2": "Suluhisho hakuna kamari",
+      "definition": "Inaondoa matokeo ya sare kutoka 1X2. Ikiwa mechi inakuwa sare, stake yako inarudishwa. Vinginevyo inakamilika kama chaguo la kawaida la mshindi wa 1X2.",
+      "howItWorks": [
+        "Suluhisho hakuna kamari (DNB) kimsingi ni Asian Handicap yenye mstari wa 0, lakini imewasilishwa kwa njia rahisi zaidi. Matokeo mawili yanalipa: ushindi wa nyumbani au ushindi wa ugenini. Sare inarudisha stake.",
+        "Odds za DNB ni za chini kidogo kuliko odds zinazolingana za 1X2 kwa sababu kurudisha kwa sare kwa ufanisi kunabadilisha uwezekano kwenda kwa timu uliyochagua. Ujira wa bookmaker kwa kawaida ni 4-5%, sawa na BTTS."
+      ],
+      "whenPredictable": [
+        "DNB ina manufaa zaidi pale una uhakika wa mwelekeo (timu hii ni bora zaidi) lakini huna uhakika kuhusu kama watashinda au kufunga sare. Kuunga mkono favorit kupitia DNB hulinda dhidi ya hali ya sare kwa gharama ya odds za chini kidogo.",
+        "Haina manufaa zaidi katika mechi ambapo sare ni isiyowezekana kitakwimu hata hivyo — ulinzi wa DNB unapotezwa, na odds za chini dhidi ya 1X2 zinawakilisha hasara safi ya thamani.",
+        "Inaweza kutabirika zaidi katika derby zenye usawa ambapo sare ni za uwezekano zaidi, hasa pale timu moja ina makali kidogo katika umbo au faida ya nyumbani."
+      ],
+      "howBetsplugPredicts": [
+        "Uwezekano wa DNB unatokana moja kwa moja kutoka mfumo wetu wa 1X2: P(Ushindi wa Nyumbani DNB) = P(ushindi wa nyumbani) / (P(ushindi wa nyumbani) + P(ushindi wa ugenini)), kwa masharti ya hakuna sare. Hesabu hiyo hiyo imegeuzwa kwa DNB ya ugenini.",
+        "Tunaonyesha fursa za DNB pale uwezekano wa sare ni wa juu kwa maana (juu ya 30%) NA tuna uhakika wa mwelekeo wazi. Katika mechi za upande mmoja zenye uwezekano mdogo wa sare, 1X2 ndiyo soko bora."
+      ],
+      "tips": [
+        "DNB ni bora zaidi kwa chaguo za uhakika wa wastani ambapo sare ni uwezekano halisi. Chaguo za mwelekeo zenye uhakika wa juu kwa kawaida zinapaswa kwenda moja kwa moja kwenye 1X2.",
+        "Linganisha odds za DNB na odds za Asian Handicap 0. Zinawakilisha kamari sawa kimuundo lakini bookmaker wakati mwingine hupanga bei tofauti.",
+        "Inafaa kwa kuunga mkono favorit wadogo katika mechi za ugenini zenye usawa — ulinzi dhidi ya sare bila kupoteza sana malipo yanayowezekana.",
+        "Usitumie DNB kurekebisha chaguo mbaya. Kurudisha kwa sare hakulipi kwa uchambuzi mbaya."
+      ],
+      "example": {
+        "homeTeam": "Arsenal",
+        "awayTeam": "Tottenham",
+        "league": "Premier League",
+        "prediction": "Arsenal DNB",
+        "confidence": 56
+      }
+    }
+  ],
+  "coverage": {
+    "h2": "Aina za kamari ambazo BetsPlug inazifuatilia",
+    "body": "Daraja la bure huonyesha chaguo lenye uhakika wa juu zaidi kwa kila mechi — kwa kawaida 1X2. Wateja wa malipo wanaona aina zote za masoko na uchambuzi kamili.",
+    "headers": {
+      "betType": "Aina ya Kamari",
+      "freeTier": "Daraja la Bure",
+      "paidTier": "Daraja la Malipo"
+    },
+    "rows": [
+      {
+        "betType": "1X2",
+        "free": true,
+        "paid": true
+      },
+      {
+        "betType": "Nafasi mbili",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "BTTS",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Over/Under 2.5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Over/Under 1.5/3.5",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Asian Handicap",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Bao halisi",
+        "free": false,
+        "paid": "matrix"
+      },
+      {
+        "betType": "HT/FT",
+        "free": false,
+        "paid": true
+      },
+      {
+        "betType": "Suluhisho hakuna kamari",
+        "free": false,
+        "paid": true
+      }
+    ],
+    "note": "Daraja la bure huonyesha chaguo lenye uhakika wa juu zaidi kwa kila mechi (kwa kawaida 1X2). Wateja wa malipo wanaona aina zote za masoko na uchambuzi kamili.",
+    "cta": {
+      "label": "Tazama Bei",
+      "canonical": "pricing"
+    }
+  },
+  "faq": {
+    "h2": "FAQ ya aina za kamari",
+    "questions": [
+      {
+        "q": "Aina gani ya kamari inaweza kutabirika zaidi?",
+        "a": "Kitakwimu, masoko ya Over/Under 2.5 ya mabao na BTTS yanaweza kutabirika zaidi kwa kutumia mifumo ya Poisson. Yana mgawanyo wa uwezekano uliofafanuliwa vyema na sampuli kubwa za kihistoria. Asian Handicap pia inaweza kutabirika sana katika mechi zenye favorit wazi lakini kidogo katika mechi zenye usawa. 1X2 inakaa katikati — inaweza kutabirika lakini yenye kutokuwa na uhakika wa asili wa masoko ya matokeo matatu."
+      },
+      {
+        "q": "Kwa nini BetsPlug inapendekeza aina mahususi za kamari kwa kila mechi?",
+        "a": "Injini yetu inatambua utabiri wenye uhakika wa juu zaidi kwa kila mechi — soko ambapo ishara ya kitakwimu ni kali zaidi. Hii inatofautiana kwa kila mechi: wakati mwingine 1X2 ina ishara wazi zaidi, wakati mwingine Over/Under, wakati mwingine BTTS. Tunachapisha ishara kali zaidi badala ya kulazimisha soko moja katika mechi zote."
+      },
+      {
+        "q": "Je, ninaweza kuona utabiri wa aina zote za kamari kwa mechi moja?",
+        "a": "Wateja wa malipo wanaona utabiri wa masoko yote kwa kila mechi — kila utabiri tunaoutoa, ikijumuisha matrix ya uwezekano kwa Bao halisi. Watumiaji wa bure wanaona chaguo lenye uhakika wa juu zaidi la injini kwa kila mechi (kwa kawaida 1X2 au Over/Under 2.5)."
+      },
+      {
+        "q": "Kwa nini hamtabiri wachezaji mahususi watakaofunga?",
+        "a": "Utabiri wa kiwango cha mchezaji una tofauti kubwa zaidi kuliko utabiri wa kiwango cha timu. Kutokuwa na uhakika wa kikosi, tofauti ya umbo la mtu binafsi, na mabadiliko ya kimkakati hufanya utabiri sahihi wa wafungaji kuwa hauaminiki. Tunajikita katika masoko ya kiwango cha timu ambapo usahihi unaweza kufikiwa. Masoko ya player-prop pia ni machache yenye ufanisi katika bookmaker wengi, hivyo data ni ngumu zaidi kuimodel."
+      },
+      {
+        "q": "Ni tofauti gani kati ya uwezekano na uhakika?",
+        "a": "Uwezekano ni uwezekano wa kihisabati tunaoukokotoa (mfano, nafasi ya 78% ya Over 2.5). Uhakika ni uthabiti wetu katika uwezekano huo — unaathiriwa na ubora wa data, ukubwa wa sampuli, na sifa za mechi zinazolingana. Tunaonyesha namba za uwezekano; utabiri wenye uhakika wa juu unaonyeshwa kando katika kiolesura cha mteja wa usajili."
+      },
+      {
+        "q": "Kwa nini baadhi ya aina za kamari zinapatikana tu kwenye mipango ya malipo?",
+        "a": "Daraja la bure huonyesha chaguo letu lenye uhakika wa juu zaidi kwa kila mechi — kwa kawaida 1X2. Masoko mengine (Over/Under, BTTS, Asian Handicap, Bao halisi, HT/FT, DNB) yanahitaji upatikanaji wa mteja wa usajili. Hii inalinganisha thamani ya bure na mfumo wa usajili endelevu. Wateja wa usajili pia wanaona matrix ya msingi ya uwezekano na wanaweza kujenga mikakati yao ya masoko mengi."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "Ona utabiri wa aina za kamari ukitenda kazi",
+    "body": "Kila utabiri katika ligi 30+. Uchambuzi wa masoko mengi. Umefungwa kabla ya kuanza kwa mechi. Track record ya umma.",
+    "ctaPrimary": {
+      "label": "Tazama Utabiri wa Leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Jinsi Utabiri Unavyofanya Kazi",
+      "canonical": "methodology"
+    }
+  }
+}

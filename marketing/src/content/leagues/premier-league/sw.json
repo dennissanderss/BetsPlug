@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Premier League leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa Premier League unaoendeshwa na AI kwa kila mechi. Imefungwa kabla ya kuanza, rekodi ya umma. Utabiri bure kila siku — uchambuzi kamili kwa wanachama.",
+    "ogImage": "/og-images/league-premier-league-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Premier League",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya Premier League. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Premier League",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Premier League",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Premier League",
+    "paragraphs": [
+      "Premier League ni daraja la juu zaidi la mpira wa miguu nchini Uingereza, linaloshindaniwa na klabu 20 katika siku 38 za mechi kuanzia Agosti hadi Mei. Ilianzishwa mwaka 1992, imekuwa ligi ya mpira wa miguu inayotazamwa zaidi duniani, ikizalisha mapato ya utangazaji yanayozidi pauni bilioni 10 kwa kila mzunguko. Mfumo wetu wa AI unachambua kila mechi ya Premier League kwa kutumia fomu ya sasa, historia ya mechi za moja kwa moja, mabao yanayotarajiwa, takwimu za uongozi wa timu, na vigezo vingine zaidi ya 40.",
+      "Utabiri wa Premier League ni mgumu hasa kutokana na ushindani mkubwa wa ligi. Klabu sita za juu hukabiliana mara kwa mara na changamoto zisizotabirika kutoka kwa timu za katikati ya jedwali, na mechi za mwisho wa msimu mara nyingi huwa na tofauti kubwa za motisha (mbio za nne za juu dhidi ya vita vya kushuka daraja). Mfumo wetu unapima fomu ya hivi karibuni kwa uzito mkubwa — hasa mechi 6-10 za mwisho — ikijumuishwa na mgawanyiko wa nyumbani/ugenini, ambapo faida ya uwanja wa nyumbani ya Premier League kihistoria ni miongoni mwa zenye nguvu zaidi katika mpira wa miguu wa Ulaya.",
+      "Kila utabiri wa Premier League umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Watumiaji wa bure wanaona utabiri 2-3 wa Premier League kila siku; wanachama wanapokea kila mechi katika ligi nzima na uchambuzi kamili wa takwimu: xG, kumiliki mpira, nguvu ya uongozi wa timu, na muktadha wa kimkakati."
+    ],
+    "statsPanel": {
+      "h3": "Premier League kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Premier League kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za Premier League",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Premier League unavyoundwa",
+    "body": "Utabiri wa Premier League hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo kwa nguvu ya timu, mifumo ya Poisson kwa uwezekano wa mabao, na machine learning kwa utambuzi wa mifumo. Mfumo umefunzwa kwa takwimu za kihistoria za Premier League — zaidi ya muongo mmoja wa matokeo ya mechi, uongozi wa timu na takwimu za fomu — na unasasishwa kwa kuendelea kila mechi inapomalizika.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning iliyofunzwa kwa takwimu za Premier League"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Premier League",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Premier League?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri. Tunachapisha kila utabiri wa Premier League katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini mnatoa utabiri wa Premier League bure?",
+        "a": "Premier League ni mojawapo ya ligi tatu kuu ambazo tunachapisha utabiri 2-3 bure kila siku. Wanachama wanapokea kila mechi ya Premier League na uchambuzi kamili."
+      },
+      {
+        "q": "Mnachapisha aina gani za utabiri kwa Premier League?",
+        "a": "Kwa kila mechi ya Premier League tunachapisha utabiri katika masoko mengi: 1X2 (matokeo ya mechi), Juu/Chini ya mabao, Timu Zote Mbili Kufunga, na Nafasi Mbili."
+      },
+      {
+        "q": "Utabiri wa Premier League unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Premier League hadi saa 24 kabla ya kuanza. Watumiaji wa bure wanaona saa 2 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia FA Cup na mechi za Ulaya zinazohusisha klabu za Premier League?",
+        "a": "Tunashughulikia mechi zote za Premier League. Mechi za FA Cup, Champions League na Europa League zinazohusisha klabu za Premier League zinashughulikiwa kando chini ya kurasa zao za mashindano."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Premier League kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Premier League wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Premier League?",
+    "h2Gated": "Fungua utabiri wa Premier League",
+    "bodyFree": "Watumiaji wa bure wanaona utabiri 2-3 kila siku. Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Premier League ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Pata akaunti bure",
+      "href": "https://app.betsplug.com/register?source=league_premier-league"
+    }
+  }
+}

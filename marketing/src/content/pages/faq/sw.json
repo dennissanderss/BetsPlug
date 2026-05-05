@@ -1,0 +1,258 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Maswali yanayoulizwa mara kwa mara | BetsPlug",
+    "description": "Kila kitu kuhusu utabiri wa AI wa mpira wa miguu wa BetsPlug: mbinu, bei, usahihi, ufuasi wa sheria, na mengineyo.",
+    "ogImage": "/og-images/faq-en.jpg"
+  },
+  "hero": {
+    "h1": "Maswali yanayoulizwa {{accent}}mara kwa mara{{/accent}}",
+    "subheadline": "Kila kitu kuhusu BetsPlug, utabiri wetu, mbinu, na usajili. Tafuta au pitia kwa kategoria."
+  },
+  "search": {
+    "label": "Tafuta FAQ",
+    "placeholder": "Tafuta FAQ...",
+    "noResultsText": "Hakuna maswali yanayolingana yaliyopatikana. Jaribu neno tofauti au pitia kategoria zilizo hapa chini.",
+    "submitLabel": "Tafuta",
+    "filterAppliedTemplate": "Inaonyesha matokeo ya: \"{query}\"",
+    "clearLabel": "Futa utafutaji"
+  },
+  "categories": [
+    {
+      "id": "about",
+      "name": "Kuhusu BetsPlug",
+      "description": "Sisi ni nani na tunafanya nini.",
+      "questions": [
+        {
+          "id": "about-1",
+          "question": "BetsPlug ni nini?",
+          "answer": "BetsPlug ni jukwaa la utabiri wa mpira wa miguu linaloendeshwa na AI. Tunazalisha utabiri kwa ligi 30+ kwa kutumia mifumo ya takwimu (Elo, Poisson) na ujifunzaji wa mashine, na kuchapisha kila utabiri katika track record ya umma."
+        },
+        {
+          "id": "about-2",
+          "question": "Je, BetsPlug ni bookmaker?",
+          "answer": "Hapana. Sisi ni jukwaa la uchambuzi wa data. Hatupokei kamari, hatushikii pesa, wala hatusaidii kamari. Tunatoa utabiri wa kitakwimu kwa matumizi ya kielimu na kiarifa."
+        },
+        {
+          "id": "about-3",
+          "question": "BetsPlug ina makao yake wapi?",
+          "answer": "BetsPlug inaendeshwa kama kampuni huru ya teknolojia yenye makao yake Ulaya. Kwa maswali ya kibiashara, tembelea ukurasa wetu wa mawasiliano."
+        },
+        {
+          "id": "about-4",
+          "question": "BetsPlug imekuwa ikifanya kazi kwa muda gani?",
+          "answer": "Track record yetu ya umma inanyoosha tangu uzinduzi — kila utabiri tuliouwahi kuutoa unaweza kuthibitishwa kwenye ukurasa wa track record. Jukwaa limekuwa likifanya kazi kwa muda wa kutosha kuwa na sampuli yenye maana katika ligi tunazozifuatilia."
+        },
+        {
+          "id": "about-5",
+          "question": "Nani anamiliki BetsPlug?",
+          "answer": "BetsPlug inaendeshwa na kampuni huru ya teknolojia. Hatumilikiwi wala hatuna ushirika na bookmaker yoyote. Mfumo wetu wa mapato unategemea usajili, si uhusiano wa washirika."
+        }
+      ]
+    },
+    {
+      "id": "predictions",
+      "name": "Utabiri na Mbinu",
+      "description": "Jinsi injini yetu inavyofanya kazi na kile inachotabiri.",
+      "questions": [
+        {
+          "id": "predictions-1",
+          "question": "Utabiri wa AI wa mpira wa miguu una usahihi kiasi gani?",
+          "answer": "Usahihi hutofautiana kwa kila ligi, soko na siku ya mechi. Tunachapisha kila utabiri — wa ushindi na wa kupoteza — katika track record yetu ya umma ili uweze kuthibitisha utendaji wewe mwenyewe badala ya kutegemea madai yetu."
+        },
+        {
+          "id": "predictions-2",
+          "question": "Je, utabiri unaweza kubadilishwa baada ya kuchapishwa?",
+          "answer": "Hapana. Kila utabiri umefungwa kabla ya kuanza kwa mechi na alama ya muda ya umma. Mara baada ya kuchapishwa, hauwezi kuhaririwa au kuondolewa. Hii inaweza kuthibitishwa katika track record yetu. Ufungaji ni wa kimuundo — hakuna kitufe cha msimamizi kinachoweza kubadilisha utabiri uliochapishwa."
+        },
+        {
+          "id": "predictions-3",
+          "question": "Kwa nini mnatumia mifumo mingi ya takwimu?",
+          "answer": "Hakuna njia moja ya kitakwimu inayoweza kushika dynamics zote za mpira wa miguu. Elo inashughulikia nguvu ya timu, Poisson inashughulikia mgawanyo wa mabao, ujifunzaji wa mashine unashughulikia muktadha. Kuziunganisha kwa muunganisho wenye uzito hutoa utabiri imara zaidi kuliko njia yoyote moja peke yake."
+        },
+        {
+          "id": "predictions-4",
+          "question": "Utabiri unapatikana mapema kiasi gani?",
+          "answer": "Wateja wa usajili wanaona utabiri hadi saa 24 kabla ya kuanza kwa mechi. Watumiaji wa bure wanaona saa 2 kabla ya kuanza kwa mechi. Mara baada ya kufungwa, utabiri hauwezi kubadilishwa — muda wa upatikanaji ndio unabadilika, si utabiri wenyewe."
+        },
+        {
+          "id": "predictions-5",
+          "question": "Je, mnatabiri mechi za kombe na mechi za kimataifa?",
+          "answer": "Tunashughulikia Champions League, Europa League, na mashindano makuu ya kombe ya ndani kwa ligi 10 tunazozifuatilia. Mechi za kimataifa (World Cup, Euros) zinashughulikiwa zinapotokea. Mizunguko ya awali ya kufuzu na mashindano madogo ya kombe hayako katika ufuatiliaji wetu wa kawaida."
+        },
+        {
+          "id": "predictions-6",
+          "question": "Utabiri unapatikana kwa lugha gani?",
+          "answer": "Utabiri wa BetsPlug unapatikana kwa Kiingereza, Kiholanzi, Kijerumani, Kifaransa, Kihispania, na Kiitaliano. Mbinu na kurasa za maudhui zimetafsiriwa kikamilifu kwa kila lugha; istilahi za kiufundi (Elo, Poisson, xG) zinabaki sawa katika lugha zote."
+        },
+        {
+          "id": "predictions-7",
+          "question": "Mnashughulikiaje kushuka/kupanda daraja kati ya misimu?",
+          "answer": "Viwango vya Elo vya timu vinaendelea kati ya misimu lakini vinarekebishwa kwa nguvu ya ligi mpya wakati timu zinapohamia kati ya madaraja. Utabiri wa msimu mpya unazingatia uhamisho wa wachezaji wa nje ya msimu na mabadiliko ya kocha. Mechi za mwanzo wa msimu zina kutokuwa na uhakika kidogo zaidi mfumo unaporekebishwa upya."
+        },
+        {
+          "id": "predictions-8",
+          "question": "Kwa nini hamtabiri wachezaji mahususi watakaofunga?",
+          "answer": "Utabiri wa kiwango cha mchezaji una tofauti kubwa zaidi kuliko utabiri wa kiwango cha timu. Kutokuwa na uhakika wa kikosi, tofauti ya umbo la mtu binafsi, na mabadiliko ya kimkakati hufanya utabiri sahihi wa wafungaji kuwa hauaminiki. Tunajikita katika masoko ya kiwango cha timu ambapo usahihi unaweza kufikiwa."
+        }
+      ]
+    },
+    {
+      "id": "pricing",
+      "name": "Bei na Usajili",
+      "description": "Mipango, malipo, na marejesho.",
+      "questions": [
+        {
+          "id": "pricing-1",
+          "question": "Je, ninaweza kubadilisha mpango baadaye?",
+          "answer": "Ndiyo, wakati wowote. Pandisha na mpango mpya unaanza kufanya kazi mara moja kwa malipo ya uwiano. Shusha na mpango mpya unaanza katika mzunguko wako wa malipo unaofuata."
+        },
+        {
+          "id": "pricing-2",
+          "question": "Mnakubali njia gani za malipo?",
+          "answer": "Kadi za mkopo/dawati (Visa, Mastercard, American Express), na uhamisho wa benki kwa EUR. Malipo ya cryptocurrency hayaungwi mkono kwa sasa lakini yapo katika mpango wetu wa baadaye."
+        },
+        {
+          "id": "pricing-3",
+          "question": "Je, mnatoa punguzo la kila mwaka?",
+          "answer": "Malipo ya kila mwaka huokoa 20% ikilinganishwa na ya kila mwezi. Chaguo la kila mwaka linaonekana wakati wa kulipa. Unaweza kubadili kati ya kila mwezi na kila mwaka wakati wowote bila kupoteza upatikanaji."
+        },
+        {
+          "id": "pricing-4",
+          "question": "Je, jaribio la siku 7 ni la bure kweli?",
+          "answer": "Ndiyo. Tunahitaji njia ya malipo kuanza jaribio, lakini hutozwi kwa siku 7 za kwanza. Sitisha kabla ya siku ya 7 na hakuna malipo yanayotokea. Sitisha baada ya malipo na utumie dhamana ya kurudishiwa pesa ndani ya siku 7 za kwanza."
+        },
+        {
+          "id": "pricing-5",
+          "question": "Je, ninaweza kupata mpango wa timu au wa shirika?",
+          "answer": "Tunafanya kazi kwenye mipango ya timu kwa wachambuzi na mashirika madogo. Wasiliana nasi ikiwa una mahitaji mahususi — tunaweza kuwa na uwezo wa kuanzisha kitu mapema."
+        },
+        {
+          "id": "pricing-6",
+          "question": "Je, bei zinajumuisha VAT/kodi?",
+          "answer": "Bei zinazoonyeshwa zinajumuisha VAT inayotumika kwa wateja wa EU. Kwa wateja wasio wa EU, bei unayoiona ni bei ya mwisho. Risiti zinajumuisha maelezo ya VAT pale yanapotumika."
+        },
+        {
+          "id": "pricing-7",
+          "question": "Nini kinatokea kwa data yangu nikisitisha?",
+          "answer": "Data ya akaunti yako (historia ya usajili, mipangilio, utabiri uliohifadhiwa) inahifadhiwa kwa siku 90 baada ya kusitisha endapo utawasha tena. Baada ya siku 90, inafutwa kabisa isipokuwa uombe ufutwe mapema."
+        },
+        {
+          "id": "pricing-8",
+          "question": "Je, mnatoa punguzo kwa wanafunzi au taasisi?",
+          "answer": "Hatutoi viwango vya punguzo kwa sasa zaidi ya punguzo la malipo ya kila mwaka (20% ikilinganishwa na ya kila mwezi). Malipo ya kila mwaka yanapatikana kwa watumiaji wote kwa kiwango sawa."
+        }
+      ]
+    },
+    {
+      "id": "account",
+      "name": "Akaunti na Kiufundi",
+      "description": "Usimamizi wa akaunti na msaada wa kiufundi.",
+      "questions": [
+        {
+          "id": "account-1",
+          "question": "Ninasasishaje barua pepe yangu?",
+          "answer": "Kutoka dashibodi yako ya akaunti app.betsplug.com/account, bofya Profile na sasisha barua pepe. Utapokea barua pepe ya uthibitishaji kwenye anwani mpya kabla ya mabadiliko kuanza kufanya kazi."
+        },
+        {
+          "id": "account-2",
+          "question": "Nimesahau nenosiri langu. Nifanyeje?",
+          "answer": "Tumia kiungo cha kuweka upya nenosiri kwenye app.betsplug.com/login. Ingiza barua pepe yako, pokea maelekezo ya kuweka upya ndani ya dakika chache. Kama barua pepe haiwasili, angalia spam/junk; vinginevyo wasiliana na msaada."
+        },
+        {
+          "id": "account-3",
+          "question": "Je, ninaweza kubadilisha lugha ya akaunti yangu baada ya kujisajili?",
+          "answer": "Ndiyo. Kutoka mipangilio ya akaunti, badilisha lugha ya kiolesura wakati wowote. Arifa zako za utabiri pia zitabadilika kwenda lugha uliyochagua."
+        },
+        {
+          "id": "account-4",
+          "question": "Je, kuna programu ya simu?",
+          "answer": "Kwa sasa tuna programu ya wavuti inayolingana ambayo inafanya kazi kikamilifu kwenye vivinjari vya simu. Programu asilia ya simu ipo katika mpango wetu. Programu ya wavuti tayari inaunga mkono add-to-home-screen kwenye iOS na Android kwa tabia kama ya programu."
+        },
+        {
+          "id": "account-5",
+          "question": "Mnaunga mkono vivinjari gani?",
+          "answer": "BetsPlug inafanya kazi kwenye vivinjari vyote vya kisasa (Chrome, Firefox, Safari, Edge) vilivyotolewa katika miaka 2 iliyopita. Vivinjari vya zamani vinaweza kuwa na utendaji mdogo."
+        }
+      ]
+    },
+    {
+      "id": "compliance",
+      "name": "Ufuasi na Kisheria",
+      "description": "Msimamo wa kisheria na ulinzi wa data.",
+      "questions": [
+        {
+          "id": "compliance-1",
+          "question": "Je, kutumia BetsPlug ni halali nchini mwangu?",
+          "answer": "BetsPlug inatoa uchambuzi wa takwimu, si huduma za kamari. Uhalali wa kutumia huduma za utabiri unatofautiana kwa mamlaka. Angalia sheria zako za eneo lako kuhusu kamari ya michezo na huduma za utabiri. Tunafuata kanuni za EU kwa watumiaji walio katika nchi za EU."
+        },
+        {
+          "id": "compliance-2",
+          "question": "Je, mna leseni ya kamari?",
+          "answer": "Hatuhitaji leseni ya kamari kwa sababu hatufanyi kazi kama bookmaker. Sisi ni huduma ya uchambuzi wa data. Tunafuata kanuni za biashara na ulinzi wa data zinazotumika kwa kampuni za programu."
+        },
+        {
+          "id": "compliance-3",
+          "question": "Mnashughulikiaje kamari yenye uwajibikaji?",
+          "answer": "Tunaunga mkono kanuni za kamari yenye uwajibikaji. Soma ukurasa wetu wa Kamari Yenye Uwajibikaji kwa maelezo. Hatuhamasishi kamari, tunaepuka lugha ya motisha ya kamari katika utangazaji wetu, na tunahitaji watumiaji wawe na umri halali wa kamari katika mamlaka yao."
+        },
+        {
+          "id": "compliance-4",
+          "question": "Je, watoto wadogo wanaweza kutumia BetsPlug?",
+          "answer": "Masharti yetu ya Huduma yanahitaji watumiaji wawe na umri wa miaka 18+ (au umri halali wa kamari katika mamlaka yao, lolote lililo juu zaidi). Hatutangazi kwa au kukubali usajili kutoka kwa watoto wadogo."
+        },
+        {
+          "id": "compliance-5",
+          "question": "Mnashughulikiaje data yangu binafsi?",
+          "answer": "Tunafuata GDPR na kanuni zinazofanana. Hatushiriki data ya watumiaji na bookmaker. Soma Sera yetu ya Faragha kwa maelezo kuhusu ukusanyaji wa data, uhifadhi, na haki za watumiaji."
+        }
+      ]
+    },
+    {
+      "id": "track",
+      "name": "Track Record na Uthibitishaji",
+      "description": "Jinsi tunavyothibitisha madai yetu ya usahihi.",
+      "questions": [
+        {
+          "id": "track-1",
+          "question": "Je, utabiri kweli hauwezi kuhaririwa baada ya kuchapishwa?",
+          "answer": "Hapana. Kila utabiri umefungwa na alama ya muda isiyoweza kubadilishwa kabla ya kuanza kwa mechi. Hatuna utaratibu wa kufuta au kuficha utabiri baada ya kuchapishwa, hata kama tungetaka. Hii ni ya kimuundo, si sera — haiwezi kubadilishwa."
+        },
+        {
+          "id": "track-2",
+          "question": "Ninawezaje kuthibitisha kuwa utabiri mahususi ulifungwa kabla ya kuanza kwa mechi?",
+          "answer": "Bofya utabiri wowote katika track record. Ukurasa wa maelezo unaonyesha alama ya muda ya kufunga — wakati halisi utabiri ulipowekwa. Linganisha hii na muda halisi wa kuanza kwa mechi (pia umeonyeshwa). Alama ya muda ya kufunga huwa daima kabla ya kuanza kwa mechi."
+        },
+        {
+          "id": "track-3",
+          "question": "Kwa nini hamuonyeshi asilimia mahususi za usahihi?",
+          "answer": "Usahihi unatofautiana kwa kiasi kikubwa kwa ligi, aina ya soko, na kipindi cha muda. Asilimia moja ya kichwa inaficha tofauti hii. Tunapendelea kuonyesha data ghafi ili uweze kuona utendaji halisi katika muktadha — ni mashindano gani, masoko gani, vipindi gani tumefanya vizuri zaidi na vibaya zaidi."
+        },
+        {
+          "id": "track-4",
+          "question": "Je, ninaweza kupakua data ya track record?",
+          "answer": "Data ya track record inapatikana kupitia API yetu kwa wateja wa malipo. Track record ya kuona kwenye ukurasa wa track-record inapatikana kwa umma kwa madhumuni ya uthibitishaji."
+        }
+      ]
+    }
+  ],
+  "stillHaveQuestions": {
+    "h2": "Bado una maswali?",
+    "body": "Huwezi kupata unachokitafuta? Tutumie ujumbe na tutajibu ndani ya saa 24.",
+    "ctaPrimary": {
+      "label": "Wasiliana na Msaada",
+      "canonical": "contact"
+    },
+    "ctaSecondary": {
+      "label": "Soma Mbinu",
+      "canonical": "methodology"
+    }
+  }
+}

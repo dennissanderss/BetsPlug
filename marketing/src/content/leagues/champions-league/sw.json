@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Champions League | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa UEFA Champions League unaoendeshwa na AI kwa kila mechi. Hatua ya makundi hadi fainali — ikichambuliwa kwa Elo + Poisson + ML. Inapatikana kwa mpango wowote wa kulipia.",
+    "ogImage": "/og-images/league-champions-league-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Champions League",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya UEFA Champions League. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Champions League",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Siku ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Champions League",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Champions League",
+    "paragraphs": [
+      "UEFA Champions League ni shindano kuu la klabu la Ulaya, linaloshindaniwa kati ya klabu za juu kutoka kote bara. Msimu wa 2024-25 ulianzisha muundo mpya wa hatua ya ligi na klabu 36 katika jedwali moja lililounganishwa, ulibadilisha hatua ya jadi ya makundi ya timu 32. Shindano hilo linafikia kilele kwa duru za knockout za mechi mbili na fainali ya mechi moja. Mfumo wetu wa AI unachambua kila ratiba ya Champions League kwa kutumia fomu ya sasa, historia ya mechi za moja kwa moja (timu zilipokutana kabla), mabao yanayotarajiwa na vigezo vingine zaidi ya 40.",
+      "Utabiri wa Champions League una sifa za kipekee zinazotofautisha na utabiri wa ligi za nyumbani. Pengo la ushindani kati ya timu ni pana zaidi — mechi ya Real Madrid dhidi ya RB Salzburg ina mienendo tofauti sana ya kitakwimu kuliko timu mbili za Premier League zilizolinganishwa kwa usawa. Mechi za knockout za hatua mbili pia huleta mazingatio ya kimkakati: timu hucheza tofauti katika hatua ya kwanza dhidi ya ya pili kulingana na alama, mahitaji ya mabao ya ugenini (palipotumika kihistoria), na muktadha wa jumla. Mfumo wetu unashughulikia mechi za hatua ya ligi na hatua ya knockout kama matatizo tofauti ya utabiri yenye uzani tofauti wa vipengele.",
+      "Kila utabiri wa Champions League umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Utabiri wa Champions League ni sehemu ya mipango yote ya kulipia — wanachama wanapokea kila ratiba na uchambuzi kamili wa takwimu: xG, marekebisho ya muktadha wa knockout, na mifumo ya mzunguko kwa klabu zinazosawazisha majukumu ya nyumbani na ya Ulaya."
+    ],
+    "statsPanel": {
+      "h3": "Champions League kwa muhtasari",
+      "teamsLabel": "Klabu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Siku ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Champions League kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Klabu bora za Champions League",
+    "positionLabel": "Nafasi ya hatua ya ligi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Champions League unavyoundwa",
+    "body": "Utabiri wa Champions League hutumia mfumo ule ule wa msingi kama utabiri wetu wa nyumbani, na upangaji tofauti kwa mienendo ya hatua ya ligi dhidi ya duru za knockout. Mechi za hatua mbili zinaigwa kwa muktadha wa jumla — upungufu wa 2-0 wa hatua ya kwanza huzalisha tabia ya kimsingi tofauti ya hatua ya pili kuliko mechi sawa.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning yenye uzani wa muktadha wa knockout"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Champions League",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Champions League?",
+        "a": "Usahihi unatofautiana kati ya ratiba za hatua ya ligi na za knockout, huku pengo pana la ushindani katika mechi za hatua za awali likiathiri viwango vya uhakika. Tunachapisha kila utabiri wa Champions League katika rekodi yetu ya umma."
+      },
+      {
+        "q": "Kwa nini utabiri wa Champions League ni wa kulipia tu?",
+        "a": "Utabiri wa bure umewekewa mipaka kwa ligi 3 kuu za nyumbani. Utabiri wa Champions League ni sehemu ya mipango yote ya kulipia, ukijumuishwa na uchambuzi wa muktadha wa knockout."
+      },
+      {
+        "q": "Mnashughulikiaje mechi za knockout za hatua mbili?",
+        "a": "Tunashughulikia kila hatua kama utabiri tofauti na alama ya jumla na muktadha wa ugenini (palipotumika) kama vigezo vya pembejeo. Utabiri wa hatua ya pili unazingatia mabadiliko ya kimkakati ndani ya mechi kulingana na matokeo ya hatua ya kwanza."
+      },
+      {
+        "q": "Utabiri wa Champions League unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Champions League hadi saa 24 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia duru za kufuzu za Champions League?",
+        "a": "Tunashughulikia mechi za hatua ya ligi na za knockout. Duru za kufuzu za awali (ambapo klabu za ligi kuu hazijajumuishwa bado) hazimo katika ushughulikiaji wetu wa msingi."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Champions League kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Champions League wenye uhakika mkubwa, hasa kuhusu ratiba za knockout."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Champions League?",
+    "h2Gated": "Fungua utabiri wa Champions League",
+    "bodyFree": "Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Champions League ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jaribu bure",
+      "href": "https://app.betsplug.com/register?source=league_champions-league"
+    }
+  }
+}

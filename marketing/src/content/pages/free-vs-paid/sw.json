@@ -1,0 +1,202 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Bure au malipo: mpango gani wa BetsPlug? | BetsPlug",
+    "description": "Linganisha viwango vya bure na vya malipo vya BetsPlug. Injini sawa ya AI, idadi na kina tofauti. Utabiri 5 kwa siku bure, bila kikomo kwa malipo.",
+    "ogImage": "/og-images/free-vs-paid-en.jpg"
+  },
+  "hero": {
+    "h1": "Bure au malipo: {{accent}}BetsPlug ipi{{/accent}} inakufaa?",
+    "subheadline": "Viwango vyote viwili vinatumia injini sawa ya AI na mbinu sawa. Tofauti ni idadi, kina, na muda. Pata mpango wako hapa chini."
+  },
+  "visual": {
+    "h2": "Unachoona katika kila kiwango",
+    "free": {
+      "header": "Bure",
+      "subheader": "Jaribu injini, bila kujifunga",
+      "useCases": [
+        "Kutathmini ubora wa utabiri kabla ya kujisajili",
+        "Kupendezwa kidogo na ligi 1-2 za juu",
+        "Kujaribu mbinu na track record"
+      ],
+      "limitations": [
+        "Utabiri 5 kwa siku",
+        "Ligi 3 za juu pekee",
+        "Saa 2 kabla ya kuanza mechi (badala ya saa 24 kwa malipo)",
+        "Taarifa za msingi pekee (hakuna xG, H2H, kikosi)"
+      ],
+      "cta": {
+        "label": "Anza Bure",
+        "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid"
+      },
+      "mockMatch": {
+        "home": "Manchester City",
+        "away": "Arsenal",
+        "league": "Premier League",
+        "pick": "Magoli Zaidi ya 2.5",
+        "confidence": 78
+      }
+    },
+    "paid": {
+      "header": "Silver / Gold",
+      "subheader": "Utabiri kamili, data kamili",
+      "useCases": [
+        "Utabiri wa kila siku katika ligi nyingi",
+        "Uchambuzi kamili wa mechi (xG, H2H, kikosi, sababu)",
+        "Utabiri saa 24 kabla ya kuanza mechi",
+        "Arifa za Telegram kwa chaguo zenye uhakika wa hali ya juu",
+        "Masoko yote ya bashiri kwa kila mechi"
+      ],
+      "cta": {
+        "label": "Tazama Bei",
+        "canonical": "pricing"
+      },
+      "mockMatch": {
+        "home": "Manchester City",
+        "away": "Arsenal",
+        "league": "Premier League",
+        "pick": "Magoli Zaidi ya 2.5",
+        "confidence": 78,
+        "xg": "City 2.4 — Arsenal 1.6",
+        "h2h": "Mechi 5 za mwisho: City 4W 1D 0L",
+        "lineup": "Kikosi cha kwanza cha pande zote mbili"
+      }
+    }
+  },
+  "comparison": {
+    "h2": "Ulinganisho wa vipengele",
+    "headers": {
+      "feature": "Kipengele",
+      "free": "Bure",
+      "silver": "Silver",
+      "gold": "Gold"
+    },
+    "rows": [
+      {
+        "feature": "Utabiri wa kila siku",
+        "free": "5",
+        "silver": "Bila kikomo",
+        "gold": "Bila kikomo"
+      },
+      {
+        "feature": "Ligi",
+        "free": "Ligi 3 za juu",
+        "silver": "Zote 30+",
+        "gold": "Zote 30+"
+      },
+      {
+        "feature": "Masoko ya bashiri",
+        "free": "1X2 pekee",
+        "silver": "Yote",
+        "gold": "Yote"
+      },
+      {
+        "feature": "Uchambuzi wa mechi",
+        "free": "Wa msingi",
+        "silver": "Kamili",
+        "gold": "Kamili"
+      },
+      {
+        "feature": "Upatikanaji wa awali",
+        "free": "Saa 2 kabla",
+        "silver": "Saa 24 kabla",
+        "gold": "Saa 24 kabla"
+      },
+      {
+        "feature": "Arifa za Telegram",
+        "free": "—",
+        "silver": "✓",
+        "gold": "✓ (zilizoboreshwa)"
+      },
+      {
+        "feature": "Kurudishiwa pesa",
+        "free": "Haitumiki",
+        "silver": "Siku 7",
+        "gold": "Siku 7"
+      }
+    ],
+    "cta": {
+      "label": "Tazama ulinganisho kamili",
+      "canonical": "pricing"
+    }
+  },
+  "useCases": {
+    "h2": "Kiwango kipi kinakufaa?",
+    "profiles": [
+      {
+        "icon": "user",
+        "title": "Mjaribu wa kawaida",
+        "description": "Anataka kujua kuhusu utabiri wa AI, anataka kujaribu kabla ya kujifunga. Anafuata ligi 1-2 za juu pekee.",
+        "recommendation": "Bure inakufaa.",
+        "cta": {
+          "label": "Anza Bure",
+          "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_profile_casual"
+        }
+      },
+      {
+        "icon": "trending-up",
+        "title": "Mwekaji bashiri wa mara kwa mara",
+        "description": "Anaweka bashiri mara 2-3 kwa wiki katika ligi nyingi. Anataka ubora wa utabiri unaoendelea, si chaguo za dakika ya mwisho.",
+        "recommendation": "Silver imejengwa kwa ajili yako.",
+        "cta": {
+          "label": "Jaribu Silver",
+          "canonical": "pricing"
+        }
+      },
+      {
+        "icon": "chart",
+        "title": "Mchambuzi makini",
+        "description": "Anafuata utabiri kila siku, masoko mengi ya bashiri, anahitaji kina cha data. Anataka upatikanaji wa mapema na arifa.",
+        "recommendation": "Gold inakupa kila kitu.",
+        "cta": {
+          "label": "Jaribu Gold",
+          "canonical": "pricing"
+        }
+      }
+    ]
+  },
+  "faq": {
+    "h2": "Maswali ya bure dhidi ya malipo",
+    "questions": [
+      {
+        "q": "Je, utabiri wa bure si sahihi sana kuliko wa malipo?",
+        "a": "Hapana. Utabiri wa bure unatumia injini sawa ya AI na mbinu sawa kama wa malipo. Tofauti ni idadi, kina, muda, na ufunikaji wa ligi — si usahihi."
+      },
+      {
+        "q": "Kwa nini ninahitaji kadi ya mkopo kwa jaribio?",
+        "a": "Ni mpangilio wa kawaida wa malipo ya SaaS. Hutozwi katika siku 7 za kwanza. Ghairi kabla ya siku ya 7 na hutozwi chochote. Tunahitaji njia ya malipo ili kuzuia matumizi mabaya ya jaribio."
+      },
+      {
+        "q": "Je, ninaweza kushuka kutoka malipo hadi bure?",
+        "a": "Ndiyo, wakati wowote. Ghairi mpango wako wa malipo kutoka dashibodi ya akaunti. Upatikanaji wako utaendelea hadi mwisho wa kipindi cha malipo, kisha utahamishiwa kiotomatiki kwenye kiwango cha bure."
+      },
+      {
+        "q": "Itakuwaje kama nataka aina 1-2 maalumu za bashiri pekee?",
+        "a": "Kiwango cha bure kinaonyesha chaguo letu lenye uhakika wa juu kwa kila mechi (hutofautiana kulingana na mechi). Mipango ya malipo inaonyesha masoko yote kwa kila mechi. Iwapo unalenga masoko 1-2 maalumu, malipo bado yanasaidia kwa sababu unaweza kulinganisha katika mechi nyingi zaidi."
+      },
+      {
+        "q": "Je, jaribio la bure la siku 7 halina hatari kweli?",
+        "a": "Ndiyo. Hakuna malipo katika siku 7. Pia, ikiwa utatozwa baada ya siku 7 na hujaridhika, dhamana yetu ya kurudishiwa pesa inashughulikia mwezi wa kwanza wa malipo."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "Anza bure, pandisha kiwango ukiwa tayari",
+    "body": "Utabiri 5 wa bure kwa siku. Hakuna kadi ya mkopo inayohitajika kwa bure.",
+    "ctaPrimary": {
+      "label": "Anza Bure",
+      "href": "https://app.betsplug.com/register?plan=free&source=free_vs_paid_final"
+    },
+    "ctaSecondary": {
+      "label": "Tazama Mipango",
+      "canonical": "pricing"
+    }
+  }
+}

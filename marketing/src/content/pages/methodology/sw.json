@@ -1,0 +1,260 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Mbinu: jinsi utabiri wa AI wa BetsPlug unavyofanya kazi | BetsPlug",
+    "description": "Mbinu ya kina nyuma ya utabiri wa AI wa mpira wa miguu wa BetsPlug. Ukadiriaji wa Elo, mifumo ya mabao ya Poisson, ujifunzaji wa mashine. Wazi, unaoweza kurudiwa, umefungwa kabla ya mechi kuanza.",
+    "ogImage": "/og-images/methodology-en.jpg"
+  },
+  "hero": {
+    "h1": "Mbinu nyuma ya utabiri wa {{accent}}BetsPlug{{/accent}}",
+    "subheadline": "Jinsi tunavyochanganya ukadiriaji wa Elo, mifumo ya mabao ya Poisson na ujifunzaji wa mashine kuwa injini moja ya utabiri. Hakuna algoriti ya siri. Hakuna uteuzi wa kihariri. Ni hisabati tu, inayotumika kwa uwazi.",
+    "trustStrip": [
+      "Mbinu wazi",
+      "Mantiki inayoweza kurudiwa",
+      "Utabiri uliofungwa"
+    ],
+    "ctaPrimary": {
+      "label": "Pata utabiri",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Tazama track record",
+      "canonical": "track-record"
+    }
+  },
+  "toc": {
+    "h2": "Kwenye ukurasa huu",
+    "items": [
+      {
+        "id": "pillars",
+        "label": "Nguzo tatu"
+      },
+      {
+        "id": "elo",
+        "label": "Mfumo wa ukadiriaji wa Elo"
+      },
+      {
+        "id": "poisson",
+        "label": "Mifumo ya mabao ya Poisson"
+      },
+      {
+        "id": "ml",
+        "label": "Safu ya ujifunzaji wa mashine"
+      },
+      {
+        "id": "data",
+        "label": "Vyanzo vya data na uthibitishaji"
+      },
+      {
+        "id": "locking",
+        "label": "Utaratibu wa kufunga"
+      },
+      {
+        "id": "what-we-dont-do",
+        "label": "Tusichofanya"
+      },
+      {
+        "id": "limitations",
+        "label": "Mipaka na uaminifu"
+      }
+    ]
+  },
+  "pillars": {
+    "h2": "Nguzo tatu za injini yetu",
+    "intro": "BetsPlug haitegemei mbinu moja ya kitakwimu. Badala yake, tunachanganya mbinu tatu zilizothibitishwa — kila moja ina nguvu katika nyanja tofauti za utabiri wa mpira wa miguu — na kuruhusu ujifunzaji wa mashine kupima matokeo yake kulingana na kinachofanya kazi kwa muktadha maalum wa kila mechi.",
+    "items": [
+      {
+        "tagline": "Nguvu ya timu, inayosasishwa kwa nguvu",
+        "oneLiner": "Kila timu ina ukadiriaji wa nguvu wa kihesabu unaobadilika baada ya kila mechi kulingana na matokeo na ubora wa mpinzani.",
+        "icon": "elo"
+      },
+      {
+        "tagline": "Hisabati ya uwezekano wa mabao",
+        "oneLiner": "Mgawanyiko wa kitakwimu unaohesabu uwezekano wa matokeo maalum ya alama.",
+        "icon": "poisson"
+      },
+      {
+        "tagline": "Utambuzi wa mienendo katika maelfu ya mechi",
+        "oneLiner": "Algoriti zinazogundua uhusiano usiojulikana waziwazi kati ya vigezo vya mechi na matokeo.",
+        "icon": "ml"
+      }
+    ]
+  },
+  "elo": {
+    "h2": "Mfumo wa ukadiriaji wa Elo",
+    "paragraphs": [
+      "Mfumo wa Elo uliasisiwa awali na Arpad Elo kwa ajili ya viwango vya chess katika miaka ya 1950. Tuliubadilisha kwa mpira wa miguu, ambapo timu zinachukua nafasi ya wachezaji na matokeo ya mechi yanachukua nafasi ya matokeo ya mchezo. Kila timu ina ukadiriaji mmoja wa kihesabu — kawaida kati ya 1200 na 2200 kwa vilabu vya daraja la juu — unaobana maelfu ya matokeo ya kihistoria ya mechi kuwa kadirio moja la nguvu ya sasa.",
+      "Wakati timu mbili zinakutana, mfumo wa Elo hutumia ukadiriaji wao wa sasa kuhesabu matokeo yanayotarajiwa. Matarajio E kwa timu ya nyumbani ni kazi ya kimantiki ya tofauti ya ukadiriaji pamoja na neno la faida ya nyumbani. Baada ya mechi, ukadiriaji unarekebishwa kwa kipengele cha K mara tofauti kati ya matokeo halisi na yanayotarajiwa. Utendaji bora kuliko unaotarajiwa huinua ukadiriaji; mbaya zaidi kuliko unaotarajiwa hushusha. Katika maelfu ya mechi, ukadiriaji unaungana kwenye kadirio thabiti la nguvu halisi.",
+      "Elo ya mpira wa miguu inatofautiana na Elo ya chess kwa njia tatu kuu. Tunazingatia tofauti ya mabao (ushindi wa 4-0 unasogeza ukadiriaji zaidi ya 1-0), faida ya nyumbani imejengwa katika matokeo yanayotarajiwa (kawaida +60 hadi +100 alama za Elo kulingana na mashindano), na tunatumia kizidishi cha umuhimu wa mechi (mechi za kuondolewa za Champions League husogeza ukadiriaji zaidi ya mechi za kirafiki).",
+      "Nguvu ya Elo ni usahihi unaopima umuhimu wa hivi karibuni. Timu iliyo katika fomu nzuri ya sasa itakuwa na ukadiriaji wa juu kuliko wastani wao wa kihistoria unavyopendekeza, kwa sababu mechi za hivi karibuni zina ushawishi mkubwa kwenye mwelekeo wa ukadiriaji. Hii hufanya Elo kuwa msingi imara wa kutabiri matokeo ya mechi — lakini peke yake, inapuuza mienendo ya kufunga mabao na vigezo vya muktadha. Ndiyo maana tunaichanganya na Poisson na ujifunzaji wa mashine."
+    ],
+    "formulaCaption": "Mfumo wa kusasisha Elo: ukadiriaji mpya unalingana na ukadiriaji wa zamani pamoja na kipengele cha K mara tofauti kati ya alama halisi na alama inayotarajiwa.",
+    "exampleBoxLabel": "Mfano wa ulimwengu halisi",
+    "exampleBoxBody": "Wakati Manchester City iliposhindwa 2-1 na timu ya kati ya jedwali mwaka 2024, ukadiriaji wao wa Elo ulishuka kwa alama 18 — ukionyesha hasara isiyotarajiwa na tofauti ya mabao. Ukadiriaji wa mpinzani wa kati ya jedwali ulipata alama 18 zile zile. Katika mechi kumi zilizofuata, ukadiriaji wa City ulipona huku matokeo yao yakirudi katika hali ya kawaida."
+  },
+  "poisson": {
+    "h2": "Mifumo ya mabao ya Poisson",
+    "paragraphs": [
+      "Mfumo wa Poisson ni fomula ya kihisabati inayohesabu uwezekano wa tukio mahususi kutokea ndani ya muda uliowekwa, ikipewa kiwango cha wastani kinachojulikana. Kwa mpira wa miguu, 'tukio' ni bao na 'muda' ni dakika 90. Kigezo lambda kinawakilisha idadi inayotarajiwa ya mabao — inayotokana na nguvu za kushambulia/kujihami za timu, faida ya nyumbani, na fomu ya hivi karibuni.",
+      "Tunahesabu viwango viwili vya Poisson kwa kila mechi: mabao yanayotarajiwa ya timu ya nyumbani (lambda H) na mabao yanayotarajiwa ya timu ya mbali (lambda A). Viwango vyote vinaingia kwenye matrix ya uwezekano kwa kila alama inayowezekana kuanzia 0-0 hadi 6-6. Kujumlisha seli zinazohusika kunatupa uwezekano kwa soko lolote: 1X2 (matokeo ya mechi), Zaidi/Chini ya jumla ya mabao, Timu zote mbili kufunga, alama kamili, na uhusiano wa nusu-mechi/mechi nzima.",
+      "Safu ya Poisson hutoa uwezekano uliorekebishwa dhidi ya odds za bookmaker na data ya kihistoria. Kwa mechi ya Bayern dhidi ya Frankfurt, mfumo wetu wa Poisson unaweza kuhesabu mabao yanayotarajiwa ya Bayern kuwa 2.4 na ya Frankfurt kuwa 0.9. Kutoka hapa, tunatoa: Zaidi ya 2.5 takribani 62%, Timu zote mbili kufunga takribani 58%, alama inayowezekana zaidi 2-1 kwa takribani 12%.",
+      "Poisson safi huwa inadharau sare na mechi za mabao mengi kutokana na dhana yake ya uhuru — kwa hakika, matukio ya mabao yanahusiana kwa udhaifu. Tunatumia urekebishaji wa Dixon-Coles, uboreshaji unaoongeza kigezo cha tau kurekebisha uhusiano wa alama za chini, na kuuchanganya na safu yetu ya ML kwa urekebishaji zaidi. Matokeo ni mfumo wa mgawanyiko wa mabao unaofanya vizuri zaidi kuliko Poisson rahisi katika matokeo halisi ya mechi."
+    ],
+    "formulaCaption": "Kazi ya wingi wa uwezekano wa Poisson: uwezekano wa mabao k ikipewa kiwango kinachotarajiwa cha lambda.",
+    "exampleBoxLabel": "Mfano wa ulimwengu halisi",
+    "exampleBoxBody": "Kwa mechi ya Bayern dhidi ya Frankfurt, mfumo wetu wa Poisson unaweza kuhesabu mabao yanayotarajiwa ya Bayern kuwa 2.4 na ya Frankfurt kuwa 0.9. Kutoka hapa tunatoa: Zaidi ya 2.5 ~62%, BTTS ndio ~58%, alama inayowezekana zaidi 2-1 (~12%)."
+  },
+  "ml": {
+    "h2": "Safu ya ujifunzaji wa mashine",
+    "paragraphs": [
+      "Elo na Poisson zina nguvu lakini ni za kimitambo. Zinanasa nguvu ya timu na uwezekano wa mabao vyema, lakini zinakosa ishara za hila zaidi — ulinganifu wa kimkakati wa timu dhidi ya wapinzani wa kushinikiza juu, thamani ya utabiri ya kutokuwepo kwa mchezaji muhimu wa kati, au jinsi waamuzi fulani wanavyoathiri faida ya nyumbani. Ujifunzaji wa mashine hujaza pengo hilo kwa kugundua mienendo katika maelfu ya mechi za kihistoria ambayo wanadamu (na mifumo rahisi ya kitakwimu) huikosa.",
+      "Safu yetu ya ML inatumia vigezo 40+ kwa kila mechi: fomu ya hivi karibuni (mechi 5 / 10 / 20 zilizopita zenye kupungua kwa uzito), mgawanyiko wa nyumbani/mbali, historia ya H2H, mwelekeo wa mabao yanayotarajiwa (yake na yaliyofungiwa), takwimu za umiliki wa mpira, nguvu ya mistari kulingana na ukadiriaji wa wachezaji binafsi, siku za mapumziko kabla ya mechi, hali ya hewa pale inapohusika (upepo, mvua, joto), tabia za mwamuzi (kadi-kwa-mchezo, kiwango cha wastani cha penalti), na umuhimu wa mechi (mbio za nne za juu, vita vya kushuka daraja, mechi ya katikati ya wiki ya Ulaya).",
+      "Safu ya ML haichukui nafasi ya Elo au Poisson — inapima matokeo yao kulingana na muktadha. Kwa mechi ya kati ya msimu yenye umuhimu mdogo kati ya timu mbili thabiti, zilizoandikwa vyema, safu ya ML inatoa uzito mwingi kwa Elo + Poisson. Kwa mechi yenye umuhimu mkubwa yenye usumbufu mkubwa wa mistari au muktadha usio wa kawaida, safu ya ML inapima upya kulingana na hali kama hizo za kihistoria.",
+      "Mfumo wetu unafunzwa kwa data ya kihistoria ya mechi za misimu kadhaa — mechi zaidi ya 100,000 katika ligi zinazofunikwa. Tunatumia mbinu ya kushikilia: mfumo hauoni kamwe mechi unazojaribiwa juu yake wakati wa mafunzo, na tunatumia uthibitishaji wa walk-forward (kufundisha kwa data hadi msimu N, kujaribu kwa msimu N+1) kuhakikisha hatuzidishi kwa kelele za kihistoria.",
+      "Baada ya kila mechi kumalizika, matokeo yanarudi kwenye mfumo. Utabiri uliofaulu unaimarishwa; utabiri uliofeli unaonyesha mienendo ya tathmini upya. Mafunzo makuu ya kurudia yanaendeshwa kila wiki, pamoja na masasisho ya Elo baada ya kila mechi na marekebisho ya vigezo vya Poisson kulingana na madirisha ya fomu yanayozunguka. Hii inamaanisha injini unayotumia leo ni tofauti kweli na injini ya miezi mitatu iliyopita — inayorekebishwa kuendelea dhidi ya data mpya."
+    ],
+    "diagramCaption": "Mtandao wa neva uliorahisishwa: vigezo 40+ vya kuingiza vinapita kupitia safu zilizofichwa hadi pato la utabiri lililopimwa."
+  },
+  "data": {
+    "h2": "Vyanzo vya data na uthibitishaji",
+    "paragraphs": [
+      "Tunakusanya data ya mechi na timu kutoka kwa watoa data wa michezo wenye leseni — vyanzo vile vile vinavyotumiwa na mashirika makuu ya vyombo vya habari vya michezo na bookmakers. Watoa huduma wengi wanaingia kwenye mfumo wetu ili tuweze kulinganisha takwimu na kugundua hitilafu kabla hazijafika kwenye injini ya utabiri.",
+      "Kabla ya data yoyote kuingia kwenye injini yetu ya utabiri, inapita kupitia mfumo wa uthibitishaji: ulinganishaji wa muundo (kuweka viwango vya majina ya timu, miundo ya tarehe, alama za alama), ugunduzi wa hitilafu (kuonyesha thamani zisizowezekana kama matokeo ya '15-0' au nyakati zisizowezekana za kuanza mechi), kulinganisha na vyanzo vingi (vyanzo vinapotofautiana, tunaweka alama kwa ukaguzi wa binadamu badala ya kuchagua kiholela), na ukaguzi wa binadamu wa hitilafu zilizowekwa alama kabla hazijaanza kutumika.",
+      "Data ya mechi inasasishwa kwa karibu wakati halisi wakati wa michezo. Takwimu za timu na wachezaji zinasasishwa baada ya mechi. Injini yetu ya utabiri inahesabu upya kuendelea data mpya inapowasili — hii ndiyo inayowezesha kiashiria cha 'imesasishwa kila dakika' kwenye /predictions. Utabiri unabaki umefungwa mara unapochapishwa; ni injini ya msingi tu (kwa mechi za baadaye) inayoonyesha data mpya."
+    ],
+    "panelTitle": "Vyanzo vya data",
+    "panelItems": [
+      "Matokeo ya mechi na data ya moja kwa moja (watoa huduma wenye leseni)",
+      "Kumbukumbu za mechi za kihistoria (hifadhidata ya misimu mingi)",
+      "Data ya mistari na majeraha (iliyothibitishwa kabla ya mechi)",
+      "Hali ya hewa na mazingira ya uwanja (APIs za upande wa tatu)",
+      "Ukadiriaji wa wachezaji na vipimo vya utendaji (watoa huduma wenye leseni)"
+    ]
+  },
+  "locking": {
+    "h2": "Utaratibu wa kufunga",
+    "paragraphs": [
+      "Kila utabiri tunaouchapisha una muhuri wa wakati wa kufunga — wakati halisi ulipozalishwa na kuwekwa kwenye track record yetu ya umma. Baada ya muhuri huu wa wakati, utabiri hauwezi kuhaririwa, kufutwa, au kubadilishwa. Hii si sera tunayoahidi kufuata; ni kizuizi cha usanifu wa jinsi mfumo unavyohifadhi utabiri. Hakuna kitufe cha msimamizi cha kuhariri utabiri baadaye.",
+      "Tovuti nyingi za utabiri zina tatizo la uadilifu: zinaweza kuondoa kimya kimya utabiri uliopoteza au 'kuusasisha' baada ya tukio, na kufanya madai yoyote ya usahihi yasiweze kuthibitishwa. Tumeondoa uwezekano huu kwa muundo. Utabiri uliofungwa unaongezeka tu — hifadhidata inakubali utabiri mpya lakini inakataa marekebisho yoyote kwa ulioupo. Usanifu huo huo unawezesha track record yetu ya umma.",
+      "Kila utabiri katika track record yetu ya umma unajumuisha muhuri wake wa wakati wa kufunga. Unaweza kuthibitisha kuwa utabiri wowote maalum ulichapishwa kabla ya mechi halisi kuanza. Pamoja na matokeo yaliyoongezwa baada ya mechi, hii inakupa kila kitu unachohitaji kutathmini usahihi mwenyewe: maandishi ya utabiri, asilimia ya uhakika, wakati wa kufunga, wakati wa mechi, na matokeo halisi."
+    ],
+    "timelineCaption": "Mzunguko wa maisha wa utabiri: umezalishwa saa 24 kabla ya mechi kuanza, umefungwa saa 2 kabla, hauwezi kubadilishwa milele baadaye.",
+    "timelineSteps": [
+      {
+        "label": "Saa 24 kabla ya mechi kuanza",
+        "detail": "Utabiri umezalishwa (ufikiaji wa wanaojisajili)"
+      },
+      {
+        "label": "Saa 2 kabla ya mechi kuanza",
+        "detail": "Kufunga kwa umma + ufikiaji wa watumiaji wa bure"
+      },
+      {
+        "label": "Mwanzo wa mechi",
+        "detail": "Mechi inaanza"
+      },
+      {
+        "label": "Baada ya mechi",
+        "detail": "Matokeo yameongezwa kwa track record"
+      },
+      {
+        "label": "Milele baadaye",
+        "detail": "Utabiri hauwezi kubadilishwa"
+      }
+    ]
+  },
+  "whatWeDontDo": {
+    "h2": "Tusichofanya",
+    "intro": "Uwazi unafanya kazi kwa pande zote mbili. Hapa kuna mambo ambayo huduma za utabiri za baadhi hufanya na ambayo sisi kwa kusudi hatufanyi:",
+    "items": [
+      {
+        "title": "Hatuuzi au kudai 'mechi zilizofanyika'",
+        "detail": "Hatuna habari za ndani. Yeyote anayedai kuuza mechi zilizofanyika anafanya udanganyifu."
+      },
+      {
+        "title": "Hatuhariri utabiri baada ya kuchapishwa",
+        "detail": "Mara unapofungwa, utabiri hauwezi kubadilishwa — kwa usanifu, sio kwa sera."
+      },
+      {
+        "title": "Hatufichi hasara kutoka kwa track record yetu",
+        "detail": "Kila utabiri unachapishwa — ushindi, hasara, na sare zote sawa."
+      },
+      {
+        "title": "Hatuahidi asilimia maalum za usahihi",
+        "detail": "Utabiri wa AI una usahihi wa uwezekano unaotofautiana kwa soko na mashindano."
+      },
+      {
+        "title": "Hatutumii upendeleo wa kihariri",
+        "detail": "Utabiri unazalishwa na injini bila kuingiliwa na binadamu."
+      },
+      {
+        "title": "Hatufanyi kazi kama bookmaker",
+        "detail": "Hatupokei dau, hatushiki pesa, au kuwezesha kamari."
+      },
+      {
+        "title": "Hatushiriki data ya mtumiaji na bookmakers",
+        "detail": "Habari za akaunti yako zinabaki ndani ya BetsPlug."
+      }
+    ]
+  },
+  "limitations": {
+    "h2": "Mipaka na uaminifu",
+    "paragraphs": [
+      "Utabiri wa AI si miujiza. Ni uwezekano uliojulishwa kitakwimu. Utabiri wa uhakika wa 78% bado una uwezekano wa 22% wa kuwa makosa. Alama za uhakika zimerekebishwa — tunaposema 78%, tunamaanisha takribani 78 kati ya 100 ya utabiri kama huo unatatuliwa kwa upande wetu kwa muda mrefu, sio kwamba utabiri wowote mmoja umehakikishwa.",
+      "Utabiri wetu unafanya vyema zaidi katika: ligi zenye kiasi kikubwa, zilizoandikwa vyema (Premier League, La Liga, Bundesliga zina data nzito zaidi); masoko ya kiwango cha kati ambapo urejesho wa kitakwimu hutawala (1X2 na Zaidi/Chini huwa na utabiri zaidi kuliko masoko ya alama kamili); na mechi ambapo timu zina mistari thabiti (mechi zenye mzunguko mkubwa huleta tofauti zaidi).",
+      "Utabiri wetu hautegemewi sana katika: ligi zenye data ndogo ambapo seti yetu ya mafunzo ni nyembamba zaidi; mechi zisizo za kawaida (mechi za kombe, michezo ya uwanja wa upande wowote, wiki za baada ya mapumziko ya kimataifa); mechi zenye usumbufu mkubwa wa mistari ambapo data yetu ya mistari ya kabla ya mechi haina uhakika; na matukio ya uwezekano mdogo sana (timu kubwa za chini kushinda, alama za juu sana za mabao) ambapo uwezekano wa msingi una kelele kwa asili.",
+      "Hatudai kutabiri mpira wa miguu kwa ukamilifu. Tunadai kuutabiri kwa uwazi na kwa mbinu. Tumia utabiri wetu kama pembejeo moja katika uchambuzi wako mwenyewe — pamoja na uchunguzi wako mwenyewe, habari za hivi karibuni za timu, na uvumilivu wako wa hatari. Track record iko hapa kukusaidia kurekebisha imani yako mwenyewe katika mfumo kwa muda."
+    ]
+  },
+  "faq": {
+    "h2": "Maswali ya mbinu",
+    "questions": [
+      {
+        "q": "Je, ninaweza kuona msimbo halisi wa mfumo?",
+        "a": "Hatuchapishi msimbo wa chanzo (ni IP yetu kuu), lakini tunachapisha mbinu ya kina — ni mifumo gani tunatumia, vigezo gani tunavyoshughulikia, vyanzo vipi vya data tunavyotumia, na jinsi utabiri unavyofungwa. Yeyote mwenye ujuzi wa takwimu anaweza kuiga mbinu ya msingi."
+      },
+      {
+        "q": "Mnashughulikiaje matukio yasiyotarajiwa kama kadi nyekundu au majeraha wakati wa mechi?",
+        "a": "Utabiri wetu unazalishwa na kufungwa kabla ya mechi kuanza, kwa hivyo hausasishwa wakati wa mechi. Matukio ya ndani ya mchezo yanayoathiri usahihi ni sehemu ya kutokuwa na uhakika wa asili wa mpira wa miguu — na yanaonyeshwa kwa uaminifu katika track record yetu ya umma yanapotugharimu utabiri."
+      },
+      {
+        "q": "Kwa nini kutumia mifumo mingi badala ya mfumo mmoja kamili?",
+        "a": "Hakuna mbinu moja ya kitakwimu inayonasa nguvu zote za mpira wa miguu. Elo inashughulikia nguvu, Poisson inashughulikia mgawanyiko wa mabao, ML inashughulikia muktadha. Kuzichanganya kwa ujumuishaji uliopimwa hutoa utabiri imara zaidi kuliko mbinu yoyote moja peke yake."
+      },
+      {
+        "q": "Je, utabiri wenu una usahihi gani ukilinganisha na odds za bookmaker?",
+        "a": "Hatuchapishi usahihi wa kulinganisha dhidi ya odds za bookmaker — ulinganisho huo ni nyeti sana kwa masoko gani na vipindi vya muda unavyochagua. Tazama track record yetu ya umma kwa utendaji ghafi wa utabiri kwa ligi na kwa soko."
+      },
+      {
+        "q": "Je, mnazingatia data maalum ya wachezaji?",
+        "a": "Ndio, lakini katika ngazi ya timu. Tunazingatia nguvu ya mistari kulingana na ukadiriaji wa wachezaji binafsi, kuwepo/kutokuwepo kwa wachezaji muhimu (kwa kutumia data ya mistari iliyothibitishwa baada ya), na fomu ya jumla. Hatutabiri masoko ya prop ya wachezaji."
+      },
+      {
+        "q": "Mara ngapi mfumo unafundishwa upya?",
+        "a": "Kuendelea, na mizunguko mikuu ya mafunzo ya kurudia baada ya kila wiki ya mechi. Ukadiriaji wa Elo unasasishwa baada ya kila mechi. Vigezo vya Poisson vinarekebishwa kulingana na madirisha ya fomu yanayozunguka. Safu ya ML inafundishwa upya kila wiki kwa data ya wiki iliyopita pamoja na seti ya mafunzo ya mechi 100k zinazozunguka."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2": "Tazama mbinu kwa vitendo",
+    "body": "Sasa kwa kuwa unaelewa jinsi utabiri wetu unavyofanya kazi, uone ukitumiwa katika ligi 30+.",
+    "ctaPrimary": {
+      "label": "Tazama utabiri wa leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Linganisha mipango",
+      "canonical": "pricing"
+    }
+  }
+}

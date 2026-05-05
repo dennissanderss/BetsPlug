@@ -46,6 +46,11 @@ export const dataProtectionAuthorities: Record<Locale, DataProtectionAuthority> 
     name: "Garante per la protezione dei dati personali",
     url: "https://www.garanteprivacy.it",
   },
+  sw: {
+    countryLabel: "Afrika Mashariki",
+    name: "Office of the Data Protection Commissioner (Kenya / ODPC)",
+    url: "https://www.odpc.go.ke",
+  },
 };
 
 export interface HelplineEntry {
@@ -81,6 +86,10 @@ export const responsibleGamblingResources: Record<Locale, HelplineEntry[]> = {
   it: [
     { name: "Gioca Responsabile", url: "https://www.giocaresponsabile.it" },
     { name: "Numero Verde", phone: "800 558822" },
+  ],
+  sw: [
+    { name: "Gambling Therapy (Kiswahili / kimataifa)", url: "https://www.gamblingtherapy.org", note: "Msaada wa bure mtandaoni kwa lugha nyingi" },
+    { name: "BetsPlug — Wasiliana nasi", url: "/contact", note: "Tunaweza kukuelekeza kwa rasilimali za karibu" },
   ],
 };
 

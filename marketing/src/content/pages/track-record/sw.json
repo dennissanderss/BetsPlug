@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Track record — ya umma, milele | BetsPlug",
+    "description": "Kila utabiri wa BetsPlug umefungwa kabla ya mechi kuanza na unabaki katika rekodi yetu ya umma milele — ushindi na hasara zote mbili. Tazama jinsi utaratibu wa kufunga unavyofanya kazi.",
+    "ogImage": "/og-images/track-record-en.jpg"
+  },
+  "hero": {
+    "h1": "Kila utabiri. {{accent}}Wa umma. Milele.{{/accent}}",
+    "subheadline": "Tovuti nyingi za utabiri huficha hasara zao. Sisi hatufanyi hivyo. Kila utabiri wa BetsPlug umefungwa kabla ya mechi kuanza na unabaki katika rekodi yetu ya umma milele — ushindi na hasara zote mbili.",
+    "trustStrip": [
+      { "icon": "lock",   "text": "Imefungwa kabla ya mechi kuanza" },
+      { "icon": "eye",    "text": "Daima ya umma" },
+      { "icon": "shield", "text": "Haiwezi kuhaririwa" }
+    ],
+    "ctaPrimary":   { "label": "Tazama bei", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Tazama utabiri wa leo", "canonical": "predictions" }
+  },
+  "whyTransparency": {
+    "h2": "Sekta ya utabiri ina {{accent}}tatizo la uaminifu{{/accent}}",
+    "paragraphs": [
+      "Tovuti nyingi za utabiri wa mpira wa miguu hufanya kitu rahisi ili kuonekana zenye kuaminika: huondoa kimya kimya utabiri wao uliopoteza. Baada ya wiki chache za uchapishaji wa kuchagua, 'track record' yao inaonyesha ushindi mwingi. Matokeo: wachezaji wa kamari wanaofuata tovuti hizi hupoteza pesa kwa misingi ya habari za kupotosha.",
+      "Tovuti nyingine huenda mbali zaidi. Huhariri utabiri baada ya mechi kuanza ili kufanana na matokeo halisi. Hudai 'usahihi wa 85%' bila njia yoyote kwa watumiaji kuthibitisha. Hutumia ushuhuda kutoka kwa akaunti zisizokuwepo. Sekta nzima ina tatizo la uaminifu kwa sababu hakuna utaratibu wa kuthibitisha au kupinga madai haya.",
+      "Tulikataa mbinu hii tangu siku ya kwanza. Sio kwa sababu sisi ni waaminifu zaidi kuliko washindani — bali kwa sababu tumejenga mfumo wetu kufanya udanganyifu usiwezekane. Uwazi sio madai ya uuzaji. Ni jinsi jukwaa linavyofanya kazi."
+    ]
+  },
+  "pillars": {
+    "h2": "Jinsi tunavyo {{accent}}hakikisha uwazi{{/accent}}",
+    "subH2": "Mitambo mitatu hufanya track record yetu ithibitishwe, sio tu kudaiwa.",
+    "items": [
+      {
+        "icon": "lock",
+        "title": "Mihuri ya wakati iliyofungwa",
+        "body": "Kila utabiri unawekwa kwenye hifadhidata yetu na muhuri wa wakati wa umma kabla ya mechi kuanza. Baada ya wakati huu, utabiri hauwezi kuhaririwa, kufutwa, au kubadilishwa — sio na sisi, sio na mtu yeyote. Hii sio sera. Ni ya kiusanifu. Mfumo hauna kazi ya 'kuhariri' kwa utabiri uliofungwa."
+      },
+      {
+        "icon": "scale",
+        "title": "Ushindi na hasara zote mbili",
+        "body": "Tunachapisha kila utabiri tunaouzalisha. Ushindi, hasara, na sare zote zinaingia kwenye rekodi sawa ya umma. Hakuna uchaguzi, hakuna uonyeshaji wa kuchagua. Ikiwa mfumo wetu unakosea kuhusu mechi, hasara hiyo inaonekana kudumu pamoja na ushindi wetu. Kuchagua bora haiwezekani kwa sababu hakuna kinachofichwa."
+      },
+      {
+        "icon": "book-open",
+        "title": "Mbinu ya umma",
+        "body": "Mbinu yetu ya utabiri imeandikwa kikamilifu: ni mifumo gani ya kitakwimu tunatumia (Elo + Poisson), ni mbinu gani ya ujifunzaji wa mashine inatumika, ni vigezo gani 40+ vinaingia katika kila utabiri. Hakuna madai ya 'algoriti ya siri'. Unaweza kusoma mbinu nzima na kuthibitisha kuwa mantiki sawa imetumika kwa kila mechi katika track record yetu."
+      }
+    ]
+  },
+  "whatYouCanVerify": {
+    "h2": "Jinsi utabiri unavyokuwa {{accent}}wa kudumu{{/accent}}",
+    "subH2": "Mara utabiri unapozalishwa, mfumo unaurekodi na muhuri wa wakati wa umma. Baada ya wakati huu, hakuna mtu — hata sisi — anayeweza kuubadilisha.",
+    "features": [
+      { "icon": "lock",       "text": "Utabiri umezalishwa na kuwekwa kwenye hifadhidata" },
+      { "icon": "clock",      "text": "Muhuri wa wakati wa umma unarekodi wakati halisi" },
+      { "icon": "shield",     "text": "Hifadhidata haina kazi ya kuhariri kwa rekodi zilizofungwa" },
+      { "icon": "eye",        "text": "Utabiri wa awali unabaki kuonekana milele — ushindi au hasara" },
+      { "icon": "database",   "text": "Utabiri wa kihistoria hujikusanya kwa muda" },
+      { "icon": "line-chart", "text": "Mienendo ya jumla inaonekana katika data yetu ya mbinu" }
+    ],
+    "cta": { "label": "Soma mbinu kamili", "canonical": "methodology" },
+    "noteUnderCta": "Ukurasa wetu wa mbinu unaeleza dhamana za kiufundi kwa undani.",
+    "mockup": {
+      "urlLabel":         "Rekodi ya utabiri · Imefungwa",
+      "filterAllLeagues": "Ligi zote",
+      "filterRange":      "Siku 90 zilizopita",
+      "filterAllMarkets": "Masoko yote",
+      "statTotal":  "Utabiri wote",
+      "statWins":   "Ushindi",
+      "statLosses": "Hasara",
+      "statVoids":  "Batili",
+      "gridLabel":  "Siku 90 zilizopita",
+      "lockedLabel": "Imefungwa",
+      "winLabel":   "Ushindi",
+      "lossLabel":  "Hasara"
+    }
+  },
+  "methodologyConnection": {
+    "h2": "Injini ile ile inazalisha {{accent}}kila utabiri{{/accent}}",
+    "paragraphs": [
+      "Track record yetu ni uthibitisho wa mbinu yetu. Ikiwa hujui jinsi utabiri unavyozalishwa, huwezi kutathmini kama track record ina maana yoyote. Ndio maana tunachapisha vyote viwili: mbinu inayounda utabiri, na rekodi ya kihistoria ya jinsi utabiri huo ulivyofanya kazi.",
+      "Soma mbinu kamili ili kuelewa ni vigezo gani tunavyoshughulikia, ni mifumo gani tunaichanganya, na kwa nini tunafunga utabiri kabla ya mechi kuanza. Kisha tazama utabiri wa leo kuona mbinu ile ile ikitumika kwa wakati halisi."
+    ],
+    "cta": { "label": "Soma mbinu", "canonical": "methodology" }
+  },
+  "faq": {
+    "h2": "Maswali ya track record",
+    "questions": [
+      {
+        "q": "Naweza kuona wapi utabiri wa leo?",
+        "a": "Utabiri wa leo unaishi kwenye ukurasa wetu wa /predictions — uhakiki wa bure kila siku, na utabiri kamili wa kila siku nyuma ya usajili. Utaratibu wa kufunga ni sawa: kila utabiri unawekwa na muhuri wa wakati wa umma kabla ya mechi kuanza."
+      },
+      {
+        "q": "Je, kweli utabiri hauwezi kuhaririwa baada ya kuchapishwa?",
+        "a": "Sahihi. Mara utabiri unapofungwa na muhuri wake wa wakati wa mechi, mfumo wetu hauna utaratibu wa kuubadilisha. Hii imejengwa katika usanifu, sio sera tunayoahidi kufuata. Hata sisi hatuwezi kubadilisha utabiri uliofungwa."
+      },
+      {
+        "q": "Ninathibitishaje utabiri maalum ulifungwa kabla ya mechi kuanza?",
+        "a": "Kila utabiri uliochapishwa una muhuri wa wakati wa kufunga — wakati halisi ulipowekwa. Linganisha hii na wakati halisi wa mechi kuanza. Muhuri wa wakati wa kufunga daima ni kabla ya mechi kuanza."
+      },
+      {
+        "q": "Kwa nini hamuonyeshi asilimia maalum za usahihi kwenye ukurasa huu?",
+        "a": "Usahihi unatofautiana kwa kiasi kikubwa kwa ligi, aina ya soko, na kipindi cha wakati. Asilimia moja ya kichwa huficha tofauti hii. Ukurasa wetu wa mbinu unaonyesha utendaji katika muktadha — mashindano gani, masoko gani, na vipindi vipi tumefanya vyema na vibaya zaidi."
+      },
+      {
+        "q": "Je, ninahitaji kujisajili ili kuona jinsi mfumo unavyofanya kazi?",
+        "a": "Hapana. Mbinu kamili ni ya umma — soma /methodology kuelewa hasa jinsi utabiri unavyozalishwa na kufungwa. Usajili hufungua utabiri wa kila siku; kuelewa mchakato ni bure."
+      },
+      {
+        "q": "Ni nini kinakuzuia kuondoa utabiri uliopoteza?",
+        "a": "Usanifu. Hifadhidata yetu haina kazi ya 'kufuta utabiri uliofungwa'. Kihalisi hatuwezi kuondoa utabiri mara unapofungwa. Hili lilikuwa chaguo la kimkakati la usanifu tulipojenga jukwaa — kufanya track record ithibitishwe kwamba haiwezi kubadilishwa, sio tu kulindwa kwa sera."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "{{accent}}Umeshawishika{{/accent}} na uwazi?",
+    "subH2": "Sasa uone utabiri wenyewe.",
+    "body": "Umeona jinsi tunavyohakikisha uwazi. Hatua inayofuata ni kuona utabiri ambao mbinu yetu hutoa — na kuamua kama unastahili usajili wako.",
+    "ctaPrimary":   { "label": "Tazama bei", "canonical": "pricing" },
+    "ctaSecondary": { "label": "Tazama utabiri wa leo", "canonical": "predictions" }
+  }
+}

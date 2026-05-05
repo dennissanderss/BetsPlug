@@ -29,7 +29,7 @@ export type LeagueSlug =
   | "primeira-liga"
   | "championship";
 
-export type Locale = "en" | "nl" | "de" | "fr" | "es" | "it";
+export type Locale = "en" | "nl" | "de" | "fr" | "es" | "it" | "sw";
 
 export interface LeagueConfig {
   slug: LeagueSlug;

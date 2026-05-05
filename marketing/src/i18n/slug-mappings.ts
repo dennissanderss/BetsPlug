@@ -30,6 +30,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "pronostics",
     es: "pronosticos",
     it: "pronostici",
+    sw: "utabiri",
   },
   learn: {
     en: "learn",
@@ -38,6 +39,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "apprendre",
     es: "aprender",
     it: "imparare",
+    sw: "jifunze",
   },
   pricing: {
     en: "pricing",
@@ -46,6 +48,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "tarifs",
     es: "precios",
     it: "prezzi",
+    sw: "bei",
   },
   about: {
     en: "about",
@@ -54,6 +57,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "a-propos",
     es: "sobre-nosotros",
     it: "chi-siamo",
+    sw: "kuhusu",
   },
   "how-it-works": {
     en: "how-it-works",
@@ -62,6 +66,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "comment-ca-marche",
     es: "como-funciona",
     it: "come-funziona",
+    sw: "jinsi-inavyofanya-kazi",
   },
   methodology: {
     en: "methodology",
@@ -70,6 +75,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "methodologie",
     es: "metodologia",
     it: "metodologia",
+    sw: "mbinu",
   },
   "bet-types": {
     en: "bet-types",
@@ -78,6 +84,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "types-de-paris",
     es: "tipos-de-apuestas",
     it: "tipi-di-scommesse",
+    sw: "aina-za-utabiri",
   },
   faq: {
     en: "faq",
@@ -86,6 +93,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "faq",
     es: "preguntas-frecuentes",
     it: "faq",
+    sw: "maswali",
   },
   "free-vs-paid": {
     en: "free-vs-paid",
@@ -94,6 +102,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "gratuit-vs-paye",
     es: "gratis-vs-pago",
     it: "gratis-vs-pagamento",
+    sw: "bure-vs-malipo",
   },
   privacy: {
     en: "privacy",
@@ -102,6 +111,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "confidentialite",
     es: "privacidad",
     it: "privacy",
+    sw: "faragha",
   },
   terms: {
     en: "terms",
@@ -110,6 +120,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "conditions",
     es: "terminos",
     it: "termini",
+    sw: "masharti",
   },
   cookies: {
     en: "cookies",
@@ -118,6 +129,7 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "cookies",
     es: "cookies",
     it: "cookie",
+    sw: "vidakuzi",
   },
   "responsible-gambling": {
     en: "responsible-gambling",
@@ -126,19 +138,23 @@ export const folderSlugs: Record<string, LocaleMap> = {
     fr: "jeu-responsable",
     es: "juego-responsable",
     it: "gioco-responsabile",
+    sw: "mchezo-wenye-busara",
   },
   /* Universal — same in every locale */
   contact: {
     en: "contact", nl: "contact", de: "contact",
     fr: "contact", es: "contact", it: "contact",
+    sw: "mawasiliano",
   },
   "track-record": {
     en: "track-record", nl: "track-record", de: "track-record",
     fr: "track-record", es: "track-record", it: "track-record",
+    sw: "rekodi",
   },
   telegram: {
     en: "telegram", nl: "telegram", de: "telegram",
     fr: "telegram", es: "telegram", it: "telegram",
+    sw: "telegram",
   },
 };
 
@@ -152,6 +168,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "qu-est-ce-que-le-value-betting",
     es: "que-es-value-betting",
     it: "cos-e-il-value-betting",
+    sw: "value-betting-ni-nini",
   },
   "expected-goals-explained": {
     en: "expected-goals-explained",
@@ -160,6 +177,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "expected-goals-explique",
     es: "expected-goals-explicado",
     it: "expected-goals-spiegato",
+    sw: "expected-goals-imefafanuliwa",
   },
   "elo-rating-explained": {
     en: "elo-rating-explained",
@@ -168,6 +186,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "classement-elo-explique",
     es: "clasificacion-elo-explicado",
     it: "classifica-elo-spiegato",
+    sw: "elo-rating-imefafanuliwa",
   },
   "poisson-goal-models": {
     en: "poisson-goal-models",
@@ -176,6 +195,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "modeles-poisson-buts",
     es: "modelos-poisson-goles",
     it: "modelli-poisson-gol",
+    sw: "mifumo-ya-mabao-ya-poisson",
   },
   "kelly-criterion": {
     en: "kelly-criterion",
@@ -184,6 +204,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "critere-de-kelly",
     es: "criterio-de-kelly",
     it: "criterio-di-kelly",
+    sw: "kigezo-cha-kelly",
   },
   "bankroll-management": {
     en: "bankroll-management",
@@ -192,6 +213,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "gestion-de-bankroll",
     es: "gestion-de-bankroll",
     it: "gestione-del-bankroll",
+    sw: "usimamizi-wa-bankroll",
   },
   "ai-vs-tipsters": {
     en: "ai-vs-tipsters",
@@ -200,6 +222,7 @@ export const articleSlugs: Record<string, LocaleMap> = {
     fr: "ia-vs-pronostiqueurs",
     es: "ia-vs-tipsters",
     it: "ia-vs-tipster",
+    sw: "ai-dhidi-ya-watabiri",
   },
 };
 

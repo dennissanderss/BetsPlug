@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Eredivisie leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa Eredivisie unaoendeshwa na AI kwa kila mechi. Ajax, PSV, Feyenoord na timu nyingine — zikichambuliwa kwa Elo + Poisson + ML. Inapatikana kwa mpango wowote wa kulipia.",
+    "ogImage": "/og-images/league-eredivisie-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Eredivisie",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya Eredivisie. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Eredivisie",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Eredivisie",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Eredivisie",
+    "paragraphs": [
+      "Eredivisie ni daraja la juu zaidi la mpira wa miguu nchini Uholanzi, linaloshindaniwa na klabu 18 katika siku 34 za mechi kuanzia Agosti hadi Mei. Kihistoria ni kitovu cha maendeleo ya vijana — ikiwazaa wachezaji kama Cruyff, Van Basten, Bergkamp na hivi karibuni De Jong, Van Dijk na Van de Beek — ligi hii ina utambulisho wa kushambulia tofauti. Ajax, PSV na Feyenoord wanaunda 'Tatu Wakubwa' wa kihistoria, huku AZ, Twente na Utrecht wakiwa wapinzani walioimarika. Mfumo wetu wa AI unachambua kila mechi ya Eredivisie kwa kutumia fomu ya sasa, historia ya mechi za moja kwa moja, mabao yanayotarajiwa na vigezo vingine zaidi ya 40.",
+      "Eredivisie ni mojawapo ya ligi za Ulaya zenye mabao mengi zaidi, ikiwa na wastani wa juu zaidi ya mabao 3.0 kwa kila mechi — sawa na Bundesliga na juu zaidi kuliko Serie A au Ligue 1. Msisitizo wa ligi katika mpira wa miguu wa kushambulia na mistari ya juu ya kujihami unamaanisha masoko ya mistari ya mabao (Juu ya 2.5, Timu Zote Mbili Kufunga) yana ishara madhubuti za kiutabiri. Tabaka letu la Poisson limepangwa kwa mazingira ya kufunga mabao yaliyoinuka ya mpira wa miguu wa Kiholanzi, na tabaka letu la ML linazingatia pengo pana kati ya klabu tatu za juu na zingine, pamoja na athari za mzunguko wa mechi za Ulaya kwenye utendaji wa Eredivisie wa wikendi.",
+      "Kila utabiri wa Eredivisie umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Utabiri wa Eredivisie ni sehemu ya mipango yote ya kulipia — watumiaji wa bure wanaona orodha za ratiba bila utabiri, huku wanachama wakipokea kila mechi na uchambuzi kamili wa takwimu ikijumuisha mgawanyiko wa xG, uwezekano wa mgawanyo wa mabao na maelezo ya muktadha wa kimkakati."
+    ],
+    "statsPanel": {
+      "h3": "Eredivisie kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Eredivisie kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za Eredivisie",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Eredivisie unavyoundwa",
+    "body": "Utabiri wa Eredivisie hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo, mifumo ya mabao ya Poisson iliyopangwa kwa kiwango cha juu cha kufunga mabao cha ligi, na machine learning. Mfumo unazingatia mifumo ya kushambulia ya mpira wa miguu wa Kiholanzi na athari ya mzunguko wa mechi za Ulaya kwa klabu tatu za juu.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning iliyofunzwa kwa takwimu za Eredivisie"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Eredivisie",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Eredivisie?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri. Tunachapisha kila utabiri wa Eredivisie katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini utabiri wa Eredivisie ni wa kulipia tu?",
+        "a": "Utabiri wa bure umewekewa mipaka kwa ligi 3 kuu (Premier League, La Liga, Bundesliga). Utabiri wa Eredivisie ni sehemu ya mipango yote ya kulipia, ukijumuishwa na uchambuzi kamili wa mechi."
+      },
+      {
+        "q": "Mnachapisha aina gani za utabiri kwa Eredivisie?",
+        "a": "Kwa kila mechi ya Eredivisie tunachapisha utabiri katika masoko mengi, ikipewa msisitizo masoko ya mistari ya mabao (Juu/Chini, BTTS) kutokana na hali ya juu ya kufunga mabao ya ligi. Pia tunashughulikia 1X2 na Nafasi Mbili."
+      },
+      {
+        "q": "Utabiri wa Eredivisie unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Eredivisie hadi saa 24 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia ratiba za KNVB-beker (kombe la Uholanzi)?",
+        "a": "Tunashughulikia mechi zote za ligi ya Eredivisie. Ratiba za KNVB Beker hazimo katika ushughulikiaji wetu wa msingi; mechi za Ulaya zinazohusisha Ajax, PSV na Feyenoord zinashughulikiwa kando."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Eredivisie kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Eredivisie wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Eredivisie?",
+    "h2Gated": "Fungua utabiri wa Eredivisie",
+    "bodyFree": "Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Eredivisie ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jaribu bure",
+      "href": "https://app.betsplug.com/register?source=league_eredivisie"
+    }
+  }
+}

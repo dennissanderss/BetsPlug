@@ -1,0 +1,251 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Mfumo wa ukadiriaji wa Elo kwa mpira wa miguu umefafanuliwa | BetsPlug learn",
+    "description": "Jinsi viwango vya Elo vinavyopima nguvu ya timu kwa mienendo. Awali kwa chess, sasa inaendesha utabiri wa kisasa wa mpira wa miguu. Fomula, mifano, na mipaka.",
+    "ogImage": "/og-images/learn-elo-rating-en.jpg"
+  },
+  "header": {
+    "h1": "Mfumo wa ukadiriaji wa Elo: jinsi nguvu ya timu ya mpira wa miguu inavyopimwa",
+    "excerpt": "Mfumo wa kuorodhesha kwa mienendo unaobadilisha nguvu ya timu baada ya kila mechi. Awali kwa chess, sasa unaendesha utabiri wa kisasa wa mpira wa miguu.",
+    "readingTime": "Soma kwa dakika 10",
+    "difficulty": "Wa Kati",
+    "category": "Mifumo ya Kitakwimu",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "Katika Makala Hii",
+  "breadcrumbLearn": "Jifunze",
+  "intro": "Meza za ligi zinakuambia ni timu zipi zimekusanya pointi nyingi zaidi. Hazikuambii chochote kuhusu kwa nini, au ikiwa pointi hizo zinaonyesha nguvu halisi ya sasa. Timu inaweza kukaa nafasi ya nne kwenye meza kwa mwanzo wa moto unaopungua sasa. Timu inaweza kukaa nafasi ya nane licha ya kuwa kwa wazi nguvu zaidi kuliko timu nne zilizo mbele yao. Viwango vya Elo vinakata kelele hii. Kila timu hubeba kiwango kimoja cha nambari kinachosasishwa baada ya kila mechi — kikipanda wanaposhinda, kikishuka wanapopoteza, kwa viwango vinavyolingana na ikiwa matokeo yalitarajiwa. Mwongozo huu unaeleza jinsi Elo inavyofanya kazi, kwa nini inalingana vyema na mpira wa miguu, na inakwama wapi. Mfumo huu unasaidia injini nyingi za kisasa za utabiri, ikiwemo yetu.",
+  "sections": [
+    {
+      "id": "what-is-elo",
+      "h2": "Ukadiriaji wa Elo ni nini?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Elo ni kiwango cha nambari cha nguvu, kinachoonyeshwa kwa kipimo kisicho na mwisho ambacho kawaida kinaanzia karibu 1200 (dhaifu sana) hadi 2200 (kiwango cha kimataifa). Kiwango hiki kinabana matokeo ya maelfu ya mechi za kihistoria kuwa makadirio moja ya nguvu ya sasa. Timu mbili zenye kiwango sawa zinaonekana kuwa na nguvu sawa; kadiri pengo la kiwango linavyoongezeka, ndivyo mpendwa anavyokuwa mkubwa zaidi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kila timu inaanza kwenye msingi (mara nyingi 1500) mara ya kwanza inapoingia kwenye mfumo. Kiwango chao kisha kinabadilika kwa muda. Shinda dhidi ya mpinzani mwenye nguvu: pata sana. Poteza kwa mpinzani dhaifu: poteza sana. Sare na mpinzani sawa: hakuna mabadiliko. Kiwango ni makadirio yanayotembea ambayo huongezeka kwa usahihi kadri timu inavyokaa katika mfumo."
+        },
+        {
+          "type": "h3",
+          "text": "Elo ilitoka wapi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Arpad Elo alikuwa profesa wa fizikia wa Kihungaria-Kimarekani aliyebuni mfumo huu mwaka 1950 kwa ajili ya orodha za chess. US Chess Federation iliupokea mwaka 1960; FIDE (chombo cha kimataifa cha chess) ilifuata mwaka 1970. Elo hakuwahi kukusudia mfumo wake kupita chess, lakini ujumla wa kihesabu ulifanya iwe asili kuubadilisha. Elo ya mpira wa miguu iliibuka mwaka 1990; leo, tovuti kama clubelo.com na eloratings.net huchapisha viwango vya umma vya Elo kwa maelfu ya klabu na timu za kitaifa."
+        }
+      ]
+    },
+    {
+      "id": "how-elo-updates",
+      "h2": "Jinsi viwango vya Elo vinavyosasishwa",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fomula ya kusasisha Elo ni moyo wa mfumo:"
+        },
+        {
+          "type": "formula",
+          "latex": "R_{\\text{new}} = R_{\\text{old}} + K \\times (S - E)",
+          "caption": "K ni mara kwa mara ya kubadilika; S ni matokeo halisi (1 ushindi, 0.5 sare, 0 hasara); E ni matokeo yanayotarajiwa kulingana na tofauti ya viwango."
+        },
+        {
+          "type": "paragraph",
+          "text": "S ni rahisi: 1 kwa ushindi, 0.5 kwa sare, 0 kwa hasara. E (matokeo yanayotarajiwa) hutoka kwenye logistic function ya tofauti ya viwango: timu yenye faida ya pointi 200 za Elo ina matokeo yanayotarajiwa ya takriban 0.76 (\"sehemu\" ya 76% ya matokeo). K inadhibiti ni kiasi gani mechi moja inahamisha kiwango. Elo ya mpira wa miguu kawaida hutumia K = 20 hadi 40. K ya juu = mabadiliko zaidi, urekebishaji wa haraka. K ya chini = uthabiti zaidi, urekebishaji wa polepole."
+        },
+        {
+          "type": "diagram",
+          "name": "elo-update",
+          "caption": "Timu mbili zinaingia mechi na viwango vya sasa; matokeo na matokeo yanayotarajiwa yanachanganya kusasisha viwango vyote viwili kwa ulinganifu."
+        },
+        {
+          "type": "example",
+          "label": "Mfano uliofanyika",
+          "body": "Mnamo Desemba 2024, Bayern Munich ilikuwa na kiwango cha Elo cha 2087 na ilicheza dhidi ya Augsburg ya kati ya meza yenye kiwango cha 1834. Tofauti ya kiwango: +253 kwa upande wa Bayern, ikitoa matokeo yanayotarajiwa ya takriban 0.81 — Bayern \"inapaswa\" kupata 81% ya pointi kwa wastani. Mechi iliisha 2-3 kwa Augsburg. S ya Bayern ilikuwa 0, E ilikuwa 0.81, hivyo ΔR = 32 × (0 − 0.81) = −26 (kutumia K=32). Bayern ilishuka hadi 2061. S ya Augsburg ilikuwa 1, E ilikuwa 0.19, hivyo ΔR = +26. Augsburg iliruka hadi 1860. Kadiri kushtua kunavyoongezeka, ndivyo mabadiliko ya kiwango yanavyoongezeka."
+        }
+      ]
+    },
+    {
+      "id": "football-adjustments",
+      "h2": "Marekebisho ya Elo maalum kwa mpira wa miguu",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Elo safi ya chess hailingani kabisa na mpira wa miguu moja kwa moja. Mifumo ya Elo ya mpira wa miguu inapanua fomula ya msingi kwa njia tatu muhimu."
+        },
+        {
+          "type": "h3",
+          "text": "Kipengele cha tofauti ya mabao"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ushindi wa 4-0 unawasilisha taarifa zaidi kuliko ushindi wa 1-0. Mifumo mingi ya Elo ya mpira wa miguu inazidisha K-factor kwa marekebisho ya tofauti ya mabao — kawaida kipimo cha logarithmic ili tofauti kubwa bado ziwe muhimu lakini kwa kupungua kwa faida. 4-0 inaweza kutumia 1.5× ya mabadiliko ya kawaida ya kiwango; 7-0 inaweza kutumia 1.75×. Hii inazuia ushindi mkubwa kutawala viwango huku ikiendelea kutuza ushindi wa uhakika zaidi kuliko wa karibu."
+        },
+        {
+          "type": "h3",
+          "text": "Faida ya nyumbani"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mpira wa miguu una faida ya nyumbani thabiti yenye thamani ya takriban pointi 60-100 za Elo katika ligi kuu. Elo ya mpira wa miguu inaijumuisha hii katika hesabu ya matokeo yanayotarajiwa: timu yenye kiwango cha kweli cha 1900 inayocheza nyumbani inachukuliwa kama timu ya kiwango cha 1980-cha-ufanisi kwa mechi hiyo. Premier League imekuwa kihistoria na faida kali zaidi ya nyumbani katika mpira wa miguu wa Ulaya kuu; ligi zingine (haswa Eredivisie) zina faida ya chini ya nyumbani."
+        },
+        {
+          "type": "h3",
+          "text": "Kizidishi cha umuhimu wa mechi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mechi ya knockout ya Champions League inawasilisha taarifa zaidi kuliko mechi ya kirafiki. Mifumo mingi ya Elo huweka uzito wa K wa juu zaidi kwa mashindano ya hatari za juu: K=30 kwa mechi za ligi, K=40 kwa fainali za kombe, K=50 kwa michezo ya mashindano makubwa. Elo ya kimataifa (inayotumiwa na FIFA's World Football Ranking, ambayo ni karibu Elo-msingi) hutumia vizidishi maalum vya mashindano."
+        }
+      ]
+    },
+    {
+      "id": "why-works",
+      "h2": "Kwa nini Elo inafanya kazi kwa utabiri",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "Usahihi wenye uzito wa hivi karibuni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Elo kwa asili huweka uzito wa mechi za hivi karibuni zaidi kuliko za zamani — si kwa kupunguza kwa makusudi matokeo ya zamani, bali kwa ukweli wa kimuundo kwamba mechi za hivi karibuni zaidi zina ushawishi mkubwa zaidi kwenye kiwango cha sasa. Kiwango cha timu kutoka miezi 18 iliyopita kimeandikwa upya makumi ya mara na matokeo ya kati. Hii inafanya Elo kujibu vyema mabadiliko ya fomu, meneja, au kikosi bila kurekebisha kwa mkono."
+        },
+        {
+          "type": "h3",
+          "text": "Inajirekebisha"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ikiwa Elo inakadiria kupita kiasi timu (kwa kuwapa kiwango cha mwenendo wa moto wasichostahili), wanapoteza pointi mara wanapoanza kupoteza mechi dhidi ya wapinzani walio chini yao. Mfumo unarekebisha hitilafu kiotomatiki — hauhitaji mchambuzi kuangazia \"timu hii imekadiriwa kupita kiasi\" na kurekebisha kwa mkono. Kiwango huenda mahali ambapo matokeo yanaagiza."
+        },
+        {
+          "type": "h3",
+          "text": "Hakuna uzito wa kiholela"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mifumo mingi ya kuorodhesha inahusisha uzito wa kibinafsi: tunapaswa kuthamini kiasi gani ushindi wa nyumbani dhidi ya wa ugenini? Wa hivi karibuni dhidi ya wa zamani? Ubora wa mpinzani? Elo inasimba haya yote katika vigezo viwili (K na faida ya nyumbani), vyote viwili vinaweza kurekebishwa kwa nguvu dhidi ya data ya kihistoria. Hakuna sehemu ya \"hisia\"."
+        }
+      ]
+    },
+    {
+      "id": "betsplug-elo",
+      "h2": "Jinsi BetsPlug inavyotumia Elo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kila timu katika ligi tunazofunika hubeba kiwango cha sasa cha Elo, kilichosasishwa ndani ya dakika baada ya filimbi ya mwisho ya kila mechi. Tofauti ya Elo kabla ya mechi ndio kitabiri kimoja kikali zaidi katika mfumo wetu — kinanasa nguvu ya timu, fomu ya hivi karibuni, na faida ya nyumbani katika nambari moja."
+        },
+        {
+          "type": "paragraph",
+          "text": "Lakini Elo haisimami pekee yake. Tunalisha tofauti ya Elo katika mfumo wa Poisson wa mabao pamoja na mwenendo wa hivi karibuni wa xG, xG ya kujihami ya mpinzani, nguvu ya lineup, na siku za kupumzika, ikitoa expected goals (lambda) kwa timu zote mbili. Kutoka hapo, safu yetu ya ujifunzaji wa mashine inarekebisha ushawishi wa Elo kwa kila muktadha wa mechi — Elo ni muhimu zaidi katika mechi thabiti za ligi na chini katika mechi za kombe zenye lineups zilizopokezwa, kwa mfano. Ukurasa wa methodologia unashughulikia muunganisho kwa undani."
+        }
+      ]
+    },
+    {
+      "id": "elo-limitations",
+      "h2": "Mipaka ya Elo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Elo ni imara lakini si isiyokosea. Mtu yeyote anayetumia utabiri wa msingi wa Elo anapaswa kujua sehemu zake dhaifu."
+        },
+        {
+          "type": "h3",
+          "text": "Mwitiko wa polepole kwa mabadiliko ya kikosi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ikiwa mfungaji nyota wa timu amejeruhiwa kwa miezi mitatu, timu ina nguvu kidogo kwa maana — lakini kiwango chao cha Elo hurekebisha tu wakati matokeo ya mechi yanapokusanyika. Mechi chache za kwanza baada ya jeraha, Elo itazidi kukadiria timu. Hili ni tatizo maalum kwa mashindano ya kombe ambapo vikosi vinapokezwa na Elo \"haijui\" lineup ni tofauti."
+        },
+        {
+          "type": "h3",
+          "text": "Ulinganifu wa kimkakati hauonekani"
+        },
+        {
+          "type": "paragraph",
+          "text": "Elo inashughulikia timu kama maadili moja ya nguvu. Haikamati kwamba Timu A inakwama dhidi ya wapinzani wa kushinikiza juu huku ikifanya vyema dhidi ya vizuizi vya kina, au kwamba nguvu ya Timu B iko katika mashambulio ya kupinga ambayo hayafanyi kazi dhidi ya ulinzi mdogo. Injini za kisasa za utabiri huweka safu ya ML juu ya Elo hasa kunasa athari hizi za kulinganisha."
+        },
+        {
+          "type": "h3",
+          "text": "Mawazo ya K-factor yanavunjika kwa mechi za kombe"
+        },
+        {
+          "type": "paragraph",
+          "text": "Mechi za kombe ni za kelele zaidi kuliko mechi za ligi — vikosi vilivyopokezwa, motisha ya chini katika raundi za mwanzo, drama katika fainali. K-factor moja haiwezi kunasa tofauti hii. Mifumo ya kisasa zaidi hutumia K-factors maalum kwa aina ya mechi au kuondoa mechi fulani za kombe kutoka kwa masasisho ya kiwango kabisa."
+        },
+        {
+          "type": "h3",
+          "text": "Utekelezaji tofauti hutofautiana"
+        },
+        {
+          "type": "paragraph",
+          "text": "Hakuna \"Elo ya mpira wa miguu\" moja ya kanuni. Clubelo, eloratings.net, FiveThirtyEight's SPI (kwa urahisi msingi wa Elo), na Elo yetu ya ndani vyote hutoa viwango tofauti kidogo kwa timu hizohizo. Tofauti kawaida ni ndogo (ndani ya pointi 30-50) lakini ni za kweli. Chagua mmoja na ushikilie kwa uthabiti."
+        }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Mafunzo muhimu",
+    "items": [
+      "Elo ni kiwango kimoja cha nambari cha nguvu kinachosasishwa baada ya kila mechi.",
+      "Fomula ya kusasisha hutumia K (kubadilika), S (matokeo halisi), na E (matokeo yanayotarajiwa kulingana na tofauti ya viwango).",
+      "Elo ya mpira wa miguu inapanua mfumo wa msingi kwa marekebisho ya tofauti ya mabao, faida ya nyumbani, na umuhimu wa mechi.",
+      "Elo ina uzito wa hivi karibuni na inajirekebisha — kitabiri kikali cha msingi.",
+      "Mipaka: polepole kujibu mabadiliko ya kikosi, kipofu kwa ulinganifu wa kimkakati, nyeti kwa chaguo la K-factor."
+    ]
+  },
+  "faq": {
+    "h2": "Maswali yanayoulizwa kuhusu ukadiriaji wa Elo",
+    "questions": [
+      {
+        "q": "Kiwango cha juu zaidi cha Elo kuwahi kuwepo katika mpira wa miguu ni kipi?",
+        "a": "Karibu 2200 — kilele cha kihistoria kwa timu ya taifa ya Brazili mwanzoni mwa 1960 na timu ya taifa ya Hispania wakati wa utawala wao wa 2008-2012. Timu za juu za klabu kawaida hufikia kilele karibu 2050-2100 zinapokuwa katika hali yao bora kabisa (Barcelona ya Pep Guardiola, Bayern bora chini ya Heynckes). Timu nyingi kali za klabu ziko katika safu ya 1850-1980."
+      },
+      {
+        "q": "Je, kiwango cha Elo kinabadilika kwa kasi gani?",
+        "a": "Inategemea K-factor. Kwa K=32 (kawaida kwa mpira wa miguu), kushtua kubwa (timu ya kiwango cha 1500 ikiipiga timu ya kiwango cha 1900) inahamisha viwango kwa karibu pointi 25. Fomu nzuri au mbaya endelevu inahamisha kiwango cha timu kwa pointi 100+ kwa msimu mmoja. Timu inayoenda 5W-0L-0D dhidi ya wapinzani wenye pointi 50 zaidi inapata takriban pointi 60-80 za Elo katika mechi hizo."
+      },
+      {
+        "q": "Je, ninaweza kuangalia viwango vya Elo kwa timu yangu?",
+        "a": "Ndiyo. Clubelo.com na eloratings.net huchapisha viwango vya umma vya Elo kwa maelfu ya klabu za mpira wa miguu na timu za kitaifa. Wanatumia methodologia tofauti kidogo, hivyo nambari hazitalingana hasa kati ya tovuti, lakini zitakuwa katika eneo lilelile. BetsPlug inatumia utekelezaji wetu wa Elo uliorekebishwa kwa usahihi wa utabiri — hatuchapishi viwango vya timu mtu mtu, lakini methodologia ya msingi ni ileile."
+      },
+      {
+        "q": "Je, Elo inatofautianaje na FIFA rankings?",
+        "a": "FIFA's World Football Ranking (inayotumiwa kwa timu za kitaifa) ni karibu Elo-msingi lakini inatumia K-factors tofauti kwa mashindano na inasasishwa mara chache. Wakosoaji wamebishana kwa muda mrefu kwamba mfumo wa FIFA unakadiria chini mechi za ushindani zisizo za mashindano na unakadiria kupita kiasi mechi za shirikisho la kanda. Elo safi kwa ujumla inachukuliwa kuwa sahihi zaidi kama chombo cha utabiri."
+      }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Makala zinazohusiana",
+    "slugs": [
+      "expected-goals-explained",
+      "poisson-goal-models",
+      "ai-vs-tipsters"
+    ]
+  },
+  "applyThis": {
+    "h2": "Tazama utabiri unaoendeshwa na Elo",
+    "body": "Tofauti ya Elo ndio ishara moja yenye nguvu zaidi katika injini yetu ya utabiri, ikichanganywa na mifumo ya Poisson ya mabao na ujifunzaji wa mashine. Kila utabiri katika ligi 30+ unaonyesha methodologia hii iliyounganishwa.",
+    "ctaPrimary": {
+      "label": "Tazama Utabiri wa Leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Soma Methodologia",
+      "canonical": "methodology"
+    }
+  }
+}

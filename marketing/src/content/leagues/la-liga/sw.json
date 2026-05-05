@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa La Liga leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa La Liga unaoendeshwa na AI kwa kila mechi. Imefungwa kabla ya kuanza, rekodi ya umma. Utabiri wa kila siku wa Real Madrid, Barcelona, Atlético na timu nyingine.",
+    "ogImage": "/og-images/league-la-liga-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa La Liga",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya La Liga. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa La Liga",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa La Liga",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa La Liga",
+    "paragraphs": [
+      "La Liga ni daraja la juu zaidi la mpira wa miguu nchini Uhispania, linaloshindaniwa na klabu 20 katika siku 38 za mechi kuanzia Agosti hadi Mei. Kihistoria ligi hii imetawaliwa na Real Madrid na Barcelona, ikiwa na Atlético Madrid kama nguvu ya tatu iliyoimarika, lakini mbio za ubingwa zimekuwa wazi zaidi katika misimu ya hivi karibuni. Mfumo wetu wa AI unachambua kila mechi ya La Liga kwa kutumia fomu ya sasa, takwimu za ushindani zilizoathiriwa na El Clásico, mabao yanayotarajiwa, mabadiliko ya uongozi wa timu wakati wa dirisha la uhamisho, na vigezo vingine zaidi ya 40.",
+      "La Liga ina utofauti wa kiufundi kutoka kwa ligi nyingine kuu za Ulaya: mechi zina wastani wa xG wa chini na mchezo unaotegemea kumiliki mpira kwa karibu zaidi, hasa nje ya timu sita za juu. Hii hufanya masoko ya mistari ya mabao (Juu/Chini, BTTS) kuwa ya mabadiliko zaidi kitakwimu kuliko Premier League au Bundesliga. Mfumo wetu unazingatia hili kwa kupima mifumo maalum ya mpira wa miguu wa Kihispania — uwezo wa kujihami wa timu za katikati ya jedwali, mzunguko wa kikosi mwishoni mwa msimu, na athari za mechi za Ulaya kwenye mechi za La Liga zinazofuatwa katikati ya wiki.",
+      "Kila utabiri wa La Liga umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Watumiaji wa bure wanaona utabiri 2-3 wa La Liga kila siku, ukipima mechi zenye uhakika mkubwa zaidi; wanachama wanapokea kila ratiba katika ligi nzima na uchambuzi kamili wa takwimu ikijumuisha xG, nguvu ya uongozi wa timu na historia ya mechi za moja kwa moja."
+    ],
+    "statsPanel": {
+      "h3": "La Liga kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama La Liga kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za La Liga",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa La Liga unavyoundwa",
+    "body": "Utabiri wa La Liga hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo kwa nguvu ya timu, mifumo ya Poisson kwa uwezekano wa mabao, na machine learning kwa utambuzi wa mifumo. Mfumo umefunzwa kwa takwimu za kihistoria mahsusi za La Liga, ukizingatia wastani wa chini wa kufunga mabao na mienendo ya mchezo inayotegemea kumiliki mpira.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning iliyofunzwa kwa takwimu za La Liga"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa La Liga",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa La Liga?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri. Tunachapisha kila utabiri wa La Liga katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini mnatoa utabiri wa La Liga bure?",
+        "a": "La Liga ni mojawapo ya ligi tatu kuu ambazo tunachapisha utabiri 2-3 bure kila siku. Wanachama wanapokea kila mechi ya La Liga na uchambuzi kamili."
+      },
+      {
+        "q": "Mnachapisha aina gani za utabiri kwa La Liga?",
+        "a": "Kwa kila mechi ya La Liga tunachapisha utabiri katika masoko mengi: 1X2, Juu/Chini ya mabao (mifumo migumu ya kufunga mabao ya mpira wa miguu wa Kihispania inazingatiwa), Timu Zote Mbili Kufunga, na Nafasi Mbili."
+      },
+      {
+        "q": "Utabiri wa La Liga unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa La Liga hadi saa 24 kabla ya kuanza. Watumiaji wa bure wanaona saa 2 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia Copa del Rey na mechi za Ulaya zinazohusisha klabu za La Liga?",
+        "a": "Tunashughulikia mechi zote za La Liga. Mechi za Copa del Rey, Champions League na Europa League zinazohusisha klabu za La Liga zinashughulikiwa kando chini ya kurasa zao za mashindano."
+      },
+      {
+        "q": "Naweza kupata utabiri wa La Liga kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa La Liga wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa La Liga?",
+    "h2Gated": "Fungua utabiri wa La Liga",
+    "bodyFree": "Watumiaji wa bure wanaona utabiri 2-3 kila siku. Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa La Liga ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Pata akaunti bure",
+      "href": "https://app.betsplug.com/register?source=league_la-liga"
+    }
+  }
+}

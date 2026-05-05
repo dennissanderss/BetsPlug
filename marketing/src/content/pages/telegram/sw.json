@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Chaguo za bure za kila siku kupitia Telegram | BetsPlug",
+    "description": "Utabiri 3 bora wa AI wa mpira wa miguu unaotumwa Telegram kila siku. Bure, bila kujisajili, bila barua pepe.",
+    "ogImage": "/og-images/telegram-en.jpg"
+  },
+  "hero": {
+    "h1": "Chaguo za bure za kila siku kupitia Telegram",
+    "subheadline": "Pata utabiri wetu 3 bora wa AI wa mpira wa miguu wa kila siku ukitumwa moja kwa moja kwenye Telegram. Bure, bila kujisajili, bila barua pepe.",
+    "telegramUrl": "https://t.me/betsplug_picks",
+    "ctaLabel": "Jiunge na Chaneli ya Telegram",
+    "trustStrip": [
+      "Bure milele",
+      "Hakuna kujisajili kunakohitajika",
+      "Chaguo za kila siku saa 8:00 CET"
+    ]
+  },
+  "whatYouGet": {
+    "h2": "Utakachopokea",
+    "cards": [
+      {
+        "icon": "trending-up",
+        "title": "Chaguo 3 bora za kila siku",
+        "body": "Utabiri wa injini yetu wenye uhakika wa juu zaidi wa siku, katika ligi kuu. Hutumwa kila asubuhi saa 8:00 CET."
+      },
+      {
+        "icon": "info",
+        "title": "Muktadha wa mechi",
+        "body": "Sababu fupi kwa kila chaguo: kwa nini injini yetu ilichagua mechi na soko hili. Si namba tu, bali uelewa."
+      },
+      {
+        "icon": "check-circle",
+        "title": "Maboresho ya matokeo",
+        "body": "Baada ya mechi kumalizika, tunachapisha matokeo: ushindi na kushindwa pia. Fuatilia utendaji wa chaneli yetu wiki kwa wiki."
+      }
+    ]
+  },
+  "whyTelegram": {
+    "h2": "Kwa nini Telegram?",
+    "paragraphs": [
+      "Telegram ni ya haraka, salama, na inafanya kazi kwenye kila kifaa. Tunapeleka chaguo mahali unapoangalia simu yako, si zilizofichwa katika folda za barua pepe. Arifa zinaonekana mara moja mechi zinapokuwa muhimu.",
+      "Hakuna spamu. Tunatuma chaguo 3 kwa siku, pamoja na maboresho ya matokeo. Jiondoe wakati wowote kwa kuondoka kwenye chaneli — hakuna kufuta akaunti kunakohitajika."
+    ]
+  },
+  "upgradePath": {
+    "h2": "Unataka zaidi ya chaguo 3 kwa siku?",
+    "body": "Chaneli ya Telegram ni kiwango chetu cha bure katika muundo wa ujumbe. Wateja wanapata utabiri wa kila siku bila kikomo katika ligi 30+, uchambuzi kamili wa mechi, na arifa zilizobinafsishwa.",
+    "ctaPrimary": {
+      "label": "Tazama Bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Pata Akaunti ya Bure Badala Yake",
+      "href": "https://app.betsplug.com/register?source=telegram_landing"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya chaneli ya Telegram",
+    "questions": [
+      {
+        "q": "Je, ninahitaji akaunti ya BetsPlug?",
+        "a": "Hapana. Chaneli ya Telegram iko wazi bila kuunda akaunti. Jiunge tu na chaneli na utapokea chaguo za kila siku."
+      },
+      {
+        "q": "Je, ninaweza kupata arifa kwa ligi maalumu?",
+        "a": "Chaneli ya bure ya Telegram inatuma chaguo 3 bora katika ligi zote. Kwa arifa maalumu za ligi au aina ya bashiri, mipango yetu ya malipo inajumuisha arifa za Telegram zinazoweza kubinafsishwa."
+      },
+      {
+        "q": "Je, chaguo hizi ni sahihi kiasi gani?",
+        "a": "Usahihi sawa na kiwango chetu cha bure cha tovuti — injini sawa, mbinu sawa. Thibitisha utendaji kupitia track record yetu ya umma."
+      },
+      {
+        "q": "Kwa nini chaguo 3 tu kwa siku kwenye Telegram?",
+        "a": "Kikomo cha kiwango cha bure. Wateja wanapokea utabiri bila kikomo pamoja na arifa za Telegram zilizobinafsishwa kulingana na vipimo vya uhakika na mapendeleo ya ligi."
+      }
+    ]
+  }
+}

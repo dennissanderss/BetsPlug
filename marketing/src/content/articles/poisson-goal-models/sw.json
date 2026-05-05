@@ -1,0 +1,263 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Mifumo ya Poisson ya mabao kwa utabiri wa mpira wa miguu | BetsPlug learn",
+    "description": "Jinsi mgawanyo wa Poisson unavyotabiri skoa za mpira wa miguu kihesabu. Hesabu ya Lambda, matriki ya uwezekano wa skoa, marekebisho ya Dixon-Coles, na mipaka.",
+    "ogImage": "/og-images/learn-poisson-en.jpg"
+  },
+  "header": {
+    "h1": "Mifumo ya Poisson ya mabao: kutabiri skoa za mpira wa miguu kihesabu",
+    "excerpt": "Mgawanyo wa kihesabu unaotabiri uwezekano wa skoa maalum za mechi kulingana na viwango vya kushambulia na vya kujihami.",
+    "readingTime": "Soma kwa dakika 12",
+    "difficulty": "Wa Kati",
+    "category": "Mifumo ya Kitakwimu",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "Katika Makala Hii",
+  "breadcrumbLearn": "Jifunze",
+  "intro": "Wakati timu mbili za mpira wa miguu zinakutana, kuna idadi ya mwisho ya mabao yanayoweza kufungwa. Mgawanyo wa Poisson — fomula ya kihesabu iliyobuniwa awali kwa kuhesabu matukio adimu katika madirisha ya muda yaliyowekwa — inaonekana kufaa kuiga ufungaji wa mabao ya mpira wa miguu vyema sana. Ingiza nambari mbili (kiwango cha mabao yanayotarajiwa cha kila timu, kinachoitwa lambda) na Poisson inatoa matriki kamili ya uwezekano: nafasi ya kila skoa inayowezekana kutoka 0-0 hadi 5-4 hadi chochote unachoweza kufikiria. Jumlisha visanduku sahihi na unapata uwezekano kwa soko lolote — Over/Under, Both Teams to Score, exact-score, hata uhusiano wa nusu-saa. Mwongozo huu unaeleza jinsi Poisson inavyofanya kazi, kwa nini inafaa kwa mpira wa miguu, marekebisho ya Dixon-Coles yanayoifanya ifanye kazi vyema zaidi, na pale mfumo bado unakwama.",
+  "sections": [
+    {
+      "id": "what-is-poisson",
+      "h2": "Mgawanyo wa Poisson ni nini?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mgawanyo wa Poisson unaeleza uwezekano wa idadi fulani ya matukio huru kutokea katika muda uliowekwa, wakati matukio hayo yanatokea kwa kiwango cha wastani cha kawaida kinachojulikana. Awali ulibuniwa na Siméon Denis Poisson mwaka 1837 kuiga maamuzi ya jury, ulipata matumizi ya vitendo katika kila kitu kuanzia hesabu za uharibifu wa mionzi, kuwasili kwa simu kwenye vituo vya simu, hadi home runs za baseball."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fomula hutumia kigezo kimoja, lambda (λ), ambayo inawakilisha idadi inayotarajiwa ya matukio katika muda. Ingiza lambda na hesabu lengwa k, na unapata uwezekano wa hasa matukio k kutokea."
+        },
+        {
+          "type": "formula",
+          "latex": "P(k) = \\dfrac{\\lambda^{k} e^{-\\lambda}}{k!}",
+          "caption": "Kazi ya wingi wa uwezekano wa Poisson: uwezekano wa matukio hasa k kutokana na kiwango kinachotarajiwa lambda."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kinachofanya Poisson kuwa muhimu kwa mpira wa miguu: inakupa uwezekano wa kila matokeo ya skoa, si tu jumla inayotarajiwa. Lambda 1.5 haitabiri tu \"karibu mabao 1.5\" — inakupa P(mabao 0), P(bao 1), P(mabao 2), na kadhalika, ikijumlika hadi 100%. Mgawanyo huo wa kina ndio unaowezesha kila utabiri unaotegemea Poisson."
+        }
+      ]
+    },
+    {
+      "id": "applying-football",
+      "h2": "Kutumia Poisson kwa mpira wa miguu",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Kutabiri mechi ya mpira wa miguu kwa Poisson, unahitaji lambda mbili: expected goals za timu ya nyumbani (λH) na expected goals za timu ya ugenini (λA). Kila moja ni kazi ya nguvu ya kushambulia, udhaifu wa kujihami wa mpinzani, faida ya nyumbani, fomu ya hivi karibuni, na vipengele vya muktadha."
+        },
+        {
+          "type": "h3",
+          "text": "Kukokotoa lambda"
+        },
+        {
+          "type": "paragraph",
+          "text": "Toleo rahisi zaidi: λH = home_attack × away_defence × home_advantage. \"Home attack\" ni wastani wa mabao yaliyofungwa na timu wakati wakiwa nyumbani, vilivyolinganishwa dhidi ya wastani wa ligi. \"Away defence\" ni wastani wa mabao yaliyokubalika na mpinzani wakati wa ugenini, vilivyolinganishwa kwa njia sawa. Faida ya nyumbani inaongeza kizidishi kidogo (kawaida 1.1–1.3) kinachoonyesha makali thabiti ambayo timu za nyumbani zinashikilia."
+        },
+        {
+          "type": "paragraph",
+          "text": "Matoleo ya kisasa zaidi yanalisha viwango vya Elo, mienendo ya hivi karibuni ya xG, makadirio ya nguvu ya lineup, na marekebisho ya siku za kupumzika katika hesabu ya lambda. Injini za kisasa huchanganya vyanzo vingi kutoa lambda moja kwa kila upande."
+        },
+        {
+          "type": "diagram",
+          "name": "poisson-distribution",
+          "caption": "Mgawanyiko mbili za Poisson: timu ya nyumbani yenye λ=2.4 (kijani) na timu ya ugenini yenye λ=0.9 (bluu)."
+        }
+      ]
+    },
+    {
+      "id": "score-probabilities",
+      "h2": "Kukokotoa uwezekano wa skoa",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mara tu unapokuwa na λH na λA, uwezekano wa pamoja wa skoa maalum (mabao h ya nyumbani, mabao a ya ugenini) ni bidhaa ya uwezekano wawili wa kibinafsi wa Poisson — ikidhani uhuru kati ya kufunga kwa nyumbani na ugenini (kurahisisha tutakachorudia)."
+        },
+        {
+          "type": "h3",
+          "text": "Matriki ya uwezekano"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kokotoa P(h) kwa h = 0, 1, 2, 3, 4, 5+ kwa kutumia λH. Kokotoa P(a) kwa a = 0, 1, 2, 3, 4, 5+ kwa kutumia λA. Zidisha kila mchanganyiko kupata uwezekano wa pamoja kwa kila skoa. Matokeo ni matriki ya 6×6 (au kubwa zaidi ukitaka), kila kisanduku kikionyesha uwezekano wa skoa hiyo halisi ya mwisho."
+        },
+        {
+          "type": "example",
+          "label": "Mfano uliofanyika",
+          "body": "Bayern Munich (λH = 2.4) dhidi ya Eintracht Frankfurt (λA = 0.9). Poisson safi inatoa: P(2-1) = (e^-2.4 × 2.4²/2!) × (e^-0.9 × 0.9¹/1!) = 0.2613 × 0.3659 = 0.0956 (~9.6%). Skoa za uwezekano mkubwa zaidi: 2-1 (~9.6%), 2-0 (~10.6%), 1-0 (~5.3%), 3-0 (~7.0%). Jumlisha visanduku vya ushindi wa nyumbani kupata P(home win); jumlisha visanduku ambapo nyumbani + ugenini ≥ 3 kwa P(Over 2.5); jumlisha visanduku ambapo nyumbani > 0 NA ugenini > 0 kwa P(BTTS Yes)."
+        }
+      ]
+    },
+    {
+      "id": "deriving-markets",
+      "h2": "Kupata uwezekano wa masoko",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mara tu matriki ya uwezekano inajengwa, kila soko la mpira wa miguu hupungua hadi kujumlisha visanduku sahihi."
+        },
+        {
+          "type": "h3",
+          "text": "1X2 (matokeo ya mechi)"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(home win) = jumla ya visanduku vyote ambapo h > a. P(draw) = jumla ya visanduku ambapo h = a. P(away win) = jumla ya visanduku ambapo h < a. Maadili matatu lazima yajumlike hadi 100%, yakitoa ukaguzi wa busara wa hesabu."
+        },
+        {
+          "type": "h3",
+          "text": "Over/Under mabao"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(Over 2.5) = jumla ya visanduku vyote ambapo h + a > 2 (yaani, jumla ya mabao = 3, 4, 5, ...). P(Under 2.5) ni nyongezo. Mantiki ileile inafanya kazi kwa 1.5, 3.5, au kizingiti chochote."
+        },
+        {
+          "type": "h3",
+          "text": "Both Teams to Score"
+        },
+        {
+          "type": "paragraph",
+          "text": "P(BTTS Yes) = jumla ya visanduku vyote ambapo h ≥ 1 NA a ≥ 1. P(BTTS No) ni nyongezo. Soko hili linategemea kwa unyeti jinsi kila lambda ilivyo karibu na sifuri — mechi yenye timu moja imara na timu moja yenye kujihami sana ina uwezekano mdogo wa BTTS hata kama jumla ya mabao ni ya juu."
+        },
+        {
+          "type": "h3",
+          "text": "Skoa halisi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Matriki ya Poisson inakupa uwezekano wa kila skoa halisi moja kwa moja. Skoa yenye uwezekano mkubwa zaidi ni kisanduku kilicho na uwezekano wa juu zaidi (kawaida 1-1 katika mechi zenye uwiano sawa, 1-0 au 2-1 ikiwa na mpendwa mmoja). Lakini \"uwezekano mkubwa zaidi\" ni nadra kuwa juu ya 12% — skoa halisi ni matukio ya uwezekano mdogo kwa asili."
+        }
+      ]
+    },
+    {
+      "id": "dixon-coles",
+      "h2": "Marekebisho ya Dixon-Coles",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Poisson safi ina udhaifu unaojulikana katika mpira wa miguu: inapunguza uwezekano wa sare zenye mabao machache na kuongeza uwiano wa 0-0 dhidi ya 1-0. Data halisi ya mpira wa miguu inaonyesha sare zaidi za 0-0, 1-1, na matokeo machache kidogo ya 1-0 / 0-1 kuliko Poisson safi inavyotabiri. Sababu ni kwamba matukio ya mabao si huru kabisa — wakati timu moja inashinda kwa nyembamba, timu zote mbili huwa zinacheza kwa hekima zaidi, zikipunguza mabao zaidi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mark Dixon na Stuart Coles walichapisha urekebishaji mwaka 1997 — sasa unaojulikana kama marekebisho ya Dixon-Coles. Waliongeza kigezo (tau) kinachoongeza wazi uwezekano wa matokeo ya 0-0, 1-0, 0-1, na 1-1, kilichorekebishwa dhidi ya matokeo halisi ya mechi. Mifumo ya kisasa ya utabiri inayotegemea Poisson hutumia Dixon-Coles au uboreshaji sawa kama kawaida."
+        },
+        {
+          "type": "paragraph",
+          "text": "Marekebisho ya Dixon-Coles pia hudhoofika kidogo wakati kuna mpendwa mkubwa (mechi ya lambda ya 4.0-vs-0.4 inafanana zaidi na Poisson safi kwa sababu timu inayoongoza haina motisha ya kutetea uongozi wa 1-0 — wanafukuza mabao zaidi). Utekelezaji wa kisasa hubadilisha tau kwa mienendo kulingana na maadili ya lambda."
+        }
+      ]
+    },
+    {
+      "id": "what-poisson-predicts-well",
+      "h2": "Kile Poisson inatabiri vyema",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Masoko ya Over/Under mabao — matumizi ya moja kwa moja zaidi; Poisson kihalisi inatoa uwezekano wa mgawanyo wa mabao.",
+            "Both Teams to Score (BTTS) — inatokea kwa usafi kutoka kwa matriki.",
+            "Skoa zenye uwezekano mkubwa zaidi na matokeo ya 1X2 — msingi imara, hasa ikiwa imeunganishwa na Elo kwa urekebishaji wa lambda.",
+            "Jumla za mabao za muda mrefu kwa kila timu — kwa msimu kamili, Poisson inatoa jumla za mabao zinazotarajiwa za kuaminika.",
+            "Uthabiti kati ya masoko — uwezekano uliotokana wote unajumlika vizuri, hakuna utata wa ndani."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "what-poisson-doesnt",
+      "h2": "Kile Poisson haitabiri",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "Wafungaji maalum — Poisson ni katika kiwango cha timu tu.",
+            "Matukio ya mechi — kadi nyekundu, penalti, mabadiliko ya mfumo, majeraha ya katikati ya mchezo.",
+            "Mabadiliko ya kimkakati — mfumo unadhani dakika 90 za kiwango cha mara kwa mara cha kufunga, ambacho si jinsi mechi zinavyoendelea kwa hakika.",
+            "Matokeo ya kiwango cha chini cha uwezekano kupita kiasi — skoa halisi kama 4-3 ni nadra kibinafsi, hivyo utabiri wa Poisson kwao ni wa kelele.",
+            "Matukio yanayohusiana na muda — bao katika dakika ya 10 hubadilisha mbinu za timu zote mbili, lakini Poisson inashughulikia kila dakika kama inayofanana."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Ufumbuzi wa kawaida ni kuweka safu ya ujifunzaji wa mashine juu ya Poisson. Mfumo wa Poisson unatoa matriki ya msingi ya uwezekano; safu ya ML inarekebisha kulingana na vipengele ambavyo Poisson haiwezi kunasa (ulinganifu wa kimkakati, mabadiliko ya lineup, hali ya hewa). Mbinu hii ya mseto ndiyo injini za kisasa, ikiwemo yetu, zinatumia."
+        }
+      ]
+    },
+    {
+      "id": "betsplug-poisson",
+      "h2": "Jinsi BetsPlug inavyotumia Poisson",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Lambda kwa kila timu inakokotolewa kutoka Elo ya sasa, mwenendo wa hivi karibuni wa xG (uzito kuelekea mechi 6-10 zilizopita), xG ya kujihami ya mpinzani, nguvu ya lineup, siku za kupumzika, na muktadha wa mashindano. Faida ya nyumbani/ugenini imejengwa ndani. Matokeo ni matriki ya uwezekano iliyorekebishwa kwa Dixon-Coles kwa kila mechi katika ligi zetu 30+ tunazofunika."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kutoka kwa matriki, tunapata uwezekano kwa kila soko tunalochapisha: 1X2, Over/Under kwa vizingiti vingi, BTTS, Asian Handicap, Correct Score (na matriki inaonyeshwa moja kwa moja kwa wanaojiandikisha), Half-Time / Full-Time. Safu ya ML kisha inarekebisha uwezekano huu wa msingi kwa muktadha ambao mfumo wa Poisson hauwezi kuona — mabadiliko ya meneja, msongamano wa fixtures, mienendo ya raundi za knockout. Utabiri wa mwisho ni uwezekano uliorekebishwa na ML."
+        }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Mafunzo muhimu",
+    "items": [
+      "Mgawanyo wa Poisson unaiga kufunga mabao kwa mpira wa miguu kwa kutumia kigezo kimoja kwa kila timu: lambda (expected goals).",
+      "Kutoka lambda mbili, pata matriki ya uwezekano kwa kila skoa halisi inayowezekana, kisha jumlisha visanduku kupata uwezekano wa soko lolote.",
+      "Poisson safi inapunguza sare za 0-0, 1-1 — marekebisho ya Dixon-Coles yanarekebisha hili kwa kigezo cha tau.",
+      "Poisson inatabiri vyema: Over/Under, BTTS, misingi ya 1X2. Inakosa: wafungaji maalum, mabadiliko ya kimkakati, uhusiano wa muda.",
+      "Injini za kisasa zinaweka safu ya ujifunzaji wa mashine juu ya Poisson kunasa muktadha ambao mfumo hauwezi kuona moja kwa moja."
+    ]
+  },
+  "faq": {
+    "h2": "Maswali yanayoulizwa kuhusu mifumo ya Poisson",
+    "questions": [
+      {
+        "q": "Kwa nini Poisson na si mgawanyo wa kawaida (normal distribution)?",
+        "a": "Mabao ni tofauti (unaweza kufunga 0, 1, 2 — si 1.5) na adimu kulinganisha na dirisha la muda. Sifa zote mbili zinalingana na mawazo ya Poisson hasa. Mgawanyo wa kawaida ni endelevu na haunigi kihalisi hesabu za matukio adimu. Mgawanyo mwingine wa kihesabu (negative binomial, zero-inflated Poisson) wakati mwingine hufaa data ya mpira wa miguu vyema zaidi, hasa kwa ligi zenye mabao machache sana, lakini Poisson ni kianzio cha kawaida kwa sababu inaweza kushughulikiwa na ni sahihi vya kutosha."
+      },
+      {
+        "q": "Maadili ya lambda ya kawaida ni yapi?",
+        "a": "Timu za nyumbani za Premier League zina wastani wa lambda ya 1.5-1.7; timu za ugenini karibu 1.1-1.3. Timu kali zinazocheza dhidi ya timu dhaifu zinaweza kufikia lambda 2.5-3.0. Timu za chini ya meza mara nyingi hutoa lambdas za 0.6-0.9. Bundesliga na Eredivisie zinaelekea juu (ligi za kushambulia zaidi); Serie A kihistoria iliegemea chini (ya kujihami zaidi). Urekebishaji maalum wa ligi ni muhimu."
+      },
+      {
+        "q": "Je, Poisson inazingatia mbinu za ndani ya mechi kama kulinda uongozi?",
+        "a": "Poisson safi haifanyi hivyo. Dixon-Coles inafanya sehemu (marekebisho ya tau yananasa athari ya wastani ya timu zinazolinda uongozi wa nyembamba). Mifumo ya Poisson ya kisasa zaidi ya mfululizo wa muda inagawanya mechi kuwa nusu mbili zenye lambdas tofauti, au inatumia lambdas za \"in-running\" zinazosasishwa kulingana na skoa ya sasa. Upanuzi huu unaboresha usahihi lakini unaongeza utata. Mifumo mingi iliyochapishwa ya Poisson inasimama kwenye Dixon-Coles."
+      },
+      {
+        "q": "Je, Poisson ni bora kuliko utabiri wa msingi wa xG?",
+        "a": "Ni za kukamilishana, si za kushindana. xG inapima ubora wa shoti katika kiwango cha timu. Poisson inatumia viwango vya mabao yanayotarajiwa vinavyotokana na xG kama lambdas za ingizo, kisha inabadilisha hivyo kuwa mgawanyiko wa uwezekano wa skoa. Unahitaji zote mbili: xG kwa kiwango, Poisson kwa mgawanyo. Pamoja zinakupa uwezekano wa kiwango cha soko; yoyote peke yake haijakamilika."
+      }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Makala zinazohusiana",
+    "slugs": [
+      "expected-goals-explained",
+      "elo-rating-explained",
+      "ai-vs-tipsters"
+    ]
+  },
+  "applyThis": {
+    "h2": "Tazama uwezekano wa Poisson kwa vitendo",
+    "body": "Kila utabiri wa BetsPlug unategemea matriki ya Poisson iliyorekebishwa kwa Dixon-Coles. Wanaojiandikisha wanaona mgawanyo kamili wa uwezekano kwa kila mechi — Correct Score, BTTS, Over/Under zote zinatolewa kutoka kwa mfumo huohuo.",
+    "ctaPrimary": {
+      "label": "Tazama Utabiri wa Leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Soma Methodologia",
+      "canonical": "methodology"
+    }
+  }
+}

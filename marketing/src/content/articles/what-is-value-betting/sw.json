@@ -1,0 +1,230 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Value betting ni nini? Hesabu ya faida ya muda mrefu | BetsPlug learn",
+    "description": "Value betting ndiyo mkakati pekee wenye msingi wa kihesabu kwa faida ya muda mrefu. Jifunze jinsi ya kukokotoa thamani inayotarajiwa (expected value), kutambua bets zenye EV chanya, na kuepuka faida ya bookmaker.",
+    "ogImage": "/og-images/learn-value-betting-en.jpg"
+  },
+  "header": {
+    "h1": "Value betting ni nini? Hesabu ya faida ya muda mrefu",
+    "excerpt": "Kwa nini kupata bets zenye thamani inayotarajiwa chanya (positive expected value) ndiyo mkakati pekee wenye msingi wa kihesabu kwa muda mrefu. Tofauti kati ya kutabiri na kupata faida.",
+    "readingTime": "Soma kwa dakika 9",
+    "difficulty": "Mwanzilishi",
+    "category": "Dhana za Kuweka Kamari",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "Katika Makala Hii",
+  "breadcrumbLearn": "Jifunze",
+  "intro": "Wengi wa wanaokamari hupoteza fedha kwa muda mrefu. Ukweli huu hauhusiani na bahati — ni hakika ya kihesabu kwa mtu yeyote asiyeelewa thamani (value). Bookmakers hujenga faida ndani ya kila soko wanalotoa, ikimaanisha kuwa bet ya wastani ni hasara kwa ufafanuzi. Njia pekee ya kupata faida kwa uthabiti ni kupata bets maalum ambapo odds za bookmaker ziko vibaya kwa upande wako — bets zenye thamani inayotarajiwa chanya (positive expected value, EV). Mwongozo huu unaeleza thamani ni nini, kwa nini ni muhimu zaidi kuliko kuchagua washindi, na jinsi ya kuitambua. Hesabu ni rahisi zaidi kuliko inavyosikika.",
+  "sections": [
+    {
+      "id": "what-is-value",
+      "h2": "Value ni nini?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bet ina \"value\" wakati uwezekano wa kushinda ni mkubwa kuliko uwezekano unaoonyeshwa na odds. Hiyo ndiyo ufafanuzi mzima. Ona kinachokosekana: hakuna chochote kuhusu uhakika, hakuna kuhusu unayedhani atashinda, hakuna kuhusu \"mambo ya hakika\". Value inahusu tu ikiwa odds zinapunguza thamani halisi ya uwezekano."
+        },
+        {
+          "type": "h3",
+          "text": "Thamani inayotarajiwa, kwa rasmi"
+        },
+        {
+          "type": "paragraph",
+          "text": "Thamani inayotarajiwa (expected value, EV) ni kile ambacho ungetarajia kushinda au kupoteza, kwa wastani, kwa kila kitengo unachoweka, ikiwa bet ileile ingewekwa idadi isiyo na mwisho ya mara. Fomula:"
+        },
+        {
+          "type": "formula",
+          "latex": "\\text{EV} = (P_{\\text{win}} \\times \\text{Profit}) - (P_{\\text{loss}} \\times \\text{Stake})",
+          "caption": "EV chanya inamaanisha unapata faida kwa wastani; EV hasi inamaanisha unapoteza kwa wastani."
+        },
+        {
+          "type": "example",
+          "label": "Mfano uliofanyika",
+          "body": "Unakadiria Real Madrid ana uwezekano wa 50% wa kushinda nyumbani. Bookmaker anatoa decimal odds ya 2.20 (faida inayowezekana ya €1.20 kwa stake ya €1). EV = (0.5 × €1.20) − (0.5 × €1.00) = +€0.10 kwa kila €1 inayowekwa. Hii ni bet yenye EV chanya: faida ya wastani ya senti 10 kwa kila euro. Mechi ileile, makadirio ya uwezekano yaleyale, lakini odds ya 1.80 badala yake: EV = (0.5 × €0.80) − (0.5 × €1.00) = −€0.10. Chaguo lilelile, matokeo kinyume kwa muda mrefu."
+        }
+      ]
+    },
+    {
+      "id": "value-vs-winners",
+      "h2": "Kwa nini value inashinda kuchagua washindi",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fikiria wanaokamari wawili. Mwekaji A anachagua washindi 65% lakini tu kwenye odds ambapo uwezekano unaoonyeshwa ni 70%. Mwekaji B anachagua washindi 45% lakini kwa uthabiti kwenye odds ambapo uwezekano unaoonyeshwa ni 40%. Mwekaji A anaishia kufilisika; Mwekaji B anatajirika. Inashangaza? Fanya hesabu."
+        },
+        {
+          "type": "paragraph",
+          "text": "Thamani inayotarajiwa ya Mwekaji A kwa stake ya €1 kwa ushindi wa 65% / uwezekano unaoonyeshwa wa 70% (decimal odds 1.43): EV = (0.65 × €0.43) − (0.35 × €1.00) = −€0.07. Hasi — Mwekaji A anapoteza senti 7 kwa euro kwa wastani. Mwekaji B kwa ushindi wa 45% / uwezekano unaoonyeshwa wa 40% (decimal odds 2.50): EV = (0.45 × €1.50) − (0.55 × €1.00) = +€0.13. Chanya — Mwekaji B anapata faida ya senti 13 kwa euro kwa wastani."
+        },
+        {
+          "type": "paragraph",
+          "text": "Kuchagua washindi ni muhimu lakini si ya kutosha. Odds lazima ziwe mbaya kwa upande wako. Hii ndiyo sababu \"unadhani nani atashinda?\" ni swali baya — swali sahihi ni \"odds zipi zimewekwa bei isiyo sahihi?\"."
+        }
+      ]
+    },
+    {
+      "id": "identifying-value",
+      "h2": "Jinsi ya kutambua value",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "Hatua ya 1: Kadiria uwezekano wa kweli"
+        },
+        {
+          "type": "paragraph",
+          "text": "Hii ndiyo sehemu ngumu. Unahitaji makadirio ya uwezekano kwa matokeo unayofikiria — sema, nafasi ya 58% ya Over 2.5 mabao. Makadirio yako lazima yatoke mahali fulani panapotetewa: mfumo wa kitakwimu, rekodi ya utabiri sahihi, au uchambuzi wa kina wa mechi. Hisia za moyoni hazihesabiwi, kwa sababu hisia za moyoni zina upendeleo wa kimfumo."
+        },
+        {
+          "type": "h3",
+          "text": "Hatua ya 2: Badilisha odds kuwa uwezekano unaoonyeshwa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Uwezekano unaoonyeshwa = 1 / decimal odds. Odds ya 1.85 inaonyesha 1/1.85 = 54% uwezekano. Odds ya 3.50 inaonyesha 29%. Odds ya 2.00 inaonyesha hasa 50%. Ona kuwa uwezekano unaoonyeshwa kwa matokeo yote ya soko hujumlika zaidi ya 100% — ziada ndiyo faida ya bookmaker."
+        },
+        {
+          "type": "h3",
+          "text": "Hatua ya 3: Linganisha na uweke bet kwenye pengo tu"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ikiwa makadirio yako ni ya juu kuliko yanayoonyeshwa: hiyo ni bet yenye EV chanya. Ikiwa makadirio yako ni ya chini au sawa: ruka. Ukubwa wa pengo ni muhimu — faida ya 2% (yako 60% dhidi ya inayoonyeshwa 58%) ni kitaalamu EV chanya lakini haifuniki kelele za makadirio yako. Wengi wa wanaokamari wa kitaaluma wanahitaji faida ya 5%+ kabla ya kuweka. Chini ya kizingiti hicho, EV ipo lakini tofauti (variance) inashinda."
+        }
+      ]
+    },
+    {
+      "id": "bookmaker-edge",
+      "h2": "Faida ya bookmaker",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Bookmakers hawawekei masoko bei kwa uwezekano wa \"kweli\". Wanaweka bei kwa uwezekano wa kweli pamoja na faida — kawaida 5–10% kwenye masoko ya 1X2 ya mpira wa miguu, 3–5% kwenye Over/Under, wakati mwingine zaidi kwenye masoko maalum kama correct-score au Asian handicap kwenye ligi za chini. Faida hii ndiyo sababu uwezekano unaoonyeshwa hujumlika zaidi ya 100%."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mfano halisi: mechi yenye uwiano kamili ambapo kila matokeo yana uwezekano halisi wa 33.3%. Bookmaker mwenye faida ya 5% anatoa odds karibu 2.85 / 2.85 / 2.85 (kila moja ikionyesha 35.1% uwezekano — jumla ni 105.3%). Ziada ya 5.3% ndiyo faida. Ili kushinda soko hili kwa muda, makadirio yako ya uwezekano lazima yawe sahihi vya kutosha kushinda hasara iliyojengwa ya 5.3%. Wengi wa wanaokamari hawajui hata kuwa faida hii ipo."
+        },
+        {
+          "type": "h3",
+          "text": "Kwa nini wengi wa wanaokamari hupoteza"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ukiweka bet kwa nasibu kwenye masoko yote ya bookmaker, unapoteza takriban faida kwa kila bet — sema 5%. Hata ukichagua washindi 50% ya wakati kwa odds za nasibu, hesabu bado inakushusha kwa sababu odds zimeegemea dhidi yako. Kushinda bookmaker kunahitaji kutambua kwa uthabiti masoko yenye bei mbaya. Wengi wa wanaokamari hawafanyi hivi kimfumo — wanaweka bet kulingana na hisia, upendeleo wa hivi karibuni, au uaminifu wa shabiki, vyote ambavyo huzalisha upendeleo wa uchaguzi wa wastani-hadi-hasi."
+        }
+      ]
+    },
+    {
+      "id": "common-mistakes",
+      "h2": "Makosa ya value betting",
+      "blocks": [
+        {
+          "type": "h3",
+          "text": "Kuchanganya uhakika na value"
+        },
+        {
+          "type": "paragraph",
+          "text": "Chaguo lenye uhakika wa 90% kwenye odds ya 1.10 ni bet yenye EV hasi (uwezekano unaoonyeshwa 91%, makadirio yako 90%). Chaguo lenye uhakika wa 25% kwenye odds ya 5.00 ni bet yenye EV chanya (inayoonyeshwa 20%, makadirio yako 25%). Uhakika na value ni vitu tofauti. Cha kwanza ni kuhusu uwezekano; cha pili ni kuhusu jinsi bei imewekwa vibaya."
+        },
+        {
+          "type": "h3",
+          "text": "Kujiamini kupita kiasi kwenye makadirio yako ya uwezekano"
+        },
+        {
+          "type": "paragraph",
+          "text": "Wengi wa wanaokamari wa amateur wanafikiri ni sahihi zaidi kuliko walivyo. Ukikadiria \"uwezekano wa 80%\" lakini unashinda tu 65% ya bets hizo, makadirio yako ni ya matumaini kupita kiasi kimfumo na umekuwa ukipoteza fedha kwenye bets za \"value\" ambazo hazikuwa value kweli. Kufuatilia usahihi wako kwa mamia ya bets ndiyo njia pekee ya kurekebisha."
+        },
+        {
+          "type": "h3",
+          "text": "Kufukuza odds kubwa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bets za value za muda mrefu (odds 5.00+) ni za kweli lakini zenye tofauti kubwa. Unahitaji sampuli kubwa zaidi ili kuthibitisha faida — kiwango cha asili cha kuhukumu vibaya uwezekano wa muda mrefu ni kikubwa. Wengi wa wanaokamari wa value wenye uzoefu wanazingatia odds 1.5–3.5 ambapo makadirio ya uwezekano ni ya kuaminika zaidi."
+        },
+        {
+          "type": "h3",
+          "text": "Kupuuza ukubwa wa sampuli"
+        },
+        {
+          "type": "paragraph",
+          "text": "Bets 100 sio za kutosha kujua ikiwa una faida. Tofauti inashinda safu hiyo. Bets 500-1,000 ni sampuli ya chini zaidi kuanza kufanya kauli za uhakika kuhusu usahihi wako wa value betting. Wengi wa wanaokamari huacha kwenye bets 50-100 — wakishinda au wakipoteza — bila kujua kamwe faida yao ya kweli."
+        }
+      ]
+    },
+    {
+      "id": "betsplug-help",
+      "h2": "Jinsi BetsPlug inavyosaidia kupata value",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Injini yetu ya utabiri inatoa makadirio ya uwezekano kwa kila mechi — kile tunachokiita asilimia za uhakika. Hizi zimerekebishwa dhidi ya data ya mechi za kihistoria: wakati injini yetu inasema 70%, takriban 70% ya utabiri huo umetatuliwa kwa usahihi katika rekodi yetu ya umma. Urekebishaji huo ndio msingi wa kutambua value: makadirio ya uaminifu ya uwezekano ni ingizo ambalo value betting inahitaji."
+        },
+        {
+          "type": "paragraph",
+          "text": "Wanaojiandikisha wanaona uwezekano unaoonyeshwa pamoja na makadirio yetu, ikifanya hesabu ya value kuwa wazi. Watumiaji wa bure wanaona chaguo letu la uhakika wa juu kwa kila mechi — la manufaa, lakini bila data ya kulinganisha inayohitajika kwa value betting ya kimfumo. Iwe vyovyote, kile BetsPlug inatoa ni ingizo moja — usimamizi wa bankroll yako, ukubwa wa stake, na nidhamu ya utekelezaji bado ni jukumu lako."
+        }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Mafunzo muhimu",
+    "items": [
+      "Value = makadirio yako ya uwezekano ya juu kuliko uwezekano unaoonyeshwa wa odds.",
+      "Thamani inayotarajiwa chanya (EV) ndiyo mkakati pekee wenye msingi wa kihesabu kwa muda mrefu.",
+      "Kuchagua washindi haitoshi — odds lazima ziwekwe bei mbaya kwa upande wako.",
+      "Bookmakers wanaweka faida ya 5–10% kwa kila soko — faida yako lazima ishinde hii.",
+      "Fuatilia bets 500+ ili kutathmini kwa uaminifu ikiwa makadirio yako ya uwezekano yamerekebishwa."
+    ]
+  },
+  "faq": {
+    "h2": "Maswali yanayoulizwa mara kwa mara kuhusu value betting",
+    "questions": [
+      {
+        "q": "Je, value betting inaweza kweli kushinda bookmakers kwa muda mrefu?",
+        "a": "Ndiyo, lakini mara chache. Labda 1-2% ya wanaokamari wanafikia faida ya muda mrefu kwa uthabiti kupitia value betting. Inahitaji makadirio sahihi ya uwezekano, ukubwa mkubwa wa sampuli, ukubwa wa stake wenye nidhamu, na uvumilivu wa kustahimili tofauti. Wengi wa wanaokamari wanaojaribu value betting ama wanaacha kabla sampuli haijakuwa na maana, au wanakadiria kupita kiasi usahihi wao wa uwezekano."
+      },
+      {
+        "q": "Faida 'nzuri' ya kulenga ni ipi?",
+        "a": "5%+ ndiyo kizingiti cha kawaida kwa bets za value zinazostahili kuwekewa stake. Chini ya 5%, faida yako ni dhaifu dhidi ya hitilafu za makadirio na harakati za laini ya bookmaker. Zaidi ya 15%, unapaswa kuhoji makadirio yako ya uwezekano — masoko mara chache hutoa faida hiyo isipokuwa kuna kitu kibaya sana na laini, ambapo bookmakers kawaida wanairekebisha kabla huwezi kunufaika."
+      },
+      {
+        "q": "Je, bookmakers wanawapunguzia value bettors waliofanikiwa?",
+        "a": "Ndiyo. Wengi wa bookmakers wanatambua na kupunguza akaunti ambazo zinashinda kwa uthabiti — wakati mwingine kwa kuweka kikomo cha stakes, wakati mwingine kwa kufunga akaunti kabisa. Hii ni kizuizi halisi kwa mkakati wa value betting kwa kiwango kikubwa. Bookmakers wenye akili kali (Pinnacle, Betfair Exchange) wanavumilia washindi; bookmakers wa burudani hawavumilii."
+      },
+      {
+        "q": "Je, hii inatofautianaje na arbitrage?",
+        "a": "Arbitrage inanufaisha tofauti za bei kati ya bookmakers wengi — ikifunika matokeo yote ya soko kwa odds zinazohakikisha faida bila kujali matokeo. Value betting inachukua upande mmoja wa soko moja kwa sababu unaamini odds zinapunguza thamani ya uwezekano wake. Arbitrage ina tofauti karibu na sifuri; value betting ina tofauti kubwa. Zote ni mikakati halisi; zinajibu maswali tofauti."
+      }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Makala zinazohusiana",
+    "slugs": [
+      "kelly-criterion",
+      "bankroll-management",
+      "ai-vs-tipsters"
+    ]
+  },
+  "applyThis": {
+    "h2": "Tazama makadirio ya uwezekano yanayoweza kufichua value",
+    "body": "Kila utabiri wa BetsPlug unaonyesha makadirio yetu ya uwezekano yaliyorekebishwa. Linganisha na odds za bookmaker wako ili kutambua bets zinazowezekana za value — au acha injini yetu iangazie fursa kali zaidi.",
+    "ctaPrimary": {
+      "label": "Tazama Utabiri wa Leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Tazama Rekodi",
+      "canonical": "track-record"
+    }
+  }
+}

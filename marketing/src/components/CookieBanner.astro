@@ -111,6 +111,17 @@ const dict: Record<Locale, CookieDict> = {
     analyticsLabel: "Analytics", analyticsDesc: "Statistiche aggregate rispettose della privacy. Nessun tracciamento incrociato.",
     required: "Richiesto",
   },
+  sw: {
+    title: "Tunatumia vidakuzi",
+    body: "Vidakuzi vya msingi vinaweka BetsPlug ikifanya kazi. Vidakuzi vya hiari vinatusaidia kuboresha. Wewe unaamua.",
+    policyLink: "Sera ya vidakuzi",
+    acceptAll: "Kubali zote", rejectAll: "Kataa zote", customize: "Sanidi",
+    save: "Hifadhi mapendeleo", cancel: "Ghairi",
+    essentialLabel: "Vya msingi", essentialDesc: "Vinahitajika kwa kuingia, usalama na lugha. Daima vimewashwa.",
+    functionalLabel: "Vya kazi", functionalDesc: "Vinakumbuka mandhari, mpangilio na mapendeleo ya arifa.",
+    analyticsLabel: "Uchambuzi", analyticsDesc: "Takwimu zilizojumuishwa zenye kuheshimu faragha. Hakuna ufuatiliaji wa tovuti mbalimbali.",
+    required: "Inahitajika",
+  },
 };
 const t = dict[locale];
 
@@ -123,6 +134,7 @@ const cookiePolicyHref =
         locale === "fr" ? "cookies" :
         locale === "es" ? "cookies" :
         locale === "it" ? "cookie" :
+        locale === "sw" ? "vidakuzi" :
         "cookies"
       }`;
 

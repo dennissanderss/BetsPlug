@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Ligue 1 leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa Ligue 1 unaoendeshwa na AI kwa kila mechi. PSG, Marseille, Monaco na timu nyingine — zikichambuliwa kwa Elo + Poisson + ML. Inapatikana kwa mpango wowote wa kulipia.",
+    "ogImage": "/og-images/league-ligue-1-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Ligue 1",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya Ligue 1. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Ligue 1",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Ligue 1",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Ligue 1",
+    "paragraphs": [
+      "Ligue 1 ni daraja la juu zaidi la mpira wa miguu nchini Ufaransa, ambalo limepangwa upya hivi karibuni kuwa klabu 18 zinazoshindana siku 34 za mechi kuanzia Agosti hadi Mei. Ligi hii kihistoria imetawaliwa na Paris Saint-Germain tangu kuchukuliwa na QSI mwaka 2011, huku Marseille, Monaco, Lille na Lyon wakishindana kwa nafasi za Ulaya. Ligue 1 inajulikana kama ligi ya maendeleo — vipaji vingi vya vijana wenye kipaji zaidi vya Ulaya (Mbappé, Kanté, Pogba, Camavinga) viliibuka hapa kabla ya kuuzwa nje. Mfumo wetu wa AI unachambua kila mechi ya Ligue 1 kwa kutumia fomu ya sasa, historia ya mechi za moja kwa moja, mabao yanayotarajiwa na vigezo vingine zaidi ya 40.",
+      "Utabiri wa Ligue 1 unawasilisha changamoto ya kipekee: sera za PSG za mzunguko wa wachezaji katika mechi za nyumbani (kuwahifadhi wachezaji muhimu kwa Champions League) huleta mabadiliko makubwa ya uongozi wa timu. Timu za katikati ya jedwali katika Ligue 1 pia huwa na mabadiliko makubwa ya kimkakati kuliko ligi nyingine za tano kuu, huku mabadiliko ya kocha katikati ya msimu yakiwa ya mara kwa mara zaidi. Mfumo wetu unazingatia mifumo inayotarajiwa ya mzunguko wa PSG, athari za mechi za Ulaya za katikati ya wiki, na matukio mengi ya kihistoria ya mabao ya kuchelewa katika mpira wa miguu wa Kifaransa.",
+      "Kila utabiri wa Ligue 1 umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Utabiri wa Ligue 1 ni sehemu ya mipango yote ya kulipia — watumiaji wa bure wanaona orodha za ratiba bila utabiri, huku wanachama wakipokea kila mechi na uchambuzi kamili wa takwimu ikijumuisha xG, maelezo ya mzunguko wa uongozi wa timu kwa klabu za juu, na vipimo vya mwelekeo wa fomu."
+    ],
+    "statsPanel": {
+      "h3": "Ligue 1 kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Ligue 1 kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za Ligue 1",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Ligue 1 unavyoundwa",
+    "body": "Utabiri wa Ligue 1 hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo kwa nguvu ya timu, mifumo ya Poisson kwa uwezekano wa mabao, na machine learning kwa utambuzi wa mifumo. Mfumo unazingatia mifumo ya mzunguko ya PSG na mabadiliko ya kocha ya katikati ya jedwali mahsusi kwa mpira wa miguu wa Kifaransa.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning iliyofunzwa kwa takwimu za Ligue 1"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Ligue 1",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Ligue 1?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri, huku mifumo ya mzunguko ya PSG ikiongeza mabadiliko. Tunachapisha kila utabiri wa Ligue 1 katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini utabiri wa Ligue 1 ni wa kulipia tu?",
+        "a": "Utabiri wa bure umewekewa mipaka kwa ligi 3 kuu (Premier League, La Liga, Bundesliga). Utabiri wa Ligue 1 ni sehemu ya mipango yote ya kulipia."
+      },
+      {
+        "q": "Mfumo unashughulikiaje mzunguko wa PSG katika mechi za nyumbani?",
+        "a": "Tabaka letu la ML linazingatia uongozi wa timu unaotarajiwa wa PSG kulingana na ukaribu wa ratiba ya Champions League. Utabiri wa mechi za PSG unazingatia upatikanaji wa wachezaji wa kuanza wanaowezekana badala ya kudhani XI ya kwanza."
+      },
+      {
+        "q": "Utabiri wa Ligue 1 unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Ligue 1 hadi saa 24 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia Coupe de France na mechi za Ulaya zinazohusisha klabu za Ligue 1?",
+        "a": "Tunashughulikia mechi zote za ligi ya Ligue 1. Mechi za Coupe de France, Champions League na Europa League zinazohusisha klabu za Ligue 1 zinashughulikiwa kando chini ya kurasa zao za mashindano."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Ligue 1 kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Ligue 1 wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Ligue 1?",
+    "h2Gated": "Fungua utabiri wa Ligue 1",
+    "bodyFree": "Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Ligue 1 ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jaribu bure",
+      "href": "https://app.betsplug.com/register?source=league_ligue-1"
+    }
+  }
+}

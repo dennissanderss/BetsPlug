@@ -82,6 +82,15 @@ export const labelsByLocale: Record<Locale, LegalPageContent["labels"]> = {
       "TODO: Revisione legale richiesta prima del lancio in produzione. Questo documento è un modello e non costituisce consulenza legale.",
     contactHeading: "Contatti",
   },
+  sw: {
+    tocTitle: "Yaliyomo",
+    lastUpdatedLabel: "Imesasishwa mwisho",
+    versionLabel: "Toleo",
+    effectiveDateLabel: "Imeanza kutumika",
+    lawyerReviewWarning:
+      "TODO: Mapitio ya kisheria yanahitajika kabla ya uzinduzi wa uzalishaji. Hati hii ni kiolezo na si ushauri wa kisheria. Kabla ya kuchapishwa katika masoko ya Afrika Mashariki (Kenya, Tanzania, Uganda, Rwanda) lazima ipitiwe na wakili anayejua sheria za eneo hilo.",
+    contactHeading: "Wasiliana nasi",
+  },
 };
 
 /* ── Per-page hero + meta overrides per locale ── */
@@ -113,6 +122,10 @@ export const privacyOverrides: PageOverrides = {
     meta: { title: "Informativa sulla Privacy | BetsPlug", description: "Come BetsPlug raccoglie, utilizza e protegge i tuoi dati. Conforme al GDPR, trasparente, nessuna vendita a terzi." },
     hero: { h1: "Informativa sulla Privacy", intro: "BetsPlug rispetta la tua privacy. Questa Informativa sulla Privacy spiega quali informazioni raccogliamo, come le utilizziamo e i tuoi diritti relativi ai tuoi dati. Utilizzando BetsPlug, accetti le pratiche qui descritte." },
   },
+  sw: {
+    meta: { title: "Sera ya Faragha | BetsPlug", description: "Jinsi BetsPlug inavyokusanya, kutumia na kulinda data yako. Inakidhi GDPR, wazi, hakuna data inayouzwa kwa watu wengine." },
+    hero: { h1: "Sera ya Faragha", intro: "BetsPlug inaheshimu faragha yako. Sera hii ya Faragha inaelezea taarifa zipi tunazokusanya, jinsi tunavyotumia, na haki zako kuhusu data yako. Kwa kutumia BetsPlug, unakubali kanuni zilizoelezwa hapa." },
+  },
 };
 
 export const termsOverrides: PageOverrides = {
@@ -139,6 +152,10 @@ export const termsOverrides: PageOverrides = {
   it: {
     meta: { title: "Termini di Servizio | BetsPlug", description: "Termini che regolano l'uso di BetsPlug. Abbonamento, uso consentito, responsabilità e controversie." },
     hero: { h1: "Termini di Servizio", intro: "Questi Termini di Servizio ('Termini') regolano l'accesso e l'uso di BetsPlug. Creando un account o utilizzando il nostro servizio, accetti questi Termini. Se non sei d'accordo, non utilizzare il nostro servizio." },
+  },
+  sw: {
+    meta: { title: "Masharti ya Huduma | BetsPlug", description: "Masharti yanayodhibiti matumizi yako ya BetsPlug. Kujisajili, matumizi yanayoruhusiwa, dhima na mizozo — yameandikwa kwa uwazi." },
+    hero: { h1: "Masharti ya Huduma", intro: "Masharti haya ya Huduma ('Masharti') yanadhibiti ufikiaji na matumizi yako ya BetsPlug. Kwa kuunda akaunti au kutumia huduma yetu, unakubali Masharti haya. Iwapo hukubali, usitumie huduma yetu." },
   },
 };
 
@@ -167,6 +184,10 @@ export const cookiesOverrides: PageOverrides = {
     meta: { title: "Politica sui Cookie | BetsPlug", description: "Quali cookie utilizza BetsPlug, perché, e come gestire le tue preferenze. Solo cookie essenziali di default." },
     hero: { h1: "Politica sui Cookie", intro: "I cookie sono piccoli file di testo memorizzati sul tuo dispositivo quando visiti i siti web. Questa politica spiega quali cookie utilizza BetsPlug, perché li utilizziamo e come puoi gestire le tue preferenze." },
   },
+  sw: {
+    meta: { title: "Sera ya Vidakuzi | BetsPlug", description: "Vidakuzi vipi BetsPlug inatumia, kwa nini, na jinsi ya kudhibiti mapendeleo yako. Vidakuzi vya msingi pekee kwa kawaida." },
+    hero: { h1: "Sera ya Vidakuzi", intro: "Vidakuzi ni faili ndogo za maandishi zinazohifadhiwa kwenye kifaa chako unapotembelea tovuti. Sera hii inaelezea vidakuzi vipi BetsPlug inatumia, kwa nini tunavitumia, na jinsi unavyoweza kudhibiti mapendeleo yako." },
+  },
 };
 
 export const responsibleGamblingOverrides: PageOverrides = {
@@ -193,6 +214,10 @@ export const responsibleGamblingOverrides: PageOverrides = {
   it: {
     meta: { title: "Gioco Responsabile | BetsPlug", description: "BetsPlug supporta il gioco responsabile. Riconosci il gioco problematico, trova aiuto e opzioni di autoesclusione, e proteggi familiari e amici." },
     hero: { h1: "Gioco Responsabile", intro: "BetsPlug fornisce analisi statistiche di partite di calcio. Non operiamo come bookmaker né facilitiamo il gioco d'azzardo. Riconosciamo tuttavia che alcuni utenti possono utilizzare i nostri pronostici in connessione con attività di gioco. Questa pagina copre principi e risorse per il gioco responsabile." },
+  },
+  sw: {
+    meta: { title: "Mchezo Wenye Busara | BetsPlug", description: "BetsPlug inaunga mkono mchezo wenye busara. Tambua tatizo la kamari, pata msaada na njia za kujizuia, na linda familia na marafiki." },
+    hero: { h1: "Mchezo Wenye Busara", intro: "BetsPlug inatoa uchambuzi wa takwimu wa mechi za mpira wa miguu. Sisi si bookmaker na hatuwezeshi kamari. Hata hivyo, tunatambua kwamba baadhi ya watumiaji wanaweza kutumia utabiri wetu pamoja na shughuli za kamari. Ukurasa huu unahusu kanuni na rasilimali za mchezo wenye busara." },
   },
 };
 

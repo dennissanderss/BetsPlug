@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Bundesliga leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa Bundesliga unaoendeshwa na AI kwa kila mechi. Imefungwa kabla ya kuanza, rekodi ya umma. Uchambuzi wa ligi yenye mabao mengi kwa Elo + Poisson + ML.",
+    "ogImage": "/og-images/league-bundesliga-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Bundesliga",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya Bundesliga. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Bundesliga",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Bundesliga",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Bundesliga",
+    "paragraphs": [
+      "Bundesliga ni daraja la juu zaidi la mpira wa miguu nchini Ujerumani, linaloshindaniwa na klabu 18 katika siku 34 za mechi kuanzia Agosti hadi Mei. Ligi hii ndiyo yenye mabao mengi zaidi miongoni mwa ligi tano kubwa za Ulaya — ikiwa na wastani wa juu zaidi ya mabao 3.0 kwa kila mechi katika misimu mingi ya hivi karibuni — na ina wastani wa juu zaidi wa mahudhurio ya uwanjani kwa kila mechi duniani. Utawala wa kihistoria wa Bayern Munich sasa unapingwa kikamilifu na Bayer Leverkusen, RB Leipzig na Borussia Dortmund. Mfumo wetu wa AI unachambua kila mechi ya Bundesliga kwa kutumia fomu ya sasa, mechi za moja kwa moja, mabao yanayotarajiwa, takwimu za uongozi wa timu na vigezo vingine zaidi ya 40.",
+      "Kiwango cha juu cha kufunga mabao cha Bundesliga hufanya masoko ya mistari ya mabao (Juu ya 2.5, Timu Zote Mbili Kufunga) kuwa ishara tajiri zaidi kitakwimu kuliko ligi zilizopangwa kwa kujihami. Tabaka letu la Poisson limepangwa kwa mifumo ya kushambulia ya mpira wa miguu wa Kijerumani, ambapo timu za katikati ya jedwali hufunga mara kwa mara dhidi ya wapinzani wa juu. Muundo wa timu 18 pia unamaanisha mechi chache kwa kila siku ya mechi, ambayo huzingatia ishara za takwimu — fomu ya hivi karibuni katika mechi 4-6 za awali ina uzito mkubwa zaidi wa utabiri hapa kuliko katika ligi za timu 20.",
+      "Kila utabiri wa Bundesliga umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Watumiaji wa bure wanaona utabiri 2-3 wa Bundesliga kila siku; wanachama wanapokea kila ratiba na uchambuzi kamili: mgawanyiko wa xG, uwezekano wa mgawanyo wa mabao, nguvu ya uongozi wa timu na muktadha wa kimkakati."
+    ],
+    "statsPanel": {
+      "h3": "Bundesliga kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Bundesliga kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za Bundesliga",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Bundesliga unavyoundwa",
+    "body": "Utabiri wa Bundesliga hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo kwa nguvu ya timu, mifumo ya Poisson iliyopangwa kwa kiwango cha juu cha kufunga mabao cha ligi, na machine learning kwa utambuzi wa mifumo. Mfumo unazingatia mtindo wa kushambulia wa mpira wa miguu wa Kijerumani, ikijumuisha matukio mengi ya mabao ya kuchelewa.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning iliyofunzwa kwa takwimu za Bundesliga"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Bundesliga",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Bundesliga?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri. Tunachapisha kila utabiri wa Bundesliga katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini mnatoa utabiri wa Bundesliga bure?",
+        "a": "Bundesliga ni mojawapo ya ligi tatu kuu ambazo tunachapisha utabiri 2-3 bure kila siku. Wanachama wanapokea kila mechi ya Bundesliga na uchambuzi kamili."
+      },
+      {
+        "q": "Mnachapisha aina gani za utabiri kwa Bundesliga?",
+        "a": "Kwa kila mechi ya Bundesliga tunachapisha utabiri katika masoko mengi, ikipewa msisitizo masoko ya mistari ya mabao (Juu/Chini, BTTS) kutokana na hali ya juu ya kufunga mabao ya ligi. Pia tunashughulikia 1X2 na Nafasi Mbili."
+      },
+      {
+        "q": "Utabiri wa Bundesliga unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Bundesliga hadi saa 24 kabla ya kuanza. Watumiaji wa bure wanaona saa 2 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia DFB-Pokal na mechi za Ulaya zinazohusisha klabu za Bundesliga?",
+        "a": "Tunashughulikia mechi zote za ligi ya Bundesliga. Mechi za DFB-Pokal, Champions League na Europa League zinazohusisha klabu za Bundesliga zinashughulikiwa kando chini ya kurasa zao za mashindano."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Bundesliga kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Bundesliga wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Bundesliga?",
+    "h2Gated": "Fungua utabiri wa Bundesliga",
+    "bodyFree": "Watumiaji wa bure wanaona utabiri 2-3 kila siku. Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Bundesliga ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Pata akaunti bure",
+      "href": "https://app.betsplug.com/register?source=league_bundesliga"
+    }
+  }
+}

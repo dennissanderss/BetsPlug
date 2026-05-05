@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Primeira Liga leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa Primeira Liga unaoendeshwa na AI kwa kila mechi. Benfica, Porto, Sporting na timu nyingine — zikichambuliwa kwa Elo + Poisson + ML. Inapatikana kwa mpango wowote wa kulipia.",
+    "ogImage": "/og-images/league-primeira-liga-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Primeira Liga",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya Primeira Liga. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Primeira Liga",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Primeira Liga",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Primeira Liga",
+    "paragraphs": [
+      "Primeira Liga ni daraja la juu zaidi la mpira wa miguu nchini Ureno, linaloshindaniwa na klabu 18 katika siku 34 za mechi kuanzia Agosti hadi Mei. Ligi hii imetawaliwa na 'Watatu Wakubwa' — Benfica, Porto na Sporting CP — ambao wameshinda kila ubingwa wa Primeira Liga tangu kuundwa kwa ligi ya kisasa. Ureno ni mojawapo ya ligi za Ulaya zenye nguvu zaidi za kuuza: klabu za juu hupeleka mara kwa mara vipaji vilivyokomaa kwa timu za Premier League, La Liga na Bundesliga kwa ada kubwa za uhamisho. Mfumo wetu wa AI unachambua kila mechi ya Primeira Liga kwa kutumia fomu ya sasa, historia ya mechi za moja kwa moja, mabao yanayotarajiwa na vigezo vingine zaidi ya 40.",
+      "Utabiri wa Primeira Liga huathiriwa na mifumo ya mabadiliko ya kikosi adimu katika ligi nyingine kuu. Madirisha ya uhamisho ya katikati ya msimu mara nyingi huona kuondoka kwa wachezaji muhimu kutoka klabu tatu za juu kwenda ligi tajiri zaidi za Ulaya, na ujenzi upya wa kikosi katika msimu wote ni mkubwa zaidi kuliko Premier League au Bundesliga. Mfumo wetu unazingatia ukaribu wa dirisha la uhamisho, mabadiliko yanayotarajiwa ya uongozi wa timu kutokana na kuondoka kwa wachezaji waliothibitishwa na wenye uvumi, na curve ya kihistoria ya kupona ya kikosi baada ya mauzo makubwa. Mechi za watatu wakubwa dhidi ya kila mmoja zina uzani tofauti kutokana na umuhimu wao ulioinuka kwa kufuzu kwa Ulaya.",
+      "Kila utabiri wa Primeira Liga umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Utabiri wa Primeira Liga ni sehemu ya mipango yote ya kulipia — wanachama wanapokea kila ratiba na uchambuzi kamili wa takwimu ikijumuisha vipimo vya uthabiti wa kikosi, makadirio ya athari za uhamisho na muktadha wa ushindani wa watatu wakubwa."
+    ],
+    "statsPanel": {
+      "h3": "Primeira Liga kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Primeira Liga kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za Primeira Liga",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Primeira Liga unavyoundwa",
+    "body": "Utabiri wa Primeira Liga hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo, mifumo ya Poisson, na machine learning. Mfumo unazingatia mienendo mahsusi ya mpira wa miguu wa Kireno — hasa mabadiliko ya kikosi karibu na madirisha ya uhamisho na utawala wa Watatu Wakubwa.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning yenye muktadha wa dirisha la uhamisho"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Primeira Liga",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Primeira Liga?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri. Tunachapisha kila utabiri wa Primeira Liga katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini utabiri wa Primeira Liga ni wa kulipia tu?",
+        "a": "Utabiri wa bure umewekewa mipaka kwa ligi 3 kuu (Premier League, La Liga, Bundesliga). Utabiri wa Primeira Liga ni sehemu ya mipango yote ya kulipia."
+      },
+      {
+        "q": "Mfumo unashughulikiaje uhamisho mkubwa wa katikati ya msimu kutoka klabu za juu za Kireno?",
+        "a": "Tabaka letu la ML linazingatia uhamisho uliothibitishwa mara moja na hurekebisha makadirio ya nguvu ya kikosi ndani ya saa chache. Kwa vipindi vya uvumi mkubwa, tunatumia punguzo la mabadiliko hadi dirisha la uhamisho lifungwe."
+      },
+      {
+        "q": "Utabiri wa Primeira Liga unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Primeira Liga hadi saa 24 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia Taça de Portugal na mechi za Ulaya zinazohusisha klabu za Primeira Liga?",
+        "a": "Tunashughulikia mechi zote za ligi ya Primeira Liga. Mechi za Taça de Portugal, Champions League na Europa League zinazohusisha klabu za Primeira Liga zinashughulikiwa kando."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Primeira Liga kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Primeira Liga wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Primeira Liga?",
+    "h2Gated": "Fungua utabiri wa Primeira Liga",
+    "bodyFree": "Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Primeira Liga ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jaribu bure",
+      "href": "https://app.betsplug.com/register?source=league_primeira-liga"
+    }
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Expected goals (xG) imefafanuliwa | BetsPlug learn",
+    "description": "Expected Goals (xG) inapima ubora wa shoti, si tu idadi ya shoti. Jifunze jinsi xG inavyokokotolewa, kwa nini inatabiri utendaji wa muda mrefu, na jinsi BetsPlug inavyoitumia.",
+    "ogImage": "/og-images/learn-expected-goals-en.jpg"
+  },
+  "header": {
+    "h1": "Expected goals (xG) imefafanuliwa: jinsi ubora unavyoshinda wingi",
+    "excerpt": "Jinsi xG inavyopima ubora wa shoti na kutabiri utendaji wa muda mrefu wa timu vyema kuliko hesabu za jadi za mabao.",
+    "readingTime": "Soma kwa dakika 8",
+    "difficulty": "Mwanzilishi",
+    "category": "Mifumo ya Kitakwimu",
+    "publishedAt": "2026-04-15",
+    "updatedAt": "2026-05-02"
+  },
+  "tocLabel": "Katika Makala Hii",
+  "breadcrumbLearn": "Jifunze",
+  "intro": "Mashabiki wa mpira wa miguu wamebishana kuhusu ushindi \"unaostahili\" kwa miongo kadhaa. Timu inatawala umiliki wa mpira, inagonga mbao mara mbili, kisha inashindwa na shambulio moja la kupinga — walikuwa na bahati mbaya, au walichezewa kweli? Hadi 2012, hili lilikuwa suala la maoni. Kisha expected goals (xG — mabao yanayotarajiwa) ilifika: kipimo cha kitakwimu kinachoeleza kwa nambari ubora wa shoti, kikitenganisha ishara ya muda mrefu na tofauti ya muda mfupi. xG sasa inatumiwa na kila klabu kubwa ya mpira, kila mchambuzi makini wa data, na kila injini ya kisasa ya utabiri. Mwongozo huu unaeleza xG ni nini, jinsi inavyokokotolewa, kwa nini ni muhimu, na inakwama wapi — ili uweze kuitumia kwa ufanisi unapotathmini timu au utabiri.",
+  "sections": [
+    {
+      "id": "what-is-xg",
+      "h2": "Expected goals ni nini?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Expected goals ni uwezekano kwamba shoti fulani itaishia ndani ya wavu, ikionyeshwa kwa kipimo cha 0.0 hadi 1.0. Mkwaju wa penalti una xG ya takriban 0.78 — ulipigwa takriban 78% ya wakati kihistoria. Shoti kutoka mita 30 ikiwa na mlinzi katika mstari wa moto ina xG ya takriban 0.03 — asilimia tatu uwezekano wa kufunga. Jumlisha xG ya kila shoti ambayo timu inachukua, na unapata jumla ya xG yao kwa mechi: kipimo cha mabao ambayo nafasi zao zilistahili, kwa wastani."
+        },
+        {
+          "type": "paragraph",
+          "text": "Dhana ni rahisi. Mabao ni matukio adimu yenye tofauti kubwa — timu inaweza kutawala mechi na kutofunga, au kuchukua 1-0 kinyume na mwenendo wa mchezo. Kuhesabu mabao kunakuambia kilichotokea katika mechi moja. Kuhesabu xG kunakuambia kile kingetokea ikiwa nafasi zilezile zingetokea mara elfu."
+        },
+        {
+          "type": "diagram",
+          "name": "xg-shot-map",
+          "caption": "Mfano wa thamani za xG kwa eneo la shoti. Penalti (~0.78), kichwa kwenye eneo la mita sita (~0.45), ukingo wa eneo (~0.09), shoti ya mita 30 (~0.03)."
+        }
+      ]
+    },
+    {
+      "id": "how-calculated",
+      "h2": "Jinsi xG inavyokokotolewa?",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mifumo ya xG inafundishwa kwenye data ya kihistoria ya shoti — kawaida mamia ya maelfu ya shoti zilizowekwa lebo na muktadha wao. Kwa kila shoti, mfumo unazingatia seti ya viingizo, kisha unatoa uwezekano."
+        },
+        {
+          "type": "h3",
+          "text": "Vigezo vinavyoongoza xG"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Eneo la shoti: umbali na pembe kuelekea goli — ishara kali zaidi.",
+            "Sehemu ya mwili: mguu dhidi ya kichwa — vichwa hupiga goli kwa kiwango cha chini kuliko shoti za miguu sawa.",
+            "Aina ya pasi ya kufungia: through-ball, cross, cutback, rebound — huathiri muda unaopatikana kupiga shoti vizuri.",
+            "Shinikizo la mlinzi: idadi ya walinzi kati ya shoti na goli, pamoja na shinikizo kwa mpiga shoti.",
+            "Hali ya mchezo: mchezo wazi, set piece, penalti, shambulio la haraka — mashambulio ya haraka huzalisha nafasi za ubora wa juu.",
+            "Nafasi ya kipa: inapatikana tu katika mifumo ya kisasa zaidi."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mfumo wa kisasa wa xG unaweza kutumia logistic regression, gradient-boosted tree (XGBoost), au mtandao mdogo wa nyuro. Algoriti halisi ni muhimu kidogo kuliko data ya mafunzo: kadiri shoti nyingi na lebo safi, ndivyo mfumo unavyokuwa bora. Watoa huduma tofauti hutoa nambari za xG zenye tofauti kidogo kwa sababu wanatumia data tofauti za mafunzo na seti za vipengele — Opta, StatsBomb, na Understat ndio wachapishaji wanaojulikana zaidi, na nambari zao kawaida zinaafikiana ndani ya ~10% kwenye jumla za timu."
+        },
+        {
+          "type": "example",
+          "label": "Mfano uliofanyika",
+          "body": "Manchester City ilikuwa na shoti 14 dhidi ya Crystal Palace katika mechi ya ligi ya 2024: jumla ya xG 2.4. Crystal Palace ilikuwa na shoti 4, jumla ya xG 0.3. Matokeo ya mwisho: Crystal Palace 2-1 Manchester City. Tofauti ya 2.1 xG inasema City ilizalisha nafasi hatari zaidi sana. Skoa halisi inasema Palace ilichukua zao na City haikufanya hivyo. Ikirudiwa mara 100, mechi hii ingefikia wastani wa karibu 2.4 dhidi ya 0.3 katika mabao — lakini katika mechi yoyote moja, chochote kinaweza kutokea."
+        }
+      ]
+    },
+    {
+      "id": "why-matters",
+      "h2": "Kwa nini xG ni muhimu kwa utabiri",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mabao ya zamani ni yenye kelele. xG ina kelele kidogo. Hiyo ndiyo ufahamu mzima. Timu yenye mabao 1.0 kwa mechi kwa mechi 5 lakini xG 1.6 kwa mechi inawezekana zaidi kufunga zaidi katika mechi 5 zifuatazo — wamekuwa wakiunda nafasi kwa kiwango cha juu kuliko ubadilishaji wao umeonyesha. Kitakwimu, xG \"hurudia kwenye wastani\" baada ya muda, lakini hufanya hivyo kwa haraka na kwa utabiri zaidi kuliko mabao."
+        },
+        {
+          "type": "paragraph",
+          "text": "Ndiyo sababu wachambuzi wa mpira wa miguu na injini za utabiri huzingatia sana mwenendo wa hivi karibuni wa xG — kawaida mechi 5 hadi 10 zilizopita. Timu iliyokwama (mabao machache lakini xG ya juu) inathaminiwa chini na meza za fomu za jadi; timu iliyo kwenye mwenendo mzuri (mabao ya juu lakini xG ya chini) inathaminiwa kupita kiasi. xG inatambua zote mbili."
+        },
+        {
+          "type": "h3",
+          "text": "xG ni nzuri katika nini"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Kutambua timu ambazo matokeo yao ya hivi karibuni yanapotosha (xG nzuri, fomu mbaya, au kinyume chake).",
+            "Kutabiri jumla za mabao za baadaye kwa usahihi zaidi kuliko jumla za mabao za zamani.",
+            "Kulinganisha timu kati ya ligi tofauti na mitindo ya kimkakati.",
+            "Kutathmini mabadiliko ya kimkakati — saini ya xG ya meneja mpya kawaida huonekana ndani ya mechi 5-8."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "betsplug-use",
+      "h2": "Jinsi BetsPlug inavyotumia xG",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "xG ni mojawapo ya viingizo zaidi ya 40 katika injini yetu ya utabiri, lakini ni kimoja chenye uzito maalum. Tunafuatilia vipimo vitatu vya xG kwa kila timu: xG ya kufungia (nafasi zilizoundwa), xG dhidi (nafasi zilizoruhusiwa), na tofauti ya xG (jumla halisi). xG ya fomu ya hivi karibuni (mechi 6-10 zilizopita) ina uzito zaidi kuliko xG ya wastani wa msimu, kwa kupungua kwa kielelezo ili mechi za hivi karibuni zaidi ziwe muhimu zaidi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mfumo wetu wa Poisson wa mabao unatumia viwango vya kufunga vilivyotarajiwa vinavyotokana na xG kama ingizo lake la msingi. Lambda ya timu (mabao yanayotarajiwa kwa mechi) inachanganya nguvu ya Elo, mwenendo wa sasa wa xG, xG ya kujihami ya mpinzani, na mgawanyiko wa nyumbani/ugenini. Matokeo yanaingia moja kwa moja katika utabiri wa Over/Under, BTTS, na exact-score. Kwa utabiri wa 1X2, xG ni mojawapo ya ishara kali zaidi — hasa wakati xG inatofautiana na fomu."
+        },
+        {
+          "type": "paragraph",
+          "text": "Soma ukurasa wetu wa methodologia kwa picha kamili ya jinsi xG, Elo, Poisson, na ujifunzaji wa mashine vinavyoungana kuwa utabiri wa mwisho."
+        }
+      ]
+    },
+    {
+      "id": "limitations",
+      "h2": "Mipaka ya xG",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "xG si nambari ya kichawi. Ina mipaka halisi ambayo mtu yeyote anayeitumia anapaswa kuelewa."
+        },
+        {
+          "type": "h3",
+          "text": "Pale ambapo xG inapungukiwa"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tofauti za watoa huduma: Opta, StatsBomb, na Understat hutoa thamani tofauti kidogo za xG kwa shoti hiyohiyo. Usilinganishe kati ya watoa huduma.",
+            "Makosa ya kujihami hayaonyeshwi: bao la nyumbani au kosa la kujihami halionyeshwi katika mifumo ya xG.",
+            "Athari za uamuzi wa mwamuzi: maamuzi ya penalti na kadi nyekundu hubadilisha mechi lakini si ingizo la xG.",
+            "Hali ya hewa na uwanja: mvua nyingi au uwanja mbaya hupunguza ubora wa shoti kwa njia ambazo mifumo mingi ya xG haikamati.",
+            "Sampuli ndogo: katika mechi za shoti chache (jumla ya shoti 4-5), xG ina tofauti kubwa na ni ya kuaminika kidogo.",
+            "Wataalamu wa set-piece: timu yenye mpiga free-kick wa kipekee hupita utabiri wa kawaida wa xG kwa shoti hizo."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Mipaka hii ndiyo sababu hakuna mchambuzi makini anayetumia xG peke yake. Ni ingizo — kali — pamoja na fomu, head-to-head, lineups, na muktadha wa kimkakati. Injini za utabiri ambazo zinategemea xG pekee zina usahihi mdogo kuliko injini zinazochanganya xG na ishara nyingine."
+        }
+      ]
+    }
+  ],
+  "keyTakeaways": {
+    "h3": "Mafunzo muhimu",
+    "items": [
+      "xG inapima ubora wa shoti kwa kipimo cha 0.0–1.0 — jumla ya xG inakusanya ubora wa nafasi za timu kwa mechi.",
+      "xG inatabiri kufunga mabao kwa siku zijazo bora kuliko mabao ya zamani, hasa kwa madirisha ya mechi 5-10.",
+      "Watoa huduma tofauti wa xG hutoa nambari tofauti kidogo — chagua mmoja na ukae nao kwa uthabiti.",
+      "BetsPlug inatumia xG kama mojawapo ya viingizo 40+, kwa uzito kuelekea fomu ya hivi karibuni (mechi 6-10 zilizopita).",
+      "xG inakosa makosa ya kujihami, wataalamu wa set-piece, na mechi za sampuli ndogo — changanya na ishara nyingine."
+    ]
+  },
+  "faq": {
+    "h2": "Maswali yanayoulizwa kuhusu Expected goals",
+    "questions": [
+      {
+        "q": "xG 'nzuri' kwa mechi ni ipi?",
+        "a": "Timu za juu katika ligi kuu zina wastani wa xG 1.5–2.0 kwa mechi. Timu za kati za meza kawaida ziko 1.1–1.4. Timu za chini huzunguka karibu 0.8–1.1. Nambari zinatofautiana kwa ligi: Bundesliga na Eredivisie zinaelekea kutoa wastani wa juu wa xG kuliko Serie A au Ligue 1 kwa sababu ya mitindo ya wazi zaidi ya kimkakati."
+      },
+      {
+        "q": "Je, xG inatumiwa na klabu za mpira wa miguu za kitaaluma?",
+        "a": "Ndiyo. Klabu nyingi za Premier League na za Ulaya kuu zinaajiri wachambuzi wa data wanaotumia xG na vipimo sawa kwa uchambuzi wa kimkakati, ujasusi wa wapinzani, na kuajiri wachezaji. Kuajiriwa kwa Liverpool kwa Ian Graham kama Mkurugenzi wa Utafiti mwaka 2012 kulikuwa mfano wa mapema wa kiwango cha juu. Kuajiri kunakoongozwa na xG sasa ni kawaida juu ya mchezo."
+      },
+      {
+        "q": "Je, ninaweza kutumia xG kutabiri mechi mimi mwenyewe?",
+        "a": "Mienendo ya hivi karibuni ya xG ni viingizo vya manufaa, hasa zinapotofautiana na fomu (timu inayofunga zaidi au chini ya inavyopendekeza xG yao). Lakini xG peke yake haitoshi — changanya na fomu ya timu, data ya head-to-head, habari za lineup, na vipengele vya muktadha. Ndiyo sababu injini za utabiri huchanganya vipimo vingi badala ya kutegemea nambari moja yoyote."
+      },
+      {
+        "q": "Ninaweza kupata data ya xG bure wapi?",
+        "a": "Understat huchapisha data ya xG bure kwa ligi za juu za Ulaya. FBref na StatsBomb pia hutoa data ya umma bure. Kwa xG ya wakati halisi, ya kina katika ligi 30+, kawaida unahitaji mtoa huduma wa data wa kulipa — ndio kile klabu za kitaaluma na huduma za utabiri zinazoongozwa na data zinatumia."
+      }
+    ]
+  },
+  "relatedArticles": {
+    "h2": "Makala zinazohusiana",
+    "slugs": [
+      "poisson-goal-models",
+      "elo-rating-explained",
+      "ai-vs-tipsters"
+    ]
+  },
+  "applyThis": {
+    "h2": "Ona xG ikitumika kwa utabiri halisi",
+    "body": "BetsPlug inatumia xG kama mojawapo ya vigezo 40+ katika injini yetu ya utabiri, ikichanganywa na viwango vya Elo na mifumo ya Poisson ya mabao. Kila utabiri katika ligi 30+ unaonyesha methodologia hii inayojumuisha xG.",
+    "ctaPrimary": {
+      "label": "Tazama Utabiri wa Leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Soma Methodologia",
+      "canonical": "methodology"
+    }
+  }
+}

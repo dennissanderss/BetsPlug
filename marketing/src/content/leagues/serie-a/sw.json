@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Serie A leo | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa Serie A unaoendeshwa na AI kwa kila mechi. Uchambuzi wa kimkakati wa mpira wa miguu wa Kiitaliano kwa Elo + Poisson + ML. Inapatikana kwa mpango wowote wa kulipia.",
+    "ogImage": "/og-images/league-serie-a-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Serie A",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya Serie A. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Serie A",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Serie A",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Serie A",
+    "paragraphs": [
+      "Serie A ni daraja la juu zaidi la mpira wa miguu nchini Italia, linaloshindaniwa na klabu 20 katika siku 38 za mechi kuanzia Agosti hadi Mei. Kihistoria ligi hii imejulikana kwa ustadi wa kimkakati na upangaji wa kujihami — maneno kama 'catenaccio' yalianzia hapa — ingawa Serie A ya kisasa imehamia kwenye mchezo wazi zaidi unaotegemea kumiliki mpira huku ikidumisha miundo madhubuti ya kujihami. Inter, Juventus, AC Milan na Napoli ni nguvu za kihistoria, huku Atalanta, Roma na Lazio wakiwa wapinzani walioimarika. Mfumo wetu wa AI unachambua kila mechi ya Serie A kwa kutumia fomu ya sasa, historia ya mechi za moja kwa moja, mabao yanayotarajiwa na vigezo vingine zaidi ya 40.",
+      "Utabiri wa Serie A unahitaji uzani maalum kwa makabiliano ya kimkakati. Ligi hii ina uhusiano mkubwa zaidi kati ya uthabiti wa muda wa kocha na matokeo ya mechi miongoni mwa ligi tano kuu za Ulaya, na mabadiliko ya mfumo wa kimkakati katikati ya msimu hutoa mabadiliko makubwa ya kiutabiri. Mfumo wetu unazingatia muda wa ukocha, mabadiliko yanayotarajiwa ya muundo kutokana na majeraha, na utendaji wa kihistoria dhidi ya mipangilio mahsusi ya kimkakati (mshindo wa juu dhidi ya kizuizi cha kina) kwa kila timu.",
+      "Kila utabiri wa Serie A umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Utabiri wa Serie A ni sehemu ya mipango yote ya kulipia — watumiaji wa bure wanaona orodha za ratiba bila utabiri, huku wanachama wakipokea kila mechi na uchambuzi kamili wa takwimu ikijumuisha xG, vipimo vya urefu wa mstari wa kujihami, na maelezo ya makabiliano ya kimkakati."
+    ],
+    "statsPanel": {
+      "h3": "Serie A kwa muhtasari",
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Serie A kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Timu bora za Serie A",
+    "positionLabel": "Nafasi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Serie A unavyoundwa",
+    "body": "Utabiri wa Serie A hutumia mfumo ule ule kama utabiri wetu wote wa mpira wa miguu: ukadiriaji wa Elo kwa nguvu ya timu, mifumo ya Poisson kwa uwezekano wa mabao, na machine learning kwa utambuzi wa mifumo. Mfumo umebadilishwa kwa mifumo ya kimkakati ya mpira wa miguu wa Kiitaliano, hasa thamani ya kiutabiri ya makabiliano ya muundo na uthabiti wa ukocha.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning iliyofunzwa kwa takwimu za Serie A"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Serie A",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Serie A?",
+        "a": "Usahihi unatofautiana kwa kila siku ya mechi na aina ya utabiri. Tunachapisha kila utabiri wa Serie A katika rekodi yetu ya umma ili uweze kuthibitisha utendaji mwenyewe."
+      },
+      {
+        "q": "Kwa nini utabiri wa Serie A ni wa kulipia tu?",
+        "a": "Utabiri wa bure umewekewa mipaka kwa ligi 3 kuu (Premier League, La Liga, Bundesliga). Utabiri wa Serie A ni sehemu ya mipango yote ya kulipia, ukijumuishwa na uchambuzi kamili wa mechi."
+      },
+      {
+        "q": "Mnachapisha aina gani za utabiri kwa Serie A?",
+        "a": "Kwa kila mechi ya Serie A tunachapisha utabiri katika masoko mengi: 1X2, Juu/Chini ya mabao, Timu Zote Mbili Kufunga, na Nafasi Mbili — pamoja na muktadha wa makabiliano ya kimkakati ukiarifu mapendekezo."
+      },
+      {
+        "q": "Utabiri wa Serie A unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Serie A hadi saa 24 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia Coppa Italia na mechi za Ulaya zinazohusisha klabu za Serie A?",
+        "a": "Tunashughulikia mechi zote za ligi ya Serie A. Mechi za Coppa Italia, Champions League na Europa League zinazohusisha klabu za Serie A zinashughulikiwa kando chini ya kurasa zao za mashindano."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Serie A kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Serie A wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Serie A?",
+    "h2Gated": "Fungua utabiri wa Serie A",
+    "bodyFree": "Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Serie A ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jaribu bure",
+      "href": "https://app.betsplug.com/register?source=league_serie-a"
+    }
+  }
+}

@@ -16,7 +16,7 @@ export default defineConfig({
   // claiming /{locale}/track-record before our dispatcher could.
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "nl", "de", "fr", "es", "it"],
+    locales: ["en", "nl", "de", "fr", "es", "it", "sw"],
     routing: {
       prefixDefaultLocale: false,
       redirectToDefaultLocale: false,
@@ -27,7 +27,7 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: "en",
-        locales: { en: "en", nl: "nl", de: "de", fr: "fr", es: "es", it: "it" },
+        locales: { en: "en", nl: "nl", de: "de", fr: "fr", es: "es", it: "it", sw: "sw" },
       },
       filter: (page) => {
         // Skip Vercel-only safety-net redirects + the foundation page.
@@ -40,7 +40,7 @@ export default defineConfig({
         if (url.match(/\/predictions(\/[^/]+)?\/?$/)) {
           item.changefreq = "daily";
           item.priority = url.endsWith("/predictions/") || /\/predictions$/.test(url) ? 0.9 : 0.8;
-        } else if (url === "https://betsplug.com/" || /^https:\/\/betsplug\.com\/(nl|de|fr|es|it)\/?$/.test(url)) {
+        } else if (url === "https://betsplug.com/" || /^https:\/\/betsplug\.com\/(nl|de|fr|es|it|sw)\/?$/.test(url)) {
           item.changefreq = "daily";
           item.priority = 1.0;
         } else if (url.includes("/learn")) {

@@ -94,6 +94,16 @@ const dict404: Record<Locale, Dict> = {
     links: { home: "Home", predictions: "Pronostici", pricing: "Prezzi", faq: "FAQ", contact: "Contatti" },
     status: { title: "", body: "" },
   },
+  sw: {
+    metaTitle: "Ukurasa haupatikani · BetsPlug",
+    h1: "Ukurasa haupatikani",
+    body: "Hatukuweza kupata ulichokuwa unatafuta. Jaribu mojawapo ya kurasa maarufu hapa chini au tafuta katika maswali yetu.",
+    searchPlaceholder: "Tafuta katika maswali…",
+    searchSubmit: "Tafuta",
+    popularLinks: "Kurasa maarufu",
+    links: { home: "Nyumbani", predictions: "Utabiri", pricing: "Bei", faq: "Maswali", contact: "Mawasiliano" },
+    status: { title: "", body: "" },
+  },
 };
 
 const dict500: Record<Locale, Dict> = {
@@ -103,6 +113,7 @@ const dict500: Record<Locale, Dict> = {
   fr: { ...dict404.fr, metaTitle: "Une erreur s'est produite · BetsPlug", h1: "Une erreur s'est produite", body: "Une erreur inattendue s'est produite de notre côté. Veuillez réessayer ou revenir dans un instant.", popularLinks: "Essayez une de ces pages", status: { title: "Statut", body: "Consultez notre page de statut pour les incidents en cours" } },
   es: { ...dict404.es, metaTitle: "Algo salió mal · BetsPlug", h1: "Algo salió mal", body: "Ocurrió un error inesperado por nuestra parte. Inténtalo de nuevo o vuelve en un momento.", popularLinks: "Prueba alguna de estas", status: { title: "Estado", body: "Consulta nuestra página de estado para incidentes en curso" } },
   it: { ...dict404.it, metaTitle: "Qualcosa è andato storto · BetsPlug", h1: "Qualcosa è andato storto", body: "Si è verificato un errore imprevisto. Riprova o torna tra un momento.", popularLinks: "Prova una di queste", status: { title: "Stato", body: "Controlla la nostra pagina di stato per incidenti in corso" } },
+  sw: { ...dict404.sw, metaTitle: "Hitilafu imetokea · BetsPlug", h1: "Hitilafu imetokea", body: "Hitilafu isiyotarajiwa imetokea upande wetu. Tafadhali jaribu tena au rudi baada ya muda mfupi.", popularLinks: "Jaribu mojawapo ya hizi", status: { title: "Hali", body: "Angalia ukurasa wetu wa hali kwa matukio yanayoendelea" } },
 };
 
 const t = kind === "404" ? dict404[locale] : dict500[locale];

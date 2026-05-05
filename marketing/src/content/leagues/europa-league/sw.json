@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa Europa League | Unaoendeshwa na AI | BetsPlug",
+    "description": "Utabiri wa UEFA Europa League unaoendeshwa na AI kwa kila mechi. Hatua ya ligi hadi knockout — ikichambuliwa kwa Elo + Poisson + ML. Inapatikana kwa mpango wowote wa kulipia.",
+    "ogImage": "/og-images/league-europa-league-en.jpg"
+  },
+  "hero": {
+    "h1": "Utabiri wa Europa League",
+    "subheadline": "Utabiri unaoendeshwa na AI kwa kila mechi ya UEFA Europa League. Umeundwa kwa kutumia ukadiriaji wa Elo, mifumo ya Poisson na machine learning. Imefungwa kabla ya kuanza.",
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa Europa League",
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "statsTeams": "Klabu",
+    "statsMatchweek": "Siku ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": {
+    "today": "Leo",
+    "thisWeek": "Wiki hii",
+    "allUpcoming": "Zinazokuja zote"
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "unlockAll": "Jisajili kutazama utabiri wote wa Europa League",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "context": {
+    "h2": "Kuhusu utabiri wa Europa League",
+    "paragraphs": [
+      "UEFA Europa League ni shindano la pili la klabu la Ulaya, likikaa daraja moja chini ya Champions League. Msimu wa 2024-25 pia ulipitisha muundo mpya wa hatua ya ligi na klabu 36 katika jedwali lililounganishwa. Washiriki wanatoka kote katika nchi wanachama wa UEFA: washindi wa kombe la nyumbani, klabu za ligi za juu zilizomaliza chini, na timu za parachute zinazoshuka kutoka mchezo wa Champions League. Washindi maarufu wa hivi karibuni ni pamoja na Atalanta, Eintracht Frankfurt, Sevilla na Atlético Madrid. Mfumo wetu wa AI unachambua kila ratiba ya Europa League kwa kutumia fomu ya sasa, mechi za moja kwa moja, mabao yanayotarajiwa na vigezo vingine zaidi ya 40.",
+      "Utabiri wa Europa League unawasilisha changamoto tofauti na Champions League: pengo la ushindani kati ya wapinzani wa hatua ya ligi mara nyingi ni dogo zaidi, lakini mabadiliko ya uongozi wa timu ni makubwa zaidi. Washiriki wengi huichukulia Europa League kama kipaumbele cha pili — klabu zinazosawazisha misimu imara ya nyumbani mara kwa mara huzungusha sana kwa wiki za Ulaya. Mfumo wetu unazingatia uzani wa fomu ya nyumbani, uwezekano wa mzunguko unaotarajiwa (hasa kwa klabu zilizo katika vita kali za ligi), na mifumo ya uchovu wa ratiba ya Alhamisi usiku katika utabiri wa fomu ya nyumbani ya wikendi inayofuata.",
+      "Kila utabiri wa Europa League umefungwa kwa muhuri wa wakati wa umma kabla ya kuanza. Ushindi na kushindwa vyote vinaingizwa katika rekodi yetu ya umma. Utabiri wa Europa League ni sehemu ya mipango yote ya kulipia — wanachama wanapokea kila ratiba na uchambuzi kamili ikijumuisha uwezekano wa mzunguko kwa klabu zinazoshiriki na makadirio ya athari za ratiba ya nyumbani baada ya mechi."
+    ],
+    "statsPanel": {
+      "h3": "Europa League kwa muhtasari",
+      "teamsLabel": "Klabu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Siku ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa",
+      "ctaLabel": "Tazama Europa League kwenye programu"
+    }
+  },
+  "topTeams": {
+    "h2": "Klabu bora za Europa League",
+    "positionLabel": "Nafasi ya hatua ya ligi",
+    "formLabel": "Fomu",
+    "viewTeamLabel": "Tazama timu"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri wa Europa League unavyoundwa",
+    "body": "Utabiri wa Europa League hutumia mfumo ule ule wa msingi kama utabiri wetu wa nyumbani, na upangaji kwa viwango vya juu vya mzunguko wa shindano na viwango tofauti vya ushindani. Tabaka letu la ML linazingatia mahsusi klabu zinazochukulia ratiba za Ulaya kama vipaumbele vya pili kuhusiana na vita vya ubingwa wa nyumbani au kushuka daraja.",
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya hisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Machine learning yenye uigaji wa mzunguko"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri wa Europa League",
+    "questions": [
+      {
+        "q": "Utabiri wa AI una usahihi kiasi gani kwa Europa League?",
+        "a": "Usahihi unatofautiana, huku mifumo ya mzunguko ikiongeza mabadiliko ikilinganishwa na Champions League. Tunachapisha kila utabiri wa Europa League katika rekodi yetu ya umma."
+      },
+      {
+        "q": "Kwa nini utabiri wa Europa League ni wa kulipia tu?",
+        "a": "Utabiri wa bure umewekewa mipaka kwa ligi 3 kuu za nyumbani. Utabiri wa Europa League ni sehemu ya mipango yote ya kulipia, ukijumuishwa na uchambuzi wa mzunguko."
+      },
+      {
+        "q": "Mfumo unashughulikiaje klabu zinazozungusha sana kwa Europa League?",
+        "a": "Tabaka letu la ML hupima nafasi ya jedwali la nyumbani na mifumo ya hivi karibuni ya mzunguko ili kukadiria wachezaji wa kuanza wanaowezekana. Utabiri wa wazungushaji wanaojulikana (k.m. klabu za Premier League katika vita kali vya kushuka daraja) unazingatia upunguzaji unaotarajiwa wa uongozi wa timu."
+      },
+      {
+        "q": "Utabiri wa Europa League unapatikana mapema kiasi gani?",
+        "a": "Wanachama wanaona utabiri wa Europa League hadi saa 24 kabla ya kuanza."
+      },
+      {
+        "q": "Mnashughulikia ratiba za Conference League?",
+        "a": "Kwa sasa tunashughulikia Champions League na Europa League. Conference League haimo katika ushughulikiaji wetu wa msingi."
+      },
+      {
+        "q": "Naweza kupata utabiri wa Europa League kupitia Telegram?",
+        "a": "Ndiyo. Wanachama wanaolipa wanapokea arifa za Telegram kwa utabiri wa Europa League wenye uhakika mkubwa."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2Free": "Unataka utabiri wote wa Europa League?",
+    "h2Gated": "Fungua utabiri wa Europa League",
+    "bodyFree": "Wanachama wanapata kila mechi na uchambuzi kamili wa takwimu.",
+    "bodyGated": "Utabiri wa Europa League ni sehemu ya mipango yote ya kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jaribu bure",
+      "href": "https://app.betsplug.com/register?source=league_europa-league"
+    }
+  }
+}

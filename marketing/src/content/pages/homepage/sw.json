@@ -1,0 +1,322 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa AI wa mpira wa miguu uliojengwa kwa data halisi | BetsPlug",
+    "description": "Utabiri wa AI wa mpira wa miguu kwa ligi 30+ ukitumia viwango vya Elo, mifumo ya Poisson na ujifunzaji wa mashine. Kila utabiri umefungwa kabla ya mechi kuanza. Track record ya umma.",
+    "ogImage": "/og-images/homepage-en.jpg"
+  },
+  "hero": {
+    "kicker": "Akili ya AI ya mpira wa miguu",
+    "h1": "Utabiri wa AI wa mpira wa miguu uliojengwa kwa {{accent}}data halisi{{/accent}}",
+    "subheadline": "Utabiri wa ligi 30+ ukitumia viwango vya Elo, mifumo ya Poisson na ujifunzaji wa mashine. Kila utabiri umefungwa kabla ya mechi kuanza. Track record kamili ni ya umma.",
+    "trustStrip": [
+      "Imefungwa kabla ya mechi kuanza",
+      "Track record ya umma",
+      "Sisi si bookmaker"
+    ],
+    "ctaPrimary": {
+      "label": "Pata utabiri bure",
+      "href": "https://app.betsplug.com/register?source=homepage_hero"
+    },
+    "ctaSecondary": {
+      "label": "Jinsi inavyofanya kazi",
+      "canonical": "how-it-works"
+    },
+    "visual": {
+      "league": "Premier League",
+      "homeTeam": "Manchester City",
+      "awayTeam": "Arsenal",
+      "kickoff": "Jumamosi, 17:30",
+      "prediction": "Zaidi ya mabao 2.5",
+      "confidence": 78,
+      "methodologyBadge": "Elo + Poisson + ML",
+      "lockLabel": "Imefungwa saa 2 kabla ya mechi kuanza"
+    }
+  },
+  "howItWorks": {
+    "h2": "Jinsi BetsPlug {{accent}}inavyofanya kazi{{/accent}}",
+    "subhead": "Kutoka mechi hadi utabiri kwa hatua tatu. Hakuna watabiri wa kibinafsi, hakuna makisio.",
+    "steps": [
+      {
+        "number": "01",
+        "icon": "database",
+        "h3": "Tunakusanya kila mechi",
+        "body": "Tunavuta ratiba na matokeo ya hivi karibuni kutoka ligi 30+. Data inaboreshwa mara kwa mara ili daima tushughulike na kile kilichotokea uwanjani.",
+        "microDetail": "Inaboreshwa kila dakika"
+      },
+      {
+        "number": "02",
+        "icon": "cpu",
+        "h3": "Mfumo wetu unafanya hesabu",
+        "body": "Kwa kila mechi inayokuja, mfumo wetu unalinganisha nguvu za timu, hali ya hivi karibuni na mienendo ya kihistoria. Hakuna mhariri, hakuna upendeleo wa mashabiki — namba tu.",
+        "microDetail": "Mfumo mmoja kwa kila utabiri"
+      },
+      {
+        "number": "03",
+        "icon": "lock",
+        "h3": "Utabiri unafungwa kabla ya mechi kuanza",
+        "body": "Kila utabiri unachapishwa na kufungwa kabla ya mwanzo wa mechi. Mara unapotolewa, hauwezi kubadilishwa. Ushindi na kushindwa vyote vinabaki kwenye track record ya umma.",
+        "microDetail": "Track record ya umma, hakuna mabadiliko"
+      }
+    ],
+    "cta": {
+      "label": "Tazama mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "livePredictions": {
+    "h2": "Utabiri wa AI wa bure wa leo",
+    "subhead": "Utabiri tatu wa bure kutoka mechi za leo, unaboreshwa kila dakika. Imefungwa kabla ya mechi kuanza — ndivyo wateja wetu wanaolipa wanavyoona.",
+    "liveLabel": "Imeboreshwa",
+    "liveSecondsAgo": "sekunde {seconds} zilizopita",
+    "lockedLabel": "Imefungwa",
+    "loadingLabel": "Inapakia utabiri…",
+    "errorLabel": "Utabiri haupatikani. Tafadhali onyesha upya.",
+    "emptyLabel": "Hakuna mechi zilizopangwa kwa leo — orodha mpya kila asubuhi.",
+    "ctaSection": {
+      "h3": "Unataka kila utabiri, kila siku?",
+      "body": "Wateja wanaona orodha kamili ya kila ligi tunayoshughulikia, pamoja na uwezekano wa ushindi kwa kila mechi.",
+      "ctaPrimary": {
+        "label": "Tazama bei",
+        "canonical": "pricing"
+      },
+      "ctaSecondary": {
+        "label": "Pata akaunti ya bure",
+        "href": "https://app.betsplug.com/register?source=homepage_live"
+      }
+    }
+  },
+  "methodology": {
+    "h2": "Imejengwa kwa {{accent}}namba{{/accent}}, si makisio",
+    "paragraphs": [
+      "Kila utabiri kwenye BetsPlug unaanza kwa njia ile ile: mfumo unaangalia jinsi kila timu ilivyo na nguvu sasa hivi, jinsi imekuwa ikicheza hivi karibuni, na kinachotokea kawaida wakati timu hizi mbili — au timu kama hizo — zinapokutana.",
+      "Hakuna mhariri, hakuna timu pendwa na hakuna uamuzi wa mwisho wa hisia. Mfumo unashughulikia kila mechi kwa njia ile ile na kugeuza picha kuwa hukumu moja rahisi yenye kiwango cha uhakika.",
+      "Tunachapisha ushindi na kushindwa pamoja kwenye track record ya umma. Ikiwa utabiri umekosea, unaweza kuuona. Hiyo ndiyo njia pekee ya uaminifu ya kufanya hivi."
+    ],
+    "stats": [
+      {
+        "value": "30+",
+        "label": "Ligi zinazoshughulikiwa"
+      },
+      {
+        "value": "dakika 1",
+        "label": "Kuboreshwa kwa data"
+      },
+      {
+        "value": "100%",
+        "label": "Utabiri uliofungwa"
+      },
+      {
+        "value": "0",
+        "label": "Maoni ya wahariri"
+      }
+    ],
+    "diagram": {
+      "input": "Tunachoangalia",
+      "inputItems": [
+        "Matokeo ya mechi",
+        "Hali ya timu",
+        "H2H"
+      ],
+      "models": [
+        "Nguvu ya timu",
+        "Mienendo ya mabao",
+        "Ishara za kihistoria"
+      ],
+      "output": "Utabiri uliofungwa"
+    },
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "trackRecord": {
+    "h2": "Kila utabiri. {{accent}}Wa umma. Milele.{{/accent}}",
+    "body": "Tovuti nyingi za utabiri huonyesha tu washindi wao. Sisi tunachapisha kila kitu — ushindi, kushindwa, utabiri kamili na muda wa rekodi. Thibitisha track record yetu mwenyewe.",
+    "topLineLabel": "Siku 30 zilizopita",
+    "topLineValue": "Utabiri wote umechapishwa — daftari la umma",
+    "legend": {
+      "win": "Ushindi",
+      "loss": "Kushindwa",
+      "void": "Batili/Sare",
+      "pending": "Inasubiri"
+    },
+    "cta": {
+      "label": "Tazama track record moja kwa moja",
+      "canonical": "track-record"
+    }
+  },
+  "comparison": {
+    "h2": "Kwa nini AI inashinda watabiri wa kawaida",
+    "headers": {
+      "criterion": "Kigezo",
+      "tipster": "Watabiri wa kawaida",
+      "betsplug": "BetsPlug AI"
+    },
+    "rows": [
+      {
+        "criterion": "Chanzo cha utabiri",
+        "tipster": "Maoni binafsi",
+        "betsplug": "Mifumo ya takwimu"
+      },
+      {
+        "criterion": "Idadi ya mechi zilizochambuliwa",
+        "tipster": "Chache zilizochaguliwa kwa siku",
+        "betsplug": "Mechi zote, ligi 30+"
+      },
+      {
+        "criterion": "Upendeleo",
+        "tipster": "Wa hisia, mwaminifu kwa shabiki",
+        "betsplug": "Hakuna (data inaongoza)"
+      },
+      {
+        "criterion": "Inaweza kubadilishwa baada ya mechi kuanza",
+        "tipster": "Mara nyingi ndiyo",
+        "betsplug": "Kamwe (imefungwa)"
+      },
+      {
+        "criterion": "Uchapishaji wa kushindwa",
+        "tipster": "Inaficha kushindwa",
+        "betsplug": "Inachapisha kila kitu"
+      },
+      {
+        "criterion": "Kasi ya kuboreshwa",
+        "tipster": "Kwa mkono",
+        "betsplug": "Wakati halisi"
+      },
+      {
+        "criterion": "Uwazi wa mbinu",
+        "tipster": "\"Mfumo wa siri\"",
+        "betsplug": "Elo + Poisson + ML"
+      },
+      {
+        "criterion": "Uthibitisho",
+        "tipster": "Niamini",
+        "betsplug": "Track record ya umma"
+      }
+    ],
+    "footnote": "Hii si kuhusu AI kuwa uchawi. Ni kuhusu kuondoa vitu viwili vinavyodhuru usahihi wa utabiri: upendeleo wa kibinadamu na kutoendelea sawa.",
+    "cta": {
+      "label": "Linganisha mipango",
+      "canonical": "pricing"
+    }
+  },
+  "pricing": {
+    "h2": "Anza bure. Pandisha unapokuwa tayari.",
+    "subhead": "Mipango mitatu. Hakuna ada zilizofichwa. Ghairi wakati wowote.",
+    "tiers": [
+      {
+        "id": "free",
+        "name": "Free",
+        "price": "€0",
+        "period": "/mwezi",
+        "description": "Utabiri wa kila siku, hakuna kadi inayohitajika",
+        "features": [
+          "Utabiri bure wa kila siku",
+          "Ligi za juu pekee",
+          "Ufikiaji wa track record ya umma"
+        ],
+        "cta": {
+          "label": "Anza",
+          "href": "https://app.betsplug.com/register?plan=free&source=homepage_pricing"
+        },
+        "highlighted": false
+      },
+      {
+        "id": "silver",
+        "name": "Silver",
+        "price": "€9.99",
+        "period": "/mwezi",
+        "description": "Utabiri wote wa kila siku, takwimu za uwezekano wa ushindi",
+        "badge": "Maarufu zaidi",
+        "features": [
+          "Utabiri wote wa kila siku",
+          "Uwezekano wa ushindi kwa kila mechi",
+          "Vivutio vya Pick of the Day",
+          "Msaada wa barua pepe"
+        ],
+        "cta": {
+          "label": "Anza Silver",
+          "href": "https://app.betsplug.com/register?plan=silver&source=homepage_pricing"
+        },
+        "highlighted": true
+      },
+      {
+        "id": "gold",
+        "name": "Gold",
+        "price": "€14.99",
+        "period": "/mwezi",
+        "description": "Kila kitu kilicho katika Silver + zana za mkakati",
+        "features": [
+          "Kila kitu kilicho katika Silver",
+          "Ujaribu wa nyuma wa mkakati",
+          "Utabiri makini, ligi za juu",
+          "Msaada wa kipaumbele"
+        ],
+        "cta": {
+          "label": "Anza Gold",
+          "href": "https://app.betsplug.com/register?plan=gold&source=homepage_pricing"
+        },
+        "highlighted": false
+      }
+    ],
+    "guaranteeMicro": "Mipango yote: dhamana ya kurudisha pesa kwa siku 7 kwenye viwango vya malipo",
+    "compareLink": {
+      "label": "Linganisha mipango kwa undani",
+      "canonical": "pricing"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya kawaida",
+    "questions": [
+      {
+        "q": "Je, BetsPlug ni bookmaker?",
+        "a": "Hapana. BetsPlug ni jukwaa la uchambuzi wa data. Hatukubali kamari, hatushiki pesa, wala hatuwezeshi kamari. Tunachapisha utabiri wa takwimu kwa matumizi ya elimu na taarifa."
+      },
+      {
+        "q": "Je, utabiri wa AI wa mpira wa miguu una usahihi kiasi gani?",
+        "a": "Usahihi unatofautiana kwa ligi, soko na siku ya mechi. Tunachapisha kila utabiri — ushindi na kushindwa — kwenye track record yetu ya umma ili uweze kuthibitisha utendaji mwenyewe badala ya kutegemea madai yetu."
+      },
+      {
+        "q": "Je, utabiri unaweza kubadilishwa baada ya kuchapishwa?",
+        "a": "Hapana. Kila utabiri umefungwa kabla ya mechi kuanza na muda wa rekodi wa umma. Mara unapochapishwa, hauwezi kuhaririwa au kuondolewa. Hii inaweza kuthibitishwa kwenye track record yetu."
+      },
+      {
+        "q": "Ni nini kinachofanya BetsPlug kuwa tofauti na tovuti zingine za watabiri?",
+        "a": "Vitu vitatu: utabiri unaoendeshwa na AI (hakuna upendeleo wa kibinadamu), uwazi kamili (tunachapisha kushindwa pia), na mbinu unayoweza kukagua (Elo + Poisson + ML — si 'algoritimu ya siri')."
+      },
+      {
+        "q": "Je, ninahitaji akaunti ya kamari kutumia BetsPlug?",
+        "a": "Hapana. BetsPlug ni huru kutoka kwa bookmaker yeyote. Tunatoa uchambuzi wa takwimu pekee. Unachofanya na taarifa hiyo ni juu yako."
+      },
+      {
+        "q": "Je, naweza kughairi usajili wangu?",
+        "a": "Ndiyo, wakati wowote. Mipango yote ya malipo inajumuisha dhamana ya kurudisha pesa kwa siku 7. Baada ya hapo, ghairi kutoka dashibodi ya akaunti yako kwa bonyeza moja."
+      }
+    ],
+    "cta": {
+      "label": "Tazama maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2": "Uko tayari kujaribu {{accent}}utabiri wa AI wa mpira wa miguu{{/accent}}?",
+    "body": "Pata utabiri 5 wa bure leo. Hakuna kadi ya mkopo inayohitajika.",
+    "ctaPrimary": {
+      "label": "Pata utabiri bure",
+      "href": "https://app.betsplug.com/register?source=homepage_final"
+    },
+    "trustSignals": [
+      "Hakuna kadi ya mkopo",
+      "Ghairi wakati wowote",
+      "Kurudisha pesa kwa siku 7 kwenye mipango ya malipo"
+    ]
+  }
+}

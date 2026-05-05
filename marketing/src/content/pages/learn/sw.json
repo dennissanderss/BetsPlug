@@ -1,0 +1,119 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Jifunze — mbinu za utabiri wa mpira wa miguu zimefafanuliwa | BetsPlug",
+    "description": "Miongozo ya kina kuhusu Elo, Poisson, machine learning, value betting, na usimamizi wa bankroll. Jifunze hesabu nyuma ya utabiri wa mpira wa miguu wa AI.",
+    "ogImage": "/og-images/learn-en.jpg"
+  },
+  "hero": {
+    "h1": "Jifunze {{accent}}hesabu{{/accent}} nyuma ya utabiri wa mpira wa miguu",
+    "subheadline": "Miongozo ya kina kuhusu mifano ya kitakwimu, dhana za bashiri, na mifumo ya uchambuzi nyuma ya utabiri wa mpira wa miguu unaotegemea data. Bila maneno ya bure. Hesabu halisi tu.",
+    "trustStrip": [
+      "Imeandikwa na wahandisi",
+      "Inasasishwa mara kwa mara",
+      "Hakuna spamu ya washirika"
+    ]
+  },
+  "grid": {
+    "h2": "Vinjari makala",
+    "readMore": "Soma makala",
+    "difficultyLabels": {
+      "Beginner": "Mwanzo",
+      "Intermediate": "Kati",
+      "Advanced": "Juu"
+    },
+    "categories": [
+      {
+        "title": "Mifano ya kitakwimu",
+        "articles": [
+          {
+            "slug": "expected-goals-explained",
+            "title": "Expected goals (xG) imefafanuliwa",
+            "excerpt": "Jinsi xG inavyopima ubora wa mipigo na kutabiri utendaji wa muda mrefu wa timu vyema kuliko hesabu za kawaida za magoli.",
+            "readingTime": "dakika 8 kusoma",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "elo-rating-explained",
+            "title": "Mfumo wa ukadiriaji wa Elo kwa mpira wa miguu",
+            "excerpt": "Mfumo wa ukadiriaji wenye nguvu unaorekebisha nguvu ya timu baada ya kila mechi. Awali ulikuwa wa chess, sasa unaendesha utabiri wa kisasa wa mpira wa miguu.",
+            "readingTime": "dakika 10 kusoma",
+            "difficulty": "Intermediate"
+          },
+          {
+            "slug": "poisson-goal-models",
+            "title": "Mifano ya magoli ya Poisson",
+            "excerpt": "Mgawanyo wa kihisabati unaotabiri uwezekano wa skoa maalumu za mechi kulingana na viwango vya kushambulia na kujihami.",
+            "readingTime": "dakika 12 kusoma",
+            "difficulty": "Intermediate"
+          }
+        ]
+      },
+      {
+        "title": "Dhana za bashiri",
+        "articles": [
+          {
+            "slug": "what-is-value-betting",
+            "title": "Value betting ni nini?",
+            "excerpt": "Kwa nini kupata bashiri zenye thamani chanya inayotarajiwa ndiyo mkakati pekee wenye msingi wa kihisabati wa muda mrefu. Tofauti kati ya kutabiri na kupata faida.",
+            "readingTime": "dakika 9 kusoma",
+            "difficulty": "Beginner"
+          },
+          {
+            "slug": "kelly-criterion",
+            "title": "Kigezo cha Kelly",
+            "excerpt": "Fomula ya kihisabati ya ukubwa bora wa bashiri kulingana na faida na odi. Kwa nini wawekaji bashiri wengi wanakosea ukubwa wa bashiri.",
+            "readingTime": "dakika 11 kusoma",
+            "difficulty": "Advanced"
+          },
+          {
+            "slug": "bankroll-management",
+            "title": "Usimamizi wa bankroll",
+            "excerpt": "Jinsi ya kusimamia mtaji wako wa kufuata utabiri ili tofauti za muda mfupi zisiharibu matokeo ya muda mrefu.",
+            "readingTime": "dakika 8 kusoma",
+            "difficulty": "Beginner"
+          }
+        ]
+      },
+      {
+        "title": "AI na uchambuzi",
+        "articles": [
+          {
+            "slug": "ai-vs-tipsters",
+            "title": "AI dhidi ya watabiri wa kibinadamu",
+            "excerpt": "Faida za kimuundo na vikomo vya utabiri unaoendeshwa na AI dhidi ya utaalamu wa kibinadamu. Mahali kila moja inafanikiwa.",
+            "readingTime": "dakika 10 kusoma",
+            "difficulty": "Intermediate"
+          }
+        ]
+      }
+    ]
+  },
+  "whyTopics": {
+    "h2": "Kwa nini tuliandika miongozo hii",
+    "paragraphs": [
+      "Tovuti nyingi za utabiri wa mpira wa miguu zinatendea mbinu zao kama 'siri za umiliki' au kuzirahisisha kupita kiasi ili zionekane rafiki kwa watumiaji. Mbinu zote mbili zinashindwa kuwasaidia wasomaji wanaotaka kweli kuelewa kinachoendelea.",
+      "Sehemu yetu ya kujifunza inafafanua hesabu halisi nyuma ya utabiri wetu — ukadiriaji wa Elo, mgawanyo wa Poisson, mifumo ya machine learning — kwa kiwango kinachoheshimu akili yako. Ukiwa tayari kujifunza, kina kiko hapa.",
+      "Makala hizi pia zinashughulikia dhana ambazo kila mwekaji bashiri makini anapaswa kuelewa: value betting, kigezo cha Kelly, usimamizi wa bankroll. Kujua jinsi utabiri unavyofanya kazi kunakusaidia kuutumia kwa ufanisi."
+    ]
+  },
+  "finalCta": {
+    "h2": "Tayari kuona dhana hizi zikifanya kazi?",
+    "body": "Injini sawa, mbinu sawa — inatumika katika ligi 30+ kila siku.",
+    "ctaPrimary": {
+      "label": "Tazama Utabiri wa Leo",
+      "canonical": "predictions"
+    },
+    "ctaSecondary": {
+      "label": "Jinsi Injini Yetu Inavyofanya Kazi",
+      "canonical": "methodology"
+    }
+  }
+}

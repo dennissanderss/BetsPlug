@@ -1,0 +1,177 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Utabiri wa AI wa mpira wa miguu leo - ligi zote | BetsPlug",
+    "description": "Utabiri wa kila siku wa AI wa mpira wa miguu kwa ligi 30+. Utabiri bure leo, imefungwa kabla ya mechi kuanza. Track record ya umma.",
+    "ogImage": "/og-images/predictions-en.jpg"
+  },
+  "hero": {
+    "h1Template": "Utabiri wa AI wa mpira wa miguu kwa {date}",
+    "subheadline": "Utabiri wa kila siku katika ligi 30+, unaozalishwa na injini yetu ya AI kwa kutumia Elo, Poisson na ujifunzaji wa mashine. Imefungwa kabla ya mechi kuanza.",
+    "trustStrip": [
+      "Masasisho ya moja kwa moja",
+      "Utabiri uliofungwa",
+      "Track record ya umma"
+    ],
+    "liveLabel": "Imesasishwa",
+    "liveSecondsAgo": "sekunde {seconds} zilizopita",
+    "ctaPrimary": {
+      "label": "Pata utabiri usio na kikomo",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Jinsi utabiri unavyofanya kazi",
+      "canonical": "methodology"
+    },
+    "miniRecord": {
+      "title": "Siku 30 zilizopita",
+      "subtitle": "Utabiri wote uliochapishwa — daftari la umma",
+      "legendWin": "Ushindi",
+      "legendLoss": "Hasara"
+    }
+  },
+  "filter": {
+    "today": "Leo",
+    "tomorrow": "Kesho",
+    "thisWeek": "Wiki hii",
+    "todayActiveAria": "Inaonyesha utabiri wa leo"
+  },
+  "emptyToday": "Hakuna mechi zilizopangwa leo — orodha mpya kila asubuhi.",
+  "cards": {
+    "locked": "Imefungwa",
+    "freePick": "Utabiri bure",
+    "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kufungua utabiri",
+    "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika",
+    "lockedBeforeKickoff": "Imefungwa kabla ya mechi kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "tomorrowEmpty": {
+    "teaserTitle": "Fungua utabiri wa kesho",
+    "teaserBody": "Utabiri {count} zaidi kesho — kwa wanaolipia tu",
+    "cta": {
+      "label": "Tazama bei",
+      "canonical": "pricing"
+    }
+  },
+  "weekTab": {
+    "h3": "Muhtasari wa wiki hii",
+    "body": "Wanaojisajili wanaona kila utabiri katika siku 7 zijazo. Watumiaji wa bure wanaona leo tu.",
+    "weekdayLabels": [
+      "Jumatatu",
+      "Jumanne",
+      "Jumatano",
+      "Alhamisi",
+      "Ijumaa",
+      "Jumamosi",
+      "Jumapili"
+    ],
+    "cta": {
+      "label": "Pata wiki nzima mbele",
+      "canonical": "pricing"
+    }
+  },
+  "paywall": {
+    "h2Template": "Unaona 5 kati ya utabiri {total} wa leo",
+    "body": "Wanaojisajili wanaona kila utabiri katika ligi 30+, uchambuzi kamili wa mechi, na wanaupata saa 24 kabla ya mechi kuanza.",
+    "bullets": [
+      "Utabiri usio na kikomo wa kila siku (badala ya 5 bure)",
+      "Ligi zote 30+ (badala ya 3 za juu tu)",
+      "Uchambuzi kamili wa mechi: xG, H2H, mistari, sababu",
+      "Utabiri saa 24 mbele (badala ya saa 2 kabla ya mechi kuanza)",
+      "Arifa za Telegram kwa utabiri wenye uhakika mkubwa"
+    ],
+    "ctaPrimary": {
+      "label": "Tazama mipango",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Linganisha bure na kulipia",
+      "canonical": "free-vs-paid"
+    }
+  },
+  "leagueGrid": {
+    "h2": "Utabiri kwa ligi",
+    "cardCta": "Tazama utabiri",
+    "todayCountTemplate": "Utabiri {count} leo",
+    "featuredBadge": "Maalum"
+  },
+  "methodology": {
+    "h2": "Jinsi utabiri huu unavyotengenezwa",
+    "body": [
+      "Kila utabiri kwenye ukurasa huu unazalishwa na injini yetu ya AI, si na wahariri au watabiri. Injini huchanganya ukadiriaji wa Elo (nguvu ya timu), mifumo ya Poisson (uwezekano wa mabao) na ujifunzaji wa mashine (utambuzi wa mienendo) ili kutathmini kila mechi katika vigezo 40+.",
+      "Utabiri unafungwa na muhuri wa wakati wa umma kabla ya mechi kuanza. Tunachapisha ushindi na hasara zote — zinazoweza kuthibitishwa katika track record yetu ya umma."
+    ],
+    "pillars": [
+      {
+        "icon": "calc",
+        "label": "Mifumo ya kihisabati (Elo + Poisson)"
+      },
+      {
+        "icon": "ml",
+        "label": "Ujifunzaji wa mashine"
+      },
+      {
+        "icon": "lock",
+        "label": "Imefungwa na imewekwa muhuri wa wakati"
+      }
+    ],
+    "cta": {
+      "label": "Soma mbinu kamili",
+      "canonical": "methodology"
+    }
+  },
+  "faq": {
+    "h2": "Maswali ya utabiri",
+    "questions": [
+      {
+        "q": "Ni mara ngapi utabiri unasasishwa?",
+        "a": "Utabiri unazalishwa kuendelea. Ukurasa wa kitovu unaonyesha upya data kila dakika. Mara utabiri unapofungwa, hauwezi kubadilishwa."
+      },
+      {
+        "q": "Kwa nini utabiri 5 tu wa bure kwa siku?",
+        "a": "Utabiri wa bure ni sampuli ya pato letu la kila siku. Wanaojisajili wanapokea utabiri wote wa kila siku katika ligi 30+, pamoja na uchambuzi kamili wa mechi."
+      },
+      {
+        "q": "Je, ninaweza kupata utabiri wa mechi maalum ninayopendelea?",
+        "a": "Wanaojisajili wanaweza kuvinjari utabiri wote wa ligi yoyote au mechi yoyote. Watumiaji wa bure wanaona uteuzi maalum kutoka kwa ligi za juu."
+      },
+      {
+        "q": "'Asilimia ya uhakika' inamaanisha nini?",
+        "a": "Uhakika unaonyesha uhakika wa mfumo wetu kuhusu matokeo yaliyotabiriwa. Uhakika wa 78% kwa 'Zaidi ya Mabao 2.5' unamaanisha mfumo unakadiria uwezekano wa 78% wa matokeo hayo."
+      },
+      {
+        "q": "Kwa nini utabiri unafungwa kabla ya mechi kuanza?",
+        "a": "Kufunga utabiri kwa muhuri wa wakati wa umma huhakikisha hatuwezi kuubadilisha baadaye. Hii ndiyo msingi wa dhamana yetu ya uwazi."
+      },
+      {
+        "q": "Je, utabiri wa bure una usahihi mdogo kuliko wa kulipia?",
+        "a": "Hapana. Utabiri wa bure unatumia injini na mbinu sawa na utabiri wa kulipia. Tofauti ni wingi, kina, wakati, na ufunikaji wa ligi."
+      }
+    ],
+    "cta": {
+      "label": "Maswali yote",
+      "canonical": "faq"
+    }
+  },
+  "finalCta": {
+    "h2": "Unataka utabiri wote?",
+    "body": "5 bure kwa siku. Bila kikomo na mpango wowote wa kulipia.",
+    "ctaPrimary": {
+      "label": "Tazama mipango",
+      "canonical": "pricing"
+    },
+    "ctaSecondary": {
+      "label": "Pata akaunti ya bure",
+      "href": "https://app.betsplug.com/register?source=predictions_hub_final"
+    }
+  }
+}

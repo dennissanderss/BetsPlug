@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "cards": {
+    "locked": "Imefungwa", "freePick": "Utabiri bure", "unlock": "Fungua utabiri",
+    "subscribeToView": "Jisajili kutazama utabiri", "viewAnalysis": "Tazama uchambuzi wa mechi",
+    "confidence": "Uhakika", "lockedBeforeKickoff": "Imefungwa kabla ya kuanza",
+    "viewPricing": "Tazama bei"
+  },
+  "filter": { "today": "Leo", "thisWeek": "Wiki hii", "allUpcoming": "Zinazokuja zote" },
+  "hero": {
+    "trustStripPredictionsThisWeek": "Utabiri {count} wiki hii ya mechi",
+    "trustStripUpdated": "Inasasishwa kila dakika",
+    "trustStripLocked": "Imefungwa kabla ya kuanza",
+    "ctaPrimaryFreeLabel": "Tazama utabiri bure",
+    "ctaPrimaryGatedLabel": "Fungua utabiri wa {league}",
+    "ctaSecondaryLabel": "Jinsi inavyofanya kazi",
+    "statsTeams": "Timu",
+    "statsMatchweek": "Wiki ya sasa ya mechi",
+    "statsThisWeek": "Utabiri wa wiki hii"
+  },
+  "methodologyPillars": [
+    { "icon": "calc", "label": "Mifumo ya hisabati (Elo + Poisson)" },
+    { "icon": "ml", "label": "Machine learning iliyofunzwa kwa takwimu za {league}" },
+    { "icon": "lock", "label": "Imefungwa na imewekwa muhuri wa wakati" }
+  ],
+  "topTeams": {
+    "positionLabel": "Nafasi", "formLabel": "Fomu", "viewTeamLabel": "Tazama timu"
+  },
+  "context": {
+    "statsPanel": {
+      "teamsLabel": "Timu",
+      "seasonLabel": "Msimu",
+      "matchweekLabel": "Wiki ya mechi",
+      "topScorerLabel": "Mfungaji bora",
+      "predictionsThisSeasonLabel": "Utabiri wa msimu huu",
+      "updatedLabel": "Imesasishwa"
+    }
+  },
+  "cardsSection": {
+    "moreTodayPaid": "Utabiri {count} zaidi leo — wa kulipia tu",
+    "fixturesOnlyHeading": "Ratiba zinazokuja",
+    "fixturesEmpty": "Hakuna ratiba zinazokuja katika kipindi hiki."
+  },
+  "ctaLabels": {
+    "readFullMethodology": "Soma mbinu kamili",
+    "allFaqs": "Maswali yote",
+    "viewPlans": "Tazama bei",
+    "viewPricing": "Tazama bei",
+    "getFreeAccount": "Pata akaunti bure",
+    "tryFree": "Jaribu bure"
+  }
+}

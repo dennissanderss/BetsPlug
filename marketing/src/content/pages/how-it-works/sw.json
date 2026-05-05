@@ -1,0 +1,223 @@
+{
+  "_meta": {
+    "translationStatus": "ai-generated",
+    "needsReview": true,
+    "lastUpdated": "2026-05-05",
+    "reviewer": null,
+    "language": "sw",
+    "languageName": "Kiswahili"
+  },
+  "meta": {
+    "title": "Jinsi BetsPlug inavyofanya kazi — kutoka data hadi utabiri | BetsPlug",
+    "description": "Mwongozo wa kielimu wa jinsi BetsPlug inavyozalisha utabiri wa mpira wa miguu. Vigezo zaidi ya arobaini kwa mechi, mifumo ya takwimu, ujifunzaji wa mashine, na utabiri uliofungwa kabla ya mechi kuanza."
+  },
+  "hero": {
+    "kicker": "Jinsi inavyofanya kazi",
+    "h1": "Kutoka data hadi utabiri, {{accent}}kila mechi{{/accent}}",
+    "subheadline": "Matokeo ya mpira wa miguu yanafuata mienendo ya kitakwimu. Mfumo wetu unashughulikia vigezo 40+ kwa kila mechi katika ligi 30+ — na unafunga kila utabiri kabla ya mechi kuanza ili uweze kuthibitisha usahihi mwenyewe.",
+    "trustStrip": [
+      { "icon": "cpu",  "text": "Inaendeshwa na AI" },
+      { "icon": "lock", "text": "Imefungwa kabla ya mechi kuanza" },
+      { "icon": "eye",  "text": "Track record ya umma" }
+    ],
+    "ctaPrimary":   { "label": "Tazama utabiri wa leo", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Soma mbinu",            "canonical": "/methodology" }
+  },
+  "problem": {
+    "h2": "Watu wengi wanatabiri mpira wa miguu kwa {{accent}}intuisheni{{/accent}}",
+    "paragraphs": [
+      "Unaangalia mechi chache. Unasoma vichwa vya habari vichache. Unafikiri unajua timu ipi iko katika hali nzuri. Kisha unafanya utabiri kulingana na unavyohisi kuihusu.",
+      "Intuisheni si bure ya manufaa — lakini inafanya kazi kwa labda pointi 5 au 10 za data. Ubongo wako unakumbuka matokeo ya wikendi iliyopita na bao la kushangaza ulilolioona. Unasahau 60% ya mechi ambapo timu hiyo hiyo ilicheza tofauti.",
+      "Mienendo katika matokeo ya mpira wa miguu ni ngumu mno kwa intuisheni kuikamata. Kuna ishara halisi katika viwango vya kufunga mabao, ubora wa wapinzani, mgawanyiko wa nyumbani na ugenini, hali ya hivi karibuni, na vigezo vingine vingi. Ishara ipo. Ubongo wako tu hauwezi kuishughulikia yote kwa wakati mmoja. Wetu unaweza."
+    ]
+  },
+  "process": {
+    "h2": "Hatua nne, {{accent}}kila utabiri{{/accent}}",
+    "subH2": "Hivi ndivyo kinachotokea kati ya mechi kupangwa na utabiri wetu kufungwa.",
+    "stages": [
+      {
+        "number": "01",
+        "title": "Ukusanyaji wa data",
+        "body": "Tunavuta data ya mechi kutoka vyanzo rasmi katika ligi 30+ — orodha za timu, mabao yaliyofungwa, mabao yaliyopokelewa, historia ya H2H, hali ya hivi karibuni, na vigezo vingine 40+ kwa kila mechi. Maboresho hutokea mara kwa mara taarifa mpya zinapopatikana.",
+        "visualLabels": {
+          "goals":    "Mabao yaliyofungwa",
+          "form":     "Hali ya hivi karibuni",
+          "h2h":      "H2H",
+          "homeAway": "Mgawanyiko wa nyumbani / ugenini",
+          "squad":    "Mabadiliko ya kikosi",
+          "context":  "Muktadha wa mechi",
+          "schedule": "Msongamano wa ratiba",
+          "defense":  "Vipimo vya ulinzi"
+        }
+      },
+      {
+        "number": "02",
+        "title": "Mifumo ya takwimu",
+        "body": "Mbinu mbili zilizothibitishwa zinashughulikia hesabu. Viwango vya Elo vinafuatilia nguvu ya kila timu kulingana na mamia ya mechi za zamani. Mifumo ya Poisson inahesabu uwezekano wa kufunga mabao kwa kuchanganya viwango vya kushambulia na ulinzi.",
+        "bodyExtra": "Elo inatupa 'timu hii ina ubora kiasi gani sasa hivi.' Poisson inatupa 'mabao mangapi yataweza kufungwa.' Pamoja vinaunda msingi wa kitakwimu wa kila utabiri.",
+        "visualLabels": {
+          "eloTitle":       "Kiwango cha Elo",
+          "eloCaption":     "Imerekebishwa kulingana na nguvu ya mpinzani",
+          "eloAria":        "Maendeleo ya kiwango cha Elo kwa muda",
+          "poissonTitle":   "Usambazaji wa mabao",
+          "poissonCaption": "Uwezekano kwa kila matokeo",
+          "poissonAria":    "Usambazaji wa uwezekano wa mabao wa Poisson"
+        }
+      },
+      {
+        "number": "03",
+        "title": "Utambuzi wa mienendo",
+        "body": "Mifumo ya takwimu ni sahihi lakini ina mipaka. Haijui kuwa timu mara nyingi inapambana baada ya mapumziko ya kimataifa. Haioni kuwa mwamuzi mmoja anatoa kadi 30% zaidi kuliko wastani.",
+        "bodyExtra": "Hapo ndipo safu ya ujifunzaji wa mashine inapoingia. Inaangalia mienendo ambayo mifumo ya takwimu inakosa — muktadha, hitilafu, faida za kihistoria. Matokeo ni marekebisho yaliyoratibiwa yanayofanya utabiri kuwa sahihi zaidi kwa muda.",
+        "visualLabels": {
+          "aria":    "Mchoro wa safu ya utambuzi wa mienendo",
+          "caption": "Ya mapambo — tazama /methodology kwa muundo halisi"
+        }
+      },
+      {
+        "number": "04",
+        "title": "Funga na chapisha",
+        "body": "Mara utabiri unapozalishwa, unawekwa kwenye hifadhidata yetu na muda wa rekodi wa umma kabla ya mechi kuanza. Baada ya wakati huu, utabiri hauwezi kuhaririwa. Si na sisi, si na yeyote.",
+        "bodyExtra": "Hii ndiyo mbinu ya uwazi. Muda wa rekodi wa kufunga unaweza kuthibitishwa. Utabiri wa awali unabaki wa umma milele. Iwe utabiri unageuka kuwa sahihi au makosa, upo kwenye track record.",
+        "visualLabels": {
+          "aria":   "Onyesho la muda wa rekodi wa kufunga utabiri",
+          "status": "Utabiri umetolewa · Hauwezi kuhaririwa"
+        }
+      }
+    ]
+  },
+  "example": {
+    "h2": "Hivi ndivyo inavyoonekana {{accent}}kwa vitendo{{/accent}}",
+    "subH2": "Kwa mechi ya kawaida ya Premier League, hivi ndivyo kinachotokea kabla hatujafunga utabiri.",
+    "steps": [
+      { "icon": "database",     "text": "Vuta vigezo 40+ kwa timu zote mbili katika mechi zao za hivi karibuni" },
+      { "icon": "trending-up",  "text": "Hesabu viwango vya Elo vilivyorekebishwa kulingana na nguvu ya mpinzani" },
+      { "icon": "bar-chart",    "text": "Zalisha usambazaji wa mabao wa Poisson kwa timu zote mbili" },
+      { "icon": "brain",        "text": "Tumia marekebisho ya ujifunzaji wa mashine kwa muktadha na mienendo" },
+      { "icon": "calculator",   "text": "Toa uwezekano wa matokeo, mabao, na masoko mengine" },
+      { "icon": "lock",         "text": "Funga utabiri kwa muda wa rekodi kabla ya mechi kuanza" }
+    ],
+    "ctaPrimary":   { "label": "Tazama utabiri wa leo",  "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Soma mbinu kamili",      "canonical": "/methodology" },
+    "mockupLabels": {
+      "leagueLine":    "Daraja la juu · Mechi 47",
+      "homeTeam":      "Timu ya nyumbani",
+      "awayTeam":      "Timu ya ugenini",
+      "vs":            "dhidi ya",
+      "outputLabel":   "Matokeo",
+      "variableHint":  "Vigezo 40+ vya mfumo",
+      "variablesAria": "Vigezo vya pembejeo vya mfumo",
+      "aria":          "Mchoro wa kawaida wa uzalishaji wa utabiri"
+    }
+  },
+  "why": {
+    "h2": "Kwa nini hii {{accent}}inafanya kazi vizuri zaidi{{/accent}} kuliko kubahatisha",
+    "pillars": [
+      {
+        "icon":  "calculator",
+        "title": "Ya kitakwimu, si ya hisia",
+        "body":  "Kila utabiri unaanza kutoka namba. Hakuna 'nina hisia kuhusu hii' — data tu, mifumo, na matokeo yaliyoratibiwa."
+      },
+      {
+        "icon":  "zap",
+        "title": "Data ya wakati halisi",
+        "body":  "Utabiri unaboreshwa mara kwa mara taarifa mpya zinapopatikana. Orodha za hivi karibuni, hali ya hivi karibuni, muktadha wa hivi karibuni — yote yanazingatiwa kabla ya kufunga."
+      },
+      {
+        "icon":  "shield",
+        "title": "Uwazi unaothibitishwa",
+        "body":  "Kila utabiri umefungwa na muda wa rekodi wa umma kabla ya mechi kuanza. Unaweza kuthibitisha usahihi kwenye track record yetu ya umma — ushindi na kushindwa vyote."
+      },
+      {
+        "icon":  "database",
+        "title": "Vigezo 40+, kila mechi",
+        "body":  "Uchambuzi ule ule kamili unaotumika kwa kila mechi katika ligi 30+. Hakuna kuchagua mechi tunayotabiri."
+      }
+    ]
+  },
+  "tiers": {
+    "h2": "{{accent}}Mfumo ule ule{{/accent}}, viwango vinne vya ufikiaji",
+    "subH2": "Kila kiwango kinasoma kutoka kwa mfumo ule ule wa utabiri. Tofauti ni bendi zipi za ubora unaweza kuona.",
+    "items": [
+      {
+        "badge":   "free",
+        "name":    "Free",
+        "tagline": "Onjo la kila siku la mfumo.",
+        "bullets": [
+          "Utabiri kadhaa wa bure kila siku",
+          "Track record ya umma inaonekana daima",
+          "Ligi 30+ zinashughulikiwa"
+        ]
+      },
+      {
+        "badge":   "silver",
+        "name":    "Silver",
+        "tagline": "Ligi 14 za juu, uhakika wa kati na zaidi.",
+        "bullets": [
+          "Utabiri wote wa bendi ya Silver pamoja na Free",
+          "Masoko ya kawaida katika ligi za kati",
+          "Muhtasari wa kila siku kwa barua pepe"
+        ]
+      },
+      {
+        "badge":   "gold",
+        "name":    "Gold",
+        "tagline": "Ligi 10 za juu, kizingiti cha juu cha uhakika.",
+        "bullets": [
+          "Utabiri wote wa bendi ya Gold pamoja na Silver na Free",
+          "Masoko ya hali ya juu yamejumuishwa",
+          "Pick of the Day inaonekana kwanza"
+        ]
+      },
+      {
+        "badge":   "platinum",
+        "name":    "Platinum",
+        "tagline": "Ligi 5 za juu, bendi ya juu kabisa ya uhakika.",
+        "bullets": [
+          "Utabiri wote wa bendi ya Platinum pamoja na yote yaliyo chini",
+          "Arifa za Telegram kwa utabiri wa uhakika wa juu",
+          "Orodha kamili, imefungwa kwa muda mrefu zaidi"
+        ]
+      }
+    ],
+    "ctaPrimary":   { "label": "Linganisha mipango",            "canonical": "/pricing"     },
+    "ctaSecondary": { "label": "Tazama utabiri wa bure wa leo", "canonical": "/predictions" }
+  },
+  "methodologyTease": {
+    "h2": "Unataka kujua hasa {{accent}}mifumo{{/accent}} tunayotumia?",
+    "body": "Ukurasa huu unaeleza kinachotokea. Ukurasa wa mbinu unaeleza hasa jinsi gani — ni vibadala vipi vya Elo, marekebisho yapi ya Poisson, muundo upi wa ujifunzaji wa mashine, ni vigezo vipi 40+. Ikiwa wewe ni mtu anayetaka kuthibitisha badala ya kuamini, hapo ndipo utakapoipata.",
+    "cta":  { "label": "Soma mbinu kamili", "canonical": "/methodology" }
+  },
+  "faq": {
+    "h2": "Maswali ya jinsi inavyofanya kazi",
+    "questions": [
+      {
+        "q": "Inachukua muda gani kuzalisha utabiri?",
+        "a": "Mfumo unashughulikia orodha kamili ya kila siku katika ligi 30+ kwa dakika chache. Kila mechi inazalishwa, inaratibiwa, na inafungwa kibinafsi kabla ya mechi kuanza."
+      },
+      {
+        "q": "Utabiri una usahihi kiasi gani?",
+        "a": "Usahihi unatofautiana kwa ligi, aina ya soko, na kipindi cha muda. Hatuchapishi asilimia moja kuu kwa sababu ingeficha tofauti hii. Track record kamili inaweza kuvinjariwa hadharani ili uweze kuona utendaji halisi katika muktadha."
+      },
+      {
+        "q": "Ni nini kinachofanya hii kuwa tofauti na huduma zingine za utabiri?",
+        "a": "Vitu vitatu. Kwanza, kila utabiri umefungwa kabla ya mechi kuanza na muda wa rekodi wa umma — wengine wanaweza kuhariri baada ya tukio. Pili, tunachapisha ushindi na kushindwa vyote — wengine wanachagua kuchapisha. Tatu, mbinu imeandikwa kikamilifu — wengine wanatumia madai ya 'algoritimu ya siri' ambayo huwezi kuthibitisha."
+      },
+      {
+        "q": "Kwa nini hamniambii utabiri upi nifuate?",
+        "a": "Kwa sababu sisi si washauri. Tunatoa uchambuzi wa takwimu. Jinsi unavyotumia uchambuzi huo ni uamuzi wako kulingana na uvumilivu wako wa hatari na hukumu yako. Tunakupa data; wewe unafanya uamuzi."
+      },
+      {
+        "q": "Je, naweza kuona jinsi utabiri maalum ulivyozalishwa?",
+        "a": "Si katika kiwango cha kigezo — hilo lingedhihirisha uzito wa kumiliki. Lakini ukurasa wa mbinu unaeleza mchakato kwa undani, na muda wa rekodi uliofungwa kwenye kila utabiri unathibitisha haukuhaririwa baada ya tukio. Mchanganyiko wa mbinu ya umma na utabiri uliofungwa unakupa uwazi unaothibitishwa bila kufichua mfumo wenyewe."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "{{accent}}Iangalie{{/accent}} ikifanya kazi",
+    "subH2": "Utabiri wa bure wa leo uko moja kwa moja.",
+    "body": "Umesoma jinsi mfumo unavyofanya kazi. Sasa angalia kile unachozalisha. Utabiri wa bure wa leo unahusu Premier League, La Liga, Bundesliga, na zaidi — umefungwa, una muda wa rekodi, na uko tayari kwako kutathmini.",
+    "ctaPrimary":   { "label": "Tazama utabiri wa leo", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Linganisha mipango",    "canonical": "/pricing"    }
+  }
+}

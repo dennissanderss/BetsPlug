@@ -1,12 +1,13 @@
 /**
  * Single source of truth for the BetsPlug locale set.
  *
- * Constraint: this list is FROZEN at 6. Adding a 7th locale is a
- * deliberate multi-system change (astro.config.mjs i18n config,
- * slug-mappings, content folder, sitemap, hreflang). See
- * docs/specs/16-i18n.md → "LOCALES OVERVIEW".
+ * 2026-05-05: extended from 6 → 7 with `sw` (Standard Swahili / Kiswahili
+ * Sanifu). Adding another locale is a deliberate multi-system change
+ * (astro.config.mjs i18n config, slug-mappings, content folders, sitemap,
+ * hreflang, navigation labels, footer/announcement strings, legal
+ * overrides + resources). See docs/specs/16-i18n.md → "LOCALES OVERVIEW".
  */
-export const locales = ["en", "nl", "de", "fr", "es", "it"] as const;
+export const locales = ["en", "nl", "de", "fr", "es", "it", "sw"] as const;
 export type Locale = typeof locales[number];
 
 export const defaultLocale: Locale = "en";
@@ -18,6 +19,7 @@ export const localeNames: Record<Locale, string> = {
   fr: "Français",
   es: "Español",
   it: "Italiano",
+  sw: "Kiswahili",
 };
 
 /** BCP-47 tag for `Intl.DateTimeFormat`, `Intl.NumberFormat`, etc. */
@@ -28,6 +30,7 @@ export const localeBcp47: Record<Locale, string> = {
   fr: "fr-FR",
   es: "es-ES",
   it: "it-IT",
+  sw: "sw-KE",
 };
 
 /** OpenGraph `og:locale` value per locale. */
@@ -38,6 +41,7 @@ export const localeOgTag: Record<Locale, string> = {
   fr: "fr_FR",
   es: "es_ES",
   it: "it_IT",
+  sw: "sw_KE",
 };
 
 export function isLocale(value: unknown): value is Locale {
