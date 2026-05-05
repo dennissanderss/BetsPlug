@@ -86,7 +86,7 @@ const plans: PlanDefinition[] = [
     id: "silver",
     name: "Silver",
     tagline: "Pre-match odds + a wider feed.",
-    price: "€9",
+    price: "€9.99",
     period: "/month",
     accentClass: "text-[#d7d9dc]",
     ringClass: "border-[rgba(229,228,226,0.30)]",
@@ -103,7 +103,7 @@ const plans: PlanDefinition[] = [
     id: "gold",
     name: "Gold",
     tagline: "Pick of the Day + simulator.",
-    price: "€19",
+    price: "€14.99",
     period: "/month",
     accentClass: "text-[#f5d67a]",
     ringClass: "border-[rgba(245,214,122,0.34)]",
@@ -121,15 +121,16 @@ const plans: PlanDefinition[] = [
   {
     id: "platinum",
     name: "Platinum",
-    tagline: "Top 5 elite calls + Telegram.",
-    price: "€39",
-    period: "/month",
+    tagline: "Lifetime access. One payment, never billed again.",
+    price: "€199",
+    period: " one-off",
     accentClass: "text-[#d9f0ff]",
     ringClass: "border-[rgba(217,240,255,0.34)]",
-    ctaLabel: "Subscribe",
+    ctaLabel: "Get lifetime access",
     ctaHref: `${APP_URL}/checkout?plan=platinum`,
     features: [
       "All Gold picks +",
+      "Lifetime access — pay once",
       "Top-5 elite leagues only",
       "85% historical accuracy claim",
       "Private Telegram channel",
@@ -141,7 +142,7 @@ const plans: PlanDefinition[] = [
 
 <Layout
   title="Pricing — BetsPlug"
-  description="Free picks every day, paid plans starting at €9/month. Compare Free / Silver / Gold / Platinum tiers with live accuracy from our public track record."
+  description="Free picks every day, paid plans from €9.99/month or €199 lifetime. Compare Free / Silver / Gold / Platinum tiers with live accuracy from our public track record."
 >
   <SiteNav />
 

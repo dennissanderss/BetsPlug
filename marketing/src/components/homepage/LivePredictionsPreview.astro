@@ -116,7 +116,7 @@ try {
   if (res.ok) {
     const data = (await res.json()) as BackendFreePicksResponse;
     const today = (data.today ?? []).filter((p) => isToday(p.scheduled_at));
-    livePicks = today.slice(0, 5).map((p) => {
+    livePicks = today.slice(0, 3).map((p) => {
       // Best-side probability — same number rendered on the hero card.
       const probs = [
         p.home_win_prob ?? 0,
@@ -192,15 +192,11 @@ const cardLabels = {
       <div
         id="live-predictions-grid"
         class={`mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 ${
-          livePicks.length >= 5
-            ? "lg:grid-cols-5"
-            : livePicks.length === 4
-              ? "lg:grid-cols-4"
-              : livePicks.length === 3
-                ? "lg:grid-cols-3"
-                : livePicks.length === 2
-                  ? "lg:grid-cols-2"
-                  : "lg:grid-cols-1"
+          livePicks.length >= 3
+            ? "lg:grid-cols-3"
+            : livePicks.length === 2
+              ? "lg:grid-cols-2"
+              : "lg:grid-cols-1"
         }`}
         data-locked-label={content.lockedLabel}
         data-loading-label={content.loadingLabel}

@@ -71,7 +71,7 @@
   },
   "livePredictions": {
     "h2": "Pronostics IA gratuits du jour",
-    "subhead": "Pronostics gratuits sur les matchs du jour, rafraîchis chaque minute. Verrouillés avant le coup d'envoi — exactement ce que voient nos abonnés payants.",
+    "subhead": "Trois pronostics gratuits sur les matchs du jour, rafraîchis chaque minute. Verrouillés avant le coup d'envoi — exactement ce que voient nos abonnés payants.",
     "liveLabel": "Mis à jour",
     "liveSecondsAgo": "il y a {seconds}s",
     "lockedLabel": "Verrouillé",
