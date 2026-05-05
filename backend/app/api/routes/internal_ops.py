@@ -1217,3 +1217,172 @@ async def audit_phase3(db: AsyncSession = Depends(get_db)) -> dict:
 
     return out
 
+
+@router.get(
+    "/audit/phase4-dataflow",
+    summary="Phase 4 audit — data flow integrity (read-only)",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_phase4(db: AsyncSession = Depends(get_db)) -> dict:
+    """Phase 4 — verify ingestion → storage → display chain.
+
+    Returns:
+      - 5 random recent matches with full data trail (odds_history vs
+        prediction.closing_odds_snapshot consistency)
+      - Stale-data check (predictions made >24h after odds recorded)
+      - Per-league bookmaker margin (overround) analysis
+      - Pending evaluations (matches finished without grading)
+    """
+    from sqlalchemy import text
+
+    out: dict = {}
+
+    # 1. Chain integrity — 5 random recent matches with prediction + odds + snapshot
+    qchain = await db.execute(text("""
+        SELECT
+            m.id AS match_id,
+            ht.name AS home, at.name AS away, l.name AS league,
+            m.scheduled_at, m.status::text AS status,
+            mr.home_score, mr.away_score,
+            p.id AS pid,
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            p.predicted_at,
+            p.closing_odds_snapshot,
+            (
+                SELECT COUNT(*) FROM odds_history oh
+                WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2')
+            ) AS odds_history_rows,
+            (
+                SELECT json_build_object(
+                    'home', home_odds, 'draw', draw_odds, 'away', away_odds,
+                    'source', source, 'recorded_at', recorded_at
+                ) FROM odds_history oh
+                WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2')
+                ORDER BY recorded_at DESC LIMIT 1
+            ) AS latest_odds,
+            (SELECT pe.is_correct FROM prediction_evaluations pe WHERE pe.prediction_id = p.id) AS is_correct
+        FROM matches m
+        JOIN predictions p ON p.match_id = m.id
+        JOIN teams ht ON ht.id = m.home_team_id
+        JOIN teams at ON at.id = m.away_team_id
+        JOIN leagues l ON l.id = m.league_id
+        LEFT JOIN match_results mr ON mr.match_id = m.id
+        WHERE m.status = 'finished'
+          AND m.scheduled_at >= NOW() - INTERVAL '30 days'
+          AND p.created_at >= '2026-04-16'
+          AND p.predicted_at <= m.scheduled_at
+          AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2'))
+        ORDER BY RANDOM() LIMIT 5
+    """))
+    chain_audits = []
+    for r in qchain.all():
+        snapshot = r.closing_odds_snapshot or {}
+        bm_in_snap = snapshot.get("bookmaker_odds") if isinstance(snapshot, dict) else None
+        latest = r.latest_odds or {}
+        # Compare snapshot odds vs latest odds_history
+        snap_home = (bm_in_snap or {}).get("home")
+        snap_draw = (bm_in_snap or {}).get("draw")
+        snap_away = (bm_in_snap or {}).get("away")
+        chain_audits.append({
+            "match": f"{r.home} vs {r.away}",
+            "league": r.league,
+            "scheduled_at": r.scheduled_at.isoformat(),
+            "score": f"{r.home_score}-{r.away_score}" if r.home_score is not None else None,
+            "is_correct": r.is_correct,
+            "model_probs": {
+                "home": float(r.home_win_prob),
+                "draw": float(r.draw_prob) if r.draw_prob else None,
+                "away": float(r.away_win_prob),
+                "confidence": float(r.confidence),
+            },
+            "odds_history_count": r.odds_history_rows,
+            "latest_odds_history": dict(latest) if latest else None,
+            "snapshot_bookmaker_odds": bm_in_snap,
+            "snapshot_match_history": (
+                snap_home is not None and latest and
+                abs(float(snap_home) - float(latest.get("home", 0))) < 0.01
+            ),
+        })
+    out["chain_integrity_5_random_matches"] = chain_audits
+
+    # 2. Stale data: predictions whose odds were recorded >24h before predicted_at
+    qstale = await db.execute(text("""
+        WITH stale AS (
+            SELECT
+                p.id, p.predicted_at, p.created_at,
+                (
+                    SELECT MIN(oh.recorded_at)
+                    FROM odds_history oh
+                    WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2')
+                ) AS earliest_odds_recorded,
+                (
+                    SELECT MAX(oh.recorded_at)
+                    FROM odds_history oh
+                    WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2')
+                ) AS latest_odds_recorded
+            FROM predictions p
+            WHERE p.created_at >= '2026-04-16'
+              AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2'))
+        )
+        SELECT
+            COUNT(*) AS total_with_odds,
+            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded)) > 86400) AS stale_gt_24h,
+            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded)) > 7*86400) AS stale_gt_7d,
+            AVG(EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded))/3600.0) AS avg_lag_hours
+        FROM stale
+    """))
+    row_s = qstale.first()
+    out["stale_data_check"] = {
+        "total_predictions_with_odds": row_s[0],
+        "predicted_more_than_24h_after_latest_odds": row_s[1],
+        "predicted_more_than_7d_after_latest_odds": row_s[2],
+        "avg_lag_hours": round(float(row_s[3] or 0), 2),
+    }
+
+    # 3. Per-league overround (bookmaker margin)
+    qol = await db.execute(text("""
+        SELECT
+            l.name AS league,
+            COUNT(oh.id) AS rows,
+            ROUND(AVG(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS avg_overround,
+            ROUND(MIN(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS min_overround,
+            ROUND(MAX(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS max_overround
+        FROM odds_history oh
+        JOIN matches m ON m.id = oh.match_id
+        JOIN leagues l ON l.id = m.league_id
+        WHERE oh.market IN ('1x2','1X2')
+          AND oh.home_odds > 1.01 AND oh.draw_odds > 1.01 AND oh.away_odds > 1.01
+        GROUP BY l.name
+        HAVING COUNT(oh.id) >= 50
+        ORDER BY avg_overround ASC
+    """))
+    out["overround_per_league"] = [
+        {
+            "league": r[0],
+            "rows": r[1],
+            "avg_overround": float(r[2]),
+            "avg_margin_pct": round(100.0 * (float(r[2]) - 1), 2),
+            "min": float(r[3]),
+            "max": float(r[4]),
+        }
+        for r in qol.all()
+    ]
+
+    # 4. Evaluator completeness
+    qev = await db.execute(text("""
+        SELECT
+            COUNT(*) AS pending_eval_finished_matches
+        FROM predictions p
+        JOIN matches m ON m.id = p.match_id
+        LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        WHERE m.status = 'finished'
+          AND pe.id IS NULL
+          AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+    """))
+    out["evaluator_lag"] = {
+        "pending_evaluations_finished_matches_gt_24h": qev.scalar() or 0,
+    }
+
+    return out
+
