@@ -1234,174 +1234,186 @@ async def audit_phase4(db: AsyncSession = Depends(get_db)) -> dict:
       - Pending evaluations (matches finished without grading)
     """
     from sqlalchemy import text
+    import traceback as _tb
 
-    out: dict = {}
+    out: dict = {"errors": {}}
 
     # 1. Chain integrity — 5 random recent matches with prediction + odds + snapshot
-    qchain = await db.execute(text("""
-        SELECT
-            m.id AS match_id,
-            ht.name AS home, at.name AS away, l.name AS league,
-            m.scheduled_at,
-            mr.home_score, mr.away_score,
-            p.id AS pid,
-            p.confidence,
-            p.home_win_prob, p.draw_prob, p.away_win_prob,
-            p.predicted_at,
-            CAST(p.closing_odds_snapshot AS TEXT) AS snapshot_text,
-            (
-                SELECT COUNT(*) FROM odds_history oh
-                WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2')
-            ) AS odds_history_rows,
-            (SELECT pe.is_correct FROM prediction_evaluations pe WHERE pe.prediction_id = p.id) AS is_correct
-        FROM matches m
-        JOIN predictions p ON p.match_id = m.id
-        JOIN teams ht ON ht.id = m.home_team_id
-        JOIN teams at ON at.id = m.away_team_id
-        JOIN leagues l ON l.id = m.league_id
-        LEFT JOIN match_results mr ON mr.match_id = m.id
-        WHERE m.scheduled_at >= NOW() - INTERVAL '30 days'
-          AND p.created_at >= '2026-04-16'
-          AND p.predicted_at <= m.scheduled_at
-          AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2'))
-        ORDER BY RANDOM() LIMIT 5
-    """))
-    rows = qchain.all()
+    try:
+        qchain = await db.execute(text("""
+            SELECT
+                m.id AS match_id,
+                ht.name AS home, at.name AS away, l.name AS league,
+                m.scheduled_at,
+                mr.home_score, mr.away_score,
+                p.id AS pid,
+                p.confidence,
+                p.home_win_prob, p.draw_prob, p.away_win_prob,
+                p.predicted_at,
+                CAST(p.closing_odds_snapshot AS TEXT) AS snapshot_text,
+                (
+                    SELECT COUNT(*) FROM odds_history oh
+                    WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2')
+                ) AS odds_history_rows,
+                (SELECT pe.is_correct FROM prediction_evaluations pe WHERE pe.prediction_id = p.id) AS is_correct
+            FROM matches m
+            JOIN predictions p ON p.match_id = m.id
+            JOIN teams ht ON ht.id = m.home_team_id
+            JOIN teams at ON at.id = m.away_team_id
+            JOIN leagues l ON l.id = m.league_id
+            LEFT JOIN match_results mr ON mr.match_id = m.id
+            WHERE m.scheduled_at >= NOW() - INTERVAL '30 days'
+              AND p.created_at >= '2026-04-16'
+              AND p.predicted_at <= m.scheduled_at
+              AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = m.id AND oh.market IN ('1x2','1X2'))
+            ORDER BY RANDOM() LIMIT 5
+        """))
+        rows = qchain.all()
 
-    chain_audits = []
-    for r in rows:
-        # Parse snapshot JSON
+        chain_audits = []
         import json as _json
-        bm_in_snap = None
-        try:
-            snap = _json.loads(r.snapshot_text) if r.snapshot_text else {}
-            bm_in_snap = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
-        except Exception:
+        for r in rows:
             bm_in_snap = None
+            try:
+                snap = _json.loads(r.snapshot_text) if r.snapshot_text else {}
+                bm_in_snap = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+            except Exception:
+                bm_in_snap = None
 
-        # Fetch latest odds row separately
-        ql = await db.execute(
-            text("""
-                SELECT home_odds, draw_odds, away_odds, source, recorded_at
-                FROM odds_history
-                WHERE match_id = :mid AND market IN ('1x2','1X2')
-                ORDER BY recorded_at DESC LIMIT 1
-            """),
-            {"mid": r.match_id},
-        )
-        latest = ql.first()
-        latest_dict = None
-        if latest:
-            latest_dict = {
-                "home": float(latest[0]),
-                "draw": float(latest[1]),
-                "away": float(latest[2]),
-                "source": latest[3],
-                "recorded_at": latest[4].isoformat(),
-            }
+            ql = await db.execute(
+                text("""
+                    SELECT home_odds, draw_odds, away_odds, source, recorded_at
+                    FROM odds_history
+                    WHERE match_id = :mid AND market IN ('1x2','1X2')
+                    ORDER BY recorded_at DESC LIMIT 1
+                """),
+                {"mid": r.match_id},
+            )
+            latest = ql.first()
+            latest_dict = None
+            if latest:
+                latest_dict = {
+                    "home": float(latest[0]),
+                    "draw": float(latest[1]),
+                    "away": float(latest[2]),
+                    "source": latest[3],
+                    "recorded_at": latest[4].isoformat() if latest[4] else None,
+                }
 
-        snap_home = (bm_in_snap or {}).get("home")
-        snapshot_match = (
-            snap_home is not None and latest_dict is not None and
-            abs(float(snap_home) - latest_dict["home"]) < 0.01
-        )
+            snap_home = (bm_in_snap or {}).get("home") if isinstance(bm_in_snap, dict) else None
+            snapshot_match = bool(
+                snap_home is not None and latest_dict is not None and
+                abs(float(snap_home) - latest_dict["home"]) < 0.01
+            )
 
-        chain_audits.append({
-            "match": f"{r.home} vs {r.away}",
-            "league": r.league,
-            "scheduled_at": r.scheduled_at.isoformat(),
-            "score": f"{r.home_score}-{r.away_score}" if r.home_score is not None else None,
-            "is_correct": r.is_correct,
-            "model_probs": {
-                "home": float(r.home_win_prob),
-                "draw": float(r.draw_prob) if r.draw_prob else None,
-                "away": float(r.away_win_prob),
-                "confidence": float(r.confidence),
-            },
-            "odds_history_count": r.odds_history_rows,
-            "latest_odds_history": latest_dict,
-            "snapshot_bookmaker_odds": bm_in_snap,
-            "snapshot_match_history": snapshot_match,
-        })
-    out["chain_integrity_5_random_matches"] = chain_audits
+            chain_audits.append({
+                "match": f"{r.home} vs {r.away}",
+                "league": r.league,
+                "scheduled_at": r.scheduled_at.isoformat() if r.scheduled_at else None,
+                "score": f"{r.home_score}-{r.away_score}" if r.home_score is not None else None,
+                "is_correct": r.is_correct,
+                "model_probs": {
+                    "home": float(r.home_win_prob) if r.home_win_prob is not None else None,
+                    "draw": float(r.draw_prob) if r.draw_prob is not None else None,
+                    "away": float(r.away_win_prob) if r.away_win_prob is not None else None,
+                    "confidence": float(r.confidence) if r.confidence is not None else None,
+                },
+                "odds_history_count": r.odds_history_rows,
+                "latest_odds_history": latest_dict,
+                "snapshot_bookmaker_odds": bm_in_snap,
+                "snapshot_match_history": snapshot_match,
+            })
+        out["chain_integrity_5_random_matches"] = chain_audits
+    except Exception as e:
+        out["errors"]["chain_integrity"] = f"{type(e).__name__}: {str(e)[:500]}"
 
     # 2. Stale data: predictions whose odds were recorded >24h before predicted_at
-    qstale = await db.execute(text("""
-        WITH stale AS (
+    try:
+        qstale = await db.execute(text("""
+            WITH stale AS (
+                SELECT
+                    p.id, p.predicted_at, p.created_at,
+                    (
+                        SELECT MIN(oh.recorded_at)
+                        FROM odds_history oh
+                        WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2')
+                    ) AS earliest_odds_recorded,
+                    (
+                        SELECT MAX(oh.recorded_at)
+                        FROM odds_history oh
+                        WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2')
+                    ) AS latest_odds_recorded
+                FROM predictions p
+                WHERE p.created_at >= '2026-04-16'
+                  AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2'))
+            )
             SELECT
-                p.id, p.predicted_at, p.created_at,
-                (
-                    SELECT MIN(oh.recorded_at)
-                    FROM odds_history oh
-                    WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2')
-                ) AS earliest_odds_recorded,
-                (
-                    SELECT MAX(oh.recorded_at)
-                    FROM odds_history oh
-                    WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2')
-                ) AS latest_odds_recorded
-            FROM predictions p
-            WHERE p.created_at >= '2026-04-16'
-              AND EXISTS (SELECT 1 FROM odds_history oh WHERE oh.match_id = p.match_id AND oh.market IN ('1x2','1X2'))
-        )
-        SELECT
-            COUNT(*) AS total_with_odds,
-            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded)) > 86400) AS stale_gt_24h,
-            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded)) > 7*86400) AS stale_gt_7d,
-            AVG(EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded))/3600.0) AS avg_lag_hours
-        FROM stale
-    """))
-    row_s = qstale.first()
-    out["stale_data_check"] = {
-        "total_predictions_with_odds": row_s[0],
-        "predicted_more_than_24h_after_latest_odds": row_s[1],
-        "predicted_more_than_7d_after_latest_odds": row_s[2],
-        "avg_lag_hours": round(float(row_s[3] or 0), 2),
-    }
+                COUNT(*) AS total_with_odds,
+                COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded)) > 86400) AS stale_gt_24h,
+                COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded)) > 7*86400) AS stale_gt_7d,
+                AVG(EXTRACT(EPOCH FROM (predicted_at - latest_odds_recorded))/3600.0) AS avg_lag_hours
+            FROM stale
+        """))
+        row_s = qstale.first()
+        out["stale_data_check"] = {
+            "total_predictions_with_odds": int(row_s[0] or 0),
+            "predicted_more_than_24h_after_latest_odds": int(row_s[1] or 0),
+            "predicted_more_than_7d_after_latest_odds": int(row_s[2] or 0),
+            "avg_lag_hours": round(float(row_s[3] or 0), 2),
+        }
+    except Exception as e:
+        out["errors"]["stale_data_check"] = f"{type(e).__name__}: {str(e)[:500]}"
 
     # 3. Per-league overround (bookmaker margin)
-    qol = await db.execute(text("""
-        SELECT
-            l.name AS league,
-            COUNT(oh.id) AS rows,
-            ROUND(AVG(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS avg_overround,
-            ROUND(MIN(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS min_overround,
-            ROUND(MAX(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS max_overround
-        FROM odds_history oh
-        JOIN matches m ON m.id = oh.match_id
-        JOIN leagues l ON l.id = m.league_id
-        WHERE oh.market IN ('1x2','1X2')
-          AND oh.home_odds > 1.01 AND oh.draw_odds > 1.01 AND oh.away_odds > 1.01
-        GROUP BY l.name
-        HAVING COUNT(oh.id) >= 50
-        ORDER BY avg_overround ASC
-    """))
-    out["overround_per_league"] = [
-        {
-            "league": r[0],
-            "rows": r[1],
-            "avg_overround": float(r[2]),
-            "avg_margin_pct": round(100.0 * (float(r[2]) - 1), 2),
-            "min": float(r[3]),
-            "max": float(r[4]),
-        }
-        for r in qol.all()
-    ]
+    try:
+        qol = await db.execute(text("""
+            SELECT
+                l.name AS league,
+                COUNT(oh.id) AS rows_count,
+                ROUND(AVG(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS avg_overround,
+                ROUND(MIN(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS min_overround,
+                ROUND(MAX(1.0/oh.home_odds + 1.0/oh.draw_odds + 1.0/oh.away_odds)::numeric, 4) AS max_overround
+            FROM odds_history oh
+            JOIN matches m ON m.id = oh.match_id
+            JOIN leagues l ON l.id = m.league_id
+            WHERE oh.market IN ('1x2','1X2')
+              AND oh.home_odds > 1.01 AND oh.draw_odds > 1.01 AND oh.away_odds > 1.01
+            GROUP BY l.name
+            HAVING COUNT(oh.id) >= 50
+            ORDER BY avg_overround ASC
+        """))
+        out["overround_per_league"] = [
+            {
+                "league": r[0],
+                "rows": int(r[1]),
+                "avg_overround": float(r[2]),
+                "avg_margin_pct": round(100.0 * (float(r[2]) - 1), 2),
+                "min": float(r[3]),
+                "max": float(r[4]),
+            }
+            for r in qol.all()
+        ]
+    except Exception as e:
+        out["errors"]["overround_per_league"] = f"{type(e).__name__}: {str(e)[:500]}"
 
     # 4. Evaluator completeness
-    qev = await db.execute(text("""
-        SELECT
-            COUNT(*) AS pending_eval_finished_matches
-        FROM predictions p
-        JOIN matches m ON m.id = p.match_id
-        LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
-        WHERE m.status = 'finished'
-          AND pe.id IS NULL
-          AND m.scheduled_at < NOW() - INTERVAL '24 hours'
-    """))
-    out["evaluator_lag"] = {
-        "pending_evaluations_finished_matches_gt_24h": qev.scalar() or 0,
-    }
+    try:
+        qev = await db.execute(text("""
+            SELECT COUNT(*) AS pending_eval_finished_matches
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            WHERE m.status::text = 'finished'
+              AND pe.id IS NULL
+              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+        """))
+        out["evaluator_lag"] = {
+            "pending_evaluations_finished_matches_gt_24h": int(qev.scalar() or 0),
+        }
+    except Exception as e:
+        out["errors"]["evaluator_lag"] = f"{type(e).__name__}: {str(e)[:500]}"
 
+    if not out["errors"]:
+        del out["errors"]
     return out
 
