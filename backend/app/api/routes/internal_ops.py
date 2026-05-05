@@ -901,5 +901,124 @@ async def audit_phase2(db: AsyncSession = Depends(get_db)) -> dict:
         for r in qpnl.all()
     ]
 
+    # 5. SPLIT BY PERIOD: backtest (match before 16 Apr 2026) vs live (after)
+    # Same ROI calc as #4 but with two buckets per tier.
+    qsplit = await db.execute(text("""
+        WITH picks AS (
+            SELECT
+                p.id,
+                p.prediction_source,
+                m.scheduled_at,
+                pe.is_correct,
+                (
+                    SELECT
+                        CASE
+                            WHEN p.home_win_prob >= p.draw_prob AND p.home_win_prob >= p.away_win_prob THEN oh.home_odds
+                            WHEN p.away_win_prob >= p.home_win_prob AND p.away_win_prob >= p.draw_prob THEN oh.away_odds
+                            ELSE oh.draw_odds
+                        END
+                    FROM odds_history oh
+                    WHERE oh.match_id = p.match_id
+                      AND oh.market IN ('1x2','1X2')
+                      AND oh.recorded_at < m.scheduled_at
+                    ORDER BY oh.recorded_at DESC LIMIT 1
+                ) AS odds_used,
+                CASE
+                    WHEN p.confidence >= 0.85 THEN 'platinum'
+                    WHEN p.confidence >= 0.70 THEN 'gold'
+                    WHEN p.confidence >= 0.60 THEN 'silver'
+                    WHEN p.confidence >= 0.45 THEN 'free'
+                    ELSE 'below_floor'
+                END AS tier,
+                CASE
+                    WHEN m.scheduled_at >= '2026-04-16' THEN 'live_period'
+                    ELSE 'backtest_period'
+                END AS period
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            WHERE p.created_at >= '2026-04-16'
+              AND p.predicted_at <= m.scheduled_at
+        )
+        SELECT
+            tier,
+            period,
+            COUNT(*) FILTER (WHERE odds_used IS NOT NULL AND odds_used > 1.0) AS picks_with_odds,
+            SUM(CASE WHEN is_correct AND odds_used > 1.0 THEN odds_used - 1.0 WHEN NOT is_correct AND odds_used > 1.0 THEN -1.0 ELSE 0 END) AS net_pnl_units,
+            SUM(CASE WHEN is_correct AND odds_used > 1.0 THEN 1 ELSE 0 END) AS wins,
+            SUM(CASE WHEN NOT is_correct AND odds_used > 1.0 THEN 1 ELSE 0 END) AS losses,
+            AVG(CASE WHEN odds_used > 1.0 THEN odds_used END) AS avg_odds
+        FROM picks
+        GROUP BY tier, period
+        ORDER BY
+            CASE tier WHEN 'platinum' THEN 1 WHEN 'gold' THEN 2 WHEN 'silver' THEN 3 WHEN 'free' THEN 4 ELSE 5 END,
+            period
+    """))
+    out["roi_per_tier_split_backtest_vs_live"] = [
+        {
+            "tier": r[0],
+            "period": r[1],
+            "picks_with_odds": r[2],
+            "wins": int(r[4]) if r[4] else 0,
+            "losses": int(r[5]) if r[5] else 0,
+            "net_pnl_units": float(r[3]) if r[3] else 0.0,
+            "roi_pct": round(100.0 * float(r[3]) / r[2], 2) if (r[2] and r[3]) else 0.0,
+            "avg_odds": float(r[6]) if r[6] else None,
+        }
+        for r in qsplit.all()
+    ]
+
+    # 6. SPLIT BY prediction_source (live cron vs batch vs regenerated backtest)
+    qsrc = await db.execute(text("""
+        WITH picks AS (
+            SELECT
+                p.id, p.prediction_source, m.scheduled_at, pe.is_correct,
+                (
+                    SELECT
+                        CASE
+                            WHEN p.home_win_prob >= p.draw_prob AND p.home_win_prob >= p.away_win_prob THEN oh.home_odds
+                            WHEN p.away_win_prob >= p.home_win_prob AND p.away_win_prob >= p.draw_prob THEN oh.away_odds
+                            ELSE oh.draw_odds
+                        END
+                    FROM odds_history oh
+                    WHERE oh.match_id = p.match_id
+                      AND oh.market IN ('1x2','1X2')
+                      AND oh.recorded_at < m.scheduled_at
+                    ORDER BY oh.recorded_at DESC LIMIT 1
+                ) AS odds_used,
+                CASE
+                    WHEN p.confidence >= 0.70 THEN 'gold_or_platinum'
+                    ELSE 'lower'
+                END AS tier_group
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            WHERE p.created_at >= '2026-04-16'
+              AND p.predicted_at <= m.scheduled_at
+        )
+        SELECT
+            prediction_source,
+            tier_group,
+            COUNT(*) FILTER (WHERE odds_used IS NOT NULL AND odds_used > 1.0) AS picks_with_odds,
+            SUM(CASE WHEN is_correct AND odds_used > 1.0 THEN odds_used - 1.0 WHEN NOT is_correct AND odds_used > 1.0 THEN -1.0 ELSE 0 END) AS net_pnl_units,
+            SUM(CASE WHEN is_correct AND odds_used > 1.0 THEN 1 ELSE 0 END) AS wins,
+            SUM(CASE WHEN NOT is_correct AND odds_used > 1.0 THEN 1 ELSE 0 END) AS losses
+        FROM picks
+        WHERE tier_group = 'gold_or_platinum'
+        GROUP BY prediction_source, tier_group
+        ORDER BY prediction_source
+    """))
+    out["roi_by_prediction_source_gold_plus"] = [
+        {
+            "prediction_source": r[0],
+            "picks_with_odds": r[2],
+            "wins": int(r[4]) if r[4] else 0,
+            "losses": int(r[5]) if r[5] else 0,
+            "net_pnl_units": float(r[3]) if r[3] else 0.0,
+            "roi_pct": round(100.0 * float(r[3]) / r[2], 2) if (r[2] and r[3]) else 0.0,
+        }
+        for r in qsrc.all()
+    ]
+
     return out
 
