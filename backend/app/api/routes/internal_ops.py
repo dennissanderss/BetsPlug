@@ -418,3 +418,257 @@ async def sync_teams(
         total_updated=total_updated,
         elapsed_seconds=round(time.monotonic() - t0, 2),
     )
+
+
+# ---------------------------------------------------------------------------
+# AUDIT — Phase 1 data inventory (read-only diagnostic queries)
+# ---------------------------------------------------------------------------
+
+
+@router.get(
+    "/audit/phase1-odds-inventory",
+    summary="Phase 1 audit — odds + predictions inventory (read-only)",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_phase1(db: AsyncSession = Depends(get_db)) -> dict:
+    """Return all Phase 1 inventory query results in one JSON response.
+
+    Pure SELECT queries — no writes. Used to diagnose post-odds-import
+    integrity (Engine v1 ROI, Engine v2 combo, coverage gaps).
+    """
+    from sqlalchemy import text
+
+    out: dict = {}
+
+    # Query A — Total odds volume
+    qa = await db.execute(text("""
+        SELECT
+            COUNT(*) AS total_odds_rows,
+            COUNT(DISTINCT match_id) AS matches_with_odds,
+            COUNT(DISTINCT source) AS bookmakers,
+            MIN(recorded_at) AS oldest_odds,
+            MAX(recorded_at) AS newest_odds
+        FROM odds_history
+    """))
+    row_a = qa.first()
+    out["A_total_odds"] = {
+        "total_odds_rows": row_a[0],
+        "matches_with_odds": row_a[1],
+        "bookmakers": row_a[2],
+        "oldest_odds": row_a[3].isoformat() if row_a[3] else None,
+        "newest_odds": row_a[4].isoformat() if row_a[4] else None,
+    }
+
+    # Query B — Per bookmaker
+    qb = await db.execute(text("""
+        SELECT
+            source AS bookmaker,
+            COUNT(*) AS rows,
+            COUNT(DISTINCT match_id) AS unique_matches,
+            AVG(home_odds + draw_odds + away_odds) AS avg_overround_sum,
+            MIN(recorded_at) AS first_seen,
+            MAX(recorded_at) AS last_seen
+        FROM odds_history
+        WHERE market IN ('1x2', '1X2')
+        GROUP BY source
+        ORDER BY rows DESC
+    """))
+    out["B_per_bookmaker"] = [
+        {
+            "bookmaker": r[0],
+            "rows": r[1],
+            "unique_matches": r[2],
+            "avg_sum_odds": float(r[3]) if r[3] else None,
+            "first_seen": r[4].isoformat() if r[4] else None,
+            "last_seen": r[5].isoformat() if r[5] else None,
+        }
+        for r in qb.all()
+    ]
+
+    # Query C — Per market
+    qc = await db.execute(text("""
+        SELECT market, COUNT(*) AS rows, COUNT(DISTINCT match_id) AS unique_matches
+        FROM odds_history
+        GROUP BY market
+        ORDER BY rows DESC
+    """))
+    out["C_per_market"] = [
+        {"market": r[0], "rows": r[1], "unique_matches": r[2]}
+        for r in qc.all()
+    ]
+
+    # Query D — Pre-match vs post-kickoff
+    qd = await db.execute(text("""
+        SELECT
+            CASE WHEN oh.recorded_at < m.scheduled_at THEN 'pre_match' ELSE 'post_kickoff' END AS timing,
+            COUNT(*) AS rows
+        FROM odds_history oh
+        JOIN matches m ON m.id = oh.match_id
+        GROUP BY timing
+    """))
+    out["D_timing"] = {r[0]: r[1] for r in qd.all()}
+
+    # Query E — Distribution by window pre-kickoff
+    qe = await db.execute(text("""
+        SELECT
+            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (m.scheduled_at - oh.recorded_at)) BETWEEN 3600*4 AND 3600*72) AS ideal_window,
+            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (m.scheduled_at - oh.recorded_at)) > 3600*72) AS too_old,
+            COUNT(*) FILTER (WHERE EXTRACT(EPOCH FROM (m.scheduled_at - oh.recorded_at)) < 3600*4 AND oh.recorded_at < m.scheduled_at) AS last_minute,
+            COUNT(*) FILTER (WHERE oh.recorded_at >= m.scheduled_at) AS post_ko,
+            COUNT(*) AS total
+        FROM odds_history oh
+        JOIN matches m ON m.id = oh.match_id
+    """))
+    row_e = qe.first()
+    out["E_window_distribution"] = {
+        "ideal_window_4h_to_72h": row_e[0],
+        "too_old_gt_72h": row_e[1],
+        "last_minute_lt_4h": row_e[2],
+        "post_kickoff": row_e[3],
+        "total": row_e[4],
+    }
+
+    # Query F — Predictions coverage with odds
+    qf = await db.execute(text("""
+        SELECT
+            COUNT(*) AS total_predictions,
+            COUNT(*) FILTER (WHERE EXISTS (
+                SELECT 1 FROM odds_history oh, matches m
+                WHERE oh.match_id = p.match_id AND m.id = p.match_id
+                AND oh.market IN ('1x2', '1X2')
+                AND oh.recorded_at < m.scheduled_at
+            )) AS with_pre_match_odds,
+            COUNT(*) FILTER (WHERE p.closing_odds_snapshot IS NOT NULL) AS with_snapshot,
+            COUNT(*) FILTER (WHERE EXISTS (
+                SELECT 1 FROM prediction_evaluations pe WHERE pe.prediction_id = p.id
+            )) AS evaluated
+        FROM predictions p
+    """))
+    row_f = qf.first()
+    out["F_predictions_coverage"] = {
+        "total_predictions": row_f[0],
+        "with_pre_match_odds": row_f[1],
+        "with_snapshot": row_f[2],
+        "evaluated": row_f[3],
+    }
+
+    # Query G — Coverage per tier (uses pick_tier_expression similar to live measurement)
+    # We replicate the league-tier classification inline to avoid coupling to tier_system.py
+    # Tier breakdown: count predictions in each tier, with odds, evaluated, both
+    qg = await db.execute(text("""
+        WITH classified AS (
+            SELECT
+                p.id AS pid,
+                p.match_id,
+                p.closing_odds_snapshot,
+                CASE
+                    WHEN p.confidence >= 0.85 THEN 'platinum'
+                    WHEN p.confidence >= 0.70 THEN 'gold'
+                    WHEN p.confidence >= 0.60 THEN 'silver'
+                    WHEN p.confidence >= 0.45 THEN 'free'
+                    ELSE 'below_floor'
+                END AS tier
+            FROM predictions p
+            WHERE p.created_at >= '2026-04-16'
+        )
+        SELECT
+            c.tier,
+            COUNT(*) AS total,
+            COUNT(*) FILTER (WHERE EXISTS (
+                SELECT 1 FROM odds_history oh, matches m
+                WHERE oh.match_id = c.match_id AND m.id = c.match_id
+                AND oh.market IN ('1x2','1X2') AND oh.recorded_at < m.scheduled_at
+            )) AS with_odds,
+            COUNT(*) FILTER (WHERE EXISTS (SELECT 1 FROM prediction_evaluations pe WHERE pe.prediction_id = c.pid)) AS evaluated,
+            COUNT(*) FILTER (WHERE EXISTS (
+                SELECT 1 FROM odds_history oh, matches m
+                WHERE oh.match_id = c.match_id AND m.id = c.match_id
+                AND oh.market IN ('1x2','1X2') AND oh.recorded_at < m.scheduled_at
+            ) AND EXISTS (SELECT 1 FROM prediction_evaluations pe WHERE pe.prediction_id = c.pid)) AS odds_and_eval
+        FROM classified c
+        GROUP BY c.tier
+        ORDER BY
+            CASE c.tier WHEN 'platinum' THEN 1 WHEN 'gold' THEN 2 WHEN 'silver' THEN 3 WHEN 'free' THEN 4 ELSE 5 END
+    """))
+    out["G_coverage_per_tier"] = [
+        {
+            "tier": r[0],
+            "total": r[1],
+            "with_odds": r[2],
+            "evaluated": r[3],
+            "odds_and_eval_usable_for_roi": r[4],
+            "coverage_pct": round(100.0 * r[2] / r[1], 1) if r[1] else 0.0,
+        }
+        for r in qg.all()
+    ]
+
+    # Query H — Coverage over time (per month)
+    qh = await db.execute(text("""
+        SELECT
+            DATE_TRUNC('month', m.scheduled_at) AS month,
+            COUNT(p.id) AS predictions,
+            COUNT(p.id) FILTER (WHERE EXISTS (
+                SELECT 1 FROM odds_history oh
+                WHERE oh.match_id = p.match_id
+                AND oh.recorded_at < m.scheduled_at
+                AND oh.market IN ('1x2','1X2')
+            )) AS with_odds
+        FROM predictions p
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.created_at >= '2026-04-16'
+        GROUP BY month
+        ORDER BY month DESC
+    """))
+    out["H_coverage_per_month"] = [
+        {
+            "month": r[0].date().isoformat() if r[0] else None,
+            "predictions": r[1],
+            "with_odds": r[2],
+            "coverage_pct": round(100.0 * r[2] / r[1], 1) if r[1] else 0.0,
+        }
+        for r in qh.all()
+    ]
+
+    # Query I — Unrealistic odds
+    qi = await db.execute(text("""
+        SELECT COUNT(*) FROM odds_history
+        WHERE home_odds < 1.01 OR home_odds > 100
+           OR draw_odds < 1.01 OR draw_odds > 100
+           OR away_odds < 1.01 OR away_odds > 100
+    """))
+    out["I_unrealistic_odds_count"] = qi.scalar() or 0
+
+    # Query J — Overround stats
+    qj = await db.execute(text("""
+        SELECT
+            COUNT(*) FILTER (WHERE (1.0/home_odds + 1.0/draw_odds + 1.0/away_odds) < 1.0) AS below_fair,
+            COUNT(*) FILTER (WHERE (1.0/home_odds + 1.0/draw_odds + 1.0/away_odds) > 1.20) AS huge_margin,
+            AVG(1.0/home_odds + 1.0/draw_odds + 1.0/away_odds) AS avg_overround,
+            MIN(1.0/home_odds + 1.0/draw_odds + 1.0/away_odds) AS min_overround,
+            MAX(1.0/home_odds + 1.0/draw_odds + 1.0/away_odds) AS max_overround
+        FROM odds_history
+        WHERE market IN ('1x2','1X2')
+        AND home_odds > 1.01 AND draw_odds > 1.01 AND away_odds > 1.01
+    """))
+    row_j = qj.first()
+    out["J_overround"] = {
+        "below_fair_lt_1_0": row_j[0],
+        "huge_margin_gt_1_20": row_j[1],
+        "avg_overround": float(row_j[2]) if row_j[2] else None,
+        "min_overround": float(row_j[3]) if row_j[3] else None,
+        "max_overround": float(row_j[4]) if row_j[4] else None,
+    }
+
+    # Query K — Duplicate odds rows
+    qk = await db.execute(text("""
+        SELECT COUNT(*) FROM (
+            SELECT match_id, source, recorded_at, COUNT(*) AS dup
+            FROM odds_history
+            GROUP BY match_id, source, recorded_at
+            HAVING COUNT(*) > 1
+        ) t
+    """))
+    out["K_duplicate_odds_groups"] = qk.scalar() or 0
+
+    return out
+
