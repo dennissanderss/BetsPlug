@@ -48,6 +48,17 @@ import TrackRecordFinalCTA      from "@/components/track-record/TrackRecordFinal
 import type { TrackRecordContent } from "@/content/pages/track-record/types";
 import { getContent } from "@/lib/i18n";
 
+import HowItWorksHero        from "@/components/how-it-works/HowItWorksHero.astro";
+import HiwTheProblem         from "@/components/how-it-works/TheProblem.astro";
+import HiwTheProcess         from "@/components/how-it-works/TheProcess.astro";
+import HiwWorkedExample      from "@/components/how-it-works/WorkedExample.astro";
+import HiwWhyItWorksBetter   from "@/components/how-it-works/WhyItWorksBetter.astro";
+import HiwWhatYouGet         from "@/components/how-it-works/WhatYouGet.astro";
+import HiwMethodologyTease   from "@/components/how-it-works/MethodologyTease.astro";
+import HiwFAQ                from "@/components/how-it-works/HowItWorksFAQ.astro";
+import HiwFinalCTA           from "@/components/how-it-works/HowItWorksFinalCTA.astro";
+import { loadHowItWorksContent } from "@/lib/how-it-works-page";
+
 import MethodologyHero          from "@/components/methodology/MethodologyHero.astro";
 import MethodologyTOC           from "@/components/methodology/MethodologyTOC.astro";
 import ThreePillarsSection      from "@/components/methodology/ThreePillarsSection.astro";
@@ -61,8 +72,6 @@ import LimitationsSection       from "@/components/methodology/LimitationsSectio
 import MethodologyFAQ           from "@/components/methodology/MethodologyFAQ.astro";
 import MethodologyFinalCTA      from "@/components/methodology/MethodologyFinalCTA.astro";
 import { loadMethodologyContent } from "@/lib/methodology-page";
-import HowItWorksPage from "@/components/how-it-works/HowItWorksPage.astro";
-import { loadHowItWorksContent } from "@/lib/how-it-works-page";
 
 import LearnHero        from "@/components/learn/LearnHero.astro";
 import ArticleGrid      from "@/components/learn/ArticleGrid.astro";
@@ -114,8 +123,8 @@ export function getStaticPaths() {
   // must live inside the function. Mirror it in `SUPPORTED_CANONICAL`
   // below for runtime branching.
   const supported = [
-    "predictions", "methodology", "track-record", "learn", "bet-types",
-    "free-vs-paid", "telegram", "faq",
+    "predictions", "methodology", "how-it-works", "track-record", "learn",
+    "bet-types", "free-vs-paid", "telegram", "faq",
     "privacy", "terms", "cookies", "responsible-gambling",
   ];
   const out: Array<{ params: { locale: string; slug: string } }> = [];
@@ -193,18 +202,18 @@ const hubFaqSchema = hubContent ? {
 
 // ── How It Works ────────────────────────────────────────────
 const hiwContent = canonical === "how-it-works" ? await loadHowItWorksContent(locale) : null;
-const hiwHowToSchema = hiwContent ? {
+
+const hiwTechSchema = hiwContent ? {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  name: hiwContent.meta.title,
+  "@type": "TechArticle",
+  headline: stripAccent(hiwContent.hero.h1),
   description: hiwContent.meta.description,
+  author: { "@type": "Organization", name: "BetsPlug" },
+  datePublished: "2026-05-05",
+  dateModified: hiwContent._meta.lastUpdated,
+  articleSection: "How it works",
   inLanguage: locale,
-  step: hiwContent.steps.map((s, i) => ({
-    "@type": "HowToStep",
-    position: i + 1,
-    name: s.title,
-    text: s.body,
-  })),
+  url: `${SITE}/${locale}/${slug}`,
 } : null;
 const hiwBreadcrumbSchema = hiwContent ? {
   "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -212,6 +221,13 @@ const hiwBreadcrumbSchema = hiwContent ? {
     { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/${locale}/` },
     { "@type": "ListItem", position: 2, name: "How it works", item: `${SITE}/${locale}/${slug}` },
   ],
+} : null;
+const hiwFaqSchema = hiwContent ? {
+  "@context": "https://schema.org", "@type": "FAQPage", inLanguage: locale,
+  mainEntity: hiwContent.faq.questions.map((q) => ({
+    "@type": "Question", name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
 } : null;
 
 // ── Methodology ─────────────────────────────────────────────
@@ -499,14 +515,24 @@ const faqBreadcrumbSchema = faqContent ? {
   <MarketingLayout
     title={hiwContent.meta.title}
     description={hiwContent.meta.description}
+    ogImage={hiwContent.meta.ogImage}
     canonicalPath="/how-it-works"
   >
     <Fragment slot="head">
-      <script is:inline type="application/ld+json" set:html={JSON.stringify(hiwHowToSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hiwTechSchema)} />
       <script is:inline type="application/ld+json" set:html={JSON.stringify(hiwBreadcrumbSchema)} />
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(hiwFaqSchema)} />
     </Fragment>
 
-    <HowItWorksPage locale={locale} content={hiwContent} />
+    <HowItWorksHero       locale={locale} content={hiwContent.hero} />
+    <HiwTheProblem                         content={hiwContent.problem} />
+    <HiwTheProcess                         content={hiwContent.process} />
+    <HiwWorkedExample     locale={locale} content={hiwContent.example} />
+    <HiwWhyItWorksBetter                   content={hiwContent.why} />
+    <HiwWhatYouGet        locale={locale} content={hiwContent.tiers} />
+    <HiwMethodologyTease  locale={locale} content={hiwContent.methodologyTease} />
+    <HiwFAQ                                content={hiwContent.faq} />
+    <HiwFinalCTA          locale={locale} content={hiwContent.finalCta} />
   </MarketingLayout>
 )}
 

@@ -1,25 +1,45 @@
 /**
- * Type contract for the standalone /how-it-works page (one JSON per locale).
- * Six pipeline steps from raw fixture to graded pick, written in plain
- * language — no engine-internals jargon. The icon names map onto the
- * inline SVG set in HowItWorksPage.astro.
+ * Type contract for /how-it-works educational page.
+ * 9 sections, conversational tone, no gambling terminology.
+ *
+ * Tier names are CANONICAL and must mirror docs/tier_system_plan.md:
+ * Free / Silver / Gold / Platinum (badges ⬜ ⚪ 🔵 🟢).
  */
 
-export interface CtaCanonical { label: string; canonical: string }
+export interface CtaCanonical {
+  label: string;
+  canonical: string;
+}
 
-export type HowItWorksIcon =
-  | "database"   // step 1 — collection
-  | "cpu"        // step 2 — engine math
-  | "layers"     // step 3 — tier sorting
-  | "lock"       // step 4 — lock before kickoff
-  | "check"      // step 5 — settle + grade
-  | "eye";       // step 6 — visibility / verification
+export interface USPLine {
+  icon: string;
+  text: string;
+}
 
-export interface HowItWorksStep {
+export interface ProcessStage {
   number: string;
-  icon: HowItWorksIcon;
   title: string;
   body: string;
+  bodyExtra?: string;
+  visualLabels: Record<string, string>;
+}
+
+export interface Pillar {
+  icon: string;
+  title: string;
+  body: string;
+}
+
+export interface TierCard {
+  badge: "free" | "silver" | "gold" | "platinum";
+  name: string;
+  tagline: string;
+  bullets: string[];
+}
+
+export interface FaqQA {
+  q: string;
+  a: string;
 }
 
 export interface HowItWorksContent {
@@ -31,14 +51,58 @@ export interface HowItWorksContent {
   meta: {
     title: string;
     description: string;
+    ogImage?: string;
   };
   hero: {
     kicker: string;
-    /** May contain a single {{accent}}…{{/accent}} segment. */
-    title: string;
-    subtitle: string;
+    h1: string;
+    subheadline: string;
+    trustStrip: USPLine[];
+    ctaPrimary: CtaCanonical;
+    ctaSecondary: CtaCanonical;
   };
-  steps: HowItWorksStep[];
-  ctaPrimary: CtaCanonical;
-  ctaSecondary: CtaCanonical;
+  problem: {
+    h2: string;
+    paragraphs: string[];
+  };
+  process: {
+    h2: string;
+    subH2: string;
+    stages: ProcessStage[];
+  };
+  example: {
+    h2: string;
+    subH2: string;
+    steps: USPLine[];
+    ctaPrimary: CtaCanonical;
+    ctaSecondary: CtaCanonical;
+    mockupLabels: Record<string, string>;
+  };
+  why: {
+    h2: string;
+    pillars: Pillar[];
+  };
+  tiers: {
+    h2: string;
+    subH2: string;
+    items: TierCard[];
+    ctaPrimary: CtaCanonical;
+    ctaSecondary: CtaCanonical;
+  };
+  methodologyTease: {
+    h2: string;
+    body: string;
+    cta: CtaCanonical;
+  };
+  faq: {
+    h2: string;
+    questions: FaqQA[];
+  };
+  finalCta: {
+    h2: string;
+    subH2: string;
+    body: string;
+    ctaPrimary: CtaCanonical;
+    ctaSecondary: CtaCanonical;
+  };
 }

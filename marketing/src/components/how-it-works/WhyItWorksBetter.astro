@@ -1,0 +1,75 @@
+---
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Icon from "@/components/ui/Icon.astro";
+import type { IconName } from "@/components/ui/icon-types";
+import { parseAccent } from "@/lib/parseAccent";
+import type { HowItWorksContent } from "@/content/pages/how-it-works/types";
+
+interface Props {
+  content: HowItWorksContent["why"];
+}
+const { content } = Astro.props;
+---
+
+<Section
+  surface="dark-charcoal"
+  spacing="lg"
+  ariaLabelledby="why"
+>
+  <Container size="lg">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2
+        id="why"
+        class="scroll-mt-24 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white-pure"
+        set:html={parseAccent(content.h2)}
+      ></h2>
+    </header>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {content.pillars.map((pillar) => (
+        <article class="pillar">
+          <span class="pillar__icon">
+            <Icon name={pillar.icon as IconName} size={24} />
+          </span>
+          <h3 class="pillar__title">{pillar.title}</h3>
+          <p class="pillar__body">{pillar.body}</p>
+        </article>
+      ))}
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .pillar {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.875rem;
+    padding: 1.5rem;
+    color: var(--white-soft, #e8eaef);
+  }
+  .pillar__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 0.625rem;
+    background: rgba(0, 210, 106, 0.12);
+    color: var(--pitch-green-500, #00d26a);
+    margin-bottom: 1rem;
+  }
+  .pillar__title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--white-pure, #ffffff);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.01em;
+  }
+  .pillar__body {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+  }
+</style>

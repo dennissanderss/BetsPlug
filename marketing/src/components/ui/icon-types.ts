@@ -35,4 +35,10 @@ export type IconName =
   | "users"
   | "message-circle"
   | "menu"
-  | "chevron-right";
+  | "chevron-right"
+  | "trending-up"
+  | "activity"
+  | "home"
+  | "calendar"
+  | "calculator"
+  | "bar-chart";

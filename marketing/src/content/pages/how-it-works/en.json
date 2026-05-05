@@ -5,58 +5,216 @@
     "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "How BetsPlug works — from fixture list to graded pick",
-    "description": "Six steps from a raw football fixture to a graded prediction on your dashboard. Plain-language pipeline, no marketing fluff."
+    "title": "How BetsPlug works — from data to prediction | BetsPlug",
+    "description": "An educational walkthrough of how BetsPlug generates football predictions. Forty-plus variables per match, statistical models, machine learning, and predictions locked before kickoff."
   },
   "hero": {
     "kicker": "How it works",
-    "title": "From fixture list to graded pick — {{accent}}six steps{{/accent}}.",
-    "subtitle": "No tipster mystery. Every prediction follows the same six-step pipeline. Same engine for everyone — only the strictness of the filter changes per tier."
+    "h1": "From data to prediction, {{accent}}every match{{/accent}}",
+    "subheadline": "Football outcomes follow statistical patterns. Our system processes 40+ variables per match across 30+ leagues — and locks every prediction before kickoff so you can verify accuracy yourself.",
+    "trustStrip": [
+      { "icon": "cpu",  "text": "AI-powered" },
+      { "icon": "lock", "text": "Locked before kickoff" },
+      { "icon": "eye",  "text": "Public track record" }
+    ],
+    "ctaPrimary":   { "label": "View today's predictions", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Read methodology",        "canonical": "/methodology" }
   },
-  "steps": [
-    {
-      "number": "01",
-      "icon": "database",
-      "title": "We collect every match",
-      "body": "Each morning we pull fresh fixtures, recent results, team form and head-to-head history from 30+ leagues — Premier League and Champions League at the top, all the way down to MLS and J1 League. The data refreshes every minute so the engine always works with the latest picture."
-    },
-    {
-      "number": "02",
-      "icon": "cpu",
-      "title": "Our engine scores every match",
-      "body": "For each upcoming match the engine compares team strength, recent form and historical patterns, and turns the picture into a single confidence score. Anything below 55% gets dropped — if the engine isn't sure, we don't publish it."
-    },
-    {
-      "number": "03",
-      "icon": "layers",
-      "title": "Picks are sorted into tiers",
-      "body": "Every surviving pick lands in one of four tiers based on how confident the engine is and how strong the league is. Free shows 45%+ historical accuracy, Silver 60%+, Gold 70%+, Platinum 85%+. You always see picks at your tier and below — never the inverse."
-    },
-    {
-      "number": "04",
-      "icon": "lock",
-      "title": "Picks lock before kickoff",
-      "body": "The instant a pick is published it gets a public timestamp. After kickoff that row is read-only. No retroactive edits, no quiet deletions of misses — the bar we set is the bar we report."
-    },
-    {
-      "number": "05",
-      "icon": "check",
-      "title": "Match settles, the result is graded",
-      "body": "When the final whistle goes, our scheduler grades the prediction against the real result. Win or loss, both go on the record. The numbers on the pricing page, the dashboard and the public track record all read from this same evaluation table."
-    },
-    {
-      "number": "06",
-      "icon": "eye",
-      "title": "You see it, you can verify it",
-      "body": "Free visitors get three picks a day on the homepage. Paid plans unlock the full feed with win probability per match, the Pick of the Day, strategy backtesting, and (Platinum lifetime) a private Telegram channel. The full track record is always public to scroll."
+  "problem": {
+    "h2": "Most people predict football with {{accent}}intuition{{/accent}}",
+    "paragraphs": [
+      "You watch a few matches. You read a few headlines. You think you know which team is in form. Then you make a prediction based on how you feel about it.",
+      "Intuition isn't useless — but it's working with maybe 5 or 10 data points. Your brain remembers last weekend's result and the dramatic goal you saw. It forgets the 60% of matches where the same team played differently.",
+      "The pattern in football outcomes is too complex for intuition to catch. There are real signals in goal-scoring rates, opponent quality, home and away splits, recent form, and dozens of other variables. The signal is there. Your brain just can't process all of it at once. Ours can."
+    ]
+  },
+  "process": {
+    "h2": "Four stages, {{accent}}every prediction{{/accent}}",
+    "subH2": "This is what happens between a match being scheduled and our prediction being locked in.",
+    "stages": [
+      {
+        "number": "01",
+        "title": "Data ingestion",
+        "body": "We pull match data from official feeds across 30+ leagues — team line-ups, goals scored, goals conceded, head-to-head history, recent form, and 40+ other variables per match. Updates happen continuously as new information becomes available.",
+        "visualLabels": {
+          "goals":    "Goals scored",
+          "form":     "Recent form",
+          "h2h":      "Head-to-head",
+          "homeAway": "Home / away splits",
+          "squad":    "Squad changes",
+          "context":  "Match context",
+          "schedule": "Schedule density",
+          "defense":  "Defensive metrics"
+        }
+      },
+      {
+        "number": "02",
+        "title": "Statistical models",
+        "body": "Two proven approaches handle the math. Elo ratings track each team's relative strength based on hundreds of past matches. Poisson models calculate goal-scoring probabilities by combining attacking and defensive rates.",
+        "bodyExtra": "Elo gives us 'how good is this team right now.' Poisson gives us 'how many goals will probably be scored.' Together they form the statistical baseline for every prediction.",
+        "visualLabels": {
+          "eloTitle":       "Elo rating",
+          "eloCaption":     "Adjusted for opponent strength",
+          "eloAria":        "Elo rating evolution over time",
+          "poissonTitle":   "Goal distribution",
+          "poissonCaption": "Probability per outcome",
+          "poissonAria":    "Poisson goal probability distribution"
+        }
+      },
+      {
+        "number": "03",
+        "title": "Pattern recognition",
+        "body": "Statistical models are precise but limited. They don't know that a team often struggles after international breaks. They don't see that one referee gives 30% more cards than the average.",
+        "bodyExtra": "That's where the machine learning layer comes in. It looks at patterns the statistical models miss — context, anomalies, historical edges. The output is a calibrated adjustment that makes predictions more accurate over time.",
+        "visualLabels": {
+          "aria":    "Pattern recognition layer diagram",
+          "caption": "Decorative — see /methodology for the actual architecture"
+        }
+      },
+      {
+        "number": "04",
+        "title": "Lock and publish",
+        "body": "Once predictions are generated, they're committed to our database with a public timestamp before kickoff. After this moment, predictions cannot be edited. Not by us, not by anyone.",
+        "bodyExtra": "This is the transparency mechanism. The lock timestamp is verifiable. The original prediction stays public forever. Whether the prediction turns out right or wrong, it's there in the track record.",
+        "visualLabels": {
+          "aria":   "Prediction lock timestamp display",
+          "status": "Prediction committed · Cannot be edited"
+        }
+      }
+    ]
+  },
+  "example": {
+    "h2": "What this looks like {{accent}}in practice{{/accent}}",
+    "subH2": "For a typical Premier League match, here's what happens before we lock the prediction.",
+    "steps": [
+      { "icon": "database",     "text": "Pull 40+ variables for both teams over their last matches"        },
+      { "icon": "trending-up",  "text": "Calculate Elo ratings adjusted for opponent strength"             },
+      { "icon": "bar-chart",    "text": "Generate Poisson goal distributions for both teams"               },
+      { "icon": "brain",        "text": "Apply machine learning adjustments for context and patterns"      },
+      { "icon": "calculator",   "text": "Output probabilities for outcome, goals, and other markets"       },
+      { "icon": "lock",         "text": "Lock the prediction with a timestamp before kickoff"              }
+    ],
+    "ctaPrimary":   { "label": "View today's predictions",  "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Read full methodology",     "canonical": "/methodology" },
+    "mockupLabels": {
+      "leagueLine":    "Top division · Match 47",
+      "homeTeam":      "Home side",
+      "awayTeam":      "Away side",
+      "vs":            "vs",
+      "outputLabel":   "Output",
+      "variableHint":  "40+ engine inputs",
+      "variablesAria": "Engine input variables",
+      "aria":          "Generic prediction generation illustration"
     }
-  ],
-  "ctaPrimary": {
-    "label": "See the tiers",
-    "canonical": "pricing"
   },
-  "ctaSecondary": {
-    "label": "Read the methodology",
-    "canonical": "methodology"
+  "why": {
+    "h2": "Why this {{accent}}works better{{/accent}} than guessing",
+    "pillars": [
+      {
+        "icon":  "calculator",
+        "title": "Quantitative, not gut",
+        "body":  "Every prediction starts from numbers. No 'I have a feeling about this one' — just data, models, and calibrated outputs."
+      },
+      {
+        "icon":  "zap",
+        "title": "Real-time data",
+        "body":  "Predictions update continuously as new information becomes available. Latest line-ups, latest form, latest context — all factored in before lock."
+      },
+      {
+        "icon":  "shield",
+        "title": "Provably transparent",
+        "body":  "Every prediction is locked with a public timestamp before kickoff. You can verify accuracy in our public track record — wins and losses both."
+      },
+      {
+        "icon":  "database",
+        "title": "40+ variables, every match",
+        "body":  "The same comprehensive analysis applied to every match across 30+ leagues. No cherry-picking which matches we predict on."
+      }
+    ]
+  },
+  "tiers": {
+    "h2": "{{accent}}Same engine{{/accent}}, four tiers of access",
+    "subH2": "Every tier reads from the same prediction engine. The difference is which quality bands you can see.",
+    "items": [
+      {
+        "badge":   "free",
+        "name":    "Free",
+        "tagline": "A daily taste of the engine.",
+        "bullets": [
+          "A handful of free picks every day",
+          "Public track record always visible",
+          "30+ leagues covered"
+        ]
+      },
+      {
+        "badge":   "silver",
+        "name":    "Silver",
+        "tagline": "Top-14 leagues, mid-confidence and up.",
+        "bullets": [
+          "All Silver-band picks plus Free",
+          "Standard markets across mid-tier leagues",
+          "Daily email digest"
+        ]
+      },
+      {
+        "badge":   "gold",
+        "name":    "Gold",
+        "tagline": "Top-10 leagues, higher confidence threshold.",
+        "bullets": [
+          "All Gold-band picks plus Silver and Free",
+          "Premium markets included",
+          "Pick of the Day surfaced first"
+        ]
+      },
+      {
+        "badge":   "platinum",
+        "name":    "Platinum",
+        "tagline": "Top-5 leagues, highest confidence band.",
+        "bullets": [
+          "All Platinum-band picks plus everything below",
+          "Telegram alerts for high-confidence picks",
+          "Full slate, locked with maximum lead time"
+        ]
+      }
+    ],
+    "ctaPrimary":   { "label": "Compare plans",            "canonical": "/pricing"     },
+    "ctaSecondary": { "label": "See free predictions today","canonical": "/predictions" }
+  },
+  "methodologyTease": {
+    "h2": "Want to know exactly which {{accent}}models{{/accent}} we use?",
+    "body": "This page explains what happens. The methodology page explains exactly how — which Elo variants, which Poisson modifications, which machine learning architecture, which 40+ variables. If you're the kind of person who wants to verify rather than trust, that's where you'll find it.",
+    "cta":  { "label": "Read full methodology", "canonical": "/methodology" }
+  },
+  "faq": {
+    "h2": "How it works FAQ",
+    "questions": [
+      {
+        "q": "How long does it take to generate a prediction?",
+        "a": "The engine processes the full daily slate across 30+ leagues in minutes. Each match is generated, calibrated, and locked individually before kickoff."
+      },
+      {
+        "q": "How accurate are the predictions?",
+        "a": "Accuracy varies by league, market type, and time period. We don't publish a single headline percentage because it would hide this variance. The full track record is publicly browsable so you can see actual performance in context."
+      },
+      {
+        "q": "What makes this different from other prediction services?",
+        "a": "Three things. First, every prediction is locked before kickoff with a public timestamp — others can edit after the fact. Second, we publish wins and losses both — others cherry-pick. Third, the methodology is fully documented — others use 'secret algorithm' claims you cannot verify."
+      },
+      {
+        "q": "Why don't you tell me which predictions to follow?",
+        "a": "Because we're not advisors. We provide statistical analysis. How you use that analysis is your decision based on your own risk tolerance and judgement. We give you the data; you make the call."
+      },
+      {
+        "q": "Can I see how a specific prediction was generated?",
+        "a": "Not at the variable level — that would expose proprietary weighting. But the methodology page explains the process in detail, and the locked timestamp on each prediction proves it wasn't edited after the fact. The combination of public methodology and locked predictions gives you verifiable transparency without exposing the model itself."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "{{accent}}See it{{/accent}} in action",
+    "subH2": "Today's free predictions are live.",
+    "body": "You've read how the system works. Now see what it produces. Today's free predictions cover Premier League, La Liga, Bundesliga, and more — locked, timestamped, and ready for you to evaluate.",
+    "ctaPrimary":   { "label": "View today's predictions", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Compare plans",            "canonical": "/pricing"    }
   }
 }

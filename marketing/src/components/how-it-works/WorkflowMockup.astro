@@ -1,0 +1,224 @@
+---
+/**
+ * Sectie 4 visual — generic prediction workflow mockup. Composed of
+ * neutral, generic placeholders (Home side / Away side, no real teams,
+ * no real numbers). The point is to show WHAT the engine produces, not
+ * which fixture it produces it for.
+ *
+ * Inline SVG sparklines + a confidence bar that animates on render.
+ */
+import Icon from "@/components/ui/Icon.astro";
+
+interface Props {
+  labels: Record<string, string>;
+}
+const { labels } = Astro.props as Props;
+
+// Neutral, deterministic sparklines for the variable-row strip.
+// Values normalised 0-100 for the SVG path math.
+const variables = [
+  { label: "Form",       series: [40, 55, 50, 65, 60, 72, 68, 78] },
+  { label: "Goals/match", series: [62, 58, 70, 66, 72, 75, 78, 82] },
+  { label: "Defensive",  series: [70, 68, 64, 60, 58, 54, 52, 48] },
+  { label: "H2H edge",   series: [50, 55, 52, 60, 58, 64, 62, 68] },
+];
+
+function pathFor(series: number[]): string {
+  const min = Math.min(...series);
+  const max = Math.max(...series);
+  const span = max - min || 1;
+  return series
+    .map((v, i) => {
+      const x = (i / (series.length - 1)) * 100;
+      const y = 100 - ((v - min) / span) * 100;
+      return `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`;
+    })
+    .join(" ");
+}
+---
+
+<div class="workflow-mockup w-full max-w-md mx-auto" aria-label={labels.aria ?? "Prediction generation workflow illustration"}>
+  <header class="workflow-mockup__head">
+    <span class="workflow-mockup__league">{labels.leagueLine ?? "Top division · Match X"}</span>
+    <span class="workflow-mockup__lock"><Icon name="lock" size={14} /></span>
+  </header>
+
+  <div class="workflow-mockup__teams">
+    <div class="workflow-mockup__team">
+      <div class="workflow-mockup__shield" aria-hidden="true">H</div>
+      <span>{labels.homeTeam ?? "Home side"}</span>
+    </div>
+    <span class="workflow-mockup__vs">{labels.vs ?? "vs"}</span>
+    <div class="workflow-mockup__team workflow-mockup__team--away">
+      <span>{labels.awayTeam ?? "Away side"}</span>
+      <div class="workflow-mockup__shield" aria-hidden="true">A</div>
+    </div>
+  </div>
+
+  <ul class="workflow-mockup__variables" aria-label={labels.variablesAria ?? "Engine input variables"}>
+    {variables.map((v, i) => (
+      <li class="workflow-mockup__var-row" style={`--row-delay: ${i * 0.08}s;`}>
+        <span class="workflow-mockup__var-label">{v.label}</span>
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="workflow-mockup__var-spark" aria-hidden="true">
+          <path d={pathFor(v.series)} fill="none" stroke="#1FE07F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+        </svg>
+      </li>
+    ))}
+  </ul>
+
+  <footer class="workflow-mockup__foot">
+    <div class="workflow-mockup__foot-row">
+      <span class="workflow-mockup__prediction-label">{labels.outputLabel ?? "Output"}</span>
+      <span class="workflow-mockup__prediction-value">—</span>
+    </div>
+    <div class="workflow-mockup__confidence" aria-hidden="true">
+      <div class="workflow-mockup__confidence-bar"></div>
+    </div>
+  </footer>
+</div>
+
+<style>
+  .workflow-mockup {
+    background: var(--deep-navy-700, #1a1f2e);
+    border: 1px solid var(--deep-navy-600, #252b3d);
+    border-radius: 0.875rem;
+    padding: 1rem 1rem 1.25rem;
+    color: var(--white-soft, #e8eaef);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  }
+  .workflow-mockup__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.55);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0.625rem;
+    margin-bottom: 0.875rem;
+  }
+  .workflow-mockup__lock {
+    color: var(--pitch-green-500, #00d26a);
+  }
+
+  .workflow-mockup__teams {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .workflow-mockup__team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .workflow-mockup__team--away {
+    justify-content: flex-end;
+  }
+  .workflow-mockup__shield {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.10);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .workflow-mockup__vs {
+    font-size: 0.625rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  .workflow-mockup__variables {
+    list-style: none;
+    margin: 1rem 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4375rem;
+  }
+  .workflow-mockup__var-row {
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.4375rem 0.625rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+  }
+  .workflow-mockup__var-label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .workflow-mockup__var-spark {
+    width: 100%;
+    height: 18px;
+    display: block;
+  }
+
+  .workflow-mockup__foot {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .workflow-mockup__foot-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .workflow-mockup__prediction-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .workflow-mockup__prediction-value {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--pitch-green-500, #00d26a);
+  }
+  .workflow-mockup__confidence {
+    margin-top: 0.5rem;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .workflow-mockup__confidence-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--pitch-green-600, #00B85A), var(--pitch-green-400, #1FE07F));
+    transform-origin: left;
+    transform: scaleX(0.72);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .workflow-mockup__var-row {
+      animation: var-row-in 0.5s ease-out backwards;
+      animation-delay: var(--row-delay, 0s);
+    }
+    .workflow-mockup__confidence-bar {
+      animation: conf-fill 1.2s ease-out 0.4s both;
+    }
+  }
+  @keyframes var-row-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0);   }
+  }
+  @keyframes conf-fill {
+    from { transform: scaleX(0);   }
+    to   { transform: scaleX(0.72); }
+  }
+</style>

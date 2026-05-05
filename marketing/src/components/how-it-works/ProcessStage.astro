@@ -1,0 +1,59 @@
+---
+/**
+ * Reusable stage block for "The Process" section. Renders a numbered
+ * card with title + body and a slot for the visual component. The
+ * `variant` flips the column order on desktop so consecutive stages
+ * alternate text/visual sides — keeps the long flow visually paced.
+ */
+interface Props {
+  number: string;
+  title: string;
+  body: string;
+  bodyExtra?: string;
+  variant?: "image-right" | "image-left";
+}
+const {
+  number,
+  title,
+  body,
+  bodyExtra,
+  variant = "image-right",
+} = Astro.props as Props;
+---
+
+<div class={`process-stage process-stage--${variant} grid items-center gap-10 lg:gap-16 py-12 lg:py-16 border-t border-white/[0.06] first:border-t-0`}>
+  <div class="stage-content">
+    <div class="font-mono text-sm tracking-[0.18em] text-pitch-green-500">
+      {number}
+    </div>
+    <h3 class="mt-3 text-2xl sm:text-3xl font-bold leading-tight tracking-tight text-white-pure">
+      {title}
+    </h3>
+    <p class="mt-4 text-base sm:text-lg leading-[1.65] text-white-soft">
+      {body}
+    </p>
+    {bodyExtra && (
+      <p class="mt-4 text-base sm:text-lg leading-[1.65] text-white-soft">
+        {bodyExtra}
+      </p>
+    )}
+  </div>
+
+  <div class="stage-visual flex items-center justify-center min-h-[260px] lg:min-h-[320px]">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .process-stage {
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 1024px) {
+    .process-stage {
+      grid-template-columns: 1fr 1fr;
+    }
+    .process-stage--image-left .stage-content {
+      order: 2;
+    }
+  }
+</style>

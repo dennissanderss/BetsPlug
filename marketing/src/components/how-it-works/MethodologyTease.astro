@@ -1,0 +1,38 @@
+---
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
+import type { HowItWorksContent } from "@/content/pages/how-it-works/types";
+
+interface Props {
+  locale: Locale;
+  content: HowItWorksContent["methodologyTease"];
+}
+const { locale, content } = Astro.props;
+const ctaHref = getLocalizedPath(content.cta.canonical, locale);
+---
+
+<Section
+  surface="dark-glow"
+  spacing="md"
+  glow
+  ariaLabelledby="methodology-tease"
+>
+  <Container size="md" class="text-center">
+    <h2
+      id="methodology-tease"
+      class="scroll-mt-24 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white-pure"
+      set:html={parseAccent(content.h2)}
+    ></h2>
+    <p class="mt-5 text-base sm:text-lg leading-[1.65] text-white-soft max-w-2xl mx-auto">
+      {content.body}
+    </p>
+    <div class="mt-8">
+      <Button href={ctaHref} variant="primary" size="lg" surface="dark">
+        {content.cta.label}
+      </Button>
+    </div>
+  </Container>
+</Section>

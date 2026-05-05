@@ -2,62 +2,219 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-05",
-    "_note": "TODO: Native speaker review needed for it. Hand-authored by Claude based on en.json source."
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "Come funziona BetsPlug — dalla lista partite al pronostico valutato",
-    "description": "Sei passaggi da una partita di calcio grezza a un pronostico valutato sulla tua dashboard. Trasparenza pura della pipeline — niente fronzoli di marketing."
+    "title": "Come funziona BetsPlug — dai dati al pronostico | BetsPlug",
+    "description": "Una spiegazione accessibile di come BetsPlug genera i suoi pronostici sul calcio. Oltre 40 variabili per partita, modelli statistici, machine learning e pronostici bloccati prima del fischio d'inizio."
   },
   "hero": {
     "kicker": "Come funziona",
-    "title": "Dalla lista partite al pronostico valutato — {{accent}}sei passaggi{{/accent}}.",
-    "subtitle": "Nessun mistero da tipster. Ogni pronostico segue la stessa pipeline in sei passaggi. Lo stesso motore per tutti — cambia solo la severità del filtro per livello."
+    "h1": "Dai dati al pronostico, {{accent}}per ogni partita{{/accent}}",
+    "subheadline": "I risultati del calcio seguono schemi statistici. Il nostro sistema elabora oltre 40 variabili per partita su più di 30 competizioni — e blocca ogni pronostico prima del fischio d'inizio, così puoi verificarne tu stesso l'accuratezza.",
+    "trustStrip": [
+      { "icon": "cpu",  "text": "Basato sull'IA" },
+      { "icon": "lock", "text": "Bloccato prima del calcio d'inizio" },
+      { "icon": "eye",  "text": "Storico pubblico" }
+    ],
+    "ctaPrimary":   { "label": "Vedi i pronostici di oggi", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Leggi la metodologia",       "canonical": "/methodology" }
   },
-  "steps": [
-    {
-      "number": "01",
-      "icon": "database",
-      "title": "Raccogliamo ogni partita",
-      "body": "Ogni mattina recuperiamo calendari freschi, risultati recenti, forma delle squadre e scontri diretti da oltre 30 campionati — Premier League e Champions League in cima, fino a MLS e J1 League. I dati si aggiornano ogni minuto, così il motore lavora sempre con il quadro più recente."
-    },
-    {
-      "number": "02",
-      "icon": "cpu",
-      "title": "Il nostro motore valuta ogni partita",
-      "body": "Per ogni partita in arrivo, il motore confronta forza della squadra, forma recente e schemi storici, e trasforma il quadro in un singolo punteggio di confidenza. Tutto ciò che sta sotto il 55% viene scartato — se il motore non è sicuro, non lo pubblichiamo."
-    },
-    {
-      "number": "03",
-      "icon": "layers",
-      "title": "I pronostici vengono ordinati nei livelli",
-      "body": "Ogni pronostico sopravvissuto finisce in uno dei quattro livelli, in base alla confidenza del motore e alla solidità del campionato. Free mostra 45%+ di accuratezza storica, Silver 60%+, Gold 70%+, Platinum 85%+. Vedi sempre i pronostici del tuo livello e sotto — mai al contrario."
-    },
-    {
-      "number": "04",
-      "icon": "lock",
-      "title": "I pronostici si bloccano prima del fischio",
-      "body": "Nell'istante in cui un pronostico viene pubblicato, riceve un timestamp pubblico. Dopo il calcio d'inizio quella riga è in sola lettura. Niente modifiche a posteriori, niente cancellazioni silenziose degli errori — l'asticella che ci poniamo è la stessa che riportiamo."
-    },
-    {
-      "number": "05",
-      "icon": "check",
-      "title": "La partita finisce, il risultato viene valutato",
-      "body": "Al fischio finale, il nostro scheduler valuta il pronostico rispetto al risultato reale. Vittoria o sconfitta, entrambi finiscono nel registro. I numeri sulla pagina prezzi, sulla dashboard e sul track record pubblico leggono tutti dalla stessa tabella di valutazione."
-    },
-    {
-      "number": "06",
-      "icon": "eye",
-      "title": "Lo vedi, lo puoi verificare",
-      "body": "I visitatori gratuiti ricevono tre pronostici al giorno sulla home. I piani a pagamento sbloccano il feed completo con probabilità di vittoria per partita, Pick of the Day, backtesting di strategie e (Platinum lifetime) un canale Telegram privato. Il track record completo è sempre consultabile pubblicamente."
+  "problem": {
+    "h2": "Quasi tutti pronosticano il calcio a {{accent}}istinto{{/accent}}",
+    "paragraphs": [
+      "Guardi qualche partita. Leggi qualche titolo. Pensi di sapere quale squadra è in forma. Poi fai un pronostico in base a come ti sembra.",
+      "L'intuito non è inutile — ma lavora con forse 5 o 10 dati. Il tuo cervello ricorda il risultato dello scorso weekend e quel gol spettacolare. Dimentica il 60% delle partite in cui la stessa squadra ha giocato in modo diverso.",
+      "Lo schema dietro i risultati del calcio è troppo complesso per l'intuito. Ci sono segnali reali nei tassi di gol, nella qualità dell'avversario, negli split casa/trasferta, nella forma recente e in decine di altre variabili. Il segnale c'è. Solo che il tuo cervello non riesce a elaborarlo tutto in una volta. Il nostro sì."
+    ]
+  },
+  "process": {
+    "h2": "Quattro fasi, {{accent}}per ogni pronostico{{/accent}}",
+    "subH2": "Ecco cosa succede tra il momento in cui una partita viene programmata e il blocco del nostro pronostico.",
+    "stages": [
+      {
+        "number": "01",
+        "title": "Acquisizione dati",
+        "body": "Raccogliamo dati sulle partite da feed ufficiali su oltre 30 competizioni — formazioni, gol fatti, gol subiti, scontri diretti, forma recente e oltre 40 altre variabili per partita. Gli aggiornamenti arrivano in continuazione, man mano che diventano disponibili nuove informazioni.",
+        "visualLabels": {
+          "goals":    "Gol fatti",
+          "form":     "Forma recente",
+          "h2h":      "Scontri diretti",
+          "homeAway": "Casa / trasferta",
+          "squad":    "Cambi rosa",
+          "context":  "Contesto della partita",
+          "schedule": "Densità del calendario",
+          "defense":  "Metriche difensive"
+        }
+      },
+      {
+        "number": "02",
+        "title": "Modelli statistici",
+        "body": "Due approcci collaudati si occupano della parte numerica. I rating Elo seguono la forza relativa di ciascuna squadra in base a centinaia di partite passate. I modelli Poisson calcolano le probabilità di gol combinando tassi offensivi e difensivi.",
+        "bodyExtra": "Elo ci dice 'quanto è forte questa squadra adesso'. Poisson ci dice 'quanti gol verranno probabilmente segnati'. Insieme formano la base statistica di ogni pronostico.",
+        "visualLabels": {
+          "eloTitle":       "Rating Elo",
+          "eloCaption":     "Adattato alla forza dell'avversario",
+          "eloAria":        "Andamento del rating Elo nel tempo",
+          "poissonTitle":   "Distribuzione dei gol",
+          "poissonCaption": "Probabilità per esito",
+          "poissonAria":    "Distribuzione Poisson delle probabilità di gol"
+        }
+      },
+      {
+        "number": "03",
+        "title": "Riconoscimento di schemi",
+        "body": "I modelli statistici sono precisi ma limitati. Non sanno che una squadra spesso fatica dopo le pause per le nazionali. Non vedono che un certo arbitro estrae il 30% di cartellini in più rispetto alla media.",
+        "bodyExtra": "Qui entra in gioco lo strato di machine learning. Cerca schemi che i modelli statistici non vedono — contesto, anomalie, vantaggi storici. L'output è una correzione calibrata che rende i pronostici più accurati nel tempo.",
+        "visualLabels": {
+          "aria":    "Diagramma dello strato di riconoscimento di schemi",
+          "caption": "Decorativo — vedi /methodology per l'architettura reale"
+        }
+      },
+      {
+        "number": "04",
+        "title": "Blocca e pubblica",
+        "body": "Una volta generati, i pronostici vengono salvati nel nostro database con un timestamp pubblico prima del fischio d'inizio. Dopo quel momento, non possono più essere modificati. Né da noi, né da nessun altro.",
+        "bodyExtra": "È il meccanismo di trasparenza. Il timestamp è verificabile. Il pronostico originale resta pubblico per sempre. Che la previsione si riveli giusta o sbagliata, è lì nello storico.",
+        "visualLabels": {
+          "aria":   "Visualizzazione del timestamp di blocco del pronostico",
+          "status": "Pronostico salvato · Non più modificabile"
+        }
+      }
+    ]
+  },
+  "example": {
+    "h2": "Come appare {{accent}}in pratica{{/accent}}",
+    "subH2": "Per una tipica partita di Premier League, ecco cosa succede prima del blocco del pronostico.",
+    "steps": [
+      { "icon": "database",     "text": "Recuperare oltre 40 variabili per entrambe le squadre nelle ultime partite" },
+      { "icon": "trending-up",  "text": "Calcolare i rating Elo aggiustati alla forza dell'avversario"               },
+      { "icon": "bar-chart",    "text": "Generare distribuzioni Poisson dei gol per entrambe le squadre"             },
+      { "icon": "brain",        "text": "Applicare correzioni di machine learning per contesto e schemi"             },
+      { "icon": "calculator",   "text": "Produrre probabilità di esito, gol e altri mercati"                          },
+      { "icon": "lock",         "text": "Bloccare il pronostico con timestamp prima del fischio d'inizio"            }
+    ],
+    "ctaPrimary":   { "label": "Vedi i pronostici di oggi",      "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Leggi la metodologia completa",  "canonical": "/methodology" },
+    "mockupLabels": {
+      "leagueLine":    "Massima divisione · Partita 47",
+      "homeTeam":      "Squadra di casa",
+      "awayTeam":      "Squadra in trasferta",
+      "vs":            "vs",
+      "outputLabel":   "Output",
+      "variableHint":  "40+ input del motore",
+      "variablesAria": "Variabili di input del motore",
+      "aria":          "Illustrazione generica della generazione del pronostico"
     }
-  ],
-  "ctaPrimary": {
-    "label": "Vedi i livelli",
-    "canonical": "pricing"
   },
-  "ctaSecondary": {
-    "label": "Leggi la metodologia",
-    "canonical": "methodology"
+  "why": {
+    "h2": "Perché funziona {{accent}}meglio dell'istinto{{/accent}}",
+    "pillars": [
+      {
+        "icon":  "calculator",
+        "title": "Quantitativo, non istintivo",
+        "body":  "Ogni pronostico parte dai numeri. Niente 'ho una sensazione' — solo dati, modelli e output calibrati."
+      },
+      {
+        "icon":  "zap",
+        "title": "Dati in tempo reale",
+        "body":  "I pronostici si aggiornano continuamente quando arrivano nuove informazioni. Ultime formazioni, ultima forma, ultimo contesto — tutto viene incluso prima del blocco."
+      },
+      {
+        "icon":  "shield",
+        "title": "Trasparenza verificabile",
+        "body":  "Ogni pronostico è bloccato con un timestamp pubblico prima del fischio d'inizio. Puoi verificare l'accuratezza nel nostro storico pubblico — successi e fallimenti."
+      },
+      {
+        "icon":  "database",
+        "title": "40+ variabili, in ogni partita",
+        "body":  "La stessa analisi completa applicata a ogni partita su oltre 30 competizioni. Niente cherry-picking su quali partite copriamo."
+      }
+    ]
+  },
+  "tiers": {
+    "h2": "{{accent}}Stesso motore{{/accent}}, quattro livelli di accesso",
+    "subH2": "Ogni livello legge dallo stesso motore di pronostici. La differenza è quale fascia di qualità puoi vedere.",
+    "items": [
+      {
+        "badge":   "free",
+        "name":    "Free",
+        "tagline": "Un assaggio quotidiano del motore.",
+        "bullets": [
+          "Una manciata di pick gratuiti al giorno",
+          "Storico sempre pubblico",
+          "Oltre 30 competizioni coperte"
+        ]
+      },
+      {
+        "badge":   "silver",
+        "name":    "Silver",
+        "tagline": "Top 14 competizioni, da confidence media in su.",
+        "bullets": [
+          "Tutti i pick Silver più Free",
+          "Mercati standard nelle competizioni intermedie",
+          "Riepilogo email quotidiano"
+        ]
+      },
+      {
+        "badge":   "gold",
+        "name":    "Gold",
+        "tagline": "Top 10 competizioni, soglia di confidence più alta.",
+        "bullets": [
+          "Tutti i pick Gold più Silver e Free",
+          "Mercati premium inclusi",
+          "Pick of the Day in primo piano"
+        ]
+      },
+      {
+        "badge":   "platinum",
+        "name":    "Platinum",
+        "tagline": "Top 5 competizioni, fascia di confidence più alta.",
+        "bullets": [
+          "Tutti i pick Platinum più tutto il resto",
+          "Avvisi Telegram per pick ad alta confidence",
+          "Programma completo, bloccato con il massimo anticipo"
+        ]
+      }
+    ],
+    "ctaPrimary":   { "label": "Confronta i piani",              "canonical": "/pricing"     },
+    "ctaSecondary": { "label": "Vedi i pronostici gratuiti oggi","canonical": "/predictions" }
+  },
+  "methodologyTease": {
+    "h2": "Vuoi sapere esattamente quali {{accent}}modelli{{/accent}} usiamo?",
+    "body": "Questa pagina spiega cosa succede. La pagina di metodologia spiega esattamente come — quali varianti di Elo, quali modifiche di Poisson, quale architettura di machine learning, quali 40+ variabili. Se sei il tipo che preferisce verificare invece che fidarsi, lo trovi lì.",
+    "cta":  { "label": "Leggi la metodologia completa", "canonical": "/methodology" }
+  },
+  "faq": {
+    "h2": "FAQ sul funzionamento",
+    "questions": [
+      {
+        "q": "Quanto tempo serve per generare un pronostico?",
+        "a": "Il motore elabora l'intero programma giornaliero su oltre 30 competizioni in pochi minuti. Ogni partita viene generata, calibrata e bloccata singolarmente prima del fischio d'inizio."
+      },
+      {
+        "q": "Quanto sono accurati i pronostici?",
+        "a": "L'accuratezza varia per competizione, tipo di mercato e periodo. Non pubblichiamo una percentuale unica perché nasconderebbe questa variabilità. Lo storico completo è consultabile pubblicamente per vedere le prestazioni reali nel contesto."
+      },
+      {
+        "q": "Cosa rende questo servizio diverso dagli altri?",
+        "a": "Tre cose. Primo: ogni pronostico è bloccato prima del fischio d'inizio con un timestamp pubblico — altri possono modificare in seguito. Secondo: pubblichiamo successi e fallimenti — altri fanno cherry-picking. Terzo: la metodologia è interamente documentata — altri si appellano a un 'algoritmo segreto' che non puoi verificare."
+      },
+      {
+        "q": "Perché non mi dite quali pronostici seguire?",
+        "a": "Perché non siamo consulenti. Forniamo analisi statistiche. Come le usi è una tua decisione, in base alla tua tolleranza al rischio e al tuo giudizio. Noi diamo i dati; la scelta è tua."
+      },
+      {
+        "q": "Posso vedere come è stato generato uno specifico pronostico?",
+        "a": "Non a livello di variabili — esporrebbe la nostra ponderazione proprietaria. Ma la pagina di metodologia spiega il processo in dettaglio, e il timestamp bloccato di ogni pronostico dimostra che non c'è stata alcuna modifica successiva. Metodologia pubblica + pronostici bloccati offrono trasparenza verificabile senza esporre il modello stesso."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "{{accent}}Vedilo{{/accent}} in azione",
+    "subH2": "I pronostici gratuiti di oggi sono live.",
+    "body": "Hai letto come funziona il sistema. Ora vedi cosa produce. I pronostici gratuiti di oggi coprono Premier League, La Liga, Bundesliga e altro — bloccati, con timestamp e pronti per essere valutati.",
+    "ctaPrimary":   { "label": "Confronta i piani",         "canonical": "/pricing"    },
+    "ctaSecondary": { "label": "Vedi i pronostici di oggi", "canonical": "/predictions" }
   }
 }

@@ -1,0 +1,122 @@
+---
+/**
+ * Sectie 6 — 4-tier strip. Names are CANONICAL (see
+ * docs/tier_system_plan.md): Free / Silver / Gold / Platinum.
+ *
+ * Page does NOT show pick volumes, accuracy %, or time-windows —
+ * those live on /pricing where they're maintained alongside billing.
+ */
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
+import type { HowItWorksContent } from "@/content/pages/how-it-works/types";
+
+interface Props {
+  locale: Locale;
+  content: HowItWorksContent["tiers"];
+}
+const { locale, content } = Astro.props;
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+
+const badgeMap: Record<HowItWorksContent["tiers"]["items"][number]["badge"], { dot: string; ring: string }> = {
+  free:     { dot: "bg-charcoal-300",   ring: "ring-charcoal-300/40"  },
+  silver:   { dot: "bg-charcoal-500",   ring: "ring-charcoal-500/40"  },
+  gold:     { dot: "bg-[#3B82F6]",      ring: "ring-[#3B82F6]/40"     },
+  platinum: { dot: "bg-pitch-green-500", ring: "ring-pitch-green-500/40" },
+};
+---
+
+<Section surface="light-soft" spacing="lg" ariaLabelledby="tiers">
+  <Container size="lg">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2
+        id="tiers"
+        class="scroll-mt-24 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-charcoal-900"
+        set:html={parseAccent(content.h2)}
+      ></h2>
+      {content.subH2 && (
+        <p class="mt-4 text-base sm:text-lg text-charcoal-700 leading-[1.65]">
+          {content.subH2}
+        </p>
+      )}
+    </header>
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {content.items.map((tier) => (
+        <article class="tier-card">
+          <div class={`tier-card__badge ring-1 ${badgeMap[tier.badge].ring}`}>
+            <span class={`tier-card__dot ${badgeMap[tier.badge].dot}`}></span>
+            <span class="tier-card__name">{tier.name}</span>
+          </div>
+          <p class="tier-card__tagline">{tier.tagline}</p>
+          <ul class="tier-card__bullets">
+            {tier.bullets.map((b) => <li>{b}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <Button href={ctaPrimaryHref} variant="primary" size="md" surface="light">
+        {content.ctaPrimary.label}
+      </Button>
+      <Button href={ctaSecondaryHref} variant="secondary" size="md" surface="light">
+        {content.ctaSecondary.label}
+      </Button>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .tier-card {
+    background: var(--stadium-white-50, #fafaf9);
+    border: 1px solid var(--stadium-white-200, #e8e8e5);
+    border-radius: 0.875rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .tier-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: 999px;
+    width: fit-content;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: rgba(15, 20, 25, 0.04);
+  }
+  .tier-card__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .tier-card__name {
+    color: var(--charcoal-900, #0f1419);
+  }
+  .tier-card__tagline {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--charcoal-900, #0f1419);
+    margin: 0;
+    line-height: 1.4;
+  }
+  .tier-card__bullets {
+    margin: 0;
+    padding: 0 0 0 1rem;
+    list-style: disc;
+    font-size: 0.875rem;
+    color: var(--charcoal-700, #2a3140);
+    line-height: 1.55;
+  }
+  .tier-card__bullets li + li {
+    margin-top: 0.25rem;
+  }
+</style>

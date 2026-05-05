@@ -1,0 +1,64 @@
+---
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import USPItem from "@/components/ui/USPItem.astro";
+import WorkflowMockup from "@/components/how-it-works/WorkflowMockup.astro";
+import type { IconName } from "@/components/ui/icon-types";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
+import type { HowItWorksContent } from "@/content/pages/how-it-works/types";
+
+interface Props {
+  locale: Locale;
+  content: HowItWorksContent["example"];
+}
+const { locale, content } = Astro.props;
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+---
+
+<Section surface="light-grid" spacing="lg" ariaLabelledby="example">
+  <Container size="xl">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+      <div>
+        <h2
+          id="example"
+          class="scroll-mt-24 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-charcoal-900"
+          set:html={parseAccent(content.h2)}
+        ></h2>
+        {content.subH2 && (
+          <p class="mt-4 text-base sm:text-lg text-charcoal-700 leading-[1.65]">
+            {content.subH2}
+          </p>
+        )}
+
+        <ul class="mt-8 space-y-4">
+          {content.steps.map((step) => (
+            <li>
+              <USPItem
+                icon={step.icon as IconName}
+                text={step.text}
+                size="md"
+                surface="light"
+              />
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <Button href={ctaPrimaryHref} variant="primary" size="md" surface="light">
+            {content.ctaPrimary.label}
+          </Button>
+          <Button href={ctaSecondaryHref} variant="secondary" size="md" surface="light">
+            {content.ctaSecondary.label}
+          </Button>
+        </div>
+      </div>
+
+      <div class="order-first lg:order-last">
+        <WorkflowMockup labels={content.mockupLabels} />
+      </div>
+    </div>
+  </Container>
+</Section>

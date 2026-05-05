@@ -1,0 +1,160 @@
+---
+/**
+ * Stage 2 visual — Elo sparkline + Poisson goal-distribution bars,
+ * side-by-side. Pure inline SVG; no JS, no chart library.
+ *
+ * The numbers are deliberately illustrative — fixed shape, never
+ * implies a specific match. Styled as data viz with pitch-green accents.
+ */
+interface Props {
+  labels: Record<string, string>;
+}
+const { labels } = Astro.props as Props;
+
+// Elo sparkline points (12 weeks of fluctuation, gently trending up).
+const eloSeries = [62, 60, 64, 63, 67, 66, 70, 69, 72, 71, 75, 78];
+const eloMin = Math.min(...eloSeries);
+const eloMax = Math.max(...eloSeries);
+const eloPath = eloSeries
+  .map((v, i) => {
+    const x = (i / (eloSeries.length - 1)) * 100;
+    const y = 100 - ((v - eloMin) / (eloMax - eloMin)) * 100;
+    return `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`;
+  })
+  .join(" ");
+
+// Poisson distribution bars (probability of N goals scored).
+const poisson = [
+  { goals: 0, prob: 0.18 },
+  { goals: 1, prob: 0.32 },
+  { goals: 2, prob: 0.26 },
+  { goals: 3, prob: 0.14 },
+  { goals: 4, prob: 0.07 },
+  { goals: 5, prob: 0.03 },
+];
+const maxProb = Math.max(...poisson.map((p) => p.prob));
+---
+
+<div class="stat-models w-full max-w-md mx-auto">
+  <div class="stat-panel" aria-label={labels.eloAria ?? "Elo rating sparkline"}>
+    <p class="stat-panel__title">{labels.eloTitle ?? "Elo rating"}</p>
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="stat-panel__sparkline" aria-hidden="true">
+      <defs>
+        <linearGradient id="elo-fill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"   stop-color="rgba(0, 210, 106, 0.32)" />
+          <stop offset="100%" stop-color="rgba(0, 210, 106, 0)"    />
+        </linearGradient>
+      </defs>
+      <path d={`${eloPath} L100,100 L0,100 Z`} fill="url(#elo-fill)" />
+      <path d={eloPath} fill="none" stroke="#1FE07F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+      <circle
+        cx="100"
+        cy={(100 - ((eloSeries[eloSeries.length - 1] - eloMin) / (eloMax - eloMin)) * 100).toFixed(2)}
+        r="2.5"
+        fill="#1FE07F"
+        vector-effect="non-scaling-stroke"
+      />
+    </svg>
+    <p class="stat-panel__caption">{labels.eloCaption ?? ""}</p>
+  </div>
+
+  <div class="stat-panel" aria-label={labels.poissonAria ?? "Poisson goal distribution"}>
+    <p class="stat-panel__title">{labels.poissonTitle ?? "Goal distribution"}</p>
+    <div class="poisson-bars" aria-hidden="true">
+      {poisson.map((p, i) => (
+        <div
+          class="poisson-bar"
+          style={`--bar-h: ${(p.prob / maxProb) * 100}%; --bar-delay: ${i * 0.08}s;`}
+          data-goals={p.goals}
+        >
+          <span class="poisson-bar__fill"></span>
+          <span class="poisson-bar__label">{p.goals}</span>
+        </div>
+      ))}
+    </div>
+    <p class="stat-panel__caption">{labels.poissonCaption ?? ""}</p>
+  </div>
+</div>
+
+<style>
+  .stat-models {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  @media (min-width: 480px) {
+    .stat-models {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .stat-panel {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+    color: var(--white-soft, #e8eaef);
+  }
+  .stat-panel__title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--pitch-green-500, #00d26a);
+    margin: 0 0 0.625rem 0;
+  }
+  .stat-panel__caption {
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0.5rem 0 0 0;
+    line-height: 1.4;
+  }
+
+  /* Elo sparkline */
+  .stat-panel__sparkline {
+    width: 100%;
+    height: 64px;
+    display: block;
+  }
+
+  /* Poisson bars */
+  .poisson-bars {
+    height: 64px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    align-items: end;
+  }
+  .poisson-bar {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: stretch;
+  }
+  .poisson-bar__fill {
+    display: block;
+    height: var(--bar-h, 0%);
+    background: linear-gradient(180deg, #1FE07F 0%, #00B85A 100%);
+    border-radius: 3px 3px 0 0;
+    transform-origin: bottom;
+  }
+  .poisson-bar__label {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .poisson-bar__fill {
+      animation: poisson-grow 0.7s ease-out backwards;
+      animation-delay: var(--bar-delay, 0s);
+    }
+  }
+  @keyframes poisson-grow {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+</style>

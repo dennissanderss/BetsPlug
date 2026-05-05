@@ -1,53 +1,87 @@
 ---
 /**
- * /how-it-works — English root.
- * Locale variants live under src/pages/[locale]/[slug].astro and
- * delegate to the same HowItWorksPage component via the same loader.
+ * /how-it-works — educational, conversational page that explains how
+ * BetsPlug predictions are produced. EN root.
+ *
+ * NOT a duplicate of /methodology — that page is the technical
+ * deep-dive (formulas, model details). This page is a non-technical
+ * walkthrough for evaluation-stage visitors.
+ *
+ * No gambling terminology: "predictions", "outcomes", "matches",
+ * "forecast", "probability". Avoid bet/wager/odds/bookmaker/stake
+ * (except the explicit "not a bookmaker" positioning line).
  */
 import MarketingLayout from "@/layouts/MarketingLayout.astro";
-import HowItWorksPage from "@/components/how-it-works/HowItWorksPage.astro";
+
+import HowItWorksHero       from "@/components/how-it-works/HowItWorksHero.astro";
+import TheProblem           from "@/components/how-it-works/TheProblem.astro";
+import TheProcess           from "@/components/how-it-works/TheProcess.astro";
+import WorkedExample        from "@/components/how-it-works/WorkedExample.astro";
+import WhyItWorksBetter     from "@/components/how-it-works/WhyItWorksBetter.astro";
+import WhatYouGet           from "@/components/how-it-works/WhatYouGet.astro";
+import MethodologyTease     from "@/components/how-it-works/MethodologyTease.astro";
+import HowItWorksFAQ        from "@/components/how-it-works/HowItWorksFAQ.astro";
+import HowItWorksFinalCTA   from "@/components/how-it-works/HowItWorksFinalCTA.astro";
+
 import { loadHowItWorksContent } from "@/lib/how-it-works-page";
+import { stripAccent } from "@/lib/parseAccent";
 
 const locale = "en" as const;
 const content = await loadHowItWorksContent(locale);
 
 const SITE = "https://betsplug.com";
+const canonicalPath = "/how-it-works";
 
-// Schema.org HowTo + Breadcrumb. The HowTo type is the natural fit for
-// a six-step pipeline page and unlocks rich-result eligibility.
-const howToSchema = {
+const techArticleSchema = {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  name: content.meta.title,
+  "@type": "TechArticle",
+  headline: stripAccent(content.hero.h1),
   description: content.meta.description,
+  author: { "@type": "Organization", name: "BetsPlug" },
+  datePublished: "2026-05-05",
+  dateModified: content._meta.lastUpdated,
+  articleSection: "How it works",
   inLanguage: locale,
-  step: content.steps.map((s, i) => ({
-    "@type": "HowToStep",
-    position: i + 1,
-    name: s.title,
-    text: s.body,
-  })),
+  url: `${SITE}${canonicalPath}`,
 };
-
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-    { "@type": "ListItem", position: 2, name: "How it works", item: `${SITE}/how-it-works` },
+    { "@type": "ListItem", position: 2, name: "How it works", item: `${SITE}${canonicalPath}` },
   ],
+};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: content.faq.questions.map((q) => ({
+    "@type": "Question",
+    name: q.q,
+    acceptedAnswer: { "@type": "Answer", text: q.a },
+  })),
 };
 ---
 
 <MarketingLayout
   title={content.meta.title}
   description={content.meta.description}
-  canonicalPath="/how-it-works"
+  ogImage={content.meta.ogImage}
+  canonicalPath={canonicalPath}
 >
   <Fragment slot="head">
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(techArticleSchema)} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </Fragment>
 
-  <HowItWorksPage locale={locale} content={content} />
+  <HowItWorksHero       locale={locale} content={content.hero} />
+  <TheProblem                            content={content.problem} />
+  <TheProcess                            content={content.process} />
+  <WorkedExample        locale={locale} content={content.example} />
+  <WhyItWorksBetter                      content={content.why} />
+  <WhatYouGet           locale={locale} content={content.tiers} />
+  <MethodologyTease     locale={locale} content={content.methodologyTease} />
+  <HowItWorksFAQ                         content={content.faq} />
+  <HowItWorksFinalCTA   locale={locale} content={content.finalCta} />
 </MarketingLayout>

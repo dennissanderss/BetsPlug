@@ -1,0 +1,87 @@
+---
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import ProcessStage from "@/components/how-it-works/ProcessStage.astro";
+import DataSourcesVisual from "@/components/how-it-works/DataSourcesVisual.astro";
+import StatModelsVisual from "@/components/how-it-works/StatModelsVisual.astro";
+import PatternRecognitionVisual from "@/components/how-it-works/PatternRecognitionVisual.astro";
+import LockMechanismVisual from "@/components/how-it-works/LockMechanismVisual.astro";
+import { parseAccent } from "@/lib/parseAccent";
+import type { HowItWorksContent } from "@/content/pages/how-it-works/types";
+
+interface Props {
+  content: HowItWorksContent["process"];
+}
+const { content } = Astro.props;
+
+// Stage 0 = Data, 1 = Stats, 2 = Pattern, 3 = Lock
+const stages = content.stages;
+---
+
+<Section
+  surface="dark-corner-accent"
+  spacing="lg"
+  ariaLabelledby="process"
+>
+  <Container size="lg">
+    <header class="text-center max-w-2xl mx-auto">
+      <h2
+        id="process"
+        class="scroll-mt-24 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white-pure"
+        set:html={parseAccent(stages[0] ? content.h2 : "")}
+      ></h2>
+      {content.subH2 && (
+        <p class="mt-4 text-base sm:text-lg text-white-soft leading-[1.65]">
+          {content.subH2}
+        </p>
+      )}
+    </header>
+
+    <div class="mt-12">
+      {stages[0] && (
+        <ProcessStage
+          number={stages[0].number}
+          title={stages[0].title}
+          body={stages[0].body}
+          bodyExtra={stages[0].bodyExtra}
+          variant="image-right"
+        >
+          <DataSourcesVisual labels={stages[0].visualLabels} />
+        </ProcessStage>
+      )}
+      {stages[1] && (
+        <ProcessStage
+          number={stages[1].number}
+          title={stages[1].title}
+          body={stages[1].body}
+          bodyExtra={stages[1].bodyExtra}
+          variant="image-left"
+        >
+          <StatModelsVisual labels={stages[1].visualLabels} />
+        </ProcessStage>
+      )}
+      {stages[2] && (
+        <ProcessStage
+          number={stages[2].number}
+          title={stages[2].title}
+          body={stages[2].body}
+          bodyExtra={stages[2].bodyExtra}
+          variant="image-right"
+        >
+          <PatternRecognitionVisual labels={stages[2].visualLabels} />
+        </ProcessStage>
+      )}
+      {stages[3] && (
+        <ProcessStage
+          number={stages[3].number}
+          title={stages[3].title}
+          body={stages[3].body}
+          bodyExtra={stages[3].bodyExtra}
+          variant="image-left"
+        >
+          <LockMechanismVisual labels={stages[3].visualLabels} />
+        </ProcessStage>
+      )}
+    </div>
+  </Container>
+</Section>

@@ -2,62 +2,219 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-05",
-    "_note": "TODO: Native speaker review needed for nl. Hand-authored by Claude based on en.json source."
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "Hoe BetsPlug werkt — van wedstrijdlijst tot beoordeelde pick",
-    "description": "Zes stappen van een ruwe voetbalwedstrijd tot een beoordeelde voorspelling op je dashboard. Pure pijplijn-transparantie — geen marketingpraat."
+    "title": "Zo werkt BetsPlug — van data naar voorspelling | BetsPlug",
+    "description": "Een educatieve uitleg over hoe BetsPlug voetbalvoorspellingen genereert. Veertig+ variabelen per wedstrijd, statistische modellen, machine learning en voorspellingen die voor de aftrap worden vergrendeld."
   },
   "hero": {
     "kicker": "Hoe het werkt",
-    "title": "Van wedstrijdlijst naar beoordeelde pick — {{accent}}zes stappen{{/accent}}.",
-    "subtitle": "Geen tipster-mysterie. Elke voorspelling volgt dezelfde zes-stappen-pijplijn. Dezelfde engine voor iedereen — alleen de strengheid van het filter verschilt per tier."
+    "h1": "Van data naar voorspelling, {{accent}}elke wedstrijd{{/accent}}",
+    "subheadline": "Voetbaluitkomsten volgen statistische patronen. Ons systeem verwerkt 40+ variabelen per wedstrijd over 30+ competities — en vergrendelt elke voorspelling vóór de aftrap, zodat je de nauwkeurigheid zelf kunt controleren.",
+    "trustStrip": [
+      { "icon": "cpu",  "text": "AI-gedreven" },
+      { "icon": "lock", "text": "Vergrendeld vóór aftrap" },
+      { "icon": "eye",  "text": "Publieke track record" }
+    ],
+    "ctaPrimary":   { "label": "Bekijk voorspellingen vandaag", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Lees de methodologie",          "canonical": "/methodology" }
   },
-  "steps": [
-    {
-      "number": "01",
-      "icon": "database",
-      "title": "We verzamelen elke wedstrijd",
-      "body": "Elke ochtend halen we verse wedstrijden, recente uitslagen, teamvorm en onderlinge geschiedenis op uit 30+ competities — Premier League en Champions League bovenaan, helemaal tot MLS en J1 League. De data wordt elke minuut ververst, dus de engine werkt altijd met het laatste beeld."
-    },
-    {
-      "number": "02",
-      "icon": "cpu",
-      "title": "Onze engine scoort elke wedstrijd",
-      "body": "Voor elke aankomende wedstrijd vergelijkt de engine teamsterkte, recente vorm en historische patronen, en zet dat beeld om in één confidence-score. Alles onder de 55% gaat eraf — als de engine niet zeker is, publiceren we het niet."
-    },
-    {
-      "number": "03",
-      "icon": "layers",
-      "title": "Picks worden ingedeeld in tiers",
-      "body": "Elke pick die overblijft, komt in één van de vier tiers terecht op basis van hoe zeker de engine is en hoe sterk de competitie is. Free toont 45%+ historische nauwkeurigheid, Silver 60%+, Gold 70%+, Platinum 85%+. Je ziet altijd picks van jouw tier en lager — nooit andersom."
-    },
-    {
-      "number": "04",
-      "icon": "lock",
-      "title": "Picks vergrendelen vóór de aftrap",
-      "body": "Op het moment dat een pick wordt gepubliceerd, krijgt 'ie een publiek tijdstempel. Na de aftrap is die regel read-only. Geen achteraf bewerken, geen stille verwijderingen van missers — de lat die we leggen is de lat die we rapporteren."
-    },
-    {
-      "number": "05",
-      "icon": "check",
-      "title": "Wedstrijd eindigt, het resultaat wordt beoordeeld",
-      "body": "Als het laatste fluitsignaal klinkt, beoordeelt onze scheduler de voorspelling tegen het echte resultaat. Winst of verlies, beide gaan in het register. De cijfers op de prijspagina, het dashboard en het publieke track record lezen allemaal uit dezelfde evaluatietabel."
-    },
-    {
-      "number": "06",
-      "icon": "eye",
-      "title": "Je ziet het, je kunt het verifiëren",
-      "body": "Gratis bezoekers krijgen drie picks per dag op de homepage. Betaalde plannen ontgrendelen de volledige feed met winkans per wedstrijd, de Pick of the Day, strategie-backtesting, en (Platinum lifetime) een privé Telegram-kanaal. Het volledige track record blijft altijd publiek inzichtelijk."
+  "problem": {
+    "h2": "De meeste mensen voorspellen voetbal op {{accent}}intuïtie{{/accent}}",
+    "paragraphs": [
+      "Je kijkt een paar wedstrijden. Je leest een paar koppen. Je denkt te weten welk team in vorm is. Vervolgens maak je een voorspelling op basis van wat je voelt.",
+      "Intuïtie is niet nutteloos — maar werkt met misschien 5 of 10 datapunten. Je brein onthoudt de uitslag van afgelopen weekend en die ene dramatische treffer. Het vergeet de 60% van de wedstrijden waarin hetzelfde team anders speelde.",
+      "Het patroon achter voetbaluitkomsten is te complex voor intuïtie. Er zitten echte signalen in scoringscijfers, kwaliteit van de tegenstander, thuis/uit-splits, recente vorm en tientallen andere variabelen. Het signaal is er. Jouw brein kan het alleen niet allemaal tegelijk verwerken. Dat van ons wel."
+    ]
+  },
+  "process": {
+    "h2": "Vier stappen, {{accent}}elke voorspelling{{/accent}}",
+    "subH2": "Dit is wat er gebeurt tussen het inplannen van een wedstrijd en het vergrendelen van onze voorspelling.",
+    "stages": [
+      {
+        "number": "01",
+        "title": "Data-inname",
+        "body": "We halen wedstrijddata uit officiële feeds van 30+ competities — opstellingen, gemaakte goals, tegengoals, onderlinge historie, recente vorm en 40+ andere variabelen per wedstrijd. Updates lopen continu door zodra nieuwe informatie binnenkomt.",
+        "visualLabels": {
+          "goals":    "Gemaakte goals",
+          "form":     "Recente vorm",
+          "h2h":      "Onderling",
+          "homeAway": "Thuis / uit",
+          "squad":    "Selectiewijzigingen",
+          "context":  "Wedstrijdcontext",
+          "schedule": "Speeldichtheid",
+          "defense":  "Defensieve cijfers"
+        }
+      },
+      {
+        "number": "02",
+        "title": "Statistische modellen",
+        "body": "Twee bewezen aanpakken doen het rekenwerk. Elo-ratings volgen de relatieve sterkte van elk team, gebaseerd op honderden eerdere wedstrijden. Poisson-modellen berekenen scoringskansen door aanvallende en verdedigende ratio's te combineren.",
+        "bodyExtra": "Elo geeft ons 'hoe sterk is dit team nu'. Poisson geeft ons 'hoeveel goals zullen er waarschijnlijk vallen'. Samen vormen ze de statistische basis voor elke voorspelling.",
+        "visualLabels": {
+          "eloTitle":       "Elo-rating",
+          "eloCaption":     "Gecorrigeerd voor sterkte tegenstander",
+          "eloAria":        "Verloop van Elo-rating over tijd",
+          "poissonTitle":   "Goalverdeling",
+          "poissonCaption": "Kans per uitkomst",
+          "poissonAria":    "Poisson-kansverdeling van goals"
+        }
+      },
+      {
+        "number": "03",
+        "title": "Patroonherkenning",
+        "body": "Statistische modellen zijn precies maar beperkt. Ze weten niet dat een team vaak worstelt na een interlandperiode. Ze zien niet dat één scheidsrechter 30% meer kaarten geeft dan gemiddeld.",
+        "bodyExtra": "Daar komt de machine-learning-laag in beeld. Die kijkt naar patronen die de statistische modellen missen — context, anomalieën, historische randjes. De output is een gekalibreerde correctie waardoor voorspellingen mettertijd nauwkeuriger worden.",
+        "visualLabels": {
+          "aria":    "Diagram van de patroonherkenningslaag",
+          "caption": "Decoratief — zie /methodology voor de werkelijke architectuur"
+        }
+      },
+      {
+        "number": "04",
+        "title": "Vergrendelen en publiceren",
+        "body": "Zodra voorspellingen gegenereerd zijn, leggen we ze vast in onze database met een publieke tijdstempel vóór de aftrap. Na dat moment kunnen ze niet meer worden bewerkt. Niet door ons, niet door iemand anders.",
+        "bodyExtra": "Dat is het transparantiemechanisme. De tijdstempel is verifieerbaar. De originele voorspelling blijft voorgoed publiek zichtbaar. Of de uitkomst nu klopt of niet — hij staat in de track record.",
+        "visualLabels": {
+          "aria":   "Tijdstempel-display van de voorspellingsvergrendeling",
+          "status": "Voorspelling vastgelegd · Niet meer aanpasbaar"
+        }
+      }
+    ]
+  },
+  "example": {
+    "h2": "Hoe dit er {{accent}}in de praktijk{{/accent}} uitziet",
+    "subH2": "Voor een typische Premier League-wedstrijd gebeurt dit voordat we de voorspelling vergrendelen.",
+    "steps": [
+      { "icon": "database",     "text": "40+ variabelen ophalen voor beide teams over hun laatste wedstrijden" },
+      { "icon": "trending-up",  "text": "Elo-ratings berekenen, gecorrigeerd voor sterkte van de tegenstander" },
+      { "icon": "bar-chart",    "text": "Poisson-goalverdelingen genereren voor beide teams"                  },
+      { "icon": "brain",        "text": "Machine-learning-correcties toepassen voor context en patronen"      },
+      { "icon": "calculator",   "text": "Kansen uitrekenen voor uitkomst, goals en andere markten"            },
+      { "icon": "lock",         "text": "Voorspelling vergrendelen met tijdstempel vóór de aftrap"             }
+    ],
+    "ctaPrimary":   { "label": "Bekijk voorspellingen vandaag", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Lees de volledige methodologie","canonical": "/methodology" },
+    "mockupLabels": {
+      "leagueLine":    "Topdivisie · Wedstrijd 47",
+      "homeTeam":      "Thuisploeg",
+      "awayTeam":      "Uitploeg",
+      "vs":            "vs",
+      "outputLabel":   "Output",
+      "variableHint":  "40+ engine-inputs",
+      "variablesAria": "Engine-invoervariabelen",
+      "aria":          "Generieke illustratie van het voorspellingsproces"
     }
-  ],
-  "ctaPrimary": {
-    "label": "Bekijk de tiers",
-    "canonical": "pricing"
   },
-  "ctaSecondary": {
-    "label": "Lees de methodologie",
-    "canonical": "methodology"
+  "why": {
+    "h2": "Waarom dit {{accent}}beter werkt{{/accent}} dan raden",
+    "pillars": [
+      {
+        "icon":  "calculator",
+        "title": "Kwantitatief, geen gevoel",
+        "body":  "Elke voorspelling start vanuit getallen. Geen 'ik heb er een goed gevoel over' — alleen data, modellen en gekalibreerde uitkomsten."
+      },
+      {
+        "icon":  "zap",
+        "title": "Realtime data",
+        "body":  "Voorspellingen worden continu bijgewerkt zodra er nieuwe informatie is. Laatste opstellingen, laatste vorm, laatste context — alles voor het vergrendelen meegenomen."
+      },
+      {
+        "icon":  "shield",
+        "title": "Aantoonbaar transparant",
+        "body":  "Elke voorspelling wordt vergrendeld met een publieke tijdstempel vóór de aftrap. Je kunt de nauwkeurigheid verifiëren in onze publieke track record — winst én verlies."
+      },
+      {
+        "icon":  "database",
+        "title": "40+ variabelen, elke wedstrijd",
+        "body":  "Dezelfde uitgebreide analyse op elke wedstrijd in 30+ competities. Geen cherry-picking welke wedstrijden we behandelen."
+      }
+    ]
+  },
+  "tiers": {
+    "h2": "{{accent}}Dezelfde engine{{/accent}}, vier toegangsniveaus",
+    "subH2": "Elk niveau leest uit dezelfde voorspellingsengine. Het verschil zit in welke kwaliteitsbanden je ziet.",
+    "items": [
+      {
+        "badge":   "free",
+        "name":    "Free",
+        "tagline": "Een dagelijkse kennismaking met de engine.",
+        "bullets": [
+          "Een handvol gratis picks per dag",
+          "Track record altijd publiek zichtbaar",
+          "30+ competities gedekt"
+        ]
+      },
+      {
+        "badge":   "silver",
+        "name":    "Silver",
+        "tagline": "Top-14 competities, vanaf middenhoge confidence.",
+        "bullets": [
+          "Alle Silver-band picks plus Free",
+          "Standaardmarkten in middentier-competities",
+          "Dagelijkse e-mail digest"
+        ]
+      },
+      {
+        "badge":   "gold",
+        "name":    "Gold",
+        "tagline": "Top-10 competities, hogere confidence-drempel.",
+        "bullets": [
+          "Alle Gold-band picks plus Silver en Free",
+          "Premium markten inbegrepen",
+          "Pick of the Day eerst zichtbaar"
+        ]
+      },
+      {
+        "badge":   "platinum",
+        "name":    "Platinum",
+        "tagline": "Top-5 competities, hoogste confidence-band.",
+        "bullets": [
+          "Alle Platinum-band picks plus alles eronder",
+          "Telegram-alerts voor high-confidence picks",
+          "Volledige slate, vergrendeld met maximale voorsprong"
+        ]
+      }
+    ],
+    "ctaPrimary":   { "label": "Vergelijk plannen",                "canonical": "/pricing"     },
+    "ctaSecondary": { "label": "Bekijk gratis voorspellingen vandaag","canonical": "/predictions" }
+  },
+  "methodologyTease": {
+    "h2": "Wil je precies weten welke {{accent}}modellen{{/accent}} we gebruiken?",
+    "body": "Deze pagina legt uit wát er gebeurt. De methodologie-pagina legt uit hoé precies — welke Elo-varianten, welke Poisson-aanpassingen, welke machine-learning-architectuur, welke 40+ variabelen. Als je het type bent dat liever verifieert dan vertrouwt, vind je het daar.",
+    "cta":  { "label": "Lees de volledige methodologie", "canonical": "/methodology" }
+  },
+  "faq": {
+    "h2": "FAQ over hoe het werkt",
+    "questions": [
+      {
+        "q": "Hoe lang duurt het om een voorspelling te genereren?",
+        "a": "De engine verwerkt het volledige dagschema over 30+ competities in minuten. Elke wedstrijd wordt apart gegenereerd, gekalibreerd en vergrendeld vóór de aftrap."
+      },
+      {
+        "q": "Hoe nauwkeurig zijn de voorspellingen?",
+        "a": "Nauwkeurigheid varieert per competitie, markttype en periode. We publiceren bewust geen enkel hoofdcijfer — dat zou die variantie verbergen. De volledige track record is publiek doorzoekbaar, zodat je de werkelijke prestaties in context kunt zien."
+      },
+      {
+        "q": "Wat maakt dit anders dan andere voorspeldiensten?",
+        "a": "Drie dingen. Ten eerste: elke voorspelling wordt vóór de aftrap vergrendeld met een publieke tijdstempel — anderen kunnen achteraf bewerken. Ten tweede: we publiceren wins én losses — anderen doen aan cherry-picking. Ten derde: de methodologie is volledig gedocumenteerd — anderen leunen op 'geheim algoritme'-claims die je niet kunt controleren."
+      },
+      {
+        "q": "Waarom vertellen jullie me niet welke voorspellingen ik moet volgen?",
+        "a": "Omdat we geen adviseurs zijn. Wij leveren statistische analyse. Hoe je die analyse gebruikt, is jouw beslissing op basis van eigen risicotolerantie en oordeel. Wij geven je de data; jij maakt de keuze."
+      },
+      {
+        "q": "Kan ik zien hoe een specifieke voorspelling tot stand kwam?",
+        "a": "Niet op variabele-niveau — dat zou onze proprietary weging blootleggen. Maar de methodologie-pagina legt het proces uitvoerig uit, en de vergrendelde tijdstempel op elke voorspelling bewijst dat er niets is aangepast achteraf. Publieke methodologie + vergrendelde voorspellingen samen geven je verifieerbare transparantie zonder het model zelf bloot te leggen."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "{{accent}}Zie het{{/accent}} in actie",
+    "subH2": "De gratis voorspellingen van vandaag staan live.",
+    "body": "Je hebt gelezen hoe het systeem werkt. Bekijk nu wat het oplevert. De gratis voorspellingen van vandaag dekken de Premier League, La Liga, Bundesliga en meer — vergrendeld, getimestempeld, klaar voor jou om te beoordelen.",
+    "ctaPrimary":   { "label": "Bekijk voorspellingen vandaag", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Vergelijk plannen",             "canonical": "/pricing"    }
   }
 }

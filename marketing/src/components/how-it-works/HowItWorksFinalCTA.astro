@@ -1,0 +1,44 @@
+---
+import Section from "@/components/ui/Section.astro";
+import Container from "@/components/ui/Container.astro";
+import Button from "@/components/ui/Button.astro";
+import { getLocalizedPath, type Locale } from "@/lib/i18n";
+import { parseAccent } from "@/lib/parseAccent";
+import type { HowItWorksContent } from "@/content/pages/how-it-works/types";
+
+interface Props {
+  locale: Locale;
+  content: HowItWorksContent["finalCta"];
+}
+const { locale, content } = Astro.props;
+const ctaPrimaryHref = getLocalizedPath(content.ctaPrimary.canonical, locale);
+const ctaSecondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
+---
+
+<Section surface="conversion" spacing="lg" ariaLabelledby="hiw-finalcta-h2">
+  <Container size="md" class="text-center">
+    <h2
+      id="hiw-finalcta-h2"
+      class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white-pure"
+      set:html={parseAccent(content.h2)}
+    ></h2>
+    {content.subH2 && (
+      <p class="mt-4 text-base sm:text-lg leading-[1.6] text-white-soft max-w-xl mx-auto">
+        {content.subH2}
+      </p>
+    )}
+    {content.body && (
+      <p class="mt-3 text-sm sm:text-base leading-[1.6] text-white-muted max-w-2xl mx-auto">
+        {content.body}
+      </p>
+    )}
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <Button href={ctaPrimaryHref} variant="primary" size="lg" surface="dark">
+        {content.ctaPrimary.label}
+      </Button>
+      <Button href={ctaSecondaryHref} variant="secondary" size="lg" surface="dark">
+        {content.ctaSecondary.label}
+      </Button>
+    </div>
+  </Container>
+</Section>

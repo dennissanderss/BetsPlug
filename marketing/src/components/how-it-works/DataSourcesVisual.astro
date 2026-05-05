@@ -1,0 +1,132 @@
+---
+/**
+ * Stage 1 visual — 8 data-category badges in a deliberately uneven
+ * grid with subtle ambient float. Each badge: small icon + label +
+ * mini placeholder data row.
+ *
+ * Layout: CSS Grid with hand-tuned column spans so the badges read
+ * as "scattered" rather than rigid. Pure CSS animation; gated behind
+ * prefers-reduced-motion.
+ */
+import Icon from "@/components/ui/Icon.astro";
+import type { IconName } from "@/components/ui/icon-types";
+
+interface Props {
+  labels: Record<string, string>;
+}
+const { labels } = Astro.props as Props;
+
+// Eight canonical data categories. Slot positions pick a slightly
+// asymmetric layout (3 cols × 4 rows with deliberate gaps) so the
+// arrangement feels organic rather than tabular.
+type DataItem = {
+  key: string;
+  icon: IconName;
+  hint: string;
+  /** column-start / row-start within the 3×4 grid */
+  col: number;
+  row: number;
+};
+
+const items: DataItem[] = [
+  { key: "goals",    icon: "trending-up", hint: "↗ 2.1 / match", col: 1, row: 1 },
+  { key: "form",     icon: "activity",    hint: "W W D L W",     col: 3, row: 1 },
+  { key: "h2h",      icon: "git-compare", hint: "12 prior",      col: 2, row: 2 },
+  { key: "homeAway", icon: "home",        hint: "+18% home",     col: 1, row: 3 },
+  { key: "squad",    icon: "users",       hint: "−2 starters",   col: 3, row: 2 },
+  { key: "context",  icon: "calendar",    hint: "MD 28",         col: 1, row: 2 },
+  { key: "schedule", icon: "clock",       hint: "3-day rest",    col: 3, row: 3 },
+  { key: "defense",  icon: "shield",      hint: "0.9 xGA",       col: 2, row: 4 },
+];
+---
+
+<div
+  class="data-sources w-full max-w-md mx-auto"
+  role="img"
+  aria-label="Data categories the engine ingests per match"
+>
+  <div class="data-sources__grid">
+    {items.map((item, i) => (
+      <div
+        class="data-badge"
+        style={`grid-column: ${item.col}; grid-row: ${item.row}; --float-delay: ${i * 0.4}s;`}
+      >
+        <span class="data-badge__icon">
+          <Icon name={item.icon} size={16} />
+        </span>
+        <span class="data-badge__body">
+          <span class="data-badge__label">{labels[item.key] ?? item.key}</span>
+          <span class="data-badge__hint">{item.hint}</span>
+        </span>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .data-sources {
+    padding: 0.5rem;
+  }
+  .data-sources__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: minmax(48px, auto);
+    gap: 0.625rem 0.5rem;
+  }
+  .data-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.625rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--white-soft, #e8eaef);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  }
+  .data-badge__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 0.4375rem;
+    background: rgba(0, 210, 106, 0.14);
+    color: var(--pitch-green-500, #00d26a);
+    flex-shrink: 0;
+  }
+  .data-badge__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .data-badge__label {
+    font-weight: 600;
+    color: var(--white-pure, #ffffff);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .data-badge__hint {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.55);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .data-badge {
+      animation: data-badge-float 6s ease-in-out infinite;
+      animation-delay: var(--float-delay, 0s);
+      will-change: transform;
+    }
+  }
+
+  @keyframes data-badge-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+</style>

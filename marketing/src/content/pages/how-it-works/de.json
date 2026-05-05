@@ -2,62 +2,219 @@
   "_meta": {
     "translationStatus": "ai-generated",
     "needsReview": true,
-    "lastUpdated": "2026-05-05",
-    "_note": "TODO: Native speaker review needed for de. Hand-authored by Claude based on en.json source."
+    "lastUpdated": "2026-05-05"
   },
   "meta": {
-    "title": "Wie BetsPlug funktioniert — von der Spielliste zum bewerteten Pick",
-    "description": "Sechs Schritte von einer rohen Fußballbegegnung bis zur bewerteten Vorhersage auf Ihrem Dashboard. Klare Pipeline-Transparenz — keine Marketing-Floskeln."
+    "title": "Wie BetsPlug funktioniert — von Daten zur Vorhersage | BetsPlug",
+    "description": "Eine verständliche Erklärung, wie BetsPlug Fußballvorhersagen erzeugt. Über 40 Variablen pro Spiel, statistische Modelle, maschinelles Lernen und Vorhersagen, die vor dem Anpfiff gesperrt werden."
   },
   "hero": {
     "kicker": "Wie es funktioniert",
-    "title": "Von der Spielliste zum bewerteten Pick — {{accent}}sechs Schritte{{/accent}}.",
-    "subtitle": "Kein Tipster-Geheimnis. Jede Vorhersage durchläuft dieselbe sechsstufige Pipeline. Dieselbe Engine für alle — nur die Strenge des Filters ändert sich pro Tier."
+    "h1": "Von Daten zur Vorhersage, {{accent}}bei jedem Spiel{{/accent}}",
+    "subheadline": "Fußballergebnisse folgen statistischen Mustern. Unser System verarbeitet 40+ Variablen pro Spiel über 30+ Ligen — und sperrt jede Vorhersage vor dem Anpfiff, damit du die Genauigkeit selbst prüfen kannst.",
+    "trustStrip": [
+      { "icon": "cpu",  "text": "KI-gestützt" },
+      { "icon": "lock", "text": "Vor dem Anpfiff gesperrt" },
+      { "icon": "eye",  "text": "Öffentlicher Track Record" }
+    ],
+    "ctaPrimary":   { "label": "Heutige Vorhersagen ansehen", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Methodik lesen",              "canonical": "/methodology" }
   },
-  "steps": [
-    {
-      "number": "01",
-      "icon": "database",
-      "title": "Wir erfassen jedes Spiel",
-      "body": "Jeden Morgen holen wir frische Spielpläne, aktuelle Ergebnisse, Teamform und direkte Vergleiche aus 30+ Ligen — Premier League und Champions League an der Spitze, bis hinunter zu MLS und J1 League. Die Daten aktualisieren sich jede Minute, sodass die Engine immer mit dem aktuellen Bild arbeitet."
-    },
-    {
-      "number": "02",
-      "icon": "cpu",
-      "title": "Unsere Engine bewertet jedes Spiel",
-      "body": "Für jedes anstehende Spiel vergleicht die Engine Teamstärke, aktuelle Form und historische Muster und macht aus dem Bild einen einzelnen Vertrauenswert. Alles unter 55% fliegt raus — wenn die Engine sich nicht sicher ist, veröffentlichen wir es nicht."
-    },
-    {
-      "number": "03",
-      "icon": "layers",
-      "title": "Picks werden in Tiers einsortiert",
-      "body": "Jeder verbleibende Pick landet in einem von vier Tiers, abhängig davon, wie sicher die Engine ist und wie stark die Liga ist. Free zeigt 45%+ historische Genauigkeit, Silver 60%+, Gold 70%+, Platinum 85%+. Sie sehen immer Picks Ihres Tiers und darunter — nie umgekehrt."
-    },
-    {
-      "number": "04",
-      "icon": "lock",
-      "title": "Picks werden vor dem Anpfiff gesperrt",
-      "body": "Sobald ein Pick veröffentlicht wird, erhält er einen öffentlichen Zeitstempel. Nach dem Anpfiff ist diese Zeile nur lesbar. Keine nachträglichen Bearbeitungen, keine stillen Löschungen von Fehlern — die Latte, die wir setzen, ist die Latte, die wir berichten."
-    },
-    {
-      "number": "05",
-      "icon": "check",
-      "title": "Spiel endet, das Ergebnis wird bewertet",
-      "body": "Wenn der Schlusspfiff ertönt, bewertet unser Scheduler die Vorhersage gegen das tatsächliche Ergebnis. Gewinn oder Verlust, beide kommen ins Register. Die Zahlen auf der Preisseite, im Dashboard und im öffentlichen Track Record lesen alle aus derselben Bewertungstabelle."
-    },
-    {
-      "number": "06",
-      "icon": "eye",
-      "title": "Sie sehen es, Sie können es überprüfen",
-      "body": "Kostenlose Besucher erhalten drei Picks pro Tag auf der Startseite. Bezahlte Pläne schalten den vollständigen Feed mit Siegwahrscheinlichkeit pro Spiel, dem Pick of the Day, Strategie-Backtesting und (Platinum Lifetime) einem privaten Telegram-Kanal frei. Der vollständige Track Record ist immer öffentlich einsehbar."
+  "problem": {
+    "h2": "Die meisten sagen Fußball aus dem {{accent}}Bauch heraus{{/accent}} voraus",
+    "paragraphs": [
+      "Du siehst dir ein paar Spiele an. Du liest ein paar Schlagzeilen. Du glaubst zu wissen, welches Team in Form ist. Und dann triffst du eine Vorhersage nach Gefühl.",
+      "Intuition ist nicht nutzlos — aber sie arbeitet vielleicht mit 5 oder 10 Datenpunkten. Dein Gehirn merkt sich das letzte Wochenend-Ergebnis und das spektakuläre Tor. Es vergisst die 60% der Spiele, in denen dasselbe Team völlig anders gespielt hat.",
+      "Das Muster hinter Fußballergebnissen ist zu komplex für Intuition. Es gibt echte Signale in Torquoten, Gegnerstärke, Heim-/Auswärts-Splits, aktueller Form und Dutzenden weiterer Variablen. Das Signal ist da. Dein Gehirn kann es nur nicht alles auf einmal verarbeiten. Unseres schon."
+    ]
+  },
+  "process": {
+    "h2": "Vier Stufen, {{accent}}jede Vorhersage{{/accent}}",
+    "subH2": "Das passiert zwischen dem Ansetzen eines Spiels und dem Sperren unserer Vorhersage.",
+    "stages": [
+      {
+        "number": "01",
+        "title": "Datenaufnahme",
+        "body": "Wir ziehen Spieldaten aus offiziellen Feeds aus 30+ Ligen — Aufstellungen, geschossene Tore, Gegentore, direkte Vergleiche, aktuelle Form und 40+ weitere Variablen pro Spiel. Updates laufen kontinuierlich, sobald neue Informationen verfügbar sind.",
+        "visualLabels": {
+          "goals":    "Geschossene Tore",
+          "form":     "Aktuelle Form",
+          "h2h":      "Direkter Vergleich",
+          "homeAway": "Heim / Auswärts",
+          "squad":    "Kaderwechsel",
+          "context":  "Spielkontext",
+          "schedule": "Spieldichte",
+          "defense":  "Defensivwerte"
+        }
+      },
+      {
+        "number": "02",
+        "title": "Statistische Modelle",
+        "body": "Zwei bewährte Ansätze übernehmen die Mathematik. Elo-Ratings verfolgen die relative Stärke jedes Teams auf Basis hunderter vergangener Spiele. Poisson-Modelle berechnen Torwahrscheinlichkeiten durch Kombination von Offensiv- und Defensivraten.",
+        "bodyExtra": "Elo sagt uns 'wie stark ist dieses Team gerade'. Poisson sagt uns 'wie viele Tore werden voraussichtlich fallen'. Zusammen bilden sie die statistische Grundlage jeder Vorhersage.",
+        "visualLabels": {
+          "eloTitle":       "Elo-Rating",
+          "eloCaption":     "Angepasst an Gegnerstärke",
+          "eloAria":        "Verlauf des Elo-Ratings über die Zeit",
+          "poissonTitle":   "Torverteilung",
+          "poissonCaption": "Wahrscheinlichkeit pro Ergebnis",
+          "poissonAria":    "Poisson-Wahrscheinlichkeitsverteilung der Tore"
+        }
+      },
+      {
+        "number": "03",
+        "title": "Mustererkennung",
+        "body": "Statistische Modelle sind präzise, aber begrenzt. Sie wissen nicht, dass eine Mannschaft nach Länderspielpausen oft schwächelt. Sie sehen nicht, dass ein bestimmter Schiedsrichter 30% mehr Karten zeigt als der Durchschnitt.",
+        "bodyExtra": "Hier setzt die Machine-Learning-Schicht an. Sie sucht nach Mustern, die die statistischen Modelle übersehen — Kontext, Anomalien, historische Vorteile. Die Ausgabe ist eine kalibrierte Korrektur, die Vorhersagen mit der Zeit genauer macht.",
+        "visualLabels": {
+          "aria":    "Diagramm der Mustererkennungsschicht",
+          "caption": "Dekorativ — siehe /methodology für die tatsächliche Architektur"
+        }
+      },
+      {
+        "number": "04",
+        "title": "Sperren und veröffentlichen",
+        "body": "Sobald Vorhersagen erzeugt sind, werden sie mit einem öffentlichen Zeitstempel vor dem Anpfiff in unserer Datenbank festgeschrieben. Danach lassen sie sich nicht mehr bearbeiten. Nicht von uns, nicht von irgendjemandem.",
+        "bodyExtra": "Das ist der Transparenzmechanismus. Der Zeitstempel ist überprüfbar. Die ursprüngliche Vorhersage bleibt für immer öffentlich. Egal ob die Vorhersage richtig oder falsch lag — sie steht im Track Record.",
+        "visualLabels": {
+          "aria":   "Zeitstempel-Anzeige der Vorhersagensperrung",
+          "status": "Vorhersage festgeschrieben · Nicht mehr änderbar"
+        }
+      }
+    ]
+  },
+  "example": {
+    "h2": "Wie das {{accent}}in der Praxis{{/accent}} aussieht",
+    "subH2": "Bei einem typischen Premier-League-Spiel passiert Folgendes, bevor wir die Vorhersage sperren.",
+    "steps": [
+      { "icon": "database",     "text": "40+ Variablen für beide Mannschaften aus den letzten Spielen abrufen" },
+      { "icon": "trending-up",  "text": "Elo-Ratings unter Berücksichtigung der Gegnerstärke berechnen"      },
+      { "icon": "bar-chart",    "text": "Poisson-Torverteilungen für beide Mannschaften erzeugen"             },
+      { "icon": "brain",        "text": "Machine-Learning-Korrekturen für Kontext und Muster anwenden"        },
+      { "icon": "calculator",   "text": "Wahrscheinlichkeiten für Ausgang, Tore und weitere Märkte ausgeben" },
+      { "icon": "lock",         "text": "Vorhersage mit Zeitstempel vor dem Anpfiff sperren"                 }
+    ],
+    "ctaPrimary":   { "label": "Heutige Vorhersagen ansehen", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Vollständige Methodik lesen", "canonical": "/methodology" },
+    "mockupLabels": {
+      "leagueLine":    "Topliga · Spiel 47",
+      "homeTeam":      "Heimmannschaft",
+      "awayTeam":      "Auswärtsmannschaft",
+      "vs":            "vs",
+      "outputLabel":   "Output",
+      "variableHint":  "40+ Engine-Inputs",
+      "variablesAria": "Engine-Eingabevariablen",
+      "aria":          "Generische Darstellung der Vorhersagenerzeugung"
     }
-  ],
-  "ctaPrimary": {
-    "label": "Tiers ansehen",
-    "canonical": "pricing"
   },
-  "ctaSecondary": {
-    "label": "Methodik lesen",
-    "canonical": "methodology"
+  "why": {
+    "h2": "Warum das {{accent}}besser funktioniert{{/accent}} als raten",
+    "pillars": [
+      {
+        "icon":  "calculator",
+        "title": "Quantitativ, nicht aus dem Bauch",
+        "body":  "Jede Vorhersage beginnt mit Zahlen. Kein 'ich habe ein gutes Gefühl' — nur Daten, Modelle und kalibrierte Ergebnisse."
+      },
+      {
+        "icon":  "zap",
+        "title": "Echtzeitdaten",
+        "body":  "Vorhersagen werden laufend aktualisiert, sobald neue Informationen verfügbar sind. Aktuelle Aufstellungen, aktuelle Form, aktueller Kontext — alles fließt vor dem Sperren ein."
+      },
+      {
+        "icon":  "shield",
+        "title": "Nachweislich transparent",
+        "body":  "Jede Vorhersage wird vor dem Anpfiff mit einem öffentlichen Zeitstempel gesperrt. Du kannst die Genauigkeit in unserem öffentlichen Track Record überprüfen — Treffer und Fehlversuche."
+      },
+      {
+        "icon":  "database",
+        "title": "40+ Variablen, jedes Spiel",
+        "body":  "Die gleiche umfassende Analyse für jedes Spiel in 30+ Ligen. Kein Cherry-Picking, welche Spiele wir behandeln."
+      }
+    ]
+  },
+  "tiers": {
+    "h2": "{{accent}}Dieselbe Engine{{/accent}}, vier Zugriffsstufen",
+    "subH2": "Jede Stufe liest aus derselben Vorhersage-Engine. Der Unterschied liegt darin, welche Qualitätsbänder du siehst.",
+    "items": [
+      {
+        "badge":   "free",
+        "name":    "Free",
+        "tagline": "Ein täglicher Vorgeschmack auf die Engine.",
+        "bullets": [
+          "Eine Handvoll kostenloser Picks pro Tag",
+          "Track Record immer öffentlich sichtbar",
+          "30+ Ligen abgedeckt"
+        ]
+      },
+      {
+        "badge":   "silver",
+        "name":    "Silver",
+        "tagline": "Top-14-Ligen, ab mittlerer Confidence.",
+        "bullets": [
+          "Alle Silver-Picks plus Free",
+          "Standardmärkte in mittleren Ligen",
+          "Tägliche E-Mail-Zusammenfassung"
+        ]
+      },
+      {
+        "badge":   "gold",
+        "name":    "Gold",
+        "tagline": "Top-10-Ligen, höhere Confidence-Schwelle.",
+        "bullets": [
+          "Alle Gold-Picks plus Silver und Free",
+          "Premium-Märkte enthalten",
+          "Pick of the Day zuerst sichtbar"
+        ]
+      },
+      {
+        "badge":   "platinum",
+        "name":    "Platinum",
+        "tagline": "Top-5-Ligen, höchstes Confidence-Band.",
+        "bullets": [
+          "Alle Platinum-Picks plus alles darunter",
+          "Telegram-Alerts für High-Confidence-Picks",
+          "Vollständiger Slate, mit maximalem Vorlauf gesperrt"
+        ]
+      }
+    ],
+    "ctaPrimary":   { "label": "Pläne vergleichen",                  "canonical": "/pricing"     },
+    "ctaSecondary": { "label": "Kostenlose Vorhersagen heute ansehen","canonical": "/predictions" }
+  },
+  "methodologyTease": {
+    "h2": "Willst du genau wissen, welche {{accent}}Modelle{{/accent}} wir verwenden?",
+    "body": "Diese Seite erklärt, was passiert. Die Methodik-Seite erklärt, wie genau — welche Elo-Varianten, welche Poisson-Anpassungen, welche Machine-Learning-Architektur, welche 40+ Variablen. Wer lieber prüft als vertraut, findet dort alles.",
+    "cta":  { "label": "Vollständige Methodik lesen", "canonical": "/methodology" }
+  },
+  "faq": {
+    "h2": "FAQ zur Funktionsweise",
+    "questions": [
+      {
+        "q": "Wie lange dauert es, eine Vorhersage zu erzeugen?",
+        "a": "Die Engine verarbeitet das gesamte Tagesprogramm über 30+ Ligen in Minuten. Jedes Spiel wird einzeln erzeugt, kalibriert und vor dem Anpfiff gesperrt."
+      },
+      {
+        "q": "Wie genau sind die Vorhersagen?",
+        "a": "Die Genauigkeit variiert je nach Liga, Markttyp und Zeitraum. Wir veröffentlichen bewusst keine einzelne Schlagzeilenzahl — sie würde diese Varianz verschleiern. Der vollständige Track Record ist öffentlich einsehbar, damit du die echte Performance im Kontext sehen kannst."
+      },
+      {
+        "q": "Was unterscheidet das von anderen Vorhersagediensten?",
+        "a": "Drei Dinge. Erstens: Jede Vorhersage wird vor dem Anpfiff mit einem öffentlichen Zeitstempel gesperrt — andere können nachträglich ändern. Zweitens: Wir veröffentlichen Treffer und Fehlversuche — andere betreiben Cherry-Picking. Drittens: Die Methodik ist vollständig dokumentiert — andere stützen sich auf 'Geheimalgorithmus'-Aussagen, die du nicht prüfen kannst."
+      },
+      {
+        "q": "Warum sagt ihr mir nicht, welchen Vorhersagen ich folgen soll?",
+        "a": "Weil wir keine Berater sind. Wir liefern statistische Analysen. Wie du sie nutzt, ist deine Entscheidung — basierend auf deiner Risikotoleranz und deinem Urteilsvermögen. Wir geben dir die Daten; du triffst die Wahl."
+      },
+      {
+        "q": "Kann ich nachvollziehen, wie eine bestimmte Vorhersage entstanden ist?",
+        "a": "Nicht auf Variablenebene — das würde unsere Gewichtung offenlegen. Aber die Methodik-Seite erklärt den Prozess ausführlich, und der gesperrte Zeitstempel jeder Vorhersage beweist, dass nachträglich nichts geändert wurde. Öffentliche Methodik + gesperrte Vorhersagen ergeben überprüfbare Transparenz, ohne das Modell selbst preiszugeben."
+      }
+    ]
+  },
+  "finalCta": {
+    "h2": "{{accent}}Sieh es dir{{/accent}} in Aktion an",
+    "subH2": "Die kostenlosen Vorhersagen von heute sind live.",
+    "body": "Du hast gelesen, wie das System funktioniert. Sieh jetzt, was es liefert. Die kostenlosen Vorhersagen von heute decken Premier League, La Liga, Bundesliga und mehr ab — gesperrt, mit Zeitstempel, bereit zur Beurteilung.",
+    "ctaPrimary":   { "label": "Heutige Vorhersagen ansehen", "canonical": "/predictions" },
+    "ctaSecondary": { "label": "Pläne vergleichen",            "canonical": "/pricing"    }
   }
 }

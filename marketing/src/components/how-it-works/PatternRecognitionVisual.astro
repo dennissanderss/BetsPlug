@@ -1,0 +1,125 @@
+---
+/**
+ * Stage 3 visual — abstract pattern-recognition diagram. A 3-layer
+ * node graph with weighted connections, drawn as inline SVG. Decorative
+ * only; not a literal architecture diagram.
+ *
+ * Layers: 6 input nodes → 4 hidden nodes → 1 output. Edges have
+ * varied opacity to suggest weight differences. Nodes pulse subtly
+ * when motion is allowed.
+ */
+interface Props {
+  labels: Record<string, string>;
+}
+const { labels } = Astro.props as Props;
+
+// Deterministic node positions — no Math.random so SSR is stable.
+const inputs  = [22, 56, 90, 124, 158, 192].map((y) => ({ x: 30,  y }));
+const hidden  = [50, 90, 130, 170].map((y) => ({ x: 160, y }));
+const outputs = [{ x: 290, y: 110 }];
+
+// Edge weights expressed as opacity (deterministic pattern).
+const edgeOpacities = [0.18, 0.42, 0.28, 0.55, 0.22, 0.38, 0.6, 0.15, 0.45, 0.32, 0.5, 0.25];
+let edgeIdx = 0;
+const inputToHidden = inputs.flatMap((a) =>
+  hidden.map((b) => ({
+    a, b,
+    opacity: edgeOpacities[(edgeIdx++) % edgeOpacities.length],
+  })),
+);
+const hiddenToOutput = hidden.flatMap((a) =>
+  outputs.map((b) => ({
+    a, b,
+    opacity: edgeOpacities[(edgeIdx++) % edgeOpacities.length],
+  })),
+);
+---
+
+<div class="pattern-visual w-full max-w-md mx-auto" aria-label={labels.aria ?? "Pattern recognition diagram"}>
+  <svg viewBox="0 0 320 220" role="img" aria-hidden="true" class="pattern-visual__svg">
+    <defs>
+      <radialGradient id="pat-node-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"  stop-color="rgba(0, 210, 106, 0.6)" />
+        <stop offset="60%" stop-color="rgba(0, 210, 106, 0.1)" />
+        <stop offset="100%" stop-color="rgba(0, 210, 106, 0)"   />
+      </radialGradient>
+    </defs>
+
+    {[...inputToHidden, ...hiddenToOutput].map((edge, i) => (
+      <line
+        x1={edge.a.x}
+        y1={edge.a.y}
+        x2={edge.b.x}
+        y2={edge.b.y}
+        stroke="#1FE07F"
+        stroke-width={(edge.opacity * 1.4).toFixed(2)}
+        stroke-opacity={edge.opacity.toFixed(2)}
+        class="pattern-edge"
+        style={`--edge-delay: ${(i % 8) * 0.18}s;`}
+      />
+    ))}
+
+    {inputs.map((n, i) => (
+      <g class="pattern-node" style={`--node-delay: ${i * 0.12}s;`}>
+        <circle cx={n.x} cy={n.y} r="14" fill="url(#pat-node-glow)" />
+        <circle cx={n.x} cy={n.y} r="5"  fill="#1FE07F" />
+      </g>
+    ))}
+    {hidden.map((n, i) => (
+      <g class="pattern-node" style={`--node-delay: ${(i + 6) * 0.12}s;`}>
+        <circle cx={n.x} cy={n.y} r="16" fill="url(#pat-node-glow)" />
+        <circle cx={n.x} cy={n.y} r="6"  fill="#FFFFFF" opacity="0.95" />
+      </g>
+    ))}
+    {outputs.map((n, i) => (
+      <g class="pattern-node pattern-node--out" style={`--node-delay: ${(i + 10) * 0.12}s;`}>
+        <circle cx={n.x} cy={n.y} r="20" fill="url(#pat-node-glow)" />
+        <circle cx={n.x} cy={n.y} r="8"  fill="#1FE07F" />
+      </g>
+    ))}
+  </svg>
+  {labels.caption && <p class="pattern-visual__caption">{labels.caption}</p>}
+</div>
+
+<style>
+  .pattern-visual {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    color: var(--white-soft, #e8eaef);
+  }
+  .pattern-visual__svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .pattern-visual__caption {
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0.625rem 0 0 0;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pattern-node {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: pattern-node-pulse 3.6s ease-in-out infinite;
+      animation-delay: var(--node-delay, 0s);
+    }
+    .pattern-edge {
+      animation: pattern-edge-flicker 4.2s ease-in-out infinite;
+      animation-delay: var(--edge-delay, 0s);
+    }
+  }
+  @keyframes pattern-node-pulse {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 1;    }
+  }
+  @keyframes pattern-edge-flicker {
+    0%, 100% { stroke-opacity: var(--orig, 0.3); }
+    50%      { stroke-opacity: 0.8;              }
+  }
+</style>
