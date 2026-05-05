@@ -82,7 +82,7 @@ let confidencePct = content.visual.confidence;
 try {
   const res = await fetch(`${API_BASE}/api/homepage/featured-match`, {
     headers: { Accept: "application/json" },
-    signal: AbortSignal.timeout(4000),
+    signal: AbortSignal.timeout(10000),
   });
   if (res.ok) {
     const data = (await res.json()) as FeaturedMatch;
@@ -99,7 +99,9 @@ try {
     }
   }
 } catch {
-  // Swallow — fallback values from content JSON stay in place.
+  // Swallow — fallback values from content JSON stay in place. The
+  // client-side hydration script below will replace them on the next
+  // page view if/when Railway is reachable from the visitor.
 }
 
 const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
@@ -217,12 +219,15 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
             <div
               class="relative rounded-2xl border border-deep-navy-600
                      bg-deep-navy-800/90 backdrop-blur-sm p-6 shadow-[var(--shadow-xl)]"
+              data-hero-card
+              data-locale={locale}
+              data-api-base={API_BASE}
             >
               <!-- Top: league + lock -->
               <div class="flex items-center justify-between text-xs">
                 <span class="inline-flex items-center gap-2 rounded-full bg-deep-navy-700 px-3 py-1 font-semibold text-white-soft">
                   <span class="h-1.5 w-1.5 rounded-full bg-pitch-green-500"></span>
-                  {league}
+                  <span data-hero-league>{league}</span>
                 </span>
                 <span class="inline-flex items-center gap-1 text-white-muted">
                   <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -234,7 +239,7 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
 
               <!-- Teams -->
               <div class="mt-6 space-y-3">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3" data-hero-home-row>
                   {homeTeamLogo ? (
                     <img
                       src={homeTeamLogo}
@@ -244,15 +249,19 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
                       loading="lazy"
                       decoding="async"
                       class="h-10 w-10 shrink-0 object-contain"
+                      data-hero-home-logo
                     />
                   ) : (
-                    <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
+                    <div
+                      class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold"
+                      data-hero-home-initial
+                    >
                       {homeTeam.slice(0, 2).toUpperCase()}
                     </div>
                   )}
-                  <p class="text-base font-semibold text-white-pure">{homeTeam}</p>
+                  <p class="text-base font-semibold text-white-pure" data-hero-home-name>{homeTeam}</p>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3" data-hero-away-row>
                   {awayTeamLogo ? (
                     <img
                       src={awayTeamLogo}
@@ -262,28 +271,33 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
                       loading="lazy"
                       decoding="async"
                       class="h-10 w-10 shrink-0 object-contain"
+                      data-hero-away-logo
                     />
                   ) : (
-                    <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
+                    <div
+                      class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold"
+                      data-hero-away-initial
+                    >
                       {awayTeam.slice(0, 2).toUpperCase()}
                     </div>
                   )}
-                  <p class="text-base font-semibold text-white-pure">{awayTeam}</p>
+                  <p class="text-base font-semibold text-white-pure" data-hero-away-name>{awayTeam}</p>
                 </div>
               </div>
 
-              <p class="mt-4 text-xs text-white-muted">{kickoff}</p>
+              <p class="mt-4 text-xs text-white-muted" data-hero-kickoff>{kickoff}</p>
 
               <!-- Confidence bar -->
               <div class="mt-6 rounded-lg bg-deep-navy-900/60 border border-deep-navy-600 p-4">
                 <div class="flex items-center justify-between text-xs">
                   <span class="text-white-muted">Confidence</span>
-                  <span class="font-mono font-semibold text-white-pure">{confidencePct}%</span>
+                  <span class="font-mono font-semibold text-white-pure" data-hero-confidence-pct>{confidencePct}%</span>
                 </div>
                 <div class="mt-2 h-2 rounded-full bg-charcoal-700 overflow-hidden">
                   <div
                     class="h-full rounded-full bg-pitch-green-500 hero-confidence-bar"
                     style={`width: ${confidenceWidth};`}
+                    data-hero-confidence-bar
                   ></div>
                 </div>
               </div>
@@ -324,3 +338,136 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
     }
   }
 </style>
+
+<script>
+  /**
+   * Client-side hydration of the hero "live prediction" card.
+   *
+   * The Astro site is fully static — pages are rebuilt only when we
+   * push to main. Without this script, a visitor would see whatever
+   * data was current at the last build (or, worse, the JSON fallback
+   * if the build-time fetch happened to fail). On every page view we
+   * refetch the live featured-match and update the card in place so
+   * the UI never lags behind the engine.
+   */
+  (function () {
+    const card = document.querySelector("[data-hero-card]");
+    if (!card) return;
+
+    const apiBase = card.getAttribute("data-api-base") ?? "";
+    const locale = card.getAttribute("data-locale") ?? "en";
+    if (!apiBase) return;
+
+    const BCP47: Record<string, string> = {
+      en: "en-GB",
+      nl: "nl-NL",
+      de: "de-DE",
+      fr: "fr-FR",
+      es: "es-ES",
+      it: "it-IT",
+      sw: "sw-KE",
+    };
+
+    function formatKickoff(iso: string): string {
+      try {
+        return new Date(iso).toLocaleString(BCP47[locale] ?? "en-GB", {
+          weekday: "long",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+      } catch {
+        return iso;
+      }
+    }
+
+    function setText(selector: string, value: string) {
+      const el = card!.querySelector<HTMLElement>(selector);
+      if (el) el.textContent = value;
+    }
+
+    function replaceLogo(rowSelector: string, logoUrl: string | null, name: string, isHome: boolean) {
+      const row = card!.querySelector<HTMLElement>(rowSelector);
+      if (!row) return;
+      const initialKey = isHome ? "[data-hero-home-initial]" : "[data-hero-away-initial]";
+      const logoKey = isHome ? "[data-hero-home-logo]" : "[data-hero-away-logo]";
+      const initialEl = row.querySelector<HTMLElement>(initialKey);
+      const logoEl = row.querySelector<HTMLImageElement>(logoKey);
+      const initials = name.slice(0, 2).toUpperCase();
+
+      if (logoUrl) {
+        if (logoEl) {
+          logoEl.src = logoUrl;
+          logoEl.alt = `${name} logo`;
+        } else if (initialEl) {
+          // Replace the initial-badge div with an <img>
+          const img = document.createElement("img");
+          img.src = logoUrl;
+          img.alt = `${name} logo`;
+          img.width = 40;
+          img.height = 40;
+          img.loading = "lazy";
+          img.decoding = "async";
+          img.className = "h-10 w-10 shrink-0 object-contain";
+          img.setAttribute(isHome ? "data-hero-home-logo" : "data-hero-away-logo", "");
+          initialEl.replaceWith(img);
+        }
+      } else {
+        // No logo URL — make sure we render the initial-badge fallback
+        if (initialEl) {
+          initialEl.textContent = initials;
+        } else if (logoEl) {
+          const div = document.createElement("div");
+          div.className =
+            "h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold";
+          div.textContent = initials;
+          div.setAttribute(isHome ? "data-hero-home-initial" : "data-hero-away-initial", "");
+          logoEl.replaceWith(div);
+        }
+      }
+    }
+
+    interface FeaturedMatch {
+      available: boolean;
+      home_team?: string | null;
+      away_team?: string | null;
+      home_team_logo?: string | null;
+      away_team_logo?: string | null;
+      league?: string | null;
+      kickoff?: string | null;
+      confidence?: number | null;
+    }
+
+    async function hydrate() {
+      try {
+        const res = await fetch(`${apiBase}/api/homepage/featured-match`, {
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as FeaturedMatch;
+        if (!data.available || !data.home_team || !data.away_team) return;
+
+        if (data.league) setText("[data-hero-league]", data.league);
+        setText("[data-hero-home-name]", data.home_team);
+        setText("[data-hero-away-name]", data.away_team);
+        if (data.kickoff) setText("[data-hero-kickoff]", formatKickoff(data.kickoff));
+
+        if (typeof data.confidence === "number") {
+          const pct = Math.max(0, Math.min(100, Math.round(data.confidence * 100)));
+          setText("[data-hero-confidence-pct]", `${pct}%`);
+          const bar = card!.querySelector<HTMLElement>("[data-hero-confidence-bar]");
+          if (bar) bar.style.width = `${pct}%`;
+        }
+
+        replaceLogo("[data-hero-home-row]", data.home_team_logo ?? null, data.home_team, true);
+        replaceLogo("[data-hero-away-row]", data.away_team_logo ?? null, data.away_team, false);
+      } catch {
+        // Network error or backend down — leave whatever the build-time
+        // fetch produced (real data on a healthy build, JSON fallback
+        // on a failed build).
+      }
+    }
+
+    hydrate();
+  })();
+</script>
