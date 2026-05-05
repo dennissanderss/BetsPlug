@@ -179,3 +179,135 @@ async def regenerate_v81(
         elapsed_seconds=elapsed,
         finished=len(targets) < body.limit,
     )
+
+
+# ---------------------------------------------------------------------------
+# Sync teams from API-Football into Postgres for the marketing-site endpoints.
+# Triggered manually after deploys when the launch-league teams DB has gaps.
+# ---------------------------------------------------------------------------
+
+
+class SyncTeamsRequest(BaseModel):
+    league_slugs: list[str]
+
+
+class SyncTeamsLeagueResult(BaseModel):
+    league_slug: str
+    fetched: int
+    inserted: int
+    updated: int
+    error: str | None = None
+
+
+class SyncTeamsResponse(BaseModel):
+    leagues: list[SyncTeamsLeagueResult]
+    total_fetched: int
+    total_inserted: int
+    total_updated: int
+    elapsed_seconds: float
+
+
+@router.post(
+    "/sync-teams",
+    response_model=SyncTeamsResponse,
+    summary="Sync team rosters from API-Football for the given league slugs",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def sync_teams(
+    body: SyncTeamsRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Refresh the ``teams`` table for one or more leagues by re-running
+    ``APIFootballAdapter.fetch_teams`` and upserting by slug. Used to fill
+    gaps that block /api/public/teams/{slug} from returning 200.
+    """
+    import httpx
+
+    from app.core.config import get_settings
+    from app.ingestion.adapters.api_football import APIFootballAdapter
+    from app.models.league import League
+    from app.models.team import Team
+    from sqlalchemy import select
+
+    t0 = time.monotonic()
+    settings = get_settings()
+    if not settings.api_football_key:
+        raise HTTPException(status_code=500, detail="API_FOOTBALL_KEY not set on this deploy")
+
+    results: list[SyncTeamsLeagueResult] = []
+    total_fetched = total_inserted = total_updated = 0
+
+    async with httpx.AsyncClient(timeout=30.0) as http_client:
+        adapter = APIFootballAdapter(
+            config={"api_key": settings.api_football_key},
+            http_client=http_client,
+        )
+
+        for league_slug in body.league_slugs:
+            league = (await db.execute(
+                select(League).where(League.slug == league_slug)
+            )).scalar_one_or_none()
+            if league is None:
+                results.append(SyncTeamsLeagueResult(
+                    league_slug=league_slug, fetched=0, inserted=0, updated=0,
+                    error="league_not_in_db",
+                ))
+                continue
+
+            try:
+                raw_teams = await adapter.fetch_teams(league_slug)
+            except Exception as exc:
+                results.append(SyncTeamsLeagueResult(
+                    league_slug=league_slug, fetched=0, inserted=0, updated=0,
+                    error=f"fetch_failed: {exc}",
+                ))
+                continue
+
+            inserted = updated = 0
+            for raw in raw_teams:
+                slug = raw.get("slug")
+                if not slug:
+                    continue
+                existing = (await db.execute(
+                    select(Team).where(Team.slug == slug)
+                )).scalar_one_or_none()
+                if existing is None:
+                    db.add(Team(
+                        league_id=league.id,
+                        name=raw.get("name", slug),
+                        slug=slug,
+                        short_name=raw.get("short_name"),
+                        country=raw.get("country"),
+                        venue=raw.get("venue"),
+                        logo_url=raw.get("logo_url"),
+                        is_active=True,
+                    ))
+                    inserted += 1
+                else:
+                    # Update mutable fields that may have shifted on API-Football's side.
+                    existing.name = raw.get("name", existing.name)
+                    existing.short_name = raw.get("short_name") or existing.short_name
+                    existing.country = raw.get("country") or existing.country
+                    existing.venue = raw.get("venue") or existing.venue
+                    existing.logo_url = raw.get("logo_url") or existing.logo_url
+                    existing.league_id = league.id
+                    updated += 1
+
+            await db.commit()
+            results.append(SyncTeamsLeagueResult(
+                league_slug=league_slug,
+                fetched=len(raw_teams),
+                inserted=inserted,
+                updated=updated,
+            ))
+            total_fetched += len(raw_teams)
+            total_inserted += inserted
+            total_updated += updated
+
+    return SyncTeamsResponse(
+        leagues=results,
+        total_fetched=total_fetched,
+        total_inserted=total_inserted,
+        total_updated=total_updated,
+        elapsed_seconds=round(time.monotonic() - t0, 2),
+    )
