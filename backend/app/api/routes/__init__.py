@@ -14,6 +14,7 @@ from app.api.routes.trackrecord import router as trackrecord_router
 from app.api.routes.backtests import router as backtests_router
 from app.api.routes.reports import router as reports_router
 from app.api.routes.admin import router as admin_router
+from app.api.routes.internal_ops import router as internal_ops_router
 from app.api.routes.live import router as live_router
 from app.api.routes.subscriptions import router as subscriptions_router
 from app.api.routes.betoftheday import router as betoftheday_router
@@ -64,6 +65,9 @@ router.include_router(reports_router, prefix="/reports", tags=["reports"])
 _ADMIN_AUTH = [Depends(require_admin)]
 
 router.include_router(admin_router, prefix="/admin", tags=["admin"], dependencies=_ADMIN_AUTH)
+# internal_ops uses its own X-Internal-Ops-Key header auth, NOT _ADMIN_AUTH,
+# so long-running maintenance loops don't break on JWT expiry.
+router.include_router(internal_ops_router, prefix="/internal-ops", tags=["internal-ops"])
 router.include_router(live_router, prefix="/live", tags=["live"])
 router.include_router(subscriptions_router, prefix="/subscriptions", tags=["subscriptions"])
 router.include_router(betoftheday_router, prefix="/bet-of-the-day", tags=["bet-of-the-day"])
