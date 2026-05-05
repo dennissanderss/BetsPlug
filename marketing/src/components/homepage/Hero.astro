@@ -3,9 +3,10 @@
  * Homepage Hero — Section 1.
  * See docs/specs/02-homepage.md → "SECTIE 1: HERO".
  *
- * Asymmetric hero (60% copy / 40% visual on desktop). Dark surface
- * with ambient pitch-green glow. The visual is a vector "live
- * prediction" card mockup — no stock photos, no video.
+ * Asymmetric hero (60% copy / 40% visual on desktop). The visual
+ * card pulls the highest-confidence upcoming match from the live
+ * backend at build/request time, with the JSON visual block as
+ * fallback when the API is unreachable.
  */
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
@@ -29,7 +30,72 @@ const { locale, content } = Astro.props;
 
 const secondaryHref = getLocalizedPath(content.ctaSecondary.canonical, locale);
 
-const confidenceWidth = `${Math.max(0, Math.min(100, content.visual.confidence))}%`;
+// ── Live featured-match fetch ────────────────────────────────────
+// Pulls the highest-confidence upcoming pick (next 72h) from the
+// public backend. Falls back to the JSON `visual` block on any
+// failure so a backend hiccup never breaks the marketing site.
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+
+const BCP47: Record<Locale, string> = {
+  en: "en-GB",
+  nl: "nl-NL",
+  de: "de-DE",
+  fr: "fr-FR",
+  es: "es-ES",
+  it: "it-IT",
+};
+
+function formatKickoff(iso: string, loc: Locale): string {
+  try {
+    return new Date(iso).toLocaleString(BCP47[loc] ?? "en-GB", {
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  } catch {
+    return iso;
+  }
+}
+
+interface FeaturedMatch {
+  available: boolean;
+  home_team?: string | null;
+  away_team?: string | null;
+  league?: string | null;
+  kickoff?: string | null;
+  confidence?: number | null;
+}
+
+let league = content.visual.league;
+let homeTeam = content.visual.homeTeam;
+let awayTeam = content.visual.awayTeam;
+let kickoff = content.visual.kickoff;
+let confidencePct = content.visual.confidence;
+
+try {
+  const res = await fetch(`${API_BASE}/api/homepage/featured-match`, {
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(4000),
+  });
+  if (res.ok) {
+    const data = (await res.json()) as FeaturedMatch;
+    if (data.available && data.home_team && data.away_team) {
+      league = data.league ?? league;
+      homeTeam = data.home_team;
+      awayTeam = data.away_team;
+      if (data.kickoff) kickoff = formatKickoff(data.kickoff, locale);
+      if (typeof data.confidence === "number") {
+        confidencePct = Math.round(data.confidence * 100);
+      }
+    }
+  }
+} catch {
+  // Swallow — fallback values from content JSON stay in place.
+}
+
+const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
 ---
 
 <section
@@ -149,7 +215,7 @@ const confidenceWidth = `${Math.max(0, Math.min(100, content.visual.confidence))
               <div class="flex items-center justify-between text-xs">
                 <span class="inline-flex items-center gap-2 rounded-full bg-deep-navy-700 px-3 py-1 font-semibold text-white-soft">
                   <span class="h-1.5 w-1.5 rounded-full bg-pitch-green-500"></span>
-                  {content.visual.league}
+                  {league}
                 </span>
                 <span class="inline-flex items-center gap-1 text-white-muted">
                   <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -163,47 +229,32 @@ const confidenceWidth = `${Math.max(0, Math.min(100, content.visual.confidence))
               <div class="mt-6 space-y-3">
                 <div class="flex items-center gap-3">
                   <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
-                    {content.visual.homeTeam.slice(0, 2).toUpperCase()}
+                    {homeTeam.slice(0, 2).toUpperCase()}
                   </div>
-                  <p class="text-base font-semibold text-white-pure">{content.visual.homeTeam}</p>
+                  <p class="text-base font-semibold text-white-pure">{homeTeam}</p>
                 </div>
                 <div class="flex items-center gap-3">
                   <div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">
-                    {content.visual.awayTeam.slice(0, 2).toUpperCase()}
+                    {awayTeam.slice(0, 2).toUpperCase()}
                   </div>
-                  <p class="text-base font-semibold text-white-pure">{content.visual.awayTeam}</p>
+                  <p class="text-base font-semibold text-white-pure">{awayTeam}</p>
                 </div>
               </div>
 
-              <p class="mt-4 text-xs text-white-muted">{content.visual.kickoff}</p>
+              <p class="mt-4 text-xs text-white-muted">{kickoff}</p>
 
-              <!-- Prediction + confidence bar -->
+              <!-- Confidence bar -->
               <div class="mt-6 rounded-lg bg-deep-navy-900/60 border border-deep-navy-600 p-4">
-                <p class="text-xs font-medium uppercase tracking-wider text-white-muted">
-                  Prediction
-                </p>
-                <p class="mt-1 text-lg font-bold text-pitch-green-400">{content.visual.prediction}</p>
-
-                <div class="mt-4">
-                  <div class="flex items-center justify-between text-xs">
-                    <span class="text-white-muted">Confidence</span>
-                    <span class="font-mono font-semibold text-white-pure">{content.visual.confidence}%</span>
-                  </div>
-                  <div class="mt-2 h-2 rounded-full bg-charcoal-700 overflow-hidden">
-                    <div
-                      class="h-full rounded-full bg-pitch-green-500 hero-confidence-bar"
-                      style={`width: ${confidenceWidth};`}
-                    ></div>
-                  </div>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-white-muted">Confidence</span>
+                  <span class="font-mono font-semibold text-white-pure">{confidencePct}%</span>
                 </div>
-              </div>
-
-              <!-- Methodology badge -->
-              <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-pitch-green-500/30 bg-pitch-green-500/10 px-3 py-1 text-xs font-semibold text-pitch-green-400">
-                <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" />
-                </svg>
-                {content.visual.methodologyBadge}
+                <div class="mt-2 h-2 rounded-full bg-charcoal-700 overflow-hidden">
+                  <div
+                    class="h-full rounded-full bg-pitch-green-500 hero-confidence-bar"
+                    style={`width: ${confidenceWidth};`}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
