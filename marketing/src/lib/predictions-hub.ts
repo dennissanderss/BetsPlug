@@ -19,6 +19,8 @@ interface HubPrediction {
   id: string;
   league: { name: string; slug: string; logo: string; country: string };
   kickoff: string;
+  /** Raw ISO timestamp — feeds the client-side kickoff countdown swap. */
+  kickoffIso: string;
   homeTeam: { name: string; logo: string; slug: string };
   awayTeam: { name: string; logo: string; slug: string };
   prediction: string;
@@ -109,6 +111,7 @@ function shapePick(p: BackendFreePick, locale: Locale): HubPrediction {
       country: "",
     },
     kickoff: formatKickoff(p.scheduled_at, locale),
+    kickoffIso: p.scheduled_at,
     homeTeam: { name: p.home_team, slug: slugify(p.home_team), logo: p.home_team_logo ?? "" },
     awayTeam: { name: p.away_team, slug: slugify(p.away_team), logo: p.away_team_logo ?? "" },
     prediction: pickLabel(p),
@@ -125,6 +128,7 @@ function emptyTeaser(): HubPrediction {
     id: "empty",
     league: { name: "—", slug: "—", logo: "", country: "—" },
     kickoff: "—",
+    kickoffIso: "",
     homeTeam: { name: "—", logo: "", slug: "—" },
     awayTeam: { name: "—", logo: "", slug: "—" },
     prediction: "—",

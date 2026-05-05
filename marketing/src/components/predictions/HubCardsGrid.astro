@@ -16,6 +16,7 @@ interface Prediction {
   id: string;
   league: { name: string; slug: string; logo: string; country: string };
   kickoff: string;
+  kickoffIso?: string;
   homeTeam: { name: string; logo: string; slug: string };
   awayTeam: { name: string; logo: string; slug: string };
   prediction: string;
@@ -71,6 +72,7 @@ const weekCtaHref = getLocalizedPath(content.weekTab.cta.canonical, locale);
           locale={locale}
           league={p.league}
           kickoff={p.kickoff}
+          kickoffIso={p.kickoffIso}
           homeTeam={p.homeTeam}
           awayTeam={p.awayTeam}
           prediction={p.prediction}
@@ -90,6 +92,7 @@ const weekCtaHref = getLocalizedPath(content.weekTab.cta.canonical, locale);
         locale={locale}
         league={tomorrowTeaser.league}
         kickoff={tomorrowTeaser.kickoff}
+        kickoffIso={tomorrowTeaser.kickoffIso}
         homeTeam={tomorrowTeaser.homeTeam}
         awayTeam={tomorrowTeaser.awayTeam}
         prediction="••••••"

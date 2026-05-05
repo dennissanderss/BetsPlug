@@ -56,6 +56,7 @@ interface CardPick {
   id: string;
   league: { name: string; slug: string };
   kickoff: string;
+  kickoffIso: string;
   homeTeam: { name: string; logoUrl?: string };
   awayTeam: { name: string; logoUrl?: string };
   prediction: string;
@@ -124,6 +125,7 @@ try {
         id: p.id,
         league: { name: p.league, slug: slugify(p.league) },
         kickoff: formatKickoff(p.scheduled_at, locale),
+        kickoffIso: p.scheduled_at,
         homeTeam: { name: p.home_team, logoUrl: p.home_team_logo ?? undefined },
         awayTeam: { name: p.away_team, logoUrl: p.away_team_logo ?? undefined },
         prediction: pickLabel(p),
@@ -203,6 +205,7 @@ const cardLabels = {
             locale={locale}
             league={p.league}
             kickoff={p.kickoff}
+            kickoffIso={p.kickoffIso}
             homeTeam={p.homeTeam}
             awayTeam={p.awayTeam}
             prediction={p.prediction}

@@ -8,9 +8,25 @@
  */
 import Container from "@/components/ui/Container.astro";
 import Section from "@/components/ui/Section.astro";
+import ScoreNumber from "@/components/ui/ScoreNumber.astro";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { parseAccent } from "@/lib/parseAccent";
 import type { HomepageContent } from "@/content/pages/homepage/types";
+
+// Split content stat values into prefix / numeric core / suffix so
+// the scoreboard chip can render each part with the correct weight.
+// Examples: "30+" → { core: "30", suffix: "+" }, "€19" → {prefix: "€", core: "19"},
+// "40+" → {core: "40", suffix: "+"}.
+function splitStat(raw: string): { prefix?: string; core: string; suffix?: string } {
+  const match = raw.trim().match(/^(\D*?)([\d.,]+)(\D*?)$/);
+  if (!match) return { core: raw };
+  const [, prefix, core, suffix] = match;
+  return {
+    prefix: prefix || undefined,
+    core,
+    suffix: suffix || undefined,
+  };
+}
 
 interface Props {
   locale: Locale;
@@ -116,18 +132,25 @@ const ctaHref = getLocalizedPath(content.cta.canonical, locale);
           </div>
         </div>
 
-        <!-- Stat callouts (2x2 grid) -->
+        <!-- Stat callouts (2x2 grid) — TV-scoreboard typography -->
         <dl class="grid grid-cols-2 gap-4">
-          {content.stats.map((stat) => (
-            <div class="rounded-xl border border-deep-navy-600 bg-charcoal-700 p-5 text-center">
-              <dt class="font-mono text-3xl lg:text-4xl font-bold text-pitch-green-400">
-                {stat.value}
-              </dt>
-              <dd class="mt-1 text-xs font-medium uppercase tracking-wider text-white-muted">
-                {stat.label}
-              </dd>
-            </div>
-          ))}
+          {content.stats.map((stat) => {
+            const parts = splitStat(stat.value);
+            return (
+              <div class="flex flex-col items-center gap-2 rounded-xl border border-deep-navy-600 bg-charcoal-700 p-5 text-center">
+                <ScoreNumber
+                  value={parts.core}
+                  prefix={parts.prefix}
+                  suffix={parts.suffix}
+                  size="lg"
+                  variant="highlight"
+                />
+                <dd class="text-xs font-medium uppercase tracking-wider text-white-muted">
+                  {stat.label}
+                </dd>
+              </div>
+            );
+          })}
         </dl>
       </div>
     </div>

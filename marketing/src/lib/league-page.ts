@@ -24,6 +24,8 @@ interface Match {
   id: string;
   league: { name: string; slug: string; logo: string };
   kickoff: string;
+  /** Raw ISO timestamp — feeds the client-side kickoff countdown swap. */
+  kickoffIso?: string;
   homeTeam: { name: string; logo: string; slug: string };
   awayTeam: { name: string; logo: string; slug: string };
   prediction?: string;
@@ -252,6 +254,7 @@ function buildMatchFromBackend(p: BackendFreePick, leagueName: string, leagueSlu
     id: p.id,
     league: { name: leagueName, slug: leagueSlug, logo: "" },
     kickoff: formatKickoff(p.scheduled_at),
+    kickoffIso: p.scheduled_at,
     homeTeam: {
       name: p.home_team,
       logo: p.home_team_logo ?? "",

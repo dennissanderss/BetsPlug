@@ -16,6 +16,7 @@ interface Match {
   id: string;
   league: { name: string; slug: string; logo: string };
   kickoff: string;
+  kickoffIso?: string;
   homeTeam: { name: string; logo: string; slug: string };
   awayTeam: { name: string; logo: string; slug: string };
   /** Set on locked/free; absent on fixture-only. */
@@ -58,6 +59,7 @@ const pricingHref = getLocalizedPath("pricing", locale);
           locale={locale}
           league={m.league}
           kickoff={m.kickoff}
+          kickoffIso={m.kickoffIso}
           homeTeam={m.homeTeam}
           awayTeam={m.awayTeam}
           prediction={m.prediction}
@@ -78,6 +80,7 @@ const pricingHref = getLocalizedPath("pricing", locale);
           locale={locale}
           league={m.league}
           kickoff={m.kickoff}
+          kickoffIso={m.kickoffIso}
           homeTeam={m.homeTeam}
           awayTeam={m.awayTeam}
           prediction="••••••"

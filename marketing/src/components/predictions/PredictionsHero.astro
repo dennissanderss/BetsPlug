@@ -7,6 +7,7 @@
 import Container from "@/components/ui/Container.astro";
 import Button from "@/components/ui/Button.astro";
 import USPItem from "@/components/ui/USPItem.astro";
+import PitchLinePattern from "@/components/ui/PitchLinePattern.astro";
 import type { IconName } from "@/components/ui/icon-types";
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import { localeBcp47 } from "@/i18n/locales";
@@ -52,12 +53,13 @@ const colorMap: Record<number, string> = {
   data-locale={locale}
   data-bcp47={localeBcp47[locale]}
 >
-  <!-- Background gradient + glow -->
+  <!-- Background gradient + glow + pitch-line pattern (bold on sport surface) -->
   <div
     aria-hidden="true"
     class="absolute inset-0 pointer-events-none"
     style="background: var(--gradient-hero-dark);"
   ></div>
+  <PitchLinePattern variant="bold" position="full" />
   <div
     aria-hidden="true"
     class="pointer-events-none absolute -top-24 right-[-10%] h-[480px] w-[480px] rounded-full opacity-40 blur-[100px]"
@@ -76,7 +78,7 @@ const colorMap: Record<number, string> = {
           </span>
           <span>
             {content.liveLabel}
-            <span data-live-seconds data-last-updated={lastUpdated}>0</span>s ago
+            <span data-live-relative data-last-updated={lastUpdated} data-locale={locale}>0s ago</span>
           </span>
         </div>
 
@@ -161,17 +163,49 @@ const colorMap: Record<number, string> = {
 </style>
 
 <script>
-  // Live "X seconds ago" counter — driven from data-last-updated.
+  // Live "ago" indicator — football conventions.
+  // Under 60s: "12s ago" (we don't render apostrophes for sub-minute
+  // intervals — apostrophes read as match-minute notation, not relative
+  // time, so we only switch to "5' ago" once we cross 1 minute).
+  // 1-59 min: "5' ago" (football minute style)
+  // 1-23 h:   "2h ago"
+  // 1-6 d:    "3d ago"
+  // ≥7 d:     "Just now" never reaches here
   (function () {
-    const el = document.querySelector("[data-live-seconds]") as HTMLElement | null;
+    type Locale = "en" | "nl" | "de" | "fr" | "es" | "it" | "sw";
+    const AGO: Record<Locale, { ago: string; justNow: string; min: (n: number) => string; h: (n: number) => string; d: (n: number) => string; sec: (n: number) => string }> = {
+      en: { ago: "ago", justNow: "Just now", min: (n) => `${n}' ago`, h: (n) => `${n}h ago`, d: (n) => `${n}d ago`, sec: (n) => `${n}s ago` },
+      nl: { ago: "geleden", justNow: "Zojuist", min: (n) => `${n}' geleden`, h: (n) => `${n}u geleden`, d: (n) => `${n}d geleden`, sec: (n) => `${n}s geleden` },
+      de: { ago: "vor", justNow: "Gerade eben", min: (n) => `vor ${n}'`, h: (n) => `vor ${n} Std`, d: (n) => `vor ${n} T`, sec: (n) => `vor ${n}s` },
+      fr: { ago: "il y a", justNow: "À l'instant", min: (n) => `il y a ${n}'`, h: (n) => `il y a ${n} h`, d: (n) => `il y a ${n} j`, sec: (n) => `il y a ${n} s` },
+      es: { ago: "hace", justNow: "Justo ahora", min: (n) => `hace ${n}'`, h: (n) => `hace ${n} h`, d: (n) => `hace ${n} d`, sec: (n) => `hace ${n} s` },
+      it: { ago: "fa", justNow: "Proprio ora", min: (n) => `${n}' fa`, h: (n) => `${n} h fa`, d: (n) => `${n} g fa`, sec: (n) => `${n}s fa` },
+      sw: { ago: "zilizopita", justNow: "Sasa hivi", min: (n) => `dak ${n}' zilizopita`, h: (n) => `saa ${n} zilizopita`, d: (n) => `siku ${n} zilizopita`, sec: (n) => `sek ${n} zilizopita` },
+    };
+
+    const el = document.querySelector("[data-live-relative]") as HTMLElement | null;
     if (!el) return;
     const lastIso = el.getAttribute("data-last-updated");
     const last = lastIso ? new Date(lastIso).getTime() : Date.now();
+    const localeAttr = (el.getAttribute("data-locale") || "en") as Locale;
+    const t = AGO[localeAttr] || AGO.en;
 
     function tick() {
       if (!el) return;
-      const sec = Math.max(0, Math.floor((Date.now() - last) / 1000));
-      el.textContent = String(sec);
+      const diffMs = Date.now() - last;
+      const sec = Math.max(0, Math.floor(diffMs / 1000));
+      const min = Math.floor(sec / 60);
+      const hr  = Math.floor(min / 60);
+      const day = Math.floor(hr / 24);
+
+      let label: string;
+      if (sec < 5)        label = t.justNow;
+      else if (sec < 60)  label = t.sec(sec);
+      else if (min < 60)  label = t.min(min);
+      else if (hr  < 24)  label = t.h(hr);
+      else                label = t.d(day);
+
+      el.textContent = label;
     }
     tick();
     setInterval(tick, 1000);

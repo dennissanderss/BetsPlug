@@ -1,5 +1,6 @@
 ---
 import Container from "@/components/ui/Container.astro";
+import PitchLinePattern from "@/components/ui/PitchLinePattern.astro";
 import { parseAccent } from "@/lib/parseAccent";
 import type { FAQContent } from "@/content/pages/faq/types";
 
@@ -9,6 +10,7 @@ const { content } = Astro.props;
 
 <section class="relative w-full overflow-hidden bg-deep-navy-900 text-white-soft min-h-[25vh] py-12 md:py-16" aria-labelledby="faq-hero-h1">
   <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: var(--gradient-hero-dark);"></div>
+  <PitchLinePattern variant="subtle" position="full" />
 
   <Container size="md" class="relative text-center">
     <h1 id="faq-hero-h1" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] tracking-tight text-white-pure" set:html={parseAccent(content.h1)}></h1>

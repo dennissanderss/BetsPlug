@@ -1,0 +1,91 @@
+---
+/**
+ * StatGroup — horizontal row of ScoreNumber chips with subtle dot
+ * separators. Use when a section needs to show 2-4 stats inline (hero
+ * trust strips, methodology callouts, league stat panels).
+ *
+ * For 2x2 stat grids (homepage MethodologyHighlight) keep the existing
+ * `<dl>` grid pattern instead — this component is for inline rows.
+ */
+import ScoreNumber from "@/components/ui/ScoreNumber.astro";
+
+type Size    = "sm" | "md" | "lg";
+type Variant = "default" | "highlight";
+type Surface = "auto" | "dark" | "light";
+
+interface Stat {
+  value: string | number;
+  label?: string;
+  prefix?: string;
+  suffix?: string;
+  variant?: Variant;
+}
+
+interface Props {
+  stats: Stat[];
+  size?: Size;
+  surface?: Surface;
+  /** Extra utility classes on the root. */
+  class?: string;
+}
+
+const {
+  stats,
+  size = "md",
+  surface = "auto",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+// Cap to 4 to keep the row readable at common viewports. Caller
+// should pass <=4 already; this is a guard rail.
+const renderedStats = stats.slice(0, 4);
+---
+
+<div class={["stat-group", extraClass].filter(Boolean).join(" ")}>
+  {renderedStats.map((stat, i) => (
+    <>
+      <ScoreNumber
+        value={stat.value}
+        label={stat.label}
+        prefix={stat.prefix}
+        suffix={stat.suffix}
+        variant={stat.variant ?? "default"}
+        size={size}
+        surface={surface}
+      />
+      {i < renderedStats.length - 1 && (
+        <span class="stat-divider" aria-hidden="true">·</span>
+      )}
+    </>
+  ))}
+</div>
+
+<style>
+  .stat-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .stat-divider {
+    color: var(--color-white-faded);
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* Hide separators on small screens — vertical wrap doesn't need
+     them (looks weird as floating dots between rows). */
+  @media (max-width: 640px) {
+    .stat-group { gap: 0.875rem; }
+    .stat-divider { display: none; }
+  }
+
+  /* Light-surface: dimmer separator dots. */
+  :global([data-surface="light"]) .stat-group .stat-divider {
+    color: var(--color-charcoal-300);
+  }
+</style>

@@ -22,7 +22,9 @@
  */
 import { getLocalizedPath, type Locale } from "@/lib/i18n";
 import TeamLogo from "@/components/ui/TeamLogo.astro";
+import MatchStatusBadge from "@/components/ui/MatchStatusBadge.astro";
 import { getTeamColors } from "@/config/teams";
+import type { MatchStatus } from "@/lib/time";
 
 type Variant = "free" | "locked" | "fixture" | "skeleton";
 
@@ -44,6 +46,15 @@ interface Props {
   locale: Locale;
   league?: LeagueRef;
   kickoff?: string;
+  /** Raw ISO timestamp — when present, a small client script swaps
+   *  the rendered kickoff string for a "Kickoff in 2h 34m" countdown
+   *  once the match is within 24h. Server-render still uses `kickoff`
+   *  so SEO/SSR text stays correct. */
+  kickoffIso?: string;
+  /** Optional match status — overrides the default "Free pick" / lock
+   *  pill in the top bar with a LIVE/FT/HT/POSTPONED/UPCOMING badge.
+   *  Leave undefined for the existing free/locked pill behaviour. */
+  matchStatus?: MatchStatus;
   homeTeam?: Team;
   awayTeam?: Team;
   prediction?: string;
@@ -71,6 +82,8 @@ const {
   locale,
   league,
   kickoff,
+  kickoffIso,
+  matchStatus,
   homeTeam,
   awayTeam,
   prediction,
@@ -124,7 +137,9 @@ const cls = [baseSurface, extraClass].join(" ");
     class={`${cls} group hover:border-pitch-green-500/40 hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5`}
     style={`--accent-color: ${accentColor};`}
   >
-    {/* Top bar — league badge + status */}
+    {/* Top bar — league badge + status. matchStatus (LIVE/FT/HT/...)
+        takes precedence over the variant-driven free/locked pill;
+        without it we fall back to the existing free/locked pills. */}
     <header class="card-top flex items-center justify-between text-xs px-4 py-2.5">
       {league && (
         <span class="inline-flex items-center gap-1.5 font-semibold text-white-soft">
@@ -132,12 +147,15 @@ const cls = [baseSurface, extraClass].join(" ");
           {league.name}
         </span>
       )}
-      {variant === "free" && (
+      {matchStatus && (
+        <MatchStatusBadge status={matchStatus} />
+      )}
+      {!matchStatus && variant === "free" && (
         <span class="inline-flex items-center rounded-full bg-pitch-green-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-pitch-green-400">
           {labels.freePick}
         </span>
       )}
-      {variant === "locked" && (
+      {!matchStatus && variant === "locked" && (
         <span class="inline-flex items-center gap-1 text-white-muted">
           <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M10 1a4 4 0 00-4 4v3H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zm2 7V5a2 2 0 10-4 0v3h4z" clip-rule="evenodd" />
@@ -162,13 +180,19 @@ const cls = [baseSurface, extraClass].join(" ");
       </div>
     )}
 
-    {/* Kickoff */}
+    {/* Kickoff — server-rendered absolute time. When kickoffIso is
+        present, the global kickoff-countdown script swaps the text
+        to "Kickoff in 2h 34m" once we're within 24h of kickoff. */}
     {kickoff && (
       <p class="kickoff-info flex items-center justify-center gap-1.5 px-4 py-1.5 text-[11px] font-mono text-white-muted">
         <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .2.08.39.22.53l3 3a.75.75 0 101.06-1.06L10.75 9.69V5z" clip-rule="evenodd" />
         </svg>
-        <time>{kickoff}</time>
+        <time
+          datetime={kickoffIso}
+          data-kickoff-iso={kickoffIso}
+          data-kickoff-locale={locale}
+        >{kickoff}</time>
       </p>
     )}
 
@@ -268,3 +292,65 @@ const cls = [baseSurface, extraClass].join(" ");
     .confidence-fill { animation: none; }
   }
 </style>
+
+<script>
+  // Kickoff countdown enhancement — swaps server-rendered absolute
+  // time (e.g. "Sat 14:30") for a football-style countdown when the
+  // match is within 24h of kickoff. Re-evaluates every 60s.
+  // Original text is preserved in data-original so the swap is
+  // reversible if the page survives past the 24h window.
+  (function setupKickoffCountdowns() {
+    type Locale = "en" | "nl" | "de" | "fr" | "es" | "it" | "sw";
+    const STR: Record<Locale, { kickoffIn: string; d: string; h: string; m: string; inProgress: string }> = {
+      en: { kickoffIn: "Kickoff in", d: "d", h: "h", m: "m", inProgress: "In progress" },
+      nl: { kickoffIn: "Aftrap over", d: "d", h: "u", m: "m", inProgress: "Bezig" },
+      de: { kickoffIn: "Anstoß in", d: "T", h: "Std", m: "Min", inProgress: "Läuft" },
+      fr: { kickoffIn: "Coup d'envoi dans", d: "j", h: "h", m: "min", inProgress: "En cours" },
+      es: { kickoffIn: "Saque inicial en", d: "d", h: "h", m: "min", inProgress: "En curso" },
+      it: { kickoffIn: "Calcio d'inizio tra", d: "g", h: "h", m: "min", inProgress: "In corso" },
+      sw: { kickoffIn: "Mechi inaanza baada ya", d: "siku", h: "saa", m: "dak", inProgress: "Inaendelea" },
+    };
+
+    function isLocale(v: string | null): v is Locale {
+      return !!v && v in STR;
+    }
+
+    function buildLabel(iso: string, locale: Locale): string | null {
+      const ts = new Date(iso).getTime();
+      if (Number.isNaN(ts)) return null;
+
+      const diffMs = ts - Date.now();
+      const t = STR[locale];
+      if (diffMs <= 0) return t.inProgress;
+
+      // Only swap to countdown for matches within 24h. Above that,
+      // the absolute time ("Sat 14:30") reads more naturally.
+      if (diffMs > 24 * 60 * 60 * 1000) return null;
+
+      const totalMin = Math.floor(diffMs / 60_000);
+      const hours = Math.floor(totalMin / 60);
+      const mins = totalMin % 60;
+
+      if (hours >= 1) return `${t.kickoffIn} ${hours}${t.h} ${mins}${t.m}`;
+      return `${t.kickoffIn} ${mins}${t.m}`;
+    }
+
+    function refresh() {
+      const targets = document.querySelectorAll<HTMLElement>("[data-kickoff-iso]");
+      targets.forEach((el) => {
+        const iso = el.dataset.kickoffIso;
+        const localeAttr = el.dataset.kickoffLocale ?? null;
+        if (!iso || !isLocale(localeAttr)) return;
+
+        if (!el.dataset.originalText) {
+          el.dataset.originalText = el.textContent ?? "";
+        }
+        const label = buildLabel(iso, localeAttr);
+        el.textContent = label ?? el.dataset.originalText;
+      });
+    }
+
+    refresh();
+    setInterval(refresh, 60_000);
+  })();
+</script>
