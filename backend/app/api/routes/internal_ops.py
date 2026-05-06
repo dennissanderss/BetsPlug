@@ -1588,10 +1588,10 @@ async def audit_phase5(db: AsyncSession = Depends(get_db)) -> dict:
                 COUNT(*) AS total,
                 COUNT(*) FILTER (WHERE is_live) AS live_n,
                 COUNT(*) FILTER (WHERE NOT is_live) AS bt_n,
-                COUNT(*) FILTER (WHERE result IS NOT NULL) AS evaluated,
-                SUM(CASE WHEN result = 'won' THEN 1 ELSE 0 END) AS won,
-                SUM(CASE WHEN result = 'lost' THEN 1 ELSE 0 END) AS lost,
-                SUM(actual_pnl) AS pnl,
+                COUNT(*) FILTER (WHERE is_evaluated) AS evaluated,
+                COUNT(*) FILTER (WHERE is_correct = TRUE) AS won,
+                COUNT(*) FILTER (WHERE is_correct = FALSE) AS lost,
+                SUM(profit_loss_units) AS pnl,
                 AVG(combined_odds) AS avg_odds,
                 AVG(combined_edge) AS avg_edge
             FROM combo_bets
@@ -1615,6 +1615,7 @@ async def audit_phase5(db: AsyncSession = Depends(get_db)) -> dict:
         }
     except Exception as e:
         out["errors"]["combo_stats"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
 
     # 7. Predictions list endpoint count (what /predictions shows)
     # Default predictions list filters by current user tier; for free-tier (anon) this means confidence < 0.62
