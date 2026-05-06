@@ -1930,3 +1930,46 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
         del out["errors"]
     return out
 
+
+@router.get(
+    "/audit/snapshot-coverage-per-month",
+    summary="Diagnostic — snapshot + v8.1 prediction coverage per month",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_snapshot_coverage(db: AsyncSession = Depends(get_db)) -> dict:
+    """Per-month: count of v8.1 predictions, of those with snapshot, and
+    those that pass the combo selector floor (snapshot + conf >= 0.62).
+
+    Used to diagnose why combo-backfill returns 0 inserted on a date range.
+    """
+    from sqlalchemy import text
+    q = await db.execute(text("""
+        SELECT
+            TO_CHAR(m.scheduled_at, 'YYYY-MM') AS yyyymm,
+            COUNT(*) AS v81_preds,
+            COUNT(*) FILTER (WHERE p.closing_odds_snapshot IS NOT NULL) AS with_snapshot,
+            COUNT(*) FILTER (
+                WHERE p.closing_odds_snapshot IS NOT NULL
+                  AND p.confidence >= 0.62
+            ) AS combo_eligible
+        FROM predictions p
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+        GROUP BY yyyymm
+        ORDER BY yyyymm
+    """))
+    rows = q.all()
+    return {
+        "per_month": [
+            {
+                "month": r[0],
+                "v81_preds": int(r[1]),
+                "with_snapshot": int(r[2]),
+                "combo_eligible": int(r[3]),
+            }
+            for r in rows
+        ],
+        "total_months": len(rows),
+    }
+
