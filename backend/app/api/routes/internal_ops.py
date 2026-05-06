@@ -1704,7 +1704,8 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
         out["errors"]["determinism"] = f"{type(e).__name__}: {str(e)[:300]}"
         await db.rollback()
 
-    # 2a. Evaluator completeness per source
+    # 2a. Evaluator completeness per source (use match_results presence
+    # since match.status is not always 'finished' for historical matches)
     try:
         q = await db.execute(text("""
             SELECT
@@ -1714,9 +1715,9 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
                 COUNT(*) - COUNT(pe.id) AS pending
             FROM predictions p
             JOIN matches m ON m.id = p.match_id
+            JOIN match_results mr ON mr.match_id = m.id
             LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
-            WHERE m.status::text = 'finished'
-              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+            WHERE m.scheduled_at < NOW() - INTERVAL '24 hours'
               AND p.created_at >= '2026-04-16 11:00:00+00'
             GROUP BY p.prediction_source
             ORDER BY p.prediction_source
@@ -1746,9 +1747,9 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
             FROM predictions p
             JOIN matches m ON m.id = p.match_id
             JOIN leagues l ON l.id = m.league_id
+            JOIN match_results mr ON mr.match_id = m.id
             LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
-            WHERE m.status::text = 'finished'
-              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+            WHERE m.scheduled_at < NOW() - INTERVAL '24 hours'
               AND p.created_at >= '2026-04-16 11:00:00+00'
             GROUP BY l.name
             ORDER BY pending DESC, total DESC
@@ -1777,9 +1778,9 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
                 COUNT(*) - COUNT(pe.id) AS pending
             FROM predictions p
             JOIN matches m ON m.id = p.match_id
+            JOIN match_results mr ON mr.match_id = m.id
             LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
-            WHERE m.status::text = 'finished'
-              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+            WHERE m.scheduled_at < NOW() - INTERVAL '24 hours'
               AND p.created_at >= '2026-04-16 11:00:00+00'
             GROUP BY yyyymm
             ORDER BY yyyymm
@@ -1905,17 +1906,21 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
             hs, as_ = int(r.home_score), int(r.away_score)
             actual = (1, 0, 0) if hs > as_ else ((0, 0, 1) if as_ > hs else (0, 1, 0))
             probs = (float(r.home_win_prob or 0), float(r.draw_prob or 0), float(r.away_win_prob or 0))
-            manual_brier = sum((p - a) ** 2 for p, a in zip(probs, actual))
+            # Standard 1X2 Brier = mean over 3 classes (sum / 3)
+            manual_brier_sum = sum((p - a) ** 2 for p, a in zip(probs, actual))
+            manual_brier_mean = manual_brier_sum / 3
             stored = float(r.brier_score)
             brier_checks.append({
-                "manual_brier": round(manual_brier, 6),
+                "manual_brier_sum_form": round(manual_brier_sum, 6),
+                "manual_brier_mean_form": round(manual_brier_mean, 6),
                 "stored_brier": round(stored, 6),
-                "diff": round(abs(manual_brier - stored), 6),
-                "match": abs(manual_brier - stored) < 0.001,
+                "matches_mean_form": abs(manual_brier_mean - stored) < 0.001,
+                "matches_sum_form": abs(manual_brier_sum - stored) < 0.001,
             })
         out["brier_replication"] = {
             "checks": brier_checks,
-            "all_match": all(c["match"] for c in brier_checks),
+            "stored_uses_mean_form": all(c["matches_mean_form"] for c in brier_checks),
+            "stored_uses_sum_form": all(c["matches_sum_form"] for c in brier_checks),
         }
     except Exception as e:
         out["errors"]["brier_replication"] = f"{type(e).__name__}: {str(e)[:300]}"
