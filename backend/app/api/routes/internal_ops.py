@@ -1651,3 +1651,277 @@ async def audit_phase5(db: AsyncSession = Depends(get_db)) -> dict:
         del out["errors"]
     return out
 
+
+@router.get(
+    "/audit/phase6-reproducibility",
+    summary="Phase 6 audit — deterministic ROI + evaluator completeness",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
+    """Phase 6 — verify the engine is reproducible.
+
+    Sub-checks:
+      1. Same query repeated 3× must return identical aggregate values
+      2. Evaluator completeness per league / per source / per month
+      3. Manual ROI replication on 5 random graded picks (1X2 with bookmaker odds)
+    """
+    from sqlalchemy import text
+
+    out: dict = {"errors": {}}
+
+    # 1. Determinism — call the same aggregate query 3× sequentially, compare
+    try:
+        runs = []
+        for _ in range(3):
+            q = await db.execute(text("""
+                SELECT
+                    COUNT(*) AS n,
+                    SUM(CASE WHEN pe.is_correct THEN 1 ELSE 0 END) AS correct,
+                    AVG(p.confidence) AS avg_conf,
+                    AVG(pe.brier_score) AS avg_brier
+                FROM predictions p
+                JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+                JOIN matches m ON m.id = p.match_id
+                WHERE p.prediction_source IN ('batch_local_fill','backtest','live')
+                  AND p.created_at >= '2026-04-16 11:00:00+00'
+                  AND p.predicted_at <= m.scheduled_at
+            """))
+            r = q.first()
+            runs.append({
+                "n": int(r[0] or 0),
+                "correct": int(r[1] or 0),
+                "avg_conf": round(float(r[2] or 0), 6),
+                "avg_brier": round(float(r[3] or 0), 6),
+            })
+        all_match = all(r == runs[0] for r in runs)
+        out["determinism_3_runs"] = {
+            "all_three_identical": all_match,
+            "run_1": runs[0],
+            "run_2": runs[1],
+            "run_3": runs[2],
+        }
+    except Exception as e:
+        out["errors"]["determinism"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
+
+    # 2a. Evaluator completeness per source
+    try:
+        q = await db.execute(text("""
+            SELECT
+                p.prediction_source AS src,
+                COUNT(*) AS total,
+                COUNT(pe.id) AS evaluated,
+                COUNT(*) - COUNT(pe.id) AS pending
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            WHERE m.status::text = 'finished'
+              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+              AND p.created_at >= '2026-04-16 11:00:00+00'
+            GROUP BY p.prediction_source
+            ORDER BY p.prediction_source
+        """))
+        out["evaluator_per_source"] = [
+            {
+                "source": r[0],
+                "total": int(r[1]),
+                "evaluated": int(r[2]),
+                "pending": int(r[3]),
+                "coverage_pct": round(100.0 * int(r[2]) / int(r[1]), 2) if r[1] else None,
+            }
+            for r in q.all()
+        ]
+    except Exception as e:
+        out["errors"]["evaluator_per_source"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
+
+    # 2b. Evaluator completeness per league (top 15 by volume)
+    try:
+        q = await db.execute(text("""
+            SELECT
+                l.name AS league,
+                COUNT(*) AS total,
+                COUNT(pe.id) AS evaluated,
+                COUNT(*) - COUNT(pe.id) AS pending
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            JOIN leagues l ON l.id = m.league_id
+            LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            WHERE m.status::text = 'finished'
+              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+              AND p.created_at >= '2026-04-16 11:00:00+00'
+            GROUP BY l.name
+            ORDER BY pending DESC, total DESC
+            LIMIT 15
+        """))
+        out["evaluator_per_league_top15"] = [
+            {
+                "league": r[0],
+                "total": int(r[1]),
+                "evaluated": int(r[2]),
+                "pending": int(r[3]),
+            }
+            for r in q.all()
+        ]
+    except Exception as e:
+        out["errors"]["evaluator_per_league"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
+
+    # 2c. Evaluator completeness per month
+    try:
+        q = await db.execute(text("""
+            SELECT
+                TO_CHAR(m.scheduled_at, 'YYYY-MM') AS yyyymm,
+                COUNT(*) AS total,
+                COUNT(pe.id) AS evaluated,
+                COUNT(*) - COUNT(pe.id) AS pending
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            WHERE m.status::text = 'finished'
+              AND m.scheduled_at < NOW() - INTERVAL '24 hours'
+              AND p.created_at >= '2026-04-16 11:00:00+00'
+            GROUP BY yyyymm
+            ORDER BY yyyymm
+        """))
+        rows = q.all()
+        # Show only months with pending > 0 OR last 6 months
+        all_months = [
+            {
+                "month": r[0],
+                "total": int(r[1]),
+                "evaluated": int(r[2]),
+                "pending": int(r[3]),
+            }
+            for r in rows
+        ]
+        problematic = [m for m in all_months if m["pending"] > 0]
+        recent = all_months[-6:] if all_months else []
+        out["evaluator_per_month"] = {
+            "total_months": len(all_months),
+            "months_with_pending": len(problematic),
+            "problematic_months": problematic,
+            "last_6_months": recent,
+        }
+    except Exception as e:
+        out["errors"]["evaluator_per_month"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
+
+    # 3. Manual ROI replication on 5 random graded picks
+    try:
+        q = await db.execute(text("""
+            SELECT
+                p.id AS pid,
+                p.confidence,
+                p.home_win_prob, p.draw_prob, p.away_win_prob,
+                CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+                pe.is_correct,
+                ht.name AS home, at.name AS away,
+                mr.home_score, mr.away_score
+            FROM predictions p
+            JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            JOIN matches m ON m.id = p.match_id
+            JOIN teams ht ON ht.id = m.home_team_id
+            JOIN teams at ON at.id = m.away_team_id
+            LEFT JOIN match_results mr ON mr.match_id = m.id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+              AND p.predicted_at <= m.scheduled_at
+              AND p.closing_odds_snapshot IS NOT NULL
+              AND mr.home_score IS NOT NULL
+            ORDER BY RANDOM() LIMIT 5
+        """))
+        import json as _json
+        manual_checks = []
+        for r in q.all():
+            home_p = float(r.home_win_prob or 0)
+            draw_p = float(r.draw_prob or 0)
+            away_p = float(r.away_win_prob or 0)
+            picks = sorted(
+                [("home", home_p), ("draw", draw_p), ("away", away_p)],
+                key=lambda x: x[1], reverse=True,
+            )
+            our_pick = picks[0][0]
+
+            hs, as_ = int(r.home_score), int(r.away_score)
+            actual = "home" if hs > as_ else ("away" if as_ > hs else "draw")
+            manual_correct = (our_pick == actual)
+
+            # Try to find odds in snapshot
+            snap_odds = None
+            try:
+                snap = _json.loads(r.snap_text) if r.snap_text else {}
+                bm = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+                if isinstance(bm, dict):
+                    snap_odds = {
+                        "home": bm.get("home"),
+                        "draw": bm.get("draw"),
+                        "away": bm.get("away"),
+                    }
+            except Exception:
+                snap_odds = None
+
+            # Compute manual P/L if odds available (1u stake)
+            pnl = None
+            if snap_odds and snap_odds.get(our_pick) is not None:
+                pnl = (float(snap_odds[our_pick]) - 1.0) if manual_correct else -1.0
+
+            manual_checks.append({
+                "match": f"{r.home} vs {r.away}",
+                "score": f"{hs}-{as_}",
+                "our_pick": our_pick,
+                "actual_outcome": actual,
+                "manual_correct": manual_correct,
+                "stored_correct": r.is_correct,
+                "labels_match": (manual_correct == r.is_correct),
+                "snapshot_odds": snap_odds,
+                "manual_pnl_1u": round(pnl, 3) if pnl is not None else None,
+            })
+        out["manual_roi_replication"] = {
+            "checks": manual_checks,
+            "all_labels_match": all(c["labels_match"] for c in manual_checks),
+        }
+    except Exception as e:
+        out["errors"]["manual_roi"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
+
+    # 4. Brier score sanity (random sample)
+    try:
+        q = await db.execute(text("""
+            SELECT
+                p.home_win_prob, p.draw_prob, p.away_win_prob,
+                pe.brier_score, pe.is_correct,
+                mr.home_score, mr.away_score
+            FROM predictions p
+            JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            JOIN matches m ON m.id = p.match_id
+            JOIN match_results mr ON mr.match_id = m.id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+              AND p.predicted_at <= m.scheduled_at
+              AND mr.home_score IS NOT NULL
+            ORDER BY RANDOM() LIMIT 5
+        """))
+        brier_checks = []
+        for r in q.all():
+            hs, as_ = int(r.home_score), int(r.away_score)
+            actual = (1, 0, 0) if hs > as_ else ((0, 0, 1) if as_ > hs else (0, 1, 0))
+            probs = (float(r.home_win_prob or 0), float(r.draw_prob or 0), float(r.away_win_prob or 0))
+            manual_brier = sum((p - a) ** 2 for p, a in zip(probs, actual))
+            stored = float(r.brier_score)
+            brier_checks.append({
+                "manual_brier": round(manual_brier, 6),
+                "stored_brier": round(stored, 6),
+                "diff": round(abs(manual_brier - stored), 6),
+                "match": abs(manual_brier - stored) < 0.001,
+            })
+        out["brier_replication"] = {
+            "checks": brier_checks,
+            "all_match": all(c["match"] for c in brier_checks),
+        }
+    except Exception as e:
+        out["errors"]["brier_replication"] = f"{type(e).__name__}: {str(e)[:300]}"
+        await db.rollback()
+
+    if not out["errors"]:
+        del out["errors"]
+    return out
+
