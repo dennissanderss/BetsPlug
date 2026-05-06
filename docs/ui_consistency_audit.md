@@ -13,7 +13,7 @@ Goal: verify that the numbers each authed/public dashboard page displays **recon
 | `/trackrecord` summary card (default) | ✅ to access_filter math | 5,134 total, 46.6% accuracy — but is dominated by retroactive backfill |
 | `/trackrecord` per-tier breakdown | ✅ to ladder semantics | each tier filter returns expected subset |
 | `/trackrecord/live-measurement` | ⚠ inconsistent with summary?source=live | 52.9% (n=612) vs 63.2% (n=174) |
-| `/combi-of-the-day` stats card | ⚠ shows 12-month window only | 69 combos / +16.85% ROI vs Phase 3 full-body +40.39% on 241 |
+| `/combi-of-the-day` stats card | ⚠ shows 12-month window only | 69 combos / +16.85% ROI vs corrected Phase 3 full-body +27.48% on 438 |
 | `/combi-of-the-day` today | ✅ hard-locked correctly | `coming_soon: true`, `legs: []` |
 | `/predictions` list partition | ✅ partitions reconcile | 19,802 free + 11,159 silver + 4,939 gold + 2,744 platinum = 38,644 (≈ 38,400 v8.1 filtered) |
 
@@ -27,7 +27,7 @@ Goal: verify that the numbers each authed/public dashboard page displays **recon
 - `predictions`: **117,765** rows
 - `prediction_evaluations`: 117,521 rows (99.8% graded)
 - `matches`: 58,631 rows
-- `combo_bets`: 241 rows
+- `combo_bets`: 500 rows (after 2026-05-06 backfill — was 241)
 
 ### v8.1-filtered population (the trackrecord pipeline universe)
 Filter: `prediction_source IN ('batch_local_fill','backtest','live') AND created_at >= 2026-04-16 11:00 AND predicted_at <= scheduled_at`
@@ -137,10 +137,11 @@ vs v8.1 filtered population: **38,400**.
 
 ## 5.5 — Combo stats inconsistency (⚠ ISSUE 2)
 
-### What Phase 3 audit reported (`engine_v2_audit.md`):
-- 241 combos (179 backtest + 62 live)
-- 47.72% hit rate, +40.39% ROI, +97.34u net P/L
-- Avg combined edge: 28.8%
+### What Phase 3 audit reports (CORRECTED 2026-05-06 — see `engine_v2_audit.md` §3.9):
+- 500 combos (438 backtest + 62 live) — full body after gap fill
+- BT 45.89% hit / +27.48% ROI / +120.36u
+- Live 45.16% hit / +36.28% ROI / +22.49u
+- *Original Phase 3 numbers (241 combos, +40.39% ROI) reflected only 2022-08 → 2023-08 — superseded.*
 
 ### What the UI shows (`/api/value-bets/combo-stats?scope=backtest`):
 ```json

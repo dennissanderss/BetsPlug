@@ -2,15 +2,31 @@
 
 *Generated 2026-05-06 via `GET /api/internal-ops/audit/phase3-engine2-combo`. Code review of `combo_bet_service.py` + 10-combo spot-check + ROI replication in SQL.*
 
+> **🔁 Updated 2026-05-06 (post-backfill):** the original audit numbers below were based on a partial backtest body (179 combos covering only 2022-08 → 2023-08-13). The combo-backfill was extended on 2026-05-06 to fill the 2.5-year gap — final numbers are in section 3.9.
+
 ---
 
-## Executive summary
+## Executive summary (ORIGINAL — partial body, 2022-08 → 2023-08)
 
 | Surface | Combos | Hit rate | Avg odds | Avg edge | Net P/L | ROI |
 |---|---:|---:|---:|---:|---:|---:|
 | **Total** | 241 | 47.7% | 3.22 | 28.8% | +97.34u | **+40.39%** |
 | Backtest | 179 | 48.6% | 3.27 | 29.1% | +74.84u | +41.81% |
 | Live | 62 | 45.2% | 3.07 | 28.0% | +22.49u | +36.28% |
+
+## Executive summary (CORRECTED — full body, 2022-08 → 2025-11 + live 2026)
+
+| Surface | Combos | Hit rate | Net P/L | ROI |
+|---|---:|---:|---:|---:|
+| **Total** | 500 | 45.8% | +142.85u | **+28.57%** |
+| Backtest (full lifetime) | 438 | 45.89% | +120.36u | **+27.48%** |
+| Live | 62 | 45.16% | +22.49u | +36.28% |
+
+**Δ vs original:**
+- Backtest sample 2.4× larger (179 → 438)
+- Backtest ROI dropped 14.3pp (+41.81% → +27.48%) when 2.5-year gap was filled
+- Live cohort unchanged (n=62)
+- The original "+41.81%" reflected a cherry-picked-by-omission window (the backfill had only run for 2022-08 → 2023-08 when Phase 3 was written)
 
 **Verdict:**
 - ✅ Math reconciles — alle 10 sample combos hebben stored_pnl = manual_pnl
@@ -216,3 +232,45 @@ Geen kritieke bugs. ROI math correct, geen synthetic data, edge filter werkt.
 ---
 
 **STOP. Phase 3 complete. Awaiting approval before Phase 4 (Data flow integrity).**
+
+---
+
+## 3.9 — Post-backfill correction (2026-05-06, addendum)
+
+### What changed
+- Combo-backfill was extended from 2023-08-14 → 2026-04-15 (the gap that Phase 3 missed)
+- 259 new backtest combos added (179 → 438)
+- Live cohort unchanged (n=62)
+
+### New full-body numbers
+```
+Backtest:   n=438, hit=201/438=45.89%, PnL=+120.36u, ROI=+27.48%
+Live:       n=62,  hit=28/62=45.16%,   PnL=+22.49u,  ROI=+36.28%
+Combined:   n=500, ~45.8% hit,         PnL=+142.85u, ROI=+28.57%
+```
+
+### Distribution per month (BT only)
+
+| Year | Months filled | Backtest combos |
+|---|---|---:|
+| 2022 | 5 (Aug-Dec) | 69 |
+| 2023 | 11 (Jan-Dec, no Jul) | 191 |
+| 2024 | 9 (Jan-May, Aug-Dec — Jun/Jul summer-stop) | 124 |
+| 2025 | 8 (Jan-May, Aug-Nov — Jun/Jul summer-stop) | 54 |
+
+### Why some months are blank
+- **Jun-Jul each year:** football off-season; <5% snapshot coverage in source predictions
+- **2025-12 → 2026-04:** snapshot coverage 50-69% (lower than 2022-2024); selector finds fewer 2-leg combinations passing the v5 edge filter
+
+### Implications
+
+1. **The headline ROI claim drops from +41.81% to +27.48%** — still strong, but the "wow" factor is materially less
+2. **Live ROI (+36.28%) now sits between corrected BT (+27.48%) and original BT (+41.81%)** — live looks slightly better than the corrected backtest, which is the expected pattern (selector favourable on recent data because it's more representative of current calibration)
+3. **Engine v2's BT-Live gap goes from -5.5pp to +8.8pp** — live is now *better* than corrected backtest. This is positive for the product story but raises the question whether the live cohort (n=62) is genuinely above-trend or just within sampling variance. CI on live n=62 ROI: roughly [+5%, +70%].
+4. **The earlier conclusion "Engine v2 BT and Live converge → no seed-leakage" is weakened.** The 14pp drop in BT ROI when we filled the gap suggests period-selection bias was inflating the original number. Live could yet move down too.
+
+### Marketing implication
+
+- **Defensible claim:** "Backtest +27% ROI on 438 combos covering 3 years; live +36% on 62 combos over 4 weeks."
+- **Not defensible anymore:** "+40% ROI" without the qualifier that this was a partial-window number.
+

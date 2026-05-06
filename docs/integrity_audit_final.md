@@ -17,7 +17,7 @@
 | Layer | Verdict |
 |---|---|
 | **Data ingestion + storage** | ✅ Clean — 30k odds rows, 100% pre-match, healthy margins |
-| **Engine v2 (Combo of the Day) — backtest** | ✅ Solid — +40.39% ROI on 241 combos, math reconciles, edge filter works |
+| **Engine v2 (Combo of the Day) — backtest** | ✅ Solid — **+27.48% ROI on 438 combos** (corrected 2026-05-06 after gap fill) |
 | **Engine v2 (Combo of the Day) — live** | ⚠ Promising — +36.28% on n=62, sample too small for confidence |
 | **Engine v1 (single picks) — retroactive backtest** | ⚠ Tier-asymmetric — Platinum +6.75% / Free -6.89%; soft seed-leakage suspect |
 | **Engine v1 (single picks) — live forward-feed** | 🚨 **-10.90% ROI on Gold+ (n=182)** — questions all retroactive +EV claims |
@@ -59,8 +59,9 @@ A 7-phase, sequential, diagnose-only audit covering both engines after the impor
 | Total predictions in DB | 117,765 |
 | v8.1-filtered evaluated population | 38,402 |
 | Live forward-feed predictions (`source=live`) | 604 |
-| Combo bets total | 241 |
+| Combo bets total (after 2026-05-06 backfill) | 500 |
 | Live combo bets | 62 |
+| Backtest combo bets (corrected) | 438 |
 
 ### Accuracy
 | Cohort | n | Accuracy |
@@ -82,7 +83,8 @@ A 7-phase, sequential, diagnose-only audit covering both engines after the impor
 | Engine v1 — Free (retroactive) | 7,916 with odds | **-6.89%** |
 | Engine v1 — **Live forward-feed (Gold+)** | **182** | **🚨 -10.90%** |
 | Engine v1 — Backtest only (Gold+, post-deploy retroactive) | 33,028 | **+5.49%** |
-| Engine v2 — Backtest combos | 179 | **+41.81%** |
+| Engine v2 — Backtest combos (CORRECTED full body) | 438 | **+27.48%** |
+| Engine v2 — Backtest combos (original partial body) | 179 | +41.81% |
 | Engine v2 — Live combos | 62 | **+36.28%** |
 | Engine v2 — UI displayed (12-month rolling) | 69 | **+16.85%** |
 
@@ -107,22 +109,26 @@ A 7-phase, sequential, diagnose-only audit covering both engines after the impor
 
 ---
 
-### ⚠ FINDING 2 — Engine v2 (Combo) is the cleaner product (P2 commercial)
+### ⚠ FINDING 2 — Engine v2 (Combo) is the cleaner product, but original ROI was inflated by partial-window backfill (P2 commercial)
 
-- Combo backtest +41.81% on 179 combos
-- Combo live +36.28% on 62 combos
-- **Only 5.5pp gap between backtest and live** — much cleaner than Engine v1's 16pp gap
-- Edge filter (≥2% per leg) appears to filter out the seed-leakage effect
+**Original Phase 3 audit (2026-05-06 morning) used a 179-combo backtest body covering only 2022-08 → 2023-08-13 — the combo-backfill had not been run for the rest of the available period.** After spotting the gap and extending the backfill to 2026-04-15:
+
+- Combo backtest (CORRECTED): **+27.48% ROI on 438 combos** (was +41.81% on 179)
+- Combo live (unchanged): +36.28% on 62 combos
+- BT-Live gap is now +8.8pp (live above corrected BT) — still cleaner than Engine v1's -16pp gap
 - Math 100% reconciles on 10/10 sample combos
+- Live cohort actually outperforms the corrected backtest, but n=62 is in wide CI
 
 **But:**
 - Live n=62 is too small to lock in a final ROI number (CI roughly [+5%, +70%])
-- UI shows a 12-month rolling window: **+16.85% on 69 combos** — different story than the lifetime audit
+- UI shows a 12-month rolling window: **+16.85% on 69 combos** — different story than either lifetime number
 - Avg combined edge of 28.8% is suspiciously high; may reflect overconfidence in underlying model
+- The 14pp drop in backtest ROI when the gap was filled **weakens the original "no seed-leakage" claim** — period selection inflated the first number
 
 **Implication:**
-- Engine v2 is a defensible product to lead with (clearer signal, math-verified)
-- But marketing should align around **one** number — either lifetime (+40%) or 12-month (+17%)
+- Engine v2 is still the defensible product to lead with (math-verified, edge filter works)
+- But the audit-writeup mistake (incomplete body presented as lifetime) should not be repeated — always cross-check sample completeness against eligible-prediction count per period before claiming "lifetime"
+- Marketing should align around **one** number — corrected lifetime (+27%), 12-month UI (+17%), or live (+36%)
 
 ---
 
@@ -194,8 +200,9 @@ For each public surface, rank how defensible the displayed metric is:
 
 | Surface | Number shown | Defensibility |
 |---|---|---|
-| `/combi-of-the-day` stats card | +16.85% ROI on 69 combos (12-mo) | ✅ **Strong** — 12-month window, math verified, sample n=69, CI [+0%, +35%] |
-| Engine v2 lifetime (audit doc) | +40.39% ROI on 241 combos | ✅ **Strong** — math verified, but conflicts with UI window |
+| `/combi-of-the-day` stats card | +16.85% ROI on 69 combos (12-mo rolling) | ✅ **Strong** — math verified, sample n=69, CI [+0%, +35%] |
+| Engine v2 lifetime (CORRECTED audit) | +27.48% ROI on 438 combos | ✅ **Strong** — full body 2022-08 → 2025-11, math verified |
+| Engine v2 lifetime (ORIGINAL, do not use) | +40.39% ROI on 241 combos | ⚠ **Stale** — partial body, superseded by corrected number |
 | `/trackrecord/summary` per-tier (Platinum) | 77.86% accuracy on 1,242 | ✅ **Strong** — large sample, calibration-checkable |
 | `/trackrecord/live-measurement` | 52.94% accuracy on 612 | ✅ **Honest** — full live cohort, no cherry-pick |
 | `/trackrecord/summary?source=live` | 63.22% on 174 | ⚠ **Tier-biased** — free-tier subset of live, reads better than full cohort |
