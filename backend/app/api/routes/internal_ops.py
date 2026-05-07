@@ -2456,6 +2456,196 @@ async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Predictions Rebuild — Phase 3.1: Verify proposed per-tier recipes
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/rebuild-phase3-verify-recipes",
+    summary="Verify exact ROI for the proposed per-tier recipe set",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_verify_recipes(db: AsyncSession = Depends(get_db)) -> dict:
+    """Apply the 4 proposed tier recipes to the v8.1 evaluated population
+    and return per-tier ROI + sample size + rolling 14d positivity.
+
+    Recipes (proposal under review):
+      - Free:     conf >= 0.60, no edge filter, no odds floor
+      - Silver:   conf >= 0.62 + edge >= 0% + odds >= 1.60
+      - Gold:     conf >= 0.65 + edge >= 6% + odds >= 1.80
+      - Platinum: conf >= 0.78 + edge >= 8% + odds in [1.50, 3.00]
+    """
+    from sqlalchemy import text as _text
+    import json as _json
+    from datetime import timedelta
+
+    rows = (await db.execute(_text("""
+        SELECT
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            m.scheduled_at,
+            p.prediction_source
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+    """))).all()
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted(
+            [("home", h), ("draw", d), ("away", a)],
+            key=lambda x: x[1], reverse=True,
+        )
+        pick, our_p = sides[0]
+        try:
+            o = float(bm.get(pick) or 0)
+            h_o = float(bm.get("home", 0) or 0)
+            d_o = float(bm.get("draw", 0) or 0)
+            a_o = float(bm.get("away", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if o <= 1.0 or h_o <= 1.0 or a_o <= 1.0:
+            continue
+        ovr = 1.0 / h_o + 1.0 / a_o + (1.0 / d_o if d_o > 1.0 else 0.0)
+        if ovr <= 0:
+            continue
+        edge = our_p - (1.0 / o) / ovr
+        pnl = (o - 1.0) if r.is_correct else -1.0
+        records.append({
+            "conf": float(r.confidence or 0),
+            "odds": o,
+            "edge": edge,
+            "is_correct": bool(r.is_correct),
+            "scheduled_at": r.scheduled_at,
+            "pnl": pnl,
+            "source": r.prediction_source,
+        })
+
+    records.sort(key=lambda x: x["scheduled_at"])
+
+    recipes = {
+        "free": {
+            "label": "conf >= 0.60 (no edge, no odds floor)",
+            "filter": lambda x: x["conf"] >= 0.60,
+        },
+        "silver": {
+            "label": "conf >= 0.62 + edge >= 0% + odds >= 1.60",
+            "filter": lambda x: x["conf"] >= 0.62 and x["edge"] >= 0.0 and x["odds"] >= 1.60,
+        },
+        "gold": {
+            "label": "conf >= 0.65 + edge >= 6% + odds >= 1.80",
+            "filter": lambda x: x["conf"] >= 0.65 and x["edge"] >= 0.06 and x["odds"] >= 1.80,
+        },
+        "platinum": {
+            "label": "conf >= 0.78 + edge >= 8% + odds in [1.50, 3.00]",
+            "filter": (
+                lambda x: x["conf"] >= 0.78 and x["edge"] >= 0.08
+                and 1.50 <= x["odds"] <= 3.00
+            ),
+        },
+    }
+
+    if not records:
+        return {"error": "no records"}
+
+    first_dt = records[0]["scheduled_at"]
+    last_dt = records[-1]["scheduled_at"]
+
+    # Build rolling 14d windows (7-day step)
+    window_starts = []
+    cur = first_dt
+    while cur + timedelta(days=14) <= last_dt + timedelta(days=1):
+        window_starts.append(cur)
+        cur += timedelta(days=7)
+
+    out = {
+        "population": len(records),
+        "span": {
+            "first": first_dt.isoformat(),
+            "last": last_dt.isoformat(),
+            "days": (last_dt - first_dt).days,
+        },
+        "windows_14d": len(window_starts),
+        "recipes": {},
+    }
+
+    for tier, spec in recipes.items():
+        full = [x for x in records if spec["filter"](x)]
+        live = [x for x in full if x["source"] == "live"]
+        n = len(full)
+        if n == 0:
+            out["recipes"][tier] = {
+                "label": spec["label"],
+                "n_total": 0,
+                "lifetime_roi_pct": None,
+            }
+            continue
+        won = sum(1 for x in full if x["is_correct"])
+        pnl = sum(x["pnl"] for x in full)
+
+        # Rolling windows
+        window_results = []
+        for ws in window_starts:
+            we = ws + timedelta(days=14)
+            w = [x for x in full if ws <= x["scheduled_at"] < we]
+            if not w:
+                continue
+            wn = len(w)
+            wpnl = sum(x["pnl"] for x in w)
+            window_results.append({"n": wn, "roi": 100.0 * wpnl / wn})
+
+        n_pos = sum(1 for w in window_results if w["roi"] > 0)
+        avg_per_window = sum(w["n"] for w in window_results) / len(window_results) if window_results else 0
+
+        # Live-only stats
+        live_n = len(live)
+        live_won = sum(1 for x in live if x["is_correct"])
+        live_pnl = sum(x["pnl"] for x in live)
+
+        out["recipes"][tier] = {
+            "label": spec["label"],
+            "n_total": n,
+            "lifetime_hit_pct": round(100.0 * won / n, 2),
+            "lifetime_roi_pct": round(100.0 * pnl / n, 2),
+            "lifetime_pnl_units": round(pnl, 2),
+            "avg_odds": round(sum(x["odds"] for x in full) / n, 3),
+            "avg_edge_pct": round(100.0 * sum(x["edge"] for x in full) / n, 2),
+            "windows_total": len(window_results),
+            "windows_pos_pct": round(100.0 * n_pos / len(window_results), 1) if window_results else None,
+            "avg_picks_per_14d": round(avg_per_window, 1),
+            "live_only_n": live_n,
+            "live_only_hit_pct": round(100.0 * live_won / live_n, 2) if live_n else None,
+            "live_only_roi_pct": round(100.0 * live_pnl / live_n, 2) if live_n else None,
+        }
+
+    # Funnel sanity check
+    rois = [out["recipes"][t]["lifetime_roi_pct"] for t in ("free", "silver", "gold", "platinum")
+            if out["recipes"][t].get("lifetime_roi_pct") is not None]
+    out["funnel_check"] = {
+        "rois_in_order": rois,
+        "monotonic_increasing": all(rois[i] <= rois[i+1] for i in range(len(rois)-1)) if len(rois) > 1 else None,
+    }
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Predictions Rebuild — Phase 3: Parameter optimisation on rolling 14d windows
 # ─────────────────────────────────────────────────────────────────────────────
 
