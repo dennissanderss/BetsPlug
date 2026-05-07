@@ -7,6 +7,7 @@ import { UpcomingPicksStrip } from "@/components/dashboard/UpcomingPicksStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
 import { TodayKpiStrip } from "@/components/dashboard/TodayKpiStrip";
+import { TierRoiHeadline } from "@/components/dashboard/TierRoiHeadline";
 import { DashboardHeroBanner } from "@/components/dashboard/DashboardHeroBanner";
 import { TodayLeagueBreakdown } from "@/components/dashboard/TodayLeagueBreakdown";
 import { TelegramInviteCard } from "@/components/telegram/invite-card";
@@ -152,6 +153,14 @@ export default function DashboardPage() {
           liveCount={liveCount}
           weekHitRate={weekHitRate}
         />
+      </div>
+
+      {/* v8.6 — Live ROI headline (Phase 7). Shows the user's current
+          tier 14-day live ROI prominently. Numbers come from the same
+          /trackrecord/per-tier-roi endpoint as Trackrecord Tab 1 +
+          Results simulator default — fully consistent. */}
+      <div className="mt-4">
+        <TierRoiHeadline tier={userTierSlug} />
       </div>
 
       {/* ── Section heading — magazine-style, gradient underline. */}
