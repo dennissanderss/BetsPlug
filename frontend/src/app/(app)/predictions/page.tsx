@@ -1208,92 +1208,10 @@ function FilterBar({
           </div>
         </div>
 
-        {/* v8.1 Pick-tier filter */}
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-            Tier
-          </span>
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-            {([
-              { value: "All" as const, label: "All", icon: null, rank: 0 },
-              { value: "platinum" as const, label: "Platinum", icon: "🟢", rank: 3 },
-              { value: "gold" as const, label: "Gold", icon: "🔵", rank: 2 },
-              { value: "silver" as const, label: "Silver", icon: "⚪", rank: 1 },
-              { value: "free" as const, label: "Free", icon: "⬜", rank: 0 },
-            ]).map((opt) => {
-              const active = tierFilter === opt.value;
-              // Higher tiers are always selectable — selecting "Platinum"
-              // as a Silver user shows the locked Platinum picks instead
-              // of disabling the chip. The lock icon stays so users
-              // understand they'll see locked variants when they pick it.
-              const aboveTier = opt.value !== "All" && opt.rank > userRank;
-              return (
-                <button
-                  key={opt.value}
-                  onClick={() => setTierFilter(opt.value)}
-                  className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition-all ${
-                    active
-                      ? opt.value === "platinum"
-                        ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
-                        : opt.value === "gold"
-                        ? "bg-blue-500/20 text-blue-300 border border-blue-400/40"
-                        : opt.value === "silver"
-                        ? "bg-white/10 text-slate-100 border border-white/30"
-                        : opt.value === "free"
-                        ? "bg-slate-600/30 text-slate-200 border border-slate-500/40"
-                        : "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
-                      : "text-slate-400 hover:text-slate-200"
-                  }`}
-                  title={
-                    opt.value === "All"
-                      ? "Show all tiers"
-                      : aboveTier
-                      ? `Show ${opt.label} picks (locked — upgrade to unlock probabilities)`
-                      : `Show only ${opt.label} picks`
-                  }
-                >
-                  {opt.icon && <span>{opt.icon}</span>}
-                  <span>{opt.label}</span>
-                  {aboveTier && <Lock className="h-2.5 w-2.5 text-amber-400/80" />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Confidence filter */}
-        <div className="flex items-center gap-2">
-          <Filter className="h-3.5 w-3.5 text-slate-500" />
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-            {confOptions.map((opt) => (
-              <button
-                key={opt}
-                onClick={() => setConfidenceFilter(opt)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                  confidenceFilter === opt
-                    ? opt === "High"
-                      ? "bg-emerald-600/80 text-white"
-                      : opt === "Medium"
-                      ? "bg-amber-600/80 text-white"
-                      : opt === "Low"
-                      ? "bg-red-600/80 text-white"
-                      : "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {opt === "High"   ? "High (>75%)"
-                 : opt === "Medium" ? "Med (50–75%)"
-                 : opt === "Low"    ? "Low (<50%)"
-                 : opt}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Result count */}
         <div className="flex items-center gap-2 ml-auto">
           <span className="text-xs text-slate-500 whitespace-nowrap">
-            {total} result{total !== 1 ? "s" : ""}
+            {total} {total === 1 ? "wedstrijd" : "wedstrijden"}
           </span>
         </div>
       </div>
@@ -1580,49 +1498,6 @@ export default function PredictionsPage() {
             {t("pred.liveUpdates")}
           </Pill>
 
-          {/* ── How it works — compact tier-explainer card.
-               Sits directly below the "Live updates" pill.
-               Always visible on Upcoming + Live tabs; hidden on
-               Results (confidence becomes hit/miss there). */}
-          {!isResults && (
-            <div className="w-full max-w-md rounded-xl border border-white/[0.06] bg-[hsl(230_22%_9%/0.5)] p-3 backdrop-blur-sm">
-              <div className="mb-2 flex items-baseline justify-between gap-3">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-400">
-                  How it works
-                </span>
-                <span className="text-[10px] text-slate-500">
-                  Higher tier = stricter floor
-                </span>
-              </div>
-              <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#e8a864]" />
-                  <span className="font-semibold text-[#e8a864]">Free</span>
-                  <span className="text-slate-400">≈ 45%+ hit</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#d7d9dc]" />
-                  <span className="font-semibold text-[#d7d9dc]">Silver</span>
-                  <span className="text-slate-400">≈ 60%+ hit</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#f5d67a]" />
-                  <span className="font-semibold text-[#f5d67a]">Gold</span>
-                  <span className="text-slate-400">≈ 70%+ hit</span>
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#d9f0ff]" />
-                  <span className="font-semibold text-[#d9f0ff]">Platinum</span>
-                  <span className="text-slate-400">≈ 85%+ hit</span>
-                </span>
-              </div>
-              <p className="mt-2 border-t border-white/[0.04] pt-2 text-[10px] leading-relaxed text-slate-500">
-                Higher confidence = stronger model conviction = better
-                historical hit rate. Tiers cluster picks by confidence
-                floor; the engine itself is the same.
-              </p>
-            </div>
-          )}
         </div>
       </div>
 
@@ -1752,33 +1627,22 @@ export default function PredictionsPage() {
         </div>
       )}
 
-      {/* ── Date range filter (upcoming only) ── */}
+      {/* ── Date range filter (upcoming only) — simpel dropdown ── */}
       {!isResults && !isLive && (
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-          <Clock className="h-4 w-4 shrink-0 text-slate-500" />
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-            {(
-              [
-                { key: "all",       label: t("pred.all") },
-                { key: "today",     label: t("pred.today") },
-                { key: "thisWeek",  label: t("pred.thisWeek") },
-                { key: "thisMonth", label: t("pred.thisMonth") },
-              ] as { key: DateRangeFilter; label: string }[]
-            ).map(({ key, label }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setDateRangeFilter(key)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                  dateRangeFilter === key
-                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-slate-500" htmlFor="date-range">
+            Wanneer:
+          </label>
+          <select
+            id="date-range"
+            value={dateRangeFilter}
+            onChange={(e) => setDateRangeFilter(e.target.value as DateRangeFilter)}
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm font-medium text-slate-200 hover:border-white/[0.15]"
+          >
+            <option value="today">Vandaag</option>
+            <option value="thisWeek">Deze week</option>
+            <option value="thisMonth">Deze maand</option>
+          </select>
         </div>
       )}
 
@@ -1858,57 +1722,28 @@ export default function PredictionsPage() {
         <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
           {tierFilter !== "All" ? (
             <>
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400/10 ring-1 ring-emerald-400/20">
-                <ShieldCheck className="h-6 w-6 text-emerald-400" strokeWidth={2} />
-              </div>
-              <div className="space-y-1">
-                <p className="text-base font-semibold text-white capitalize">
-                  No {tierFilter} picks right now
-                </p>
-                <p className="mx-auto max-w-sm text-sm leading-relaxed text-slate-400">
-                  Our engine is being selective — it only picks matches it&apos;s
-                  highly confident about. This is normal and a sign that the
-                  system is working correctly.
-                </p>
-              </div>
-              {tierFilter !== "free" && (
-                <p className="mx-auto max-w-sm rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs leading-relaxed text-slate-400">
-                  Want to see picks now?{" "}
-                  <button
-                    onClick={() => setTierFilter(
-                      tierFilter === "platinum" ? "gold"
-                      : tierFilter === "gold" ? "silver"
-                      : "free"
-                    )}
-                    className="font-semibold text-slate-200 underline underline-offset-2 hover:text-white"
-                  >
-                    Switch to a lower tier
-                  </button>
-                  {" "}— keep in mind accuracy may be slightly lower.
-                </p>
-              )}
-              <button
-                onClick={() => setTierFilter("All")}
-                className="btn-primary mt-1"
-              >
-                Show all picks
-              </button>
+              <Sparkles className="h-8 w-8 text-slate-600" />
+              <p className="text-base font-medium text-slate-400">
+                Vandaag geen voorspellingen voor jouw tier
+              </p>
+              <p className="mx-auto max-w-md text-sm text-slate-500">
+                De AI vindt vandaag geen wedstrijden waar we genoeg vertrouwen in hebben. Dat is normaal — kom morgen terug.
+              </p>
             </>
           ) : (
             <>
               <Sparkles className="h-8 w-8 text-slate-600" />
-              <p className="text-base font-medium text-slate-400">{t("pred.noMatchingPredictions")}</p>
-              <p className="text-sm text-slate-600">
-                {t("pred.noMatchingPredictionsDesc")}
+              <p className="text-base font-medium text-slate-400">
+                Geen wedstrijden om te tonen
               </p>
-              <p className="text-xs text-slate-500">
-                {t("pred.predictionsAvailable", { count: fixturesWithPrediction.length })}
+              <p className="text-sm text-slate-500">
+                Probeer een andere periode of competitie.
               </p>
               <button
-                onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); setTierFilter("All"); }}
+                onClick={() => setLeagueFilter("All")}
                 className="btn-primary mt-2"
               >
-                {t("pred.clearFilters")}
+                Toon alle competities
               </button>
             </>
           )}
@@ -1959,15 +1794,6 @@ export default function PredictionsPage() {
         </div>
       )}
 
-      {/* ── Upsell: Gold for BOTD ── */}
-      {!isLoading && upcomingFixtures.length > 0 && (
-        <UpsellBanner
-          targetTier="gold"
-          headline={t("pred.upsellHeadline")}
-          subtext={t("pred.upsellSubtext")}
-          variant="card"
-        />
-      )}
 
       </div>
     </div>
