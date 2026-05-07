@@ -2003,3 +2003,210 @@ async def audit_snapshot_coverage(db: AsyncSession = Depends(get_db)) -> dict:
         "total_months": len(rows),
     }
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Predictions ROI scenario sweep
+# Goal: enumerate every parameter combination and find a stack that yields
+# structurally +EV ROI on the v8.1 evaluated population.
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/predictions-roi-scenarios",
+    summary="Predictions ROI sweep — find stacks with positive ROI",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_predictions_roi_scenarios(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Sweep over confidence x edge x odds-range x pick-side combinations and
+    return ROI on real bookmaker odds for each. Computed on the v8.1
+    evaluated population that has a closing_odds_snapshot.
+    """
+    from sqlalchemy import text
+    import json as _json
+
+    out: dict = {"errors": {}}
+
+    try:
+        q = await db.execute(text("""
+            SELECT
+                p.confidence,
+                p.home_win_prob, p.draw_prob, p.away_win_prob,
+                p.prediction_source,
+                pe.is_correct,
+                CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+                l.name AS league
+            FROM predictions p
+            JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            JOIN matches m ON m.id = p.match_id
+            JOIN leagues l ON l.id = m.league_id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+              AND p.predicted_at <= m.scheduled_at
+              AND p.closing_odds_snapshot IS NOT NULL
+        """))
+        rows = q.all()
+    except Exception as e:
+        out["errors"]["pull_population"] = f"{type(e).__name__}: {str(e)[:300]}"
+        return out
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+
+        home_p = float(r.home_win_prob or 0)
+        draw_p = float(r.draw_prob or 0)
+        away_p = float(r.away_win_prob or 0)
+        sides = [("home", home_p), ("draw", draw_p), ("away", away_p)]
+        sides.sort(key=lambda x: x[1], reverse=True)
+        pick_side, our_prob = sides[0]
+        leg_odds_raw = bm.get(pick_side)
+        if leg_odds_raw is None:
+            continue
+        try:
+            leg_odds = float(leg_odds_raw)
+        except (TypeError, ValueError):
+            continue
+        if leg_odds <= 1.0 or leg_odds > 100:
+            continue
+
+        try:
+            ovh = 1.0 / float(bm.get("home", 0) or 0)
+        except (ZeroDivisionError, TypeError, ValueError):
+            ovh = 0.0
+        try:
+            ovd = 1.0 / float(bm.get("draw", 0) or 0)
+        except (ZeroDivisionError, TypeError, ValueError):
+            ovd = 0.0
+        try:
+            ova = 1.0 / float(bm.get("away", 0) or 0)
+        except (ZeroDivisionError, TypeError, ValueError):
+            ova = 0.0
+        ov = ovh + ovd + ova
+        if ov <= 0:
+            continue
+        raw_implied = 1.0 / leg_odds
+        fair_implied = raw_implied / ov
+        edge = our_prob - fair_implied
+
+        pnl = (leg_odds - 1.0) if r.is_correct else -1.0
+
+        records.append({
+            "conf": float(r.confidence or 0),
+            "pick": pick_side,
+            "leg_odds": leg_odds,
+            "edge": edge,
+            "is_correct": bool(r.is_correct),
+            "source": r.prediction_source,
+            "league": r.league,
+            "pnl": pnl,
+        })
+
+    out["population_size"] = len(rows)
+    out["analysed_after_snapshot_parse"] = len(records)
+
+    if not records:
+        out["errors"]["no_records"] = "No records survived snapshot parsing"
+        if not out["errors"]:
+            del out["errors"]
+        return out
+
+    def stats(filtered):
+        n = len(filtered)
+        if n == 0:
+            return {"n": 0, "hit_rate_pct": None, "roi_pct": None, "pnl": 0.0}
+        won = sum(1 for r in filtered if r["is_correct"])
+        pnl = sum(r["pnl"] for r in filtered)
+        return {
+            "n": n,
+            "hit_rate_pct": round(100.0 * won / n, 2),
+            "roi_pct": round(100.0 * pnl / n, 2),
+            "pnl": round(pnl, 2),
+            "avg_odds": round(sum(r["leg_odds"] for r in filtered) / n, 3),
+            "avg_edge_pct": round(100.0 * sum(r["edge"] for r in filtered) / n, 2),
+        }
+
+    out["baseline"] = stats(records)
+
+    out["by_confidence"] = {
+        f"conf_ge_{thr:.2f}": stats([r for r in records if r["conf"] >= thr])
+        for thr in (0.50, 0.55, 0.60, 0.62, 0.65, 0.70, 0.75, 0.78, 0.80, 0.85)
+    }
+
+    out["by_edge"] = {
+        f"edge_ge_{int(thr*100):+d}pct": stats([r for r in records if r["edge"] >= thr])
+        for thr in (-0.05, 0.0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.15, 0.20)
+    }
+
+    odds_ranges = [
+        ("1.10-1.50", 1.10, 1.50),
+        ("1.30-1.80", 1.30, 1.80),
+        ("1.50-2.20", 1.50, 2.20),
+        ("1.80-2.60", 1.80, 2.60),
+        ("2.20-3.50", 2.20, 3.50),
+        ("3.00-5.00", 3.00, 5.00),
+        ("5.00-10.0", 5.00, 10.00),
+    ]
+    out["by_odds_range"] = {
+        label: stats([r for r in records if lo <= r["leg_odds"] <= hi])
+        for label, lo, hi in odds_ranges
+    }
+
+    out["by_pick_side"] = {
+        side: stats([r for r in records if r["pick"] == side])
+        for side in ("home", "draw", "away")
+    }
+
+    out["by_source"] = {
+        src: stats([r for r in records if r["source"] == src])
+        for src in ("live", "backtest", "batch_local_fill")
+    }
+
+    league_groups = {}
+    for r in records:
+        league_groups.setdefault(r["league"] or "unknown", []).append(r)
+    league_ranked = sorted(league_groups.items(), key=lambda kv: len(kv[1]), reverse=True)[:25]
+    out["by_league_top25"] = {l: stats(rs) for l, rs in league_ranked}
+
+    stacks = []
+    for c_thr in (0.55, 0.60, 0.62, 0.65, 0.70, 0.75, 0.78, 0.80):
+        for e_thr in (0.0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.15):
+            f = [r for r in records if r["conf"] >= c_thr and r["edge"] >= e_thr]
+            s = stats(f)
+            if s["n"] < 30:
+                continue
+            stacks.append({
+                "conf_ge": c_thr,
+                "edge_ge_pct": round(e_thr * 100, 1),
+                **s,
+            })
+    stacks.sort(key=lambda x: x["roi_pct"] if x["roi_pct"] is not None else -999, reverse=True)
+    out["top_stacks_conf_x_edge"] = stacks[:20]
+
+    live_records = [r for r in records if r["source"] == "live"]
+    if live_records:
+        out["live_only_by_edge"] = {
+            f"edge_ge_{int(thr*100)}pct": stats([r for r in live_records if r["edge"] >= thr])
+            for thr in (0.0, 0.02, 0.04, 0.06, 0.08, 0.10)
+        }
+
+    out["pick_side_by_edge"] = {
+        f"{side}_edge_ge_{int(thr*100)}pct": stats([
+            r for r in records if r["pick"] == side and r["edge"] >= thr
+        ])
+        for side in ("home", "draw", "away")
+        for thr in (0.0, 0.02, 0.05, 0.10)
+    }
+
+    if not out["errors"]:
+        del out["errors"]
+    return out
+
