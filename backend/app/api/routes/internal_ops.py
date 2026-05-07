@@ -2456,6 +2456,171 @@ async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Predictions Rebuild — Extended live cohort sizing (since 2026-01-01)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/extended-live-cohort",
+    summary="Extended live cohort: live + honest backtest since 2026-01-01",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_extended_live_cohort(db: AsyncSession = Depends(get_db)) -> dict:
+    """Honest 'extended live' cohort = (live + backtest with predicted_at
+    <= scheduled_at) AND match.scheduled_at >= 2026-01-01. Returns
+    sample sizes per source per tier per recipe so we can confirm
+    statistical defensibility."""
+    from sqlalchemy import text as _text
+    import json as _json
+    from datetime import timedelta
+
+    rows = (await db.execute(_text("""
+        SELECT
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            m.scheduled_at,
+            p.prediction_source
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+          AND m.scheduled_at >= '2026-01-01'
+          AND p.prediction_source IN ('live', 'backtest', 'batch_local_fill')
+    """))).all()
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted(
+            [("home", h), ("draw", d), ("away", a)],
+            key=lambda x: x[1], reverse=True,
+        )
+        pick, our_p = sides[0]
+        try:
+            o = float(bm.get(pick) or 0)
+            h_o = float(bm.get("home", 0) or 0)
+            d_o = float(bm.get("draw", 0) or 0)
+            a_o = float(bm.get("away", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if o <= 1.0 or h_o <= 1.0 or a_o <= 1.0:
+            continue
+        ovr = 1.0 / h_o + 1.0 / a_o + (1.0 / d_o if d_o > 1.0 else 0.0)
+        if ovr <= 0:
+            continue
+        edge = our_p - (1.0 / o) / ovr
+        pnl = (o - 1.0) if r.is_correct else -1.0
+        records.append({
+            "conf": float(r.confidence or 0),
+            "odds": o,
+            "edge": edge,
+            "is_correct": bool(r.is_correct),
+            "scheduled_at": r.scheduled_at,
+            "pnl": pnl,
+            "source": r.prediction_source,
+        })
+
+    if not records:
+        return {"error": "no records since 2026-01-01"}
+    records.sort(key=lambda x: x["scheduled_at"])
+
+    # Source breakdown
+    src_breakdown = {}
+    for s in ("live", "backtest", "batch_local_fill"):
+        sr = [x for x in records if x["source"] == s]
+        if sr:
+            src_breakdown[s] = {
+                "n": len(sr),
+                "first": sr[0]["scheduled_at"].isoformat(),
+                "last": sr[-1]["scheduled_at"].isoformat(),
+            }
+
+    recipes = {
+        "free":     lambda x: x["conf"] >= 0.60,
+        "silver":   lambda x: x["conf"] >= 0.62 and x["edge"] >= 0.0 and x["odds"] >= 1.60,
+        "gold":     lambda x: x["conf"] >= 0.65 and x["edge"] >= 0.06 and x["odds"] >= 1.80,
+        "platinum": (lambda x: x["conf"] >= 0.78 and x["edge"] >= 0.08
+                     and 1.50 <= x["odds"] <= 3.00),
+    }
+
+    def stats(filt):
+        n = len(filt)
+        if n == 0:
+            return {"n": 0}
+        won = sum(1 for x in filt if x["is_correct"])
+        pnl = sum(x["pnl"] for x in filt)
+        return {
+            "n": n,
+            "hit_pct": round(100.0 * won / n, 2),
+            "roi_pct": round(100.0 * pnl / n, 2),
+            "pnl": round(pnl, 2),
+            "avg_odds": round(sum(x["odds"] for x in filt) / n, 3),
+        }
+
+    # Build rolling 14d windows
+    first_dt = records[0]["scheduled_at"]
+    last_dt = records[-1]["scheduled_at"]
+    win_starts = []
+    cur = first_dt
+    while cur + timedelta(days=14) <= last_dt + timedelta(days=1):
+        win_starts.append(cur)
+        cur += timedelta(days=7)
+
+    out = {
+        "total_records": len(records),
+        "span": {
+            "first": first_dt.isoformat(),
+            "last": last_dt.isoformat(),
+            "days": (last_dt - first_dt).days,
+        },
+        "source_breakdown": src_breakdown,
+        "windows_14d": len(win_starts),
+        "recipes": {},
+    }
+
+    for tier, f in recipes.items():
+        full = [x for x in records if f(x)]
+        full_stats = stats(full)
+        # Per-source split
+        per_source = {
+            s: stats([x for x in full if x["source"] == s])
+            for s in ("live", "backtest", "batch_local_fill")
+        }
+        # Rolling windows
+        wins = []
+        for ws in win_starts:
+            we = ws + timedelta(days=14)
+            w = [x for x in full if ws <= x["scheduled_at"] < we]
+            if not w:
+                continue
+            wins.append({"n": len(w), "roi": 100.0 * sum(x["pnl"] for x in w) / len(w)})
+        n_pos = sum(1 for w in wins if w["roi"] > 0)
+        out["recipes"][tier] = {
+            **full_stats,
+            "per_source": per_source,
+            "windows_total": len(wins),
+            "windows_pos_pct": round(100.0 * n_pos / len(wins), 1) if wins else None,
+            "avg_picks_per_14d": round(sum(w["n"] for w in wins) / len(wins), 1) if wins else None,
+        }
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Predictions Rebuild — Phase 3.1: Verify proposed per-tier recipes
 # ─────────────────────────────────────────────────────────────────────────────
 
