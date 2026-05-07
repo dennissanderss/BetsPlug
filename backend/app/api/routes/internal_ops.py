@@ -2454,3 +2454,257 @@ async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
         "rows": out_rows,
     }
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Predictions Rebuild — Phase 1: Data Integrity Audit
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/rebuild-phase1-integrity",
+    summary="Rebuild Phase 1 — leakage + coverage integrity audit",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_rebuild_phase1(db: AsyncSession = Depends(get_db)) -> dict:
+    """Phase 1 of Predictions rebuild — leakage + data-coverage checks.
+
+    Runs five sub-checks in one query batch:
+      A) Pre-match lock integrity per source
+      B) Closing odds capture timing vs kickoff
+      C) Sample for feature-pipeline spot-check (manual reproduction needed)
+      D) v81 cutoff respect overall (counts in / out)
+      1.2) Data coverage per period + tier + snapshot fill
+    """
+    from sqlalchemy import text as _text
+
+    out: dict = {"errors": {}}
+
+    # ── Check A — Pre-match lock per source (post-deploy) ──
+    try:
+        q = await db.execute(_text("""
+            SELECT
+                p.prediction_source,
+                COUNT(*) FILTER (WHERE p.predicted_at > m.scheduled_at) AS post_kickoff,
+                COUNT(*) FILTER (WHERE p.predicted_at = m.scheduled_at) AS exact_same,
+                COUNT(*) FILTER (WHERE p.predicted_at < m.scheduled_at) AS pre_match,
+                COUNT(*) AS total,
+                AVG(EXTRACT(EPOCH FROM (m.scheduled_at - p.predicted_at)) / 3600.0)
+                  FILTER (WHERE p.predicted_at < m.scheduled_at) AS avg_lead_hours_pre
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+            GROUP BY p.prediction_source
+            ORDER BY p.prediction_source
+        """))
+        out["A_pre_match_lock_per_source"] = [
+            {
+                "source": r[0],
+                "post_kickoff": int(r[1]),
+                "exact_same_as_kickoff": int(r[2]),
+                "pre_match_strict": int(r[3]),
+                "total": int(r[4]),
+                "avg_lead_hours_pre_match": round(float(r[5] or 0), 2),
+                "leakage_flag": int(r[1]) > 0,
+            }
+            for r in q.all()
+        ]
+    except Exception as e:
+        out["errors"]["A_pre_match_lock"] = f"{type(e).__name__}: {str(e)[:300]}"
+
+    # ── Check B — Closing odds capture timing ──
+    # Snapshot may include {timestamp, recorded_at, fetched_at, source}.
+    # We sample 30 and inspect to see if any odds were captured POST kickoff.
+    try:
+        q = await db.execute(_text("""
+            SELECT
+                p.id::text AS pid,
+                p.prediction_source,
+                CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+                m.scheduled_at,
+                p.predicted_at
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+              AND p.closing_odds_snapshot IS NOT NULL
+            ORDER BY RANDOM()
+            LIMIT 30
+        """))
+        import json as _json
+        from datetime import datetime, timezone
+        snap_check_rows = []
+        for r in q.all():
+            try:
+                snap = _json.loads(r.snap_text) if r.snap_text else None
+            except Exception:
+                snap = None
+            snap_ts = None
+            for k in ("recorded_at", "fetched_at", "timestamp", "captured_at"):
+                if isinstance(snap, dict) and snap.get(k):
+                    snap_ts = snap[k]
+                    break
+            post_kickoff = None
+            if snap_ts:
+                try:
+                    parsed = datetime.fromisoformat(str(snap_ts).replace("Z", "+00:00"))
+                    if parsed.tzinfo is None:
+                        parsed = parsed.replace(tzinfo=timezone.utc)
+                    post_kickoff = parsed > r.scheduled_at
+                except Exception:
+                    post_kickoff = None
+            snap_check_rows.append({
+                "pid": r.pid,
+                "source": r.prediction_source,
+                "scheduled_at": r.scheduled_at.isoformat(),
+                "predicted_at": r.predicted_at.isoformat() if r.predicted_at else None,
+                "snapshot_keys": (
+                    sorted(list(snap.keys())) if isinstance(snap, dict) else None
+                ),
+                "snapshot_timestamp_field": snap_ts,
+                "snapshot_post_kickoff": post_kickoff,
+            })
+        post_kickoff_count = sum(
+            1 for r in snap_check_rows if r["snapshot_post_kickoff"] is True
+        )
+        out["B_closing_odds_capture_timing"] = {
+            "sampled": len(snap_check_rows),
+            "snapshot_post_kickoff_count": post_kickoff_count,
+            "leakage_flag": post_kickoff_count > 0,
+            "rows": snap_check_rows,
+        }
+    except Exception as e:
+        out["errors"]["B_closing_odds"] = f"{type(e).__name__}: {str(e)[:300]}"
+
+    # ── Check C — Feature pipeline isolation sample ──
+    # Pull 20 random predictions with features_snapshot — caller will need to
+    # reproduce features point-in-time externally; we surface IDs + snapshot
+    # so the comparison can be done without re-running the full ML pipeline
+    # in this endpoint.
+    try:
+        q = await db.execute(_text("""
+            SELECT
+                p.id::text AS pid,
+                p.prediction_source,
+                p.predicted_at,
+                m.scheduled_at,
+                m.id::text AS mid,
+                ht.name || ' vs ' || at.name AS match_label,
+                p.features_snapshot IS NOT NULL AS has_snapshot
+            FROM predictions p
+            JOIN matches m ON m.id = p.match_id
+            JOIN teams ht ON ht.id = m.home_team_id
+            JOIN teams at ON at.id = m.away_team_id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+            ORDER BY RANDOM()
+            LIMIT 20
+        """))
+        out["C_feature_isolation_sample"] = {
+            "note": (
+                "Manual reproduction needed — re-run feature_service "
+                "with cutoff = predicted_at and compare to features_snapshot. "
+                "Mismatch = leakage. Identical = clean."
+            ),
+            "rows": [
+                {
+                    "pid": r.pid,
+                    "match_id": r.mid,
+                    "match": r.match_label,
+                    "source": r.prediction_source,
+                    "predicted_at": r.predicted_at.isoformat() if r.predicted_at else None,
+                    "scheduled_at": r.scheduled_at.isoformat(),
+                    "has_features_snapshot": r.has_snapshot,
+                }
+                for r in q.all()
+            ],
+        }
+    except Exception as e:
+        out["errors"]["C_feature_sample"] = f"{type(e).__name__}: {str(e)[:300]}"
+
+    # ── Check D — v81 cutoff respect ──
+    try:
+        q = await db.execute(_text("""
+            SELECT
+                COUNT(*) FILTER (WHERE p.created_at >= '2026-04-16 11:00:00+00') AS post_v81,
+                COUNT(*) FILTER (WHERE p.created_at < '2026-04-16 11:00:00+00') AS pre_v81,
+                COUNT(*) AS total
+            FROM predictions p
+        """))
+        r = q.first()
+        out["D_v81_cutoff_population"] = {
+            "post_v81": int(r[0]),
+            "pre_v81": int(r[1]),
+            "total": int(r[2]),
+            "note": (
+                "trackrecord_filter() excludes pre_v81 from every aggregate "
+                "endpoint. Pre-v81 rows are kept only for historical context."
+            ),
+        }
+    except Exception as e:
+        out["errors"]["D_v81_cutoff"] = f"{type(e).__name__}: {str(e)[:300]}"
+
+    # ── 1.2 Data coverage ──
+    try:
+        q = await db.execute(_text("""
+            SELECT
+                COUNT(*) FILTER (WHERE p.created_at >= '2026-04-16 11:00:00+00'
+                                  AND pe.id IS NOT NULL) AS evaluated_post_v81,
+                COUNT(*) FILTER (WHERE p.created_at >= '2025-01-01'
+                                  AND pe.id IS NOT NULL) AS evaluated_since_2025,
+                COUNT(*) FILTER (WHERE p.created_at >= '2026-04-16 11:00:00+00'
+                                  AND p.closing_odds_snapshot IS NOT NULL) AS post_v81_with_snapshot,
+                COUNT(*) FILTER (WHERE p.created_at >= '2026-04-16 11:00:00+00') AS post_v81_total
+            FROM predictions p
+            LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        """))
+        r = q.first()
+        out["coverage_overview"] = {
+            "evaluated_post_v81": int(r[0]),
+            "evaluated_since_2025_01_01": int(r[1]),
+            "post_v81_with_snapshot": int(r[2]),
+            "post_v81_total": int(r[3]),
+            "snapshot_coverage_pct": round(
+                100.0 * int(r[2]) / int(r[3]), 2
+            ) if r[3] else None,
+        }
+    except Exception as e:
+        out["errors"]["coverage_overview"] = f"{type(e).__name__}: {str(e)[:300]}"
+
+    # Per-tier coverage (using simple confidence ladder, post-v81 evaluated)
+    try:
+        q = await db.execute(_text("""
+            SELECT
+                CASE
+                  WHEN p.confidence >= 0.78 THEN 'platinum'
+                  WHEN p.confidence >= 0.70 THEN 'gold'
+                  WHEN p.confidence >= 0.62 THEN 'silver'
+                  WHEN p.confidence >= 0.55 THEN 'free'
+                  ELSE 'below_floor'
+                END AS tier,
+                COUNT(*) AS total,
+                COUNT(*) FILTER (WHERE p.closing_odds_snapshot IS NOT NULL) AS with_snapshot,
+                COUNT(*) FILTER (WHERE pe.id IS NOT NULL) AS evaluated
+            FROM predictions p
+            LEFT JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+            JOIN matches m ON m.id = p.match_id
+            WHERE p.created_at >= '2026-04-16 11:00:00+00'
+              AND p.predicted_at <= m.scheduled_at
+            GROUP BY tier
+            ORDER BY tier
+        """))
+        out["coverage_per_tier_post_v81"] = [
+            {
+                "tier": r[0],
+                "total": int(r[1]),
+                "with_snapshot": int(r[2]),
+                "evaluated": int(r[3]),
+                "snapshot_pct": round(100.0 * int(r[2]) / int(r[1]), 2) if r[1] else None,
+            }
+            for r in q.all()
+        ]
+    except Exception as e:
+        out["errors"]["coverage_per_tier"] = f"{type(e).__name__}: {str(e)[:300]}"
+
+    if not out["errors"]:
+        del out["errors"]
+    return out
+
+
