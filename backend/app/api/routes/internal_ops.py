@@ -2206,7 +2206,125 @@ async def audit_predictions_roi_scenarios(
         for thr in (0.0, 0.02, 0.05, 0.10)
     }
 
+    # ── Live-only stack sweep (the prospective signal) ──
+    live_records = [r for r in records if r["source"] == "live"]
+    live_stacks = []
+    for c_thr in (0.55, 0.60, 0.62, 0.65, 0.70, 0.75, 0.78):
+        for e_thr in (0.0, 0.02, 0.04, 0.06, 0.08, 0.10):
+            f = [r for r in live_records if r["conf"] >= c_thr and r["edge"] >= e_thr]
+            s = stats(f)
+            if s["n"] < 10:
+                continue
+            live_stacks.append({
+                "conf_ge": c_thr,
+                "edge_ge_pct": round(e_thr * 100, 1),
+                **s,
+            })
+    live_stacks.sort(key=lambda x: x["roi_pct"] if x["roi_pct"] is not None else -999, reverse=True)
+    out["top_live_only_stacks"] = live_stacks[:15]
+    out["live_population"] = len(live_records)
+
     if not out["errors"]:
         del out["errors"]
     return out
+
+
+@router.get(
+    "/audit/saudi-spot-check",
+    summary="Saudi Pro League — verify the 100% hit rate spike",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
+    """Pull every Saudi Pro League prediction in the v8.1 evaluated set with
+    snapshot odds. Show predicted side, model probs, actual score, and
+    is_correct grade so we can verify whether 100% hit rate is real or a
+    data anomaly (mis-graded results, single-side dominance, etc.).
+    """
+    from sqlalchemy import text
+    import json as _json
+
+    q = await db.execute(text("""
+        SELECT
+            p.id::text AS pid,
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            pe.actual_outcome,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            ht.name AS home, at.name AS away,
+            mr.home_score, mr.away_score,
+            m.scheduled_at
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        JOIN leagues l ON l.id = m.league_id
+        JOIN teams ht ON ht.id = m.home_team_id
+        JOIN teams at ON at.id = m.away_team_id
+        LEFT JOIN match_results mr ON mr.match_id = m.id
+        WHERE l.name = 'Saudi Pro League'
+          AND p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+        ORDER BY m.scheduled_at DESC
+        LIMIT 50
+    """))
+    rows = q.all()
+
+    out_rows = []
+    pick_counts = {"home": 0, "draw": 0, "away": 0}
+    correct_count = 0
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        bm = snap.get("bookmaker_odds") if isinstance(snap, dict) else {}
+
+        home_p = float(r.home_win_prob or 0)
+        draw_p = float(r.draw_prob or 0)
+        away_p = float(r.away_win_prob or 0)
+        sides = [("home", home_p), ("draw", draw_p), ("away", away_p)]
+        sides.sort(key=lambda x: x[1], reverse=True)
+        pick_side = sides[0][0]
+        pick_counts[pick_side] += 1
+
+        hs = int(r.home_score) if r.home_score is not None else None
+        as_ = int(r.away_score) if r.away_score is not None else None
+        actual_from_score = None
+        if hs is not None and as_ is not None:
+            actual_from_score = (
+                "home" if hs > as_ else "away" if as_ > hs else "draw"
+            )
+
+        if r.is_correct:
+            correct_count += 1
+
+        out_rows.append({
+            "pid": r.pid,
+            "scheduled_at": r.scheduled_at.isoformat() if r.scheduled_at else None,
+            "match": f"{r.home} vs {r.away}",
+            "score": f"{hs}-{as_}" if hs is not None else None,
+            "model_pick": pick_side,
+            "model_probs": {"home": round(home_p, 3), "draw": round(draw_p, 3), "away": round(away_p, 3)},
+            "actual_from_score": actual_from_score,
+            "actual_outcome_stored": r.actual_outcome,
+            "is_correct_stored": r.is_correct,
+            "manual_correct": (
+                pick_side == actual_from_score
+                if actual_from_score is not None else None
+            ),
+            "labels_match": (
+                (pick_side == actual_from_score) == bool(r.is_correct)
+                if actual_from_score is not None else None
+            ),
+            "snapshot_odds": (bm if isinstance(bm, dict) else None),
+        })
+
+    return {
+        "total_pulled": len(rows),
+        "pick_distribution": pick_counts,
+        "stored_correct_count": correct_count,
+        "stored_hit_rate_pct": round(100.0 * correct_count / len(rows), 2) if rows else None,
+        "rows": out_rows,
+    }
 
