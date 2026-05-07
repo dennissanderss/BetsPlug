@@ -2456,6 +2456,236 @@ async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Predictions Rebuild — Phase 3: Parameter optimisation on rolling 14d windows
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/rebuild-phase3-parameter-opt",
+    summary="Rebuild Phase 3 — rolling 14d window optimisation per parameter combo",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_rebuild_phase3_param_opt(
+    sources: str = "live,backtest,batch_local_fill",
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """For every (confidence, edge, min_odds, max_odds) combination,
+    compute rolling 14-day windows and report:
+      - Total picks
+      - Lifetime ROI
+      - % of windows positive
+      - Avg picks per window
+      - Best / worst window ROI
+
+    Tier-fit per the rebuild brief:
+      - Platinum: 80%+ windows positive, n>=5 per 14d
+      - Gold:    70%+, n>=12 per 14d
+      - Silver:  60%+, n>=25 per 14d
+      - Free:    break-even, max 28 per 14d (~2/dag)
+    """
+    from sqlalchemy import text as _text
+    import json as _json
+    from datetime import timedelta
+
+    out: dict = {"errors": {}}
+
+    src_list = [s.strip() for s in sources.split(",") if s.strip()]
+    src_filter = ",".join(f"'{s}'" for s in src_list)
+
+    rows = (await db.execute(_text(f"""
+        SELECT
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            l.name AS league,
+            m.scheduled_at,
+            p.prediction_source
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        JOIN leagues l ON l.id = m.league_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+          AND p.prediction_source IN ({src_filter})
+    """))).all()
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted(
+            [("home", h), ("draw", d), ("away", a)],
+            key=lambda x: x[1], reverse=True,
+        )
+        pick, our_p = sides[0]
+        try:
+            o = float(bm.get(pick) or 0)
+            h_o = float(bm.get("home", 0) or 0)
+            d_o = float(bm.get("draw", 0) or 0)
+            a_o = float(bm.get("away", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if o <= 1.0 or h_o <= 1.0 or a_o <= 1.0:
+            continue
+        ovr = 1.0 / h_o + 1.0 / a_o + (1.0 / d_o if d_o > 1.0 else 0.0)
+        if ovr <= 0:
+            continue
+        edge = our_p - (1.0 / o) / ovr
+        pnl = (o - 1.0) if r.is_correct else -1.0
+        records.append({
+            "conf": float(r.confidence or 0),
+            "odds": o,
+            "edge": edge,
+            "is_correct": bool(r.is_correct),
+            "scheduled_at": r.scheduled_at,
+            "pnl": pnl,
+            "source": r.prediction_source,
+            "league": r.league,
+        })
+
+    out["population"] = len(records)
+    out["sources_used"] = src_list
+
+    if not records:
+        out["errors"]["no_records"] = "no records"
+        return out
+
+    records.sort(key=lambda x: x["scheduled_at"])
+    first_dt = records[0]["scheduled_at"]
+    last_dt = records[-1]["scheduled_at"]
+    span_days = (last_dt - first_dt).days
+    out["span"] = {
+        "first_scheduled": first_dt.isoformat(),
+        "last_scheduled": last_dt.isoformat(),
+        "days": span_days,
+    }
+
+    # Build window starts every 7 days (rolling) of length 14d
+    window_starts = []
+    cur = first_dt
+    while cur + timedelta(days=14) <= last_dt + timedelta(days=1):
+        window_starts.append(cur)
+        cur += timedelta(days=7)
+
+    # Tier requirements
+    tier_floor = {"platinum": 5, "gold": 12, "silver": 25, "free": 1}
+
+    confs = (0.55, 0.60, 0.62, 0.65, 0.70, 0.75, 0.78, 0.82)
+    edges = (-0.05, 0.0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.12)
+    min_odds_opts = (1.30, 1.50, 1.70, 1.90)
+    max_odds_opts = (3.00, 4.00, 100.00)  # 100 = no ceiling
+
+    results = []
+    for c in confs:
+        for e in edges:
+            for lo in min_odds_opts:
+                for hi in max_odds_opts:
+                    full = [
+                        x for x in records
+                        if x["conf"] >= c and x["edge"] >= e
+                        and lo <= x["odds"] <= hi
+                    ]
+                    if len(full) < 50:
+                        # Skip degenerate combos with <50 total picks across full body
+                        continue
+                    won = sum(1 for x in full if x["is_correct"])
+                    pnl = sum(x["pnl"] for x in full)
+                    n = len(full)
+                    lifetime_roi = 100.0 * pnl / n
+                    lifetime_hit = 100.0 * won / n
+
+                    # Rolling windows
+                    window_results = []
+                    for start in window_starts:
+                        end = start + timedelta(days=14)
+                        w = [
+                            x for x in full
+                            if start <= x["scheduled_at"] < end
+                        ]
+                        if not w:
+                            continue
+                        wn = len(w)
+                        wpnl = sum(x["pnl"] for x in w)
+                        window_results.append({
+                            "n": wn,
+                            "roi": 100.0 * wpnl / wn,
+                        })
+                    if not window_results:
+                        continue
+                    n_pos = sum(1 for w in window_results if w["roi"] > 0)
+                    pct_pos = 100.0 * n_pos / len(window_results)
+                    avg_n = sum(w["n"] for w in window_results) / len(window_results)
+                    rois = [w["roi"] for w in window_results]
+                    worst = min(rois)
+                    best = max(rois)
+
+                    results.append({
+                        "conf_ge": c,
+                        "edge_ge_pct": round(e * 100, 1),
+                        "min_odds": lo,
+                        "max_odds": hi,
+                        "n_total": n,
+                        "lifetime_roi_pct": round(lifetime_roi, 2),
+                        "lifetime_hit_pct": round(lifetime_hit, 2),
+                        "windows_total": len(window_results),
+                        "windows_pos_pct": round(pct_pos, 1),
+                        "avg_picks_per_14d": round(avg_n, 1),
+                        "best_window_roi_pct": round(best, 2),
+                        "worst_window_roi_pct": round(worst, 2),
+                    })
+
+    out["windows_analysed"] = len(window_starts)
+
+    # Per-tier candidate selection
+    candidates_per_tier = {}
+    for tier_name, min_n_per_window in tier_floor.items():
+        if tier_name == "platinum":
+            pct_threshold = 80.0
+        elif tier_name == "gold":
+            pct_threshold = 70.0
+        elif tier_name == "silver":
+            pct_threshold = 60.0
+        else:
+            pct_threshold = 50.0  # free: just break-even
+
+        # Filter by sample size + windows positive %
+        eligible = [
+            r for r in results
+            if r["avg_picks_per_14d"] >= min_n_per_window
+            and r["windows_pos_pct"] >= pct_threshold
+        ]
+        # For free, also cap avg picks per 14d at 28 (~2/day)
+        if tier_name == "free":
+            eligible = [r for r in eligible if r["avg_picks_per_14d"] <= 28]
+        # Sort by lifetime ROI
+        eligible.sort(key=lambda x: x["lifetime_roi_pct"], reverse=True)
+        candidates_per_tier[tier_name] = eligible[:10]
+
+    out["candidates_per_tier"] = candidates_per_tier
+
+    # Top 30 stacks overall by lifetime ROI (with min sample size 100)
+    top_overall = [r for r in results if r["n_total"] >= 100]
+    top_overall.sort(key=lambda x: x["lifetime_roi_pct"], reverse=True)
+    out["top_30_overall"] = top_overall[:30]
+
+    if not out["errors"]:
+        del out["errors"]
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Predictions Rebuild — Phase 1.1C: Feature-pipeline isolation spot-check
 # ─────────────────────────────────────────────────────────────────────────────
 
