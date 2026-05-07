@@ -216,8 +216,11 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
               </svg>
             </div>
             <div class="hero-chip-body">
-              <p class="hero-chip-value">Elo + Poisson + ML</p>
-              <p class="hero-chip-label">Ensemble engine</p>
+              <p class="hero-chip-value">
+                <span class="font-mono">3</span>
+                <span class="hero-chip-suffix">models</span>
+              </p>
+              <p class="hero-chip-label">Hybrid AI engine</p>
             </div>
           </div>
 
@@ -450,19 +453,27 @@ const confidenceWidth = `${Math.max(0, Math.min(100, confidencePct))}%`;
   /* Position + drift — each chip drifts on its own rhythm so the
      scene reads as alive, not synchronized. */
   .hero-chip--top-left {
-    top: -8%;
-    left: -12%;
+    top: -2.75rem;
+    left: -3.5rem;
     animation: chip-drift-a 7s ease-in-out infinite;
   }
   .hero-chip--right {
-    top: 38%;
-    right: -10%;
+    top: 44%;
+    right: -3rem;
     animation: chip-drift-b 9s ease-in-out infinite;
   }
   .hero-chip--bottom-left {
-    bottom: -6%;
-    left: -8%;
+    bottom: -2.5rem;
+    left: -2.75rem;
     animation: chip-drift-c 8s ease-in-out infinite;
+  }
+
+  /* On wider viewports give the chips a touch more outward room so
+     they sit clearly off the card instead of hovering on top of it. */
+  @media (min-width: 1280px) {
+    .hero-chip--top-left   { top: -3rem;    left: -4rem; }
+    .hero-chip--right      { right: -3.5rem; }
+    .hero-chip--bottom-left{ bottom: -3rem; left: -3.25rem; }
   }
 
   @keyframes chip-drift-a {
