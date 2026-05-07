@@ -24,6 +24,23 @@ interface PerTierEntry {
   };
 }
 
+interface DailyPoint {
+  date: string;
+  n: number;
+  won: number;
+  roi_pct: number | null;
+  cumulative_n: number;
+  cumulative_roi_pct: number | null;
+}
+
+interface MilestoneEntry {
+  n_live: number;
+  roi_live_pct: number | null;
+  n_required: number;
+  roi_required_pct: number;
+  unlocked: boolean;
+}
+
 interface PerTierResponse {
   per_tier: {
     free: PerTierEntry;
@@ -31,6 +48,8 @@ interface PerTierResponse {
     gold: PerTierEntry;
     platinum: PerTierEntry;
   };
+  daily_breakdown_14d?: Record<string, DailyPoint[]>;
+  marketing_claim_milestones?: Record<string, MilestoneEntry>;
   generated_at: string;
   disclaimer: string;
 }
@@ -176,6 +195,118 @@ export function PerTierPerformanceSection() {
           );
         })}
       </div>
+
+      {data.marketing_claim_milestones && (
+        <div className="glass-card p-5">
+          <div className="mb-3">
+            <h3 className="text-base font-semibold text-slate-100">Marketing-claim milestones</h3>
+            <p className="mt-1 text-xs text-slate-500">
+              Per tier: live n ≥ 100 picks AND live ROI ≥ +5% nodig voordat we de tier-claim als headline mogen pushen. Phase 9 monitoring.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {tiers.map((tier) => {
+              const m = data.marketing_claim_milestones?.[tier];
+              if (!m) return null;
+              const meta = TIER_META[tier];
+              const nProgress = Math.min(100, (m.n_live / m.n_required) * 100);
+              const roi = fmtRoi(m.roi_live_pct);
+              return (
+                <div
+                  key={tier}
+                  className="rounded-xl border p-3"
+                  style={{
+                    borderColor: m.unlocked ? "#4ade8055" : "rgba(255,255,255,0.06)",
+                    background: m.unlocked ? "rgba(74,222,128,0.04)" : undefined,
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold" style={{ color: meta.color }}>
+                      {meta.label}
+                    </p>
+                    <span
+                      className="text-[10px] font-bold uppercase tracking-widest"
+                      style={{ color: m.unlocked ? "#4ade80" : "#94a3b8" }}
+                    >
+                      {m.unlocked ? "✓ unlocked" : "building"}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex items-baseline justify-between text-xs">
+                    <span className="text-slate-400">Picks</span>
+                    <span className="font-semibold tabular-nums text-slate-200">
+                      {m.n_live} / {m.n_required}
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: `${nProgress}%`, background: meta.color }}
+                    />
+                  </div>
+                  <div className="mt-2 flex items-baseline justify-between text-xs">
+                    <span className="text-slate-400">Live ROI</span>
+                    <span className="font-semibold tabular-nums" style={{ color: roi.color }}>
+                      {roi.text}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {data.daily_breakdown_14d && (
+        <details className="glass-card overflow-hidden">
+          <summary className="cursor-pointer px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/[0.02]">
+            Daily breakdown (14 dagen) ▾
+          </summary>
+          <div className="space-y-4 p-5">
+            {tiers.map((tier) => {
+              const days = data.daily_breakdown_14d?.[tier] ?? [];
+              if (days.length === 0) return null;
+              const meta = TIER_META[tier];
+              return (
+                <div key={tier}>
+                  <p className="mb-2 text-xs font-semibold" style={{ color: meta.color }}>
+                    {meta.label}
+                  </p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs tabular-nums">
+                      <thead>
+                        <tr className="text-slate-500">
+                          <th className="px-2 py-1 text-left">Datum</th>
+                          <th className="px-2 py-1 text-right">Picks</th>
+                          <th className="px-2 py-1 text-right">Won</th>
+                          <th className="px-2 py-1 text-right">Daily ROI</th>
+                          <th className="px-2 py-1 text-right">Cum n</th>
+                          <th className="px-2 py-1 text-right">Cum ROI</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {days.map((d) => {
+                          const roi = fmtRoi(d.roi_pct);
+                          const cum = fmtRoi(d.cumulative_roi_pct);
+                          return (
+                            <tr key={d.date} className="border-t border-white/[0.04]">
+                              <td className="px-2 py-1 font-mono text-[11px] text-slate-400">{d.date}</td>
+                              <td className="px-2 py-1 text-right text-slate-300">{d.n || "—"}</td>
+                              <td className="px-2 py-1 text-right text-slate-300">{d.n ? d.won : "—"}</td>
+                              <td className="px-2 py-1 text-right" style={{ color: roi.color }}>{roi.text}</td>
+                              <td className="px-2 py-1 text-right text-slate-300">{d.cumulative_n}</td>
+                              <td className="px-2 py-1 text-right" style={{ color: cum.color }}>{cum.text}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </details>
+      )}
 
       <p className="text-[11px] text-slate-500 leading-relaxed">
         {data.disclaimer}

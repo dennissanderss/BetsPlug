@@ -1343,6 +1343,68 @@ async def get_per_tier_roi(
             },
         }
 
+    # ── v8.6 Phase 9 — Daily breakdown for shadow monitoring ──
+    # For each tier: per-day ROI over the last 14 days. Drives the
+    # daily monitoring widget that shows the trajectory toward
+    # production rollout (need n>=100 cumulative AND ROI>=+5% over
+    # the rolling 14d on Platinum to ship a marketing claim).
+    daily_breakdown = {}
+    fourteen_days_ago = (now - timedelta(days=14)).date()
+    for tier, recipe in DISPLAY_RECIPES.items():
+        tier_picks = [
+            x for x in records
+            if recipe.passes(x["conf"], x["edge"], x["odds"])
+        ]
+        # Group by date
+        by_date = {}
+        for x in tier_picks:
+            d = x["scheduled_at"].date()
+            if d < fourteen_days_ago:
+                continue
+            b = by_date.setdefault(d, {"n": 0, "won": 0, "pnl": 0.0})
+            b["n"] += 1
+            if x["is_correct"]:
+                b["won"] += 1
+            b["pnl"] += x["pnl"]
+        daily = []
+        cumulative_n = 0
+        cumulative_pnl = 0.0
+        # Walk days from oldest to newest within window
+        cur = fourteen_days_ago
+        end = now.date()
+        while cur <= end:
+            b = by_date.get(cur, {"n": 0, "won": 0, "pnl": 0.0})
+            cumulative_n += b["n"]
+            cumulative_pnl += b["pnl"]
+            daily.append({
+                "date": cur.isoformat(),
+                "n": b["n"],
+                "won": b["won"],
+                "roi_pct": round(100.0 * b["pnl"] / b["n"], 2) if b["n"] else None,
+                "cumulative_n": cumulative_n,
+                "cumulative_roi_pct": round(100.0 * cumulative_pnl / cumulative_n, 2) if cumulative_n else None,
+            })
+            cur += timedelta(days=1)
+        daily_breakdown[tier] = daily
+    out["daily_breakdown_14d"] = daily_breakdown
+
+    # Milestone tracker — when can we make a marketing claim?
+    # Brief criterion: live ROI >= +5% on n >= 100 sample for the tier.
+    milestones = {}
+    for tier in ("free", "silver", "gold", "platinum"):
+        live = out["per_tier"][tier]["live_only"]
+        n = live.get("n") or 0
+        roi = live.get("roi_pct")
+        unlocked = n >= 100 and roi is not None and roi >= 5.0
+        milestones[tier] = {
+            "n_live": n,
+            "roi_live_pct": roi,
+            "n_required": 100,
+            "roi_required_pct": 5.0,
+            "unlocked": unlocked,
+        }
+    out["marketing_claim_milestones"] = milestones
+
     out["generated_at"] = now.isoformat()
     out["disclaimer"] = (
         "ROI computed on real bookmaker closing odds, post-v8.1 deploy "
