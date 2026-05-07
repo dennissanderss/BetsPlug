@@ -17,6 +17,7 @@ import {
 import { api } from "@/lib/api";
 import { useTier } from "@/hooks/use-tier";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import type {
   ComboOfTheDay,
   ComboStats,
@@ -138,9 +139,12 @@ export default function CombiOfTheDayPage() {
         {/* Card 2 — Hoe deden we het (lifetime BT + Live) */}
         <SimpleTrackRecord history={allHistory} loading={historyQ.isLoading} />
 
-        {/* Card 3 — Geschiedenis (laatste 10) */}
+        {/* Card 3 — Geschiedenis: alleen al-gespeelde / gegradeerde
+            combos. Vandaag's nog-niet-gespeelde combo zit al in de
+            "Vandaag's Combo" card hierboven, dus filter 'is_evaluated'
+            uit de history. */}
         <SimpleHistory
-          items={allHistory.slice(0, 10)}
+          items={allHistory.filter((c) => c.is_evaluated).slice(0, 10)}
           loading={historyQ.isLoading}
         />
 
@@ -743,22 +747,42 @@ function SimpleTodayCombo({
     >
       <h2 className="text-lg font-extrabold text-white">Vandaag&apos;s Combo</h2>
       <div className="mt-5 space-y-4">
-        {data.legs.map((leg, i) => (
-          <div key={leg.match_id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-            <p className="text-[11px] uppercase tracking-widest text-slate-500">
-              Wedstrijd {i + 1} · {leg.league}
-            </p>
-            <p className="mt-1 text-base font-bold text-white">
-              {leg.home_team} <span className="text-slate-500">vs</span> {leg.away_team}
-            </p>
-            <p className="mt-2 text-sm text-slate-300">
-              Onze pick: <span className="font-semibold text-emerald-300">{leg.our_pick_label}</span>
-            </p>
-            <p className="mt-1 text-sm text-slate-400">
-              Odds: <span className="font-semibold tabular-nums text-slate-200">{leg.leg_odds.toFixed(2)}</span>
-            </p>
-          </div>
-        ))}
+        {data.legs.map((leg, i) => {
+          const kickoff = (() => {
+            try {
+              return new Date(leg.scheduled_at).toLocaleString("nl-NL", {
+                weekday: "short",
+                day: "2-digit",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              });
+            } catch {
+              return leg.scheduled_at;
+            }
+          })();
+          return (
+            <div key={leg.match_id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+              <p className="text-[11px] uppercase tracking-widest text-slate-500">
+                Wedstrijd {i + 1} · {leg.league} · {kickoff}
+              </p>
+              <div className="mt-2 flex items-center gap-3">
+                <TeamLogo src={leg.home_team_logo} name={leg.home_team} size={28} />
+                <p className="flex-1 text-base font-bold text-white">
+                  {leg.home_team} <span className="text-slate-500 font-normal">vs</span> {leg.away_team}
+                </p>
+                <TeamLogo src={leg.away_team_logo} name={leg.away_team} size={28} />
+              </div>
+              <p className="mt-3 text-sm text-slate-300">
+                Onze pick: <span className="font-semibold text-emerald-300">{leg.our_pick_label}</span>
+              </p>
+              <p className="mt-1 text-sm text-slate-400">
+                Odds: <span className="font-semibold tabular-nums text-slate-200">{leg.leg_odds.toFixed(2)}</span>
+              </p>
+            </div>
+          );
+        })}
       </div>
       <div className="mt-5 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-4">
         <p className="text-xs uppercase tracking-widest text-emerald-300">Totaal</p>

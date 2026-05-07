@@ -839,6 +839,8 @@ class ComboLeg(BaseModel):
     match_id: str
     home_team: str
     away_team: str
+    home_team_logo: Optional[str] = None
+    away_team_logo: Optional[str] = None
     league: str
     league_id: str
     scheduled_at: str
@@ -1022,6 +1024,8 @@ async def get_combo_of_the_day(
             match_id=str(match.id),
             home_team=match.home_team.name,
             away_team=match.away_team.name,
+            home_team_logo=match.home_team.logo_url if match.home_team else None,
+            away_team_logo=match.away_team.logo_url if match.away_team else None,
             league=match.league.name if match.league else "",
             league_id=str(match.league_id),
             scheduled_at=match.scheduled_at.isoformat() if match.scheduled_at else "",

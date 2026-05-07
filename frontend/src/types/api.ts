@@ -1119,6 +1119,8 @@ export interface ComboLeg {
   match_id: string;
   home_team: string;
   away_team: string;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   league: string;
   league_id: string;
   scheduled_at: string;

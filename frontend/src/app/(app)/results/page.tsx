@@ -1933,7 +1933,7 @@ function ResultsPageContent() {
             Hoe deden we het
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            Resultaten van onze voorspellingen voor jouw {TIER_META[tierFilter].label} tier
+            Resultaten van onze voorspellingen — bekijk per tier ({TIER_META[tierFilter].label})
           </p>
         </div>
 
@@ -2071,21 +2071,51 @@ function ResultsPageContent() {
         </div>
         )}
 
-        {/* ── Periode dropdown (simpel) ── */}
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-slate-500" htmlFor="period-select">
-            Periode:
-          </label>
-          <select
-            id="period-select"
-            value={period}
-            onChange={(e) => setPeriod(Number(e.target.value) as PeriodFilter)}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm font-medium text-slate-200 hover:border-white/[0.15]"
-          >
-            <option value={7}>Laatste 7 dagen</option>
-            <option value={30}>Laatste 30 dagen</option>
-            <option value={90}>Laatste 90 dagen</option>
-          </select>
+        {/* ── Periode + Tier dropdowns ── */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-slate-500" htmlFor="period-select">
+              Periode:
+            </label>
+            <select
+              id="period-select"
+              value={period}
+              onChange={(e) => setPeriod(Number(e.target.value) as PeriodFilter)}
+              className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm font-medium text-slate-200 hover:border-white/[0.15]"
+            >
+              <option value={7}>Laatste 7 dagen</option>
+              <option value={30}>Laatste 30 dagen</option>
+              <option value={90}>Laatste 90 dagen</option>
+            </select>
+          </div>
+
+          {/* v8.6 — tier picker. User can compare tiers within their
+              own subscription scope: Platinum sees all 4, Gold sees
+              gold + silver + free, Silver sees silver + free, Free
+              sees only free. */}
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-slate-500" htmlFor="tier-select">
+              Tier:
+            </label>
+            <select
+              id="tier-select"
+              value={tierFilter}
+              onChange={(e) => {
+                setManualTierOverride(true);
+                setTierFilter(e.target.value as TierFilter);
+              }}
+              className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm font-medium text-slate-200 hover:border-white/[0.15]"
+            >
+              {(["platinum", "gold", "silver", "free"] as const)
+                .filter((t) => USER_TIER_RANK[t as Tier] <= USER_TIER_RANK[userTier])
+                .map((t) => (
+                  <option key={t} value={t}>
+                    {t.charAt(0).toUpperCase() + t.slice(1)} tier
+                  </option>
+                ))}
+            </select>
+          </div>
+
           <span className="ml-auto text-xs text-slate-500 tabular-nums">
             {filtered.length} {filtered.length === 1 ? "wedstrijd" : "wedstrijden"}
           </span>

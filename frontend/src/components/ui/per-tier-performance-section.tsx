@@ -143,14 +143,30 @@ export function PerTierPerformanceSection() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-semibold text-[#ededed]">{meta.label}</h3>
+                  <h3
+                    className="text-base font-semibold"
+                    style={{ color: meta.color }}
+                  >
+                    {meta.label} tier
+                  </h3>
                   <p className="mt-0.5 text-[11px] text-slate-500">
-                    Filter: conf ≥ {(t.recipe.min_confidence * 100).toFixed(0)}%
-                    {t.recipe.min_edge_pct != null && ` · edge ≥ ${t.recipe.min_edge_pct}%`}
-                    {t.recipe.min_odds != null && ` · odds ≥ ${t.recipe.min_odds.toFixed(2)}`}
-                    {t.recipe.max_odds != null && ` · odds ≤ ${t.recipe.max_odds.toFixed(2)}`}
+                    {tier === "free"
+                      ? "Veel picks, gemiddelde resultaten"
+                      : tier === "silver"
+                      ? "Edge-gefilterde picks"
+                      : tier === "gold"
+                      ? "Sterkere selectie, betere odds"
+                      : "Onze meest selectieve picks"}
                   </p>
                 </div>
+                <a
+                  href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/trackrecord/export.csv?pick_tier=${tier}`}
+                  download
+                  className="shrink-0 rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-1 text-[11px] font-semibold text-slate-300 hover:border-white/[0.18]"
+                  title={`Download alle ${meta.label} picks als CSV`}
+                >
+                  CSV
+                </a>
               </div>
 
               <div className="grid grid-cols-3 divide-x divide-white/[0.05]">
@@ -196,121 +212,7 @@ export function PerTierPerformanceSection() {
         })}
       </div>
 
-      {data.marketing_claim_milestones && (
-        <div className="glass-card p-5">
-          <div className="mb-3">
-            <h3 className="text-base font-semibold text-slate-100">Marketing-claim milestones</h3>
-            <p className="mt-1 text-xs text-slate-500">
-              Per tier: live n ≥ 100 picks AND live ROI ≥ +5% nodig voordat we de tier-claim als headline mogen pushen. Phase 9 monitoring.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {tiers.map((tier) => {
-              const m = data.marketing_claim_milestones?.[tier];
-              if (!m) return null;
-              const meta = TIER_META[tier];
-              const nProgress = Math.min(100, (m.n_live / m.n_required) * 100);
-              const roi = fmtRoi(m.roi_live_pct);
-              return (
-                <div
-                  key={tier}
-                  className="rounded-xl border p-3"
-                  style={{
-                    borderColor: m.unlocked ? "#4ade8055" : "rgba(255,255,255,0.06)",
-                    background: m.unlocked ? "rgba(74,222,128,0.04)" : undefined,
-                  }}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold" style={{ color: meta.color }}>
-                      {meta.label}
-                    </p>
-                    <span
-                      className="text-[10px] font-bold uppercase tracking-widest"
-                      style={{ color: m.unlocked ? "#4ade80" : "#94a3b8" }}
-                    >
-                      {m.unlocked ? "✓ unlocked" : "building"}
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-baseline justify-between text-xs">
-                    <span className="text-slate-400">Picks</span>
-                    <span className="font-semibold tabular-nums text-slate-200">
-                      {m.n_live} / {m.n_required}
-                    </span>
-                  </div>
-                  <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/[0.06]">
-                    <div
-                      className="h-full rounded-full"
-                      style={{ width: `${nProgress}%`, background: meta.color }}
-                    />
-                  </div>
-                  <div className="mt-2 flex items-baseline justify-between text-xs">
-                    <span className="text-slate-400">Live ROI</span>
-                    <span className="font-semibold tabular-nums" style={{ color: roi.color }}>
-                      {roi.text}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
-      {data.daily_breakdown_14d && (
-        <details className="glass-card overflow-hidden">
-          <summary className="cursor-pointer px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/[0.02]">
-            Daily breakdown (14 dagen) ▾
-          </summary>
-          <div className="space-y-4 p-5">
-            {tiers.map((tier) => {
-              const days = data.daily_breakdown_14d?.[tier] ?? [];
-              if (days.length === 0) return null;
-              const meta = TIER_META[tier];
-              return (
-                <div key={tier}>
-                  <p className="mb-2 text-xs font-semibold" style={{ color: meta.color }}>
-                    {meta.label}
-                  </p>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs tabular-nums">
-                      <thead>
-                        <tr className="text-slate-500">
-                          <th className="px-2 py-1 text-left">Datum</th>
-                          <th className="px-2 py-1 text-right">Picks</th>
-                          <th className="px-2 py-1 text-right">Won</th>
-                          <th className="px-2 py-1 text-right">Daily ROI</th>
-                          <th className="px-2 py-1 text-right">Cum n</th>
-                          <th className="px-2 py-1 text-right">Cum ROI</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {days.map((d) => {
-                          const roi = fmtRoi(d.roi_pct);
-                          const cum = fmtRoi(d.cumulative_roi_pct);
-                          return (
-                            <tr key={d.date} className="border-t border-white/[0.04]">
-                              <td className="px-2 py-1 font-mono text-[11px] text-slate-400">{d.date}</td>
-                              <td className="px-2 py-1 text-right text-slate-300">{d.n || "—"}</td>
-                              <td className="px-2 py-1 text-right text-slate-300">{d.n ? d.won : "—"}</td>
-                              <td className="px-2 py-1 text-right" style={{ color: roi.color }}>{roi.text}</td>
-                              <td className="px-2 py-1 text-right text-slate-300">{d.cumulative_n}</td>
-                              <td className="px-2 py-1 text-right" style={{ color: cum.color }}>{cum.text}</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </details>
-      )}
-
-      <p className="text-[11px] text-slate-500 leading-relaxed">
-        {data.disclaimer}
-      </p>
     </div>
   );
 }
