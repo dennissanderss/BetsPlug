@@ -41,6 +41,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { TrustFunnel } from "@/components/ui/trust-funnel";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
 import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
+import { PerTierPerformanceSection } from "@/components/ui/per-tier-performance-section";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { useTier } from "@/hooks/use-tier";
@@ -1420,7 +1421,7 @@ function TierTabsStrip({
 export default function TrackrecordPage() {
   const { t, locale } = useTranslations();
   const isNl = locale === "nl";
-  const [mainTab, setMainTab] = React.useState<"live" | "backtest">("live");
+  const [mainTab, setMainTab] = React.useState<"performance" | "live" | "backtest">("performance");
   const [pickTier, setPickTier] = React.useState<
     "all" | "free" | "silver" | "gold" | "platinum"
   >("all");
@@ -1463,22 +1464,27 @@ export default function TrackrecordPage() {
 
       {/* ─── Main tab navigation ─── */}
       <div className="glass-card overflow-hidden">
-        <div className="flex border-b border-white/[0.06]">
+        <div className="flex border-b border-white/[0.06] overflow-x-auto">
           {([
-            { key: "live", label: t("trackRecord.liveMeasurement"), icon: Activity, accent: "blue" },
-            { key: "backtest", label: "Backtest", icon: BarChart3, accent: "emerald" },
+            { key: "performance", label: "Onze prestatie", icon: TrendingUp, accent: "green" },
+            { key: "live", label: "Modelvalidatie", icon: Activity, accent: "blue" },
+            { key: "backtest", label: "Walk-forward backtest", icon: BarChart3, accent: "emerald" },
           ] as const).map(({ key, label, icon: Icon, accent }) => {
             const active = mainTab === key;
+            const accentClass =
+              accent === "green"
+                ? "border-emerald-400 bg-emerald-500/[0.08] text-emerald-300"
+                : accent === "blue"
+                ? "border-blue-400 bg-blue-500/[0.08] text-blue-300"
+                : "border-emerald-400 bg-emerald-500/[0.08] text-emerald-300";
             return (
               <button
                 key={key}
                 type="button"
                 onClick={() => setMainTab(key)}
-                className={`flex items-center gap-2 px-6 py-3.5 text-sm font-semibold transition-colors border-b-2 ${
+                className={`flex items-center gap-2 px-6 py-3.5 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap shrink-0 ${
                   active
-                    ? accent === "blue"
-                      ? "border-blue-400 bg-blue-500/[0.08] text-blue-300"
-                      : "border-emerald-400 bg-emerald-500/[0.08] text-emerald-300"
+                    ? accentClass
                     : "border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20"
                 }`}
                 aria-selected={active}
@@ -1490,6 +1496,19 @@ export default function TrackrecordPage() {
           })}
         </div>
       </div>
+
+      {/* ──────────────── ONZE PRESTATIE TAB (default) ──────────────── */}
+      {mainTab === "performance" && (
+        <div className="space-y-6 animate-slide-up">
+          <SectionPhaseBanner
+            accent="emerald"
+            kicker="Live tracking"
+            title="Onze prestatie per tier"
+            subtitle="ROI per tier op de exact filter die de Predictions tool nu toepast. Cijfers matchen wat je in /predictions ziet."
+          />
+          <PerTierPerformanceSection />
+        </div>
+      )}
 
       {/* ──────────────── BACKTEST TAB CONTENT ──────────────── */}
       {mainTab === "backtest" && (<>
