@@ -141,6 +141,11 @@ class PredictionSummary(BaseModel):
     pick: Optional[str] = None  # HOME / DRAW / AWAY
     reasoning: Optional[str] = None
     edge: Optional[Dict[str, float]] = None  # {home: 0.04, draw: -0.02, away: -0.02}
+    # v8.5 — single-number edge for the picked side, computed against the
+    # bookmaker's vig-removed implied probability. Null when no closing
+    # snapshot odds are on file. Used by /predictions "Edge-verified" filter.
+    edge_pct: Optional[float] = None  # e.g. 0.12 = 12% edge over fair price
+    bookmaker_odds_pick: Optional[float] = None  # the price for our pick side
     implied_probabilities: Optional[Dict[str, float]] = None
     top_features: Optional[List[Dict[str, Any]]] = None
     # v8.2 — ranked top-3 human-readable drivers derived from
@@ -445,6 +450,46 @@ def _build_fixture_item(
             "away": round(latest_prediction.away_win_prob - 1/3, 4),
         }
 
+        # v8.5 — real edge for the picked side using vig-removed bookmaker
+        # odds from the closing snapshot. Used by /predictions Edge-verified
+        # filter. Null when the snapshot is missing or odds are degenerate.
+        edge_pct: Optional[float] = None
+        bookmaker_odds_pick: Optional[float] = None
+        snap = getattr(latest_prediction, "closing_odds_snapshot", None) or {}
+        if isinstance(snap, dict):
+            bm = snap.get("bookmaker_odds")
+            if isinstance(bm, dict):
+                key = pick.lower() if isinstance(pick, str) else None
+                try:
+                    pick_odds_raw = bm.get(key) if key else None
+                    h_o = float(bm.get("home", 0) or 0)
+                    d_o = float(bm.get("draw", 0) or 0)
+                    a_o = float(bm.get("away", 0) or 0)
+                    if pick_odds_raw is not None:
+                        pick_odds = float(pick_odds_raw)
+                    else:
+                        pick_odds = 0.0
+                    if h_o > 1.0 and a_o > 1.0 and pick_odds > 1.0:
+                        ovr = 1.0 / h_o + 1.0 / a_o
+                        if d_o > 1.0:
+                            ovr += 1.0 / d_o
+                        if ovr > 0:
+                            our_prob = (
+                                latest_prediction.home_win_prob
+                                if key == "home"
+                                else (
+                                    latest_prediction.draw_prob or 0.0
+                                    if key == "draw"
+                                    else latest_prediction.away_win_prob
+                                )
+                            )
+                            fair_implied = (1.0 / pick_odds) / ovr
+                            edge_pct = round(float(our_prob) - fair_implied, 4)
+                            bookmaker_odds_pick = round(pick_odds, 3)
+                except (TypeError, ValueError, ZeroDivisionError):
+                    edge_pct = None
+                    bookmaker_odds_pick = None
+
         # Top features from raw_output
         top_features = None
         if latest_prediction.raw_output and isinstance(latest_prediction.raw_output, dict):
@@ -527,6 +572,8 @@ def _build_fixture_item(
                 pick=pick,
                 reasoning=reasoning,
                 edge=edge,
+                edge_pct=edge_pct,
+                bookmaker_odds_pick=bookmaker_odds_pick,
                 top_features=top_features,
                 top_drivers=top_drivers,
                 pick_tier=meta["pick_tier"],
