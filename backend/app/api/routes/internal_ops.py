@@ -2456,6 +2456,258 @@ async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Predictions Rebuild — Phase 2B: Live-only ROI scenario sweep
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/rebuild-phase2b-live-sweep",
+    summary="Rebuild Phase 2B — live-only ROI sweep across params x tier x window",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_rebuild_phase2b_live_sweep(db: AsyncSession = Depends(get_db)) -> dict:
+    """Live-only sweep. Source = 'live' ONLY (the clean cohort from Phase 1).
+
+    Returns ROI for parameter combinations on prediction_source='live':
+      - by_confidence
+      - by_edge
+      - by_odds_range
+      - top_stacks_conf_x_edge_x_odds (n>=10)
+      - per_tier_recipes (proposed parameter sets per tier with rolling windows)
+
+    No backtest / batch_local_fill source — those are polluted (see Phase 1).
+    """
+    from sqlalchemy import text as _text
+    import json as _json
+
+    out: dict = {"errors": {}}
+
+    rows = (await db.execute(_text("""
+        SELECT
+            p.id::text AS pid,
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            l.name AS league,
+            l.id::text AS league_id,
+            m.scheduled_at,
+            p.predicted_at
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        JOIN leagues l ON l.id = m.league_id
+        WHERE p.prediction_source = 'live'
+          AND p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at < m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+        ORDER BY m.scheduled_at ASC
+    """))).all()
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted(
+            [("home", h), ("draw", d), ("away", a)],
+            key=lambda x: x[1], reverse=True,
+        )
+        pick, our_p = sides[0]
+        try:
+            o = float(bm.get(pick) or 0)
+            h_o = float(bm.get("home", 0) or 0)
+            d_o = float(bm.get("draw", 0) or 0)
+            a_o = float(bm.get("away", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if o <= 1.0 or h_o <= 1.0 or a_o <= 1.0:
+            continue
+        ovr = 1.0 / h_o + 1.0 / a_o + (1.0 / d_o if d_o > 1.0 else 0.0)
+        if ovr <= 0:
+            continue
+        edge = our_p - (1.0 / o) / ovr
+        pnl = (o - 1.0) if r.is_correct else -1.0
+        records.append({
+            "conf": float(r.confidence or 0),
+            "pick": pick,
+            "odds": o,
+            "edge": edge,
+            "is_correct": bool(r.is_correct),
+            "league": r.league,
+            "scheduled_at": r.scheduled_at,
+            "pnl": pnl,
+        })
+
+    out["live_population"] = len(rows)
+    out["analysed"] = len(records)
+
+    if not records:
+        out["errors"]["no_records"] = "No live records survived parsing"
+        return out
+
+    def stats(filt):
+        n = len(filt)
+        if n == 0:
+            return {"n": 0, "hit_pct": None, "roi_pct": None, "pnl": 0.0, "avg_odds": None}
+        won = sum(1 for x in filt if x["is_correct"])
+        pnl = sum(x["pnl"] for x in filt)
+        return {
+            "n": n,
+            "hit_pct": round(100.0 * won / n, 2),
+            "roi_pct": round(100.0 * pnl / n, 2),
+            "pnl": round(pnl, 2),
+            "avg_odds": round(sum(x["odds"] for x in filt) / n, 3),
+            "avg_edge_pct": round(100.0 * sum(x["edge"] for x in filt) / n, 2),
+        }
+
+    out["baseline"] = stats(records)
+
+    out["by_confidence"] = {
+        f"conf_ge_{thr:.2f}": stats([r for r in records if r["conf"] >= thr])
+        for thr in (0.50, 0.55, 0.60, 0.62, 0.65, 0.70, 0.75, 0.78, 0.82)
+    }
+
+    out["by_edge"] = {
+        f"edge_ge_{int(thr*100):+d}pct": stats([r for r in records if r["edge"] >= thr])
+        for thr in (-0.05, 0.0, 0.02, 0.05, 0.08, 0.10, 0.12, 0.15)
+    }
+
+    out["by_odds_range"] = {
+        label: stats([r for r in records if lo <= r["odds"] <= hi])
+        for label, lo, hi in [
+            ("1.30-1.50", 1.30, 1.50),
+            ("1.50-1.70", 1.50, 1.70),
+            ("1.70-1.90", 1.70, 1.90),
+            ("1.90-2.20", 1.90, 2.20),
+            ("2.20-2.60", 2.20, 2.60),
+            ("2.60-3.50", 2.60, 3.50),
+            ("ge_3.50", 3.50, 100),
+        ]
+    }
+
+    # ── Proposed per-tier recipes per the rebuild brief ──
+    # Each tier needs:
+    #  - Min sample requirement per 14d window (Platinum 5, Gold 12, Silver 25, Free <=28)
+    #  - +EV in majority of 14d windows
+    #
+    # We compute candidate recipes server-side and report ROI + sample size.
+    # The full rolling-window analysis happens in Phase 3 — this is the
+    # candidate shortlist.
+
+    candidate_recipes = [
+        # Platinum candidates: tight conf + edge + odds floor
+        {"label": "Platinum-A: conf>=0.78 + edge>=8% + odds>=1.50",
+         "conf": 0.78, "edge": 0.08, "min_odds": 1.50, "max_odds": 100, "tier": "platinum"},
+        {"label": "Platinum-B: conf>=0.75 + edge>=10% + odds>=1.50",
+         "conf": 0.75, "edge": 0.10, "min_odds": 1.50, "max_odds": 100, "tier": "platinum"},
+        {"label": "Platinum-C: conf>=0.70 + edge>=10% + odds in [1.70, 3.00]",
+         "conf": 0.70, "edge": 0.10, "min_odds": 1.70, "max_odds": 3.00, "tier": "platinum"},
+        # Gold candidates: middle-conf + clear edge
+        {"label": "Gold-A: conf>=0.70 + edge>=6% + odds>=1.50",
+         "conf": 0.70, "edge": 0.06, "min_odds": 1.50, "max_odds": 100, "tier": "gold"},
+        {"label": "Gold-B: conf>=0.65 + edge>=8% + odds>=1.60",
+         "conf": 0.65, "edge": 0.08, "min_odds": 1.60, "max_odds": 100, "tier": "gold"},
+        # Silver candidates: looser conf + moderate edge
+        {"label": "Silver-A: conf>=0.62 + edge>=4% + odds>=1.60",
+         "conf": 0.62, "edge": 0.04, "min_odds": 1.60, "max_odds": 100, "tier": "silver"},
+        {"label": "Silver-B: conf>=0.62 + edge>=6% + odds>=1.50",
+         "conf": 0.62, "edge": 0.06, "min_odds": 1.50, "max_odds": 100, "tier": "silver"},
+        # Free candidates: top picks of the day
+        {"label": "Free-A: conf>=0.55 + edge>=10% + odds>=1.70",
+         "conf": 0.55, "edge": 0.10, "min_odds": 1.70, "max_odds": 100, "tier": "free"},
+    ]
+
+    recipe_results = []
+    for r in candidate_recipes:
+        filt = [
+            x for x in records
+            if x["conf"] >= r["conf"]
+            and x["edge"] >= r["edge"]
+            and r["min_odds"] <= x["odds"] <= r["max_odds"]
+        ]
+        s = stats(filt)
+        recipe_results.append({**r, **s})
+    out["candidate_recipes"] = recipe_results
+
+    # ── Open conf x edge x odds_floor exhaustive sweep (n>=10) ──
+    stacks = []
+    for c in (0.55, 0.60, 0.62, 0.65, 0.70, 0.75, 0.78, 0.82):
+        for e in (0.0, 0.02, 0.04, 0.06, 0.08, 0.10, 0.12):
+            for o_floor in (1.30, 1.50, 1.70, 1.90):
+                filt = [
+                    x for x in records
+                    if x["conf"] >= c and x["edge"] >= e and x["odds"] >= o_floor
+                ]
+                s = stats(filt)
+                if s["n"] < 10:
+                    continue
+                stacks.append({
+                    "conf_ge": c, "edge_ge_pct": round(e * 100, 1),
+                    "odds_ge": o_floor,
+                    **s,
+                })
+    stacks.sort(key=lambda x: x["roi_pct"] if x["roi_pct"] is not None else -999, reverse=True)
+    out["top_stacks"] = stacks[:30]
+
+    # ── Rolling 14-day window analysis on best stack ──
+    # For the most-promising stack, count how many 14-day windows are +EV.
+    if stacks:
+        best = stacks[0]
+        records_sorted = sorted(records, key=lambda x: x["scheduled_at"])
+        window_size = timedelta(days=14)
+        if records_sorted:
+            first_date = records_sorted[0]["scheduled_at"]
+            last_date = records_sorted[-1]["scheduled_at"]
+            cur = first_date
+            windows = []
+            while cur + window_size <= last_date + timedelta(days=1):
+                end = cur + window_size
+                window_filt = [
+                    x for x in records_sorted
+                    if cur <= x["scheduled_at"] < end
+                    and x["conf"] >= best["conf_ge"]
+                    and x["edge"] >= best["edge_ge_pct"] / 100.0
+                    and x["odds"] >= best["odds_ge"]
+                ]
+                if window_filt:
+                    s = stats(window_filt)
+                    windows.append({
+                        "window_start": cur.date().isoformat(),
+                        "window_end": end.date().isoformat(),
+                        **s,
+                    })
+                cur += timedelta(days=7)  # rolling 7-day step
+
+            n_pos = sum(1 for w in windows if (w.get("roi_pct") or 0) > 0)
+            out["rolling_window_check_best_stack"] = {
+                "best_stack": best,
+                "windows_analysed": len(windows),
+                "windows_positive_roi": n_pos,
+                "windows_positive_pct": round(100.0 * n_pos / len(windows), 1) if windows else None,
+                "windows": windows,
+            }
+
+    # ── League ranked ROI within live cohort ──
+    league_groups = {}
+    for r in records:
+        league_groups.setdefault(r["league"] or "unknown", []).append(r)
+    league_ranked = sorted(league_groups.items(), key=lambda kv: len(kv[1]), reverse=True)[:25]
+    out["by_league_top25"] = {l: stats(rs) for l, rs in league_ranked}
+
+    if not out["errors"]:
+        del out["errors"]
+    return out
+# ─────────────────────────────────────────────────────────────────────────────
 # Predictions Rebuild — Phase 1: Data Integrity Audit
 # ─────────────────────────────────────────────────────────────────────────────
 

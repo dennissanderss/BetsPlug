@@ -1396,15 +1396,35 @@ def start_scheduler():
         replace_existing=True,
     )
 
-    # Historical predictions: generate batch of 100 every 5 min until all done
-    scheduler.add_job(
-        job_generate_historical_predictions,
-        trigger=IntervalTrigger(minutes=5),
-        id="historical_predictions",
-        name="Generate historical predictions (batch 100)",
-        replace_existing=True,
-        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=1),
-    )
+    # ── DISABLED 2026-05-07 (rebuild Phase 2A.1) ─────────────────────────
+    # ``job_generate_historical_predictions`` was running every 5 min,
+    # picking up FINISHED matches without a prediction and writing one
+    # via ``forecast_service.generate_forecast(source="backtest")``.
+    # The forecast service stamps ``predicted_at = now()``; for past
+    # matches that's ``predicted_at > scheduled_at`` — a post-kickoff
+    # leakage flag that pollutes the ``backtest`` source. Phase 1 audit
+    # found 10,130 such polluted rows (35% of backtest source).
+    #
+    # The historical population is already filled (48k+ post-v8.1 rows
+    # from the regenerate-v81 batches in May 2026). New historical gaps
+    # are filled by the ``/internal-ops/regenerate-v81`` endpoint which
+    # explicitly stamps ``predicted_at = scheduled_at`` for clean
+    # retroactive simulation.
+    #
+    # If we need point-in-time backtest predictions, do it through the
+    # new ``backend/scripts/walk_forward_backtest.py`` script with
+    # proper feature isolation. See docs/integrity_audit.md.
+    #
+    # Re-enable only after fixing forecast_service to accept an explicit
+    # predicted_at parameter (forbidden under current rebuild constraints).
+    # scheduler.add_job(
+    #     job_generate_historical_predictions,
+    #     trigger=IntervalTrigger(minutes=5),
+    #     id="historical_predictions",
+    #     name="Generate historical predictions (batch 100)",
+    #     replace_existing=True,
+    #     next_run_time=datetime.now(timezone.utc) + timedelta(minutes=1),
+    # )
 
     # Abandoned checkout emails every 30 minutes
     scheduler.add_job(
