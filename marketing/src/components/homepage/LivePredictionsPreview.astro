@@ -101,18 +101,26 @@ function formatKickoff(iso: string, loc: Locale): string {
 let livePicks: CardPick[] = [];
 
 try {
-  const res = await fetch(`${API_BASE}/api/homepage/free-picks`, {
-    headers: { Accept: "application/json" },
-    signal: AbortSignal.timeout(4000),
-  });
+  // ?upcoming_limit=5&upcoming_sort=kickoff — give visitors the next five
+  // free-tier matches in chronological order (earliest kickoff first), so
+  // the section under the hero reads as "what's on the pitch next" rather
+  // than "our highest-confidence picks of the week".
+  const res = await fetch(
+    `${API_BASE}/api/homepage/free-picks?upcoming_limit=5&upcoming_sort=kickoff`,
+    {
+      headers: { Accept: "application/json" },
+      // Bumped from 4s — Railway cold-starts and the public API rate
+      // limiter can both push the round-trip past 4s during a build.
+      // The client-side hydration script below is the real safety net,
+      // but a longer build-time budget means more visitors see the
+      // server-rendered cards on first paint.
+      signal: AbortSignal.timeout(10000),
+    },
+  );
   if (res.ok) {
     const data = (await res.json()) as BackendFreePicksResponse;
-    // Backend's `today` array is the "next-N-upcoming Free-tier picks"
-    // feed (up to 45 days out) — same source the dashboard uses. We
-    // render it as-is to match what the app shows, not strict
-    // calendar-today filtered (which would empty the grid most days).
     const today = data.today ?? [];
-    livePicks = today.slice(0, 3).map((p) => {
+    livePicks = today.slice(0, 5).map((p) => {
       // Best-side probability — same number rendered on the hero card.
       const probs = [
         p.home_win_prob ?? 0,
@@ -181,6 +189,18 @@ const cardLabels = {
       </p>
     </header>
 
+    {/* Hydration slot — the script at the bottom of this file re-fetches
+        the same /api/homepage/free-picks endpoint on page load and
+        replaces the contents of this slot with a fresh grid. That way
+        a build-time fetch failure (Railway rate-limit, cold start,
+        DNS blip) no longer leaves the section permanently empty
+        between deploys. */}
+    <div
+      data-live-predictions-slot
+      data-api-base={API_BASE}
+      data-locale={locale}
+      data-empty-label={content.emptyLabel}
+    >
     {showEmpty ? (
       <div class="mt-12 rounded-2xl border border-deep-navy-600 bg-charcoal-700 p-10 text-center text-sm text-white-muted">
         {content.emptyLabel}
@@ -189,11 +209,13 @@ const cardLabels = {
       <div
         id="live-predictions-grid"
         class={`mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 ${
-          livePicks.length >= 3
-            ? "lg:grid-cols-3"
-            : livePicks.length === 2
-              ? "lg:grid-cols-2"
-              : "lg:grid-cols-1"
+          livePicks.length >= 5
+            ? "lg:grid-cols-3 xl:grid-cols-5"
+            : livePicks.length >= 3
+              ? "lg:grid-cols-3"
+              : livePicks.length === 2
+                ? "lg:grid-cols-2"
+                : "lg:grid-cols-1"
         }`}
         data-locked-label={content.lockedLabel}
         data-loading-label={content.loadingLabel}
@@ -217,6 +239,7 @@ const cardLabels = {
         ))}
       </div>
     )}
+    </div>
 
     {/* CTA strip below cards */}
     <div class="mt-12 rounded-2xl border border-deep-navy-600 bg-deep-navy-800 p-8 lg:p-10 text-center">
@@ -263,5 +286,203 @@ const cardLabels = {
       const seconds = Math.floor((Date.now() - start) / 1000);
       liveSecondsEl.textContent = String(seconds);
     }, 1000);
+  })();
+</script>
+
+<script>
+  /**
+   * Client-side hydration of the live-predictions grid.
+   *
+   * The marketing site is statically built — if the build-time fetch
+   * to /api/homepage/free-picks fails (Railway rate-limit, cold start,
+   * DNS blip), the section ships empty until the next deploy. This
+   * script runs on every page view, refetches the next-five-fixtures
+   * feed, and replaces the slot contents in place. If the fetch fails
+   * we leave whatever the build produced — never make it worse.
+   */
+  (function () {
+    const slot = document.querySelector<HTMLElement>(
+      "[data-live-predictions-slot]"
+    );
+    if (!slot) return;
+
+    const apiBase = slot.dataset.apiBase ?? "";
+    const locale = slot.dataset.locale ?? "en";
+    const emptyLabel = slot.dataset.emptyLabel ?? "No upcoming matches.";
+    if (!apiBase) return;
+
+    type LocaleKey = "en" | "nl" | "de" | "fr" | "es" | "it" | "sw";
+    const BCP47: Record<LocaleKey, string> = {
+      en: "en-GB",
+      nl: "nl-NL",
+      de: "de-DE",
+      fr: "fr-FR",
+      es: "es-ES",
+      it: "it-IT",
+      sw: "sw-KE",
+    };
+
+    function isLocale(v: string): v is LocaleKey {
+      return v in BCP47;
+    }
+    const loc: LocaleKey = isLocale(locale) ? locale : "en";
+
+    function fmtKickoff(iso: string): string {
+      try {
+        return new Date(iso).toLocaleString(BCP47[loc], {
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+      } catch {
+        return iso;
+      }
+    }
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    interface FreePick {
+      id: string;
+      match_id: string;
+      home_team: string;
+      away_team: string;
+      home_team_logo?: string | null;
+      away_team_logo?: string | null;
+      league: string;
+      scheduled_at: string;
+      pick?: "HOME" | "DRAW" | "AWAY" | null;
+      home_win_prob?: number | null;
+      draw_prob?: number | null;
+      away_win_prob?: number | null;
+      status: string;
+    }
+
+    function pickLabel(p: FreePick): string {
+      if (p.pick === "HOME") return p.home_team;
+      if (p.pick === "AWAY") return p.away_team;
+      return "Draw";
+    }
+
+    function teamLogoHtml(name: string, logoUrl: string | null | undefined): string {
+      const safeName = escapeHtml(name);
+      if (logoUrl) {
+        return `<img src="${escapeHtml(logoUrl)}" alt="${safeName} logo" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 shrink-0 object-contain" />`;
+      }
+      const initials = escapeHtml(name.slice(0, 2).toUpperCase());
+      return `<div class="h-10 w-10 shrink-0 rounded-full bg-charcoal-700 flex items-center justify-center text-white-soft text-sm font-bold">${initials}</div>`;
+    }
+
+    function buildCard(p: FreePick): string {
+      const probs = [
+        p.home_win_prob ?? 0,
+        p.draw_prob ?? 0,
+        p.away_win_prob ?? 0,
+      ];
+      const conf = Math.round(Math.max(...probs) * 100);
+      const kickoff = fmtKickoff(p.scheduled_at);
+      const league = escapeHtml(p.league);
+      const home = escapeHtml(p.home_team);
+      const away = escapeHtml(p.away_team);
+      const prediction = escapeHtml(pickLabel(p));
+
+      return `
+        <article class="relative rounded-xl border border-deep-navy-600 bg-charcoal-700 overflow-hidden transition-all duration-200 hover:border-pitch-green-500/40 hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5">
+          <header class="flex items-center justify-between text-xs px-4 py-2.5 border-b border-white/[0.06] bg-black/[0.15]">
+            <span class="inline-flex items-center gap-1.5 font-semibold text-white-soft">
+              <span class="h-1.5 w-1.5 rounded-full bg-pitch-green-500" aria-hidden="true"></span>
+              ${league}
+            </span>
+            <span class="inline-flex items-center rounded-full bg-pitch-green-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-pitch-green-400">
+              Free pick
+            </span>
+          </header>
+          <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-4">
+            <div class="flex flex-col items-center text-center gap-2">
+              ${teamLogoHtml(p.home_team, p.home_team_logo)}
+              <p class="text-xs font-semibold text-white-pure leading-tight line-clamp-2">${home}</p>
+            </div>
+            <span class="text-[10px] uppercase tracking-[0.15em] font-semibold text-white-faded">vs</span>
+            <div class="flex flex-col items-center text-center gap-2">
+              ${teamLogoHtml(p.away_team, p.away_team_logo)}
+              <p class="text-xs font-semibold text-white-pure leading-tight line-clamp-2">${away}</p>
+            </div>
+          </div>
+          <p class="flex items-center justify-center gap-1.5 px-4 py-1.5 text-[11px] font-mono text-white-muted border-t border-white/[0.05] bg-black/[0.10]">
+            <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .2.08.39.22.53l3 3a.75.75 0 101.06-1.06L10.75 9.69V5z" clip-rule="evenodd" />
+            </svg>
+            <time datetime="${escapeHtml(p.scheduled_at)}">${escapeHtml(kickoff)}</time>
+          </p>
+          <div class="px-4 py-3">
+            <p class="text-base font-bold text-pitch-green-400">${prediction}</p>
+            <p class="mt-0.5 text-[10px] uppercase tracking-wider font-semibold text-white-faded">Match Result</p>
+            <div class="mt-3">
+              <div class="relative h-1.5 rounded-full bg-deep-navy-900 overflow-hidden">
+                <div class="h-full rounded-full bg-pitch-green-500" style="width: ${conf}%;"></div>
+              </div>
+              <div class="mt-1.5 flex items-center justify-between text-[11px]">
+                <span class="text-white-muted">Confidence</span>
+                <span class="font-mono font-semibold text-white-pure">${conf}%</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function gridClasses(n: number): string {
+      const base = "mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4";
+      if (n >= 5) return base + " lg:grid-cols-3 xl:grid-cols-5";
+      if (n >= 3) return base + " lg:grid-cols-3";
+      if (n === 2) return base + " lg:grid-cols-2";
+      return base + " lg:grid-cols-1";
+    }
+
+    interface FreePicksResponse {
+      today?: FreePick[];
+    }
+
+    async function hydrate() {
+      try {
+        const res = await fetch(
+          `${apiBase}/api/homepage/free-picks?upcoming_limit=5&upcoming_sort=kickoff`,
+          { headers: { Accept: "application/json" } }
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as FreePicksResponse;
+        const picks = (data.today ?? []).slice(0, 5);
+
+        if (picks.length === 0) {
+          // Genuine empty state — leave the build-time render alone if
+          // it already shows "No matches"; otherwise replace.
+          slot!.innerHTML = `
+            <div class="mt-12 rounded-2xl border border-deep-navy-600 bg-charcoal-700 p-10 text-center text-sm text-white-muted">
+              ${escapeHtml(emptyLabel)}
+            </div>
+          `;
+          return;
+        }
+
+        const cards = picks.map(buildCard).join("");
+        slot!.innerHTML = `
+          <div class="${gridClasses(picks.length)}">
+            ${cards}
+          </div>
+        `;
+      } catch {
+        // Network error or backend down — leave whatever the build-time
+        // fetch produced.
+      }
+    }
+
+    hydrate();
   })();
 </script>

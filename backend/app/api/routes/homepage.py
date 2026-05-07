@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -227,14 +227,20 @@ def _build_free_pick(pred: Prediction) -> FreePickItem:
 )
 async def get_free_picks(
     db: AsyncSession = Depends(get_db),
+    upcoming_limit: int = Query(3, ge=1, le=10, description="How many upcoming picks to return."),
+    upcoming_sort: str = Query(
+        "confidence",
+        pattern="^(confidence|kickoff)$",
+        description="Sort upcoming picks by 'confidence' (best max-prob first, default) or 'kickoff' (earliest first).",
+    ),
 ) -> FreePicksResponse:
-    """Top 3 highest-confidence upcoming picks + 3 recent results + 30-day winrate.
+    """Free-tier upcoming picks + recent results + cumulative winrate.
 
-    Unlike the previous version which was limited to today/yesterday only
-    (often empty on days without matches), this searches a wider window:
-    - "today": next 3 upcoming scheduled matches (up to 7 days ahead)
-    - "yesterday": last 3 finished matches (up to 7 days back)
-    This guarantees the homepage section always has content.
+    Default behaviour (back-compat): top 3 picks ordered by max-prob DESC
+    plus the last 3 finished free-tier picks. Query params let callers
+    request a longer slate or a chronological order — the marketing
+    homepage uses ?upcoming_limit=5&upcoming_sort=kickoff to render the
+    next-five-fixtures grid directly below the hero.
     """
     now = datetime.now(timezone.utc)
 
@@ -274,6 +280,9 @@ async def get_free_picks(
     # true coin-flips.
     VISIBLE_WIN_PROB_FLOOR = 0.50
     upcoming_cutoff = now + timedelta(days=45)
+    order_by = (
+        Match.scheduled_at.asc() if upcoming_sort == "kickoff" else max_prob_expr.desc()
+    )
     today_stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
@@ -286,8 +295,8 @@ async def get_free_picks(
                 max_prob_expr >= VISIBLE_WIN_PROB_FLOOR,
             )
         )
-        .order_by(max_prob_expr.desc())
-        .limit(3)
+        .order_by(order_by)
+        .limit(upcoming_limit)
     )
     # Use the FREE access scope — this endpoint powers the public
     # "gratis voorspellingen" surface (homepage hero + /voorspellingen

@@ -112,12 +112,16 @@ const breadcrumbSchema = {
       one canvas. Same-surface boundaries (e.g. dark→dark) get no strip. */}
 
   <Hero                   locale={locale} content={content.hero} />
+  {/* LivePredictions sits directly under the hero so the very first
+      thing a visitor sees after the headline is five real upcoming
+      fixtures (chronological order). Both surfaces are dark, so no
+      SectionTransition strip is needed between them. */}
+  <LivePredictionsPreview locale={locale} content={content.livePredictions} />
   <SectionTransition from="dark" to="light" />
 
   <HowItWorks             locale={locale} content={content.howItWorks} />
   <SectionTransition from="light" to="dark" />
 
-  <LivePredictionsPreview locale={locale} content={content.livePredictions} />
   <MethodologyHighlight   locale={locale} content={content.methodology} />
   <SectionTransition from="dark" to="light" />
 
