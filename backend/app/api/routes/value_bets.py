@@ -1102,10 +1102,19 @@ class ComboHistoryItem(BaseModel):
 async def get_combo_history(
     limit: int = Query(default=20, ge=1, le=1000),
     db: AsyncSession = Depends(get_db),
+    user: Optional[User] = Depends(get_current_user_optional),
 ) -> list[ComboHistoryItem]:
     """Return the most recent persisted combos (live + backfill mixed),
-    newest first. Drives the history table on /combo-of-the-day."""
+    newest first. Drives the history table on /combo-of-the-day.
+
+    Hard-lock parity with /combo-today: while ``COMBO_PUBLIC_LAUNCH`` is
+    off, non-admin callers should not see today's or future pending
+    combos in the history table either — otherwise the "No combo today"
+    overlay leaks through the recent-combos list.
+    """
     from sqlalchemy.orm import selectinload
+
+    is_admin = user is not None and user.role == Role.ADMIN
 
     stmt = (
         select(ComboBet)
@@ -1113,6 +1122,9 @@ async def get_combo_history(
         .order_by(ComboBet.bet_date.desc(), ComboBet.picked_at.desc())
         .limit(limit)
     )
+    if not COMBO_PUBLIC_LAUNCH and not is_admin:
+        today = datetime.now(timezone.utc).date()
+        stmt = stmt.where(ComboBet.bet_date < today)
     rows = (await db.execute(stmt)).scalars().unique().all()
 
     out: list[ComboHistoryItem] = []
