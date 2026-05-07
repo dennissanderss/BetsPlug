@@ -2232,7 +2232,7 @@ async def optimize_ensemble(
         default="2026-01-01",
         description="ISO date: matches before = backtest, after = validation",
     ),
-    min_confidence: float = Query(default=0.0, description="Min confidence filter for BOTD sim"),
+    min_confidence: float = Query(default=0.0, description="Min confidence filter for high-conf subset"),
     db: AsyncSession = Depends(get_db),
 ):
     """Re-weight the ensemble using sub-model outputs stored in raw_output.
@@ -2306,7 +2306,7 @@ async def optimize_ensemble(
     results = []
     for weights in combos:
         bt_correct = bt_total = val_correct = val_total = 0
-        bt_botd_correct = bt_botd_total = val_botd_correct = val_botd_total = 0
+        bt_highconf_correct = bt_highconf_total = val_highconf_correct = val_highconf_total = 0
 
         for p in parsed:
             # Re-compute ensemble with these weights
@@ -2338,22 +2338,22 @@ async def optimize_ensemble(
                 if correct:
                     bt_correct += 1
                 if conf >= 0.60:
-                    bt_botd_total += 1
+                    bt_highconf_total += 1
                     if correct:
-                        bt_botd_correct += 1
+                        bt_highconf_correct += 1
             else:
                 val_total += 1
                 if correct:
                     val_correct += 1
                 if conf >= 0.60:
-                    val_botd_total += 1
+                    val_highconf_total += 1
                     if correct:
-                        val_botd_correct += 1
+                        val_highconf_correct += 1
 
         bt_acc = bt_correct / bt_total * 100 if bt_total else 0
         val_acc = val_correct / val_total * 100 if val_total else 0
-        bt_botd_acc = bt_botd_correct / bt_botd_total * 100 if bt_botd_total else 0
-        val_botd_acc = val_botd_correct / val_botd_total * 100 if val_botd_total else 0
+        bt_highconf_acc = bt_highconf_correct / bt_highconf_total * 100 if bt_highconf_total else 0
+        val_highconf_acc = val_highconf_correct / val_highconf_total * 100 if val_highconf_total else 0
 
         results.append({
             "weights": weights,
@@ -2361,15 +2361,15 @@ async def optimize_ensemble(
                 "accuracy": round(bt_acc, 1),
                 "total": bt_total,
                 "correct": bt_correct,
-                "botd_accuracy": round(bt_botd_acc, 1),
-                "botd_total": bt_botd_total,
+                "highconf_accuracy": round(bt_highconf_acc, 1),
+                "highconf_total": bt_highconf_total,
             },
             "validation": {
                 "accuracy": round(val_acc, 1),
                 "total": val_total,
                 "correct": val_correct,
-                "botd_accuracy": round(val_botd_acc, 1),
-                "botd_total": val_botd_total,
+                "highconf_accuracy": round(val_highconf_acc, 1),
+                "highconf_total": val_highconf_total,
             },
         })
 
@@ -2382,10 +2382,10 @@ async def optimize_ensemble(
     # Top 20 configurations
     top_20 = results[:20]
 
-    # Also find best BOTD config
-    botd_sorted = sorted(
-        [r for r in results if r["validation"]["botd_total"] >= 5],
-        key=lambda r: (r["validation"]["botd_accuracy"], r["backtest"]["botd_accuracy"]),
+    # Also find best high-confidence subset config
+    highconf_sorted = sorted(
+        [r for r in results if r["validation"]["highconf_total"] >= 5],
+        key=lambda r: (r["validation"]["highconf_accuracy"], r["backtest"]["highconf_accuracy"]),
         reverse=True,
     )
 
@@ -2396,5 +2396,5 @@ async def optimize_ensemble(
         "configurations_tested": len(combos),
         "current_weights": {"EloModel": 0.8, "PoissonModel": 1.2, "LogisticModel": 0.8, "XGBoostModel": 1.5},
         "top_20_overall": top_20,
-        "top_5_botd": botd_sorted[:5],
+        "top_5_highconf": highconf_sorted[:5],
     }

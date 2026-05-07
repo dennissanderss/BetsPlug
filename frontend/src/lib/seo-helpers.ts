@@ -24,7 +24,6 @@ import {
 import { localizePath } from "@/i18n/routes";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
-import { POTD_STATS } from "@/data/potd-stats";
 
 const SITE_URL = "https://betsplug.com";
 
@@ -199,50 +198,17 @@ export function getOpenGraphLocales(localeOverride?: Locale | string | null): {
 type FaqKeySet = { q: string; a: string }[];
 
 /**
- * Per-locale narrative numbers for SSR placeholder substitution.
- * Uses the comma decimal for every European locale that formats
- * numbers with a comma (most continental Europe), point for Anglo-
- * style locales. These feed `formatMsg()` where FAQ strings contain
- * `{potdAccuracy}` / `{potdPicks}` tokens — keeps JSON-LD markup
- * crawler-friendly with real numbers instead of raw templates.
- */
-// Locales that render decimals with a comma (fr, de, nl, es, it,
-// pt, pl, ro, ru, el, da, sv, tr, id); point-style: en, sw.
-const COMMA_DECIMAL_LOCALES: ReadonlySet<Locale> = new Set<Locale>([
-  "nl", "de", "fr", "es", "it",
-  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv", "id",
-]);
-
-const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: string }> =
-  Object.fromEntries(
-    (["en","nl","de","fr","es","it","sw","id","pt","tr","pl","ro","ru","el","da","sv"] as Locale[])
-      .map((l) => [
-        l,
-        {
-          potdAccuracy: COMMA_DECIMAL_LOCALES.has(l)
-            ? POTD_STATS.accuracyNL
-            : POTD_STATS.accuracy,
-          potdPicks: POTD_STATS.totalPicks,
-        },
-      ]),
-  ) as Record<Locale, { potdAccuracy: string; potdPicks: string }>;
-
-/**
  * Build a locale-aware FAQ items array from translation keys.
  * Each entry in `keys` is { q: "faq.home.q1", a: "faq.home.a1" }.
- * Applies `{potdAccuracy}` / `{potdPicks}` placeholder substitution
- * using the static `POTD_STATS` snapshot so JSON-LD ships real
- * numbers to crawlers without a client fetch.
  */
 export function getLocalizedFaq(
   keys: FaqKeySet,
   localeOverride?: Locale | string | null,
 ) {
   const locale = getServerLocale(localeOverride);
-  const vars = POTD_VARS_BY_LOCALE[locale];
   return keys.map(({ q, a }) => ({
-    question: formatMsg(translate(locale, q as any), vars),
-    answer: formatMsg(translate(locale, a as any), vars),
+    question: formatMsg(translate(locale, q as any), {}),
+    answer: formatMsg(translate(locale, a as any), {}),
   }));
 }
 

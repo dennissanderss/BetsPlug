@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
 import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
 import { UpcomingPicksStrip } from "@/components/dashboard/UpcomingPicksStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
@@ -30,18 +29,6 @@ function isTrulyLive(f: Fixture, now: number): boolean {
 
 export default function DashboardPage() {
   const { tier: userTierSlug } = useTier();
-
-  // Pick of the Day — strictly today's pick, not "best of next 7 days".
-  // The bare api.getBetOfTheDay() call falls back to a 7-day window
-  // on the backend; passing today's ISO date forces a single-day
-  // match. When today has no Gold-league fixture, the response is
-  // available=false and HeroBotdCompact renders its empty state
-  // ("Geen pick vandaag") instead of silently sliding to a future day.
-  const todayISO = new Date().toISOString().slice(0, 10);
-  const { data: botd, isLoading: botdLoading } = useQuery({
-    queryKey: ["botd-hub-today", todayISO],
-    queryFn: () => api.getBetOfTheDay(todayISO),
-  });
 
   const { data: liveFixtures, isLoading: liveLoading } = useQuery({
     queryKey: ["fixtures-live-hub"],
@@ -185,16 +172,10 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* ── Two-column editorial layout: POTD + upcoming on the left,
+      {/* ── Two-column editorial layout: upcoming on the left,
           tier-accuracy widget pinned right on xl+. ── */}
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="min-w-0 space-y-5">
-          {/* Pick of the Day — centerpiece for Gold/Platinum.
-              Free/Silver get the upgrade nudge below instead. */}
-          {(userTierSlug === "gold" || userTierSlug === "platinum") && (
-            <HeroBotdCompact botd={botd} isLoading={botdLoading} />
-          )}
-
           {/* Tier-specific upsell — Free/Silver only. */}
           <UpgradeNudgeCard />
 

@@ -772,26 +772,6 @@ class ApiClient {
     );
   }
 
-  // Pick of the Day
-  getBetOfTheDay(targetDate?: string) {
-    const params = targetDate ? `?target_date=${targetDate}` : "";
-    return this.request<{
-      available: boolean;
-      match_id?: string;
-      home_team?: string;
-      away_team?: string;
-      league?: string;
-      scheduled_at?: string;
-      home_win_prob?: number;
-      draw_prob?: number;
-      away_win_prob?: number;
-      confidence?: number;
-      predicted_outcome?: string;
-      explanation_summary?: string;
-      prediction_id?: string;
-    }>(`/bet-of-the-day/${params}`);
-  }
-
   // Subscriptions
   getSubscriptionPlans() {
     return this.request<{

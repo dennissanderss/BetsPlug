@@ -39,8 +39,6 @@ import { cn, formatPercent, formatDate } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TrustFunnel } from "@/components/ui/trust-funnel";
-import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
-import { BotdLiveTrackingSection } from "@/components/ui/botd-live-tracking-section";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
 import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
 import { Pill } from "@/components/noct/pill";
@@ -802,7 +800,6 @@ function DataTransparencyCard({
             <Download className="h-4 w-4" />
             {t("trackrecord.csv.downloadCta")}
           </a>
-          <BotdCsvDownloadButton />
         </div>
       </div>
     </div>
@@ -882,128 +879,6 @@ function SectionPhaseBanner({
         </div>
       </div>
     </section>
-  );
-}
-
-// ─── BOTD tier gate — voor BOTD en BOTD-Live tabs. Gold en Platinum
-//      zien de onderliggende sectie; Free en Silver krijgen een
-//      upgrade-teaser. Tier komt uit useTier() zodat de waarde altijd
-//      gesynchroniseerd is met /subscriptions/me en de admin tier-
-//      switcher meteen doorwerkt zonder page refresh.
-
-function BotdTierGate({ children }: { children: React.ReactNode }) {
-  const { hasAccess: hasTierAccess, ready } = useTier();
-  const { t } = useTranslations();
-  if (!ready) return null;
-  if (hasTierAccess("gold")) return <>{children}</>;
-
-  return (
-    <div
-      className="relative overflow-hidden rounded-2xl border p-6 sm:p-10"
-      style={{
-        background:
-          "linear-gradient(135deg, hsl(var(--accent-green) / 0.14) 0%, hsl(230 22% 9% / 0.9) 55%, hsl(var(--accent-purple) / 0.18) 100%)",
-        borderColor: "hsl(var(--accent-purple) / 0.3)",
-        boxShadow:
-          "0 0 0 1px hsl(var(--accent-purple) / 0.08) inset, 0 10px 40px rgba(0,0,0,0.4)",
-      }}
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-20 -top-20 h-[280px] w-[280px] rounded-full"
-        style={{
-          background: "hsl(var(--accent-purple) / 0.25)",
-          filter: "blur(100px)",
-        }}
-      />
-      <div className="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-500/15 ring-1 ring-purple-400/30">
-          <Trophy className="h-6 w-6 text-purple-300" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h3 className="text-xl font-bold text-[#ededed] sm:text-2xl">
-            {t("trackrecord.botdGate.heading")}
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-[#c8cdd6]">
-            {t("trackrecord.botdGate.body")}
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <Link
-              href="/pricing"
-              className="btn-primary inline-flex items-center gap-2"
-            >
-              {t("trackrecord.botdGate.upgradeCta")}
-            </Link>
-            <Link
-              href="/bet-of-the-day"
-              className="btn-glass inline-flex items-center gap-2"
-            >
-              {t("trackrecord.botdGate.exampleCta")}
-            </Link>
-          </div>
-          <p className="mt-3 text-[11px] text-[#6b7280]">
-            {t("trackrecord.botdGate.adminHint")}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── BOTD CSV download — aparte knop want users vroegen om een CSV
-//      met alleen de Pick-of-the-Day historie, niet het hele prediction
-//      corpus. Bearer-token pattern zodat de admin-gated backend
-//      endpoint accepts dezelfde auth als de rest van deze pagina.
-
-function BotdCsvDownloadButton() {
-  const [busy, setBusy] = React.useState(false);
-  const api = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-
-  async function downloadBotd() {
-    setBusy(true);
-    try {
-      const token =
-        typeof window !== "undefined"
-          ? window.localStorage.getItem("betsplug_token")
-          : null;
-      const resp = await fetch(`${api}/bet-of-the-day/export.csv`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      });
-      if (!resp.ok) {
-        window.alert(
-          resp.status === 401 || resp.status === 403
-            ? "Log opnieuw in om de BOTD CSV te downloaden."
-            : `BOTD CSV download mislukt (${resp.status}).`,
-        );
-        return;
-      }
-      const blob = await resp.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "betsplug-pick-of-the-day.csv";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } catch {
-      window.alert("BOTD CSV download mislukt.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  return (
-    <button
-      type="button"
-      disabled={busy}
-      onClick={downloadBotd}
-      title="Alleen Pick-of-the-Day historie als CSV"
-      className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-sm font-semibold text-purple-200 hover:bg-purple-500/20 hover:border-purple-500/50 transition-colors disabled:opacity-50"
-    >
-      <Trophy className="h-4 w-4" />
-      {busy ? "Bezig…" : "BOTD CSV"}
-    </button>
   );
 }
 
@@ -1717,35 +1592,6 @@ export default function TrackrecordPage() {
           )}
         </div>
 
-        {/* ── Container 2: Bet of the Day ── */}
-        <div className="glass-card overflow-hidden border border-purple-500/20">
-          <div className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 ring-1 ring-purple-500/20">
-                <Trophy className="h-5 w-5 text-purple-300" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-base font-semibold text-slate-100">
-                    {t("trackrecord.botd.backtestTitle")}
-                  </h2>
-                  <span className="inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-0.5 text-[10px] font-semibold text-yellow-300">
-                    Gold &amp; Platinum
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  {t("trackrecord.botd.backtestSubtitle")}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="p-6">
-            <BotdTierGate>
-              <BotdTrackRecordSection />
-            </BotdTierGate>
-          </div>
-        </div>
-
       </div>
 
       </>)}
@@ -1773,24 +1619,6 @@ export default function TrackrecordPage() {
             </p>
           </div>
           <LiveMeasurementSection />
-        </div>
-
-        {/* Pick of the Day — live (Gold+ only) */}
-        <div className="glass-card p-6 border border-purple-500/20">
-          <div className="mb-4 flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-purple-300" />
-            <div>
-              <h2 className="text-base font-semibold text-slate-100">
-                {t("trackrecord.live.botdTitle")}
-              </h2>
-              <p className="text-sm text-slate-500 mt-0.5">
-                {t("trackrecord.live.botdSubtitle")}
-              </p>
-            </div>
-          </div>
-          <BotdTierGate>
-            <BotdLiveTrackingSection />
-          </BotdTierGate>
         </div>
 
         {/* Spoor 2 — Accuracy Pro Engine v2 preview (gelockt tot 100 picks) */}

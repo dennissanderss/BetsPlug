@@ -13,8 +13,7 @@ export function QuickNavStrip() {
   const lHref = useLocalizedHref();
 
   const items = [
-    { label: t("dash.nav.botd"), description: t("dash.nav.botd"), href: "/bet-of-the-day", icon: Star, badge: null as number | null },
-    { label: t("dash.nav.predictions"), description: t("dash.nav.predictions"), href: "/predictions", icon: Target, badge: null },
+    { label: t("dash.nav.predictions"), description: t("dash.nav.predictions"), href: "/predictions", icon: Target, badge: null as number | null },
     { label: t("dash.nav.results"), description: t("dash.nav.results"), href: "/results", icon: Trophy, badge: null },
   ];
 

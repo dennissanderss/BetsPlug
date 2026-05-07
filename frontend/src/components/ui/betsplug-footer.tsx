@@ -53,7 +53,6 @@ const HIDDEN_FOOTER_PATTERNS: ReadonlyArray<RegExp> = [
   /^\/(?:[a-z]{2}\/)?thank-you(?:\/|$)/,
   /^\/(?:[a-z]{2}\/)?dashboard(?:\/|$)/,
   /^\/(?:[a-z]{2}\/)?predictions(?:\/|$)/,
-  /^\/(?:[a-z]{2}\/)?bet-of-the-day(?:\/|$)/,
   /^\/(?:[a-z]{2}\/)?combo-of-the-day(?:\/|$)/,
   /^\/(?:[a-z]{2}\/)?results(?:\/|$)/,
   /^\/(?:[a-z]{2}\/)?trackrecord(?:\/|$)/,

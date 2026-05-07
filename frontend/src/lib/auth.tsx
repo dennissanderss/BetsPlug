@@ -230,7 +230,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             "/teams",
             "/matches",
             "/live-score",
-            "/bet-of-the-day",
             "/weekly-report",
             "/checkout",
           ];

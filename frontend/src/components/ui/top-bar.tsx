@@ -4,8 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { X, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
-import { POTD_STATS } from "@/data/potd-stats";
 
 /**
  * TopBar — rotating multi-lever announcement strip.
@@ -139,7 +137,7 @@ function buildCopy(
         desktop: t("topbar.v.reciprocity.text"),
         mobile: t("topbar.v.reciprocity.textMobile"),
         cta: t("topbar.v.reciprocity.cta"),
-        href: loc("/bet-of-the-day"),
+        href: loc("/predictions"),
       };
     case "social":
       return {
@@ -164,17 +162,11 @@ export function TopBar() {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
   const [variant, setVariant] = useState<VariantKey | null>(null);
-  const stats = useBotdTrackRecord();
-
-  // Gate on stats: if we don't yet know the numbers OR the numbers
-  // are too sparse to quote (evaluated<20 or accuracy_pct==0), pick
-  // from SAFE_VARIANTS only. Prevents "0% win rate · 2+ picks"
-  // appearing on every public page when the BOTD ledger is new.
-  const canQuoteStats = !!(
-    stats &&
-    stats.evaluated >= 20 &&
-    stats.accuracy_pct > 0
-  );
+  // BOTD ledger has been retired — stats are no longer queried, so
+  // top-bar always falls back to SAFE_VARIANTS that don't quote a hit
+  // rate or pick count.
+  const stats: { accuracy_pct?: number; total_picks?: number; evaluated?: number } | null = null;
+  const canQuoteStats = false;
 
   useEffect(() => {
     try {
@@ -212,15 +204,8 @@ export function TopBar() {
     return;
   }, [stats, canQuoteStats, variant]);
 
-  const hitRate = useMemo(() => {
-    if (stats?.accuracy_pct) return String(Math.round(stats.accuracy_pct));
-    return POTD_STATS.accuracy.split(".")[0];
-  }, [stats]);
-
-  const totalPicks = useMemo(() => {
-    if (stats?.total_picks) return String(stats.total_picks);
-    return POTD_STATS.totalPicks;
-  }, [stats]);
+  const hitRate = useMemo(() => "", []);
+  const totalPicks = useMemo(() => "", []);
 
   const copy = useMemo(() => {
     if (!variant) return null;

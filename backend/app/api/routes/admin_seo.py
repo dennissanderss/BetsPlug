@@ -56,18 +56,6 @@ _SEO_PAGES: List[dict] = [
         "overall_score": 88,
     },
     {
-        "path": "/bet-of-the-day",
-        "title": "Pick of the Day - Betsplug",
-        "title_length": 26,
-        "title_score": "good",
-        "meta_description": "Our highest-confidence pick each day, backed by data analysis.",
-        "meta_length": 62,
-        "meta_score": "needs_improvement",
-        "has_og_tags": True,
-        "has_schema": False,
-        "overall_score": 65,
-    },
-    {
         "path": "/results",
         "title": "Results - Betsplug",
         "title_length": 18,

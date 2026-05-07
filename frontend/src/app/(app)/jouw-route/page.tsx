@@ -194,20 +194,20 @@ export default function YourRoutePage() {
 
       {/* Two paths */}
       <section className="mb-10 grid gap-4 sm:grid-cols-2">
-        <Link href={loc("/bet-of-the-day")} className="card-neon card-neon-green halo-green group">
+        <Link href={loc("/combi-of-the-day")} className="card-neon card-neon-green halo-green group">
           <div className="relative p-6 space-y-3">
             <div className="flex items-center gap-3">
               <HexBadge variant="green" size="md">
                 <Trophy className="h-5 w-5" />
               </HexBadge>
               <div>
-                <h3 className="text-base font-semibold text-white">{t("route.botdTitle")}</h3>
-                <p className="text-xs text-[#4ade80] font-medium">{t("route.botdBadge")}</p>
+                <h3 className="text-base font-semibold text-white">{t("route.comboTitle")}</h3>
+                <p className="text-xs text-[#4ade80] font-medium">{t("route.comboBadge")}</p>
               </div>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed">{t("route.botdDesc")}</p>
+            <p className="text-sm text-slate-400 leading-relaxed">{t("route.comboDesc")}</p>
             <div className="flex items-center gap-1 text-sm font-medium text-[#4ade80] group-hover:gap-2 transition-all">
-              {t("route.botdCta")} <ArrowRight className="h-4 w-4" />
+              {t("route.comboCta")} <ArrowRight className="h-4 w-4" />
             </div>
           </div>
         </Link>
@@ -265,9 +265,9 @@ export default function YourRoutePage() {
           <HexBadge variant="green" size="lg" className="mx-auto">
             <Sparkles className="h-6 w-6" />
           </HexBadge>
-          <h3 className="text-xl font-semibold text-white">{t("route.botdCta")}</h3>
-          <Link href={loc("/bet-of-the-day")} className="btn-primary inline-flex items-center gap-2">
-            {t("route.botdCta")} <ArrowRight className="h-4 w-4" />
+          <h3 className="text-xl font-semibold text-white">{t("route.comboCta")}</h3>
+          <Link href={loc("/combi-of-the-day")} className="btn-primary inline-flex items-center gap-2">
+            {t("route.comboCta")} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>

@@ -63,11 +63,6 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.predictions",
     fallbackLabel: "Predictions",
     items: [
-      // Pick of the Day mirrors the PaywallOverlay tier on the page
-      // itself (bet-of-the-day/page.tsx). Without this the nav item is
-      // clickable for Free users and only paywalls on arrival —
-      // inconsistent state between sidebar and page.
-      { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, requiredTier: "gold" },
       // Combi van de Dag = Gold/Platinum only — multi-leg edge product,
       // not a Free/Silver feature.
       { labelKey: "nav.combo_of_the_day", fallback: "Combo of the Day", href: "/combi-of-the-day", icon: Layers, requiredTier: "gold" },

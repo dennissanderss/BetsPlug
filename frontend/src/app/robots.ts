@@ -46,7 +46,6 @@ const PRIVATE_PATHS = [
   "/strategy/",
   "/matches/",
   "/teams/",
-  "/bet-of-the-day/",
   "/jouw-route/",
   "/your-route/",
 ];
