@@ -1324,10 +1324,6 @@ export default function PredictionsPage() {
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
-  // v8.6 — default ON: hide picks priced under 1.50 (heavy favorites
-  // where the payout doesn't compensate for vig). User can toggle off
-  // to see everything.
-  const [hideLowOdds, setHideLowOdds] = useState<boolean>(true);
 
   // v6.2: view mode tabs (Upcoming / Live Now / Results)
   const [viewMode, setViewMode] = useState<ViewMode>("upcoming");
@@ -1491,16 +1487,6 @@ export default function PredictionsPage() {
       });
     }
 
-    // v8.6 — odds floor: hide picks priced below 1.50. The bookmaker
-    // pays too little on heavy favorites for them to be a worthwhile
-    // wager (you'd need ~80% hit-rate to break-even at odds 1.20).
-    if (hideLowOdds) {
-      items = items.filter((f) => {
-        if (!f.prediction) return true; // keep locked / no-pred rows
-        return !f.prediction.below_odds_floor;
-      });
-    }
-
     if (sortKey === "confidence") {
       items.sort((a, b) => {
         const ca = a.prediction ? a.prediction.confidence : -1;
@@ -1514,7 +1500,7 @@ export default function PredictionsPage() {
     }
 
     return items;
-  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey, hideLowOdds]);
+  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey]);
 
   // v6.2: group filtered fixtures by league for accordion rendering
   const groupedByLeague = useMemo(
@@ -1835,23 +1821,6 @@ export default function PredictionsPage() {
         userTier={userTier}
       />
 
-      {/* v8.6 — Low-odds toggle: by default we hide picks priced under
-          1.50 (heavy favorites that don't pay enough to be worth a
-          stake). Power users can flip this to see everything. */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] px-4 py-2 text-xs text-slate-400">
-        <p>
-          {hideLowOdds
-            ? "Wedstrijden met odds onder 1.50 zijn verborgen — geen zin om op te wedden (te kleine uitbetaling)."
-            : "Alle wedstrijden zichtbaar, ook lage odds."}
-        </p>
-        <button
-          type="button"
-          onClick={() => setHideLowOdds((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-md border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-semibold text-slate-200 hover:border-white/[0.15]"
-        >
-          {hideLowOdds ? "Toon ook lage odds" : "Verberg lage odds (default)"}
-        </button>
-      </div>
 
       {/* ── Content ── */}
       {isLoading ? (

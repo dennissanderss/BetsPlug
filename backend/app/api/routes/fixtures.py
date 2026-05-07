@@ -592,6 +592,36 @@ def _build_fixture_item(
             )
             locked_meta = (None, None, None)
 
+            # ── v8.6 — Phase 4 display filter ────────────────────────
+            # Apply tier-specific recipe gate. Picks that don't meet the
+            # quality bar of any tier visible to the user get hidden from
+            # the predictions list. The match still appears (so users see
+            # the day's slate); the prediction column is just empty.
+            #
+            # Recipes live in core/predictions_display_filter.py.
+            # Engine v1 / v2 / combo selector are not affected — the
+            # filter only operates on the FixtureItem response shape.
+            from app.core.predictions_display_filter import (
+                classify_display_tier,
+                picks_visible_to_user_tier,
+            )
+
+            display_tier = classify_display_tier(
+                latest_prediction.confidence,
+                edge_pct,
+                bookmaker_odds_pick,
+            )
+            user_tier_slug = (
+                user_tier.name.lower() if user_tier is not None else "free"
+            )
+            if not is_finished and not picks_visible_to_user_tier(
+                user_tier_slug, display_tier
+            ):
+                # Pick exists in DB but doesn't pass any tier recipe (or
+                # the user's tier doesn't include this pick's display
+                # tier). Hide the prediction; keep the fixture row.
+                pred_summary = None
+
     return FixtureItem(
         id=str(match.id),
         league_id=str(match.league_id),
