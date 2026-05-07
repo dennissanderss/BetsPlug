@@ -1039,3 +1039,183 @@ async def export_trackrecord_csv(
         media_type="text/csv; charset=utf-8",
         headers=headers,
     )
+
+
+@router.get(
+    "/edge-verified-live",
+    summary="Live ROI on the Edge-verified recipe (conf>=0.62 AND edge>=10%)",
+)
+async def get_edge_verified_live(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Return rolling live measurement on the Edge-verified recipe.
+
+    Recipe: confidence >= 0.62 AND real edge >= 10% over the vig-removed
+    bookmaker price. Computed on prediction_source='live' rows only,
+    post-v8.1 deploy. Used by the /trackrecord live tab to show how the
+    prospective sample is evolving without the user having to ask.
+    """
+    from sqlalchemy import text as _text
+    import json as _json
+
+    rows = (await db.execute(_text("""
+        SELECT
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            m.scheduled_at
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.prediction_source = 'live'
+          AND p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+        ORDER BY m.scheduled_at ASC
+    """))).all()
+
+    # Parse + filter to recipe + compute P/L
+    recipe_picks = []
+    for r in rows:
+        if (r.confidence or 0) < 0.62:
+            continue
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted(
+            [("home", h), ("draw", d), ("away", a)],
+            key=lambda x: x[1], reverse=True,
+        )
+        pick_side, our_prob = sides[0]
+        try:
+            pick_odds = float(bm.get(pick_side) or 0)
+            h_o = float(bm.get("home", 0) or 0)
+            d_o = float(bm.get("draw", 0) or 0)
+            a_o = float(bm.get("away", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if pick_odds <= 1.0 or h_o <= 1.0 or a_o <= 1.0:
+            continue
+        ovr = 1.0 / h_o + 1.0 / a_o + (1.0 / d_o if d_o > 1.0 else 0.0)
+        if ovr <= 0:
+            continue
+        edge = our_prob - (1.0 / pick_odds) / ovr
+        if edge < 0.10:
+            continue
+
+        pnl = (pick_odds - 1.0) if r.is_correct else -1.0
+        recipe_picks.append({
+            "scheduled_at": r.scheduled_at,
+            "is_correct": bool(r.is_correct),
+            "pnl": pnl,
+            "leg_odds": pick_odds,
+            "edge": edge,
+        })
+
+    n = len(recipe_picks)
+    if n == 0:
+        return {
+            "recipe": {
+                "confidence_min": 0.62,
+                "edge_min_pct": 10.0,
+            },
+            "n_total": 0,
+            "hit_rate_pct": None,
+            "roi_pct": None,
+            "pnl_units": 0.0,
+            "avg_odds": None,
+            "avg_edge_pct": None,
+            "weekly": [],
+            "milestone_n_for_headline_claim": 100,
+            "headline_claim_unlocked": False,
+        }
+
+    won = sum(1 for x in recipe_picks if x["is_correct"])
+    pnl = sum(x["pnl"] for x in recipe_picks)
+
+    # Group by ISO week for the time series
+    from collections import OrderedDict
+    weekly = OrderedDict()
+    for x in recipe_picks:
+        wk = x["scheduled_at"].strftime("%G-W%V")
+        b = weekly.setdefault(wk, {"n": 0, "won": 0, "pnl": 0.0})
+        b["n"] += 1
+        if x["is_correct"]:
+            b["won"] += 1
+        b["pnl"] += x["pnl"]
+
+    weekly_list = [
+        {
+            "iso_week": wk,
+            "n": v["n"],
+            "won": v["won"],
+            "hit_rate_pct": round(100.0 * v["won"] / v["n"], 2),
+            "pnl_units": round(v["pnl"], 2),
+            "roi_pct": round(100.0 * v["pnl"] / v["n"], 2),
+        }
+        for wk, v in weekly.items()
+    ]
+
+    # Cumulative P/L line for charting
+    cumulative = []
+    running = 0.0
+    for i, x in enumerate(recipe_picks, start=1):
+        running += x["pnl"]
+        cumulative.append({
+            "n": i,
+            "scheduled_at": x["scheduled_at"].isoformat(),
+            "cumulative_pnl_units": round(running, 2),
+            "cumulative_roi_pct": round(100.0 * running / i, 2),
+        })
+
+    # Wilson CI for hit rate (95%)
+    import math
+    z = 1.96
+    p_hat = won / n
+    denom = 1 + z * z / n
+    centre = p_hat + z * z / (2 * n)
+    margin = z * math.sqrt(p_hat * (1 - p_hat) / n + z * z / (4 * n * n))
+    wilson_low = round((centre - margin) / denom, 4)
+    wilson_high = round((centre + margin) / denom, 4)
+
+    return {
+        "recipe": {
+            "confidence_min": 0.62,
+            "edge_min_pct": 10.0,
+            "explainer": (
+                "Live picks since v8.1 deploy (2026-04-16) where confidence "
+                "was at least 62% and the model's probability was at least "
+                "10 percentage points above the bookmaker's vig-removed fair "
+                "price for the picked side."
+            ),
+        },
+        "n_total": n,
+        "won": won,
+        "lost": n - won,
+        "hit_rate_pct": round(100.0 * won / n, 2),
+        "wilson_ci_low": wilson_low,
+        "wilson_ci_high": wilson_high,
+        "roi_pct": round(100.0 * pnl / n, 2),
+        "pnl_units": round(pnl, 2),
+        "avg_odds": round(sum(x["leg_odds"] for x in recipe_picks) / n, 3),
+        "avg_edge_pct": round(100.0 * sum(x["edge"] for x in recipe_picks) / n, 2),
+        "weekly": weekly_list,
+        "cumulative": cumulative,
+        "milestone_n_for_headline_claim": 100,
+        "headline_claim_unlocked": (
+            n >= 100 and (pnl / n) >= 0.05
+        ),
+        "first_pick_at": recipe_picks[0]["scheduled_at"].isoformat(),
+        "last_pick_at": recipe_picks[-1]["scheduled_at"].isoformat(),
+    }
