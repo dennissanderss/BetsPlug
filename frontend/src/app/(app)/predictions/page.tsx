@@ -25,6 +25,7 @@ import {
   ShieldCheck,
   Lock,
   Radio,
+  Target,
 } from "lucide-react";
 import { useTier } from "@/hooks/use-tier";
 import { api } from "@/lib/api";
@@ -924,6 +925,102 @@ function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
   );
 }
 
+// ─── Edge-verified toggle ────────────────────────────────────────────────────
+//
+// Optional filter that narrows picks to confidence >= 62% AND real edge
+// >= 10% over the vig-removed bookmaker price. The full sample of
+// historical picks matching this stack returned +13.26% ROI on n=1,114
+// (see docs/predictions_roi_optimization.md). Default OFF so users see
+// the full prediction stream by default; toggle ON when looking for
+// the higher-conviction subset.
+
+interface EdgeVerifiedToggleProps {
+  active: boolean;
+  onToggle: () => void;
+}
+
+function EdgeVerifiedToggle({ active, onToggle }: EdgeVerifiedToggleProps) {
+  return (
+    <div
+      className="glass-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
+      style={{
+        borderColor: active ? "hsl(var(--accent-green) / 0.4)" : undefined,
+        background: active
+          ? "linear-gradient(135deg, hsl(var(--accent-green) / 0.06) 0%, hsl(230 22% 9% / 0.6) 100%)"
+          : undefined,
+      }}
+    >
+      <div className="flex items-start gap-3">
+        <div
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+          style={{
+            background: active
+              ? "hsl(var(--accent-green) / 0.18)"
+              : "rgba(148,163,184,0.12)",
+            color: active ? "#4ade80" : "#94a3b8",
+          }}
+        >
+          <Target className="h-4 w-4" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-[#ededed]">
+            {active ? "Edge-verified picks only" : "Edge-verified filter"}
+          </p>
+          <p className="mt-0.5 text-xs text-slate-400">
+            {active
+              ? "Showing picks with confidence ≥ 62% and real edge ≥ 10% over the bookmaker price."
+              : "Filter to picks where the model's probability is ≥ 10% above the vig-removed bookmaker price."}
+          </p>
+          <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+            {active ? (
+              <>
+                Historical sample: <span className="font-semibold text-emerald-300">+13% ROI on 1,114 picks</span>
+                <span className="text-slate-600"> · live tracking still building (n is small)</span>
+              </>
+            ) : (
+              <>
+                Lifetime baseline (no filter): <span className="text-slate-300">50.5% accuracy</span>
+                <span className="text-slate-600"> / </span>
+                <span className="text-rose-400">−2.3% ROI</span>
+                <span className="text-slate-600"> across all v8.1 picks.</span>
+              </>
+            )}
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-pressed={active}
+        className="inline-flex items-center gap-2 self-start rounded-lg border px-4 py-2 text-sm font-semibold transition-colors sm:self-center"
+        style={{
+          background: active ? "rgba(74,222,128,0.16)" : "rgba(148,163,184,0.08)",
+          borderColor: active
+            ? "hsl(var(--accent-green) / 0.45)"
+            : "rgba(148,163,184,0.2)",
+          color: active ? "#4ade80" : "#cbd5e1",
+        }}
+      >
+        <span
+          aria-hidden
+          className="inline-flex h-4 w-7 items-center rounded-full transition-colors"
+          style={{
+            background: active ? "rgba(74,222,128,0.6)" : "rgba(148,163,184,0.3)",
+          }}
+        >
+          <span
+            className="block h-3 w-3 rounded-full bg-white transition-transform"
+            style={{
+              transform: active ? "translateX(14px)" : "translateX(2px)",
+            }}
+          />
+        </span>
+        {active ? "Edge-verified ON" : "Edge-verified OFF"}
+      </button>
+    </div>
+  );
+}
+
 // ─── Filter Bar ──────────────────────────────────────────────────────────────
 
 interface FilterBarProps {
@@ -1323,6 +1420,10 @@ export default function PredictionsPage() {
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
+  // v8.5 — Edge-verified filter: only show picks with confidence >= 0.62
+  // AND real edge >= 10% (vig-removed). Default OFF — opt-in for users
+  // who want the historical +13% ROI filtered subset.
+  const [edgeVerified, setEdgeVerified] = useState<boolean>(false);
 
   // v6.2: view mode tabs (Upcoming / Live Now / Results)
   const [viewMode, setViewMode] = useState<ViewMode>("upcoming");
@@ -1486,6 +1587,18 @@ export default function PredictionsPage() {
       });
     }
 
+    // v8.5 — Edge-verified filter: confidence >= 0.62 AND edge_pct >= 10%
+    // (i.e. real edge over the vig-removed bookmaker price). Picks without
+    // a closing-odds snapshot are excluded (their edge_pct is null).
+    if (edgeVerified) {
+      items = items.filter((f) => {
+        if (!f.prediction) return false;
+        if ((f.prediction.confidence ?? 0) < 0.62) return false;
+        const ep = f.prediction.edge_pct;
+        return typeof ep === "number" && ep >= 0.10;
+      });
+    }
+
     if (sortKey === "confidence") {
       items.sort((a, b) => {
         const ca = a.prediction ? a.prediction.confidence : -1;
@@ -1499,7 +1612,7 @@ export default function PredictionsPage() {
     }
 
     return items;
-  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey]);
+  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey, edgeVerified]);
 
   // v6.2: group filtered fixtures by league for accordion rendering
   const groupedByLeague = useMemo(
@@ -1803,6 +1916,12 @@ export default function PredictionsPage() {
           </p>
         </div>
       )}
+
+      {/* ── Edge-verified toggle ── */}
+      <EdgeVerifiedToggle
+        active={edgeVerified}
+        onToggle={() => setEdgeVerified((v) => !v)}
+      />
 
       {/* ── Filter bar ── */}
       <FilterBar

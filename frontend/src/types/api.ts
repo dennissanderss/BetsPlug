@@ -548,6 +548,12 @@ export interface FixturePrediction {
   pick?: string | null;
   reasoning?: string | null;
   edge?: Record<string, number> | null;
+  /** v8.5 — single-number edge for the picked side (vig-removed). Null
+   *  when no closing-odds snapshot is on file. Used by /predictions
+   *  "Edge-verified" filter. */
+  edge_pct?: number | null;
+  /** v8.5 — bookmaker odds for the picked side at snapshot time. */
+  bookmaker_odds_pick?: number | null;
   implied_probabilities?: Record<string, number> | null;
   top_features?: Array<
     | { feature: string; importance: number }
