@@ -120,14 +120,11 @@ export default function CombiOfTheDayPage() {
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">
-              Engine
-            </p>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-              Combo of the Day
+            <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+              Combo van de Dag
             </h1>
-            <p className="mt-1 text-xs text-slate-500">
-              3 legs · edge-filtered · live pre-match odds since 16 Apr 2026
+            <p className="mt-1 text-sm text-slate-500">
+              Onze 2 picks gecombineerd in één weddenschap voor vandaag
             </p>
           </div>
           {isAdmin && (
@@ -135,26 +132,21 @@ export default function CombiOfTheDayPage() {
           )}
         </div>
 
-        {/* Today's combo */}
-        <TodayComboCard data={today} loading={todayQ.isLoading} />
+        {/* Card 1 — Vandaag's combo */}
+        <SimpleTodayCombo data={today} loading={todayQ.isLoading} />
 
-        {/* Stats — scope (backtest/live) + period (daily/weekly/monthly/all) */}
-        <StatsBlock
-          scope={statsScope}
-          setScope={setStatsScope}
-          period={periodFilter}
-          setPeriod={setPeriodFilter}
-          stats={computedStats}
+        {/* Card 2 — Hoe deden we het (lifetime BT + Live) */}
+        <SimpleTrackRecord history={allHistory} loading={historyQ.isLoading} />
+
+        {/* Card 3 — Geschiedenis (laatste 10) */}
+        <SimpleHistory
+          items={allHistory.slice(0, 10)}
           loading={historyQ.isLoading}
         />
 
-        {/* Recent history — filtered by both scope and period */}
-        <HistoryBlock
-          items={filteredHistory}
-          loading={historyQ.isLoading}
-          scope={statsScope}
-          period={periodFilter}
-        />
+        <p className="pt-2 text-center text-[10px] text-slate-600">
+          Statistische analyse · 18+ · geen gokadvies
+        </p>
       </div>
     </div>
     </PaywallOverlay>
@@ -706,4 +698,190 @@ function computeAggregateStats(
         ? `Geen ${scope === "live" ? "live" : "backtest"} combos in deze periode (${PERIOD_LABELS[period].full}).`
         : `${PERIOD_LABELS[period].full} · ${scope === "live" ? "Live measurement" : "Backtest replay"} · ${total} geëvalueerde combo${total === 1 ? "" : "s"}.`,
   };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SIMPLE UI (post-UX-rewrite 2026-05-07)
+// Strips the 4-KPI grid + edge labels + period tabs + technical disclaimer.
+// ────────────────────────────────────────────────────────────────────────────
+
+function SimpleTodayCombo({
+  data,
+  loading,
+}: {
+  data: ComboOfTheDay | undefined;
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <div className="glass-card animate-pulse p-6">
+        <div className="h-5 w-40 rounded bg-white/[0.06]" />
+        <div className="mt-4 h-16 rounded bg-white/[0.04]" />
+        <div className="mt-2 h-16 rounded bg-white/[0.04]" />
+      </div>
+    );
+  }
+  if (!data || !data.available) {
+    return (
+      <div className="glass-card p-6">
+        <h2 className="text-base font-semibold text-white">Vandaag nog geen combo</h2>
+        <p className="mt-1 text-sm text-slate-400">
+          Onze AI vindt vandaag geen 2 picks waar we genoeg vertrouwen in hebben. Kom morgen terug.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="relative overflow-hidden rounded-2xl border p-6 sm:p-8"
+      style={{
+        borderColor: "rgba(74, 222, 128, 0.30)",
+        background: "radial-gradient(circle at 0% 0%, rgba(74,222,128,0.08), transparent 55%), hsl(230 22% 9% / 0.7)",
+        boxShadow: "0 0 0 1px rgba(74,222,128,0.15)",
+      }}
+    >
+      <h2 className="text-lg font-extrabold text-white">Vandaag&apos;s Combo</h2>
+      <div className="mt-5 space-y-4">
+        {data.legs.map((leg, i) => (
+          <div key={leg.match_id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+            <p className="text-[11px] uppercase tracking-widest text-slate-500">
+              Wedstrijd {i + 1} · {leg.league}
+            </p>
+            <p className="mt-1 text-base font-bold text-white">
+              {leg.home_team} <span className="text-slate-500">vs</span> {leg.away_team}
+            </p>
+            <p className="mt-2 text-sm text-slate-300">
+              Onze pick: <span className="font-semibold text-emerald-300">{leg.our_pick_label}</span>
+            </p>
+            <p className="mt-1 text-sm text-slate-400">
+              Odds: <span className="font-semibold tabular-nums text-slate-200">{leg.leg_odds.toFixed(2)}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-4">
+        <p className="text-xs uppercase tracking-widest text-emerald-300">Totaal</p>
+        <p className="mt-1 text-2xl font-extrabold tabular-nums text-white">
+          {data.combined_odds.toFixed(2)} keer je inzet
+        </p>
+        <p className="mt-1 text-sm text-slate-300">
+          Bij €10 inzet:{" "}
+          <span className="font-semibold text-emerald-300">€{(10 * data.combined_odds).toFixed(2)}</span>{" "}
+          winst als beide kloppen
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SimpleTrackRecord({
+  history,
+  loading,
+}: {
+  history: ComboHistoryItem[];
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="glass-card h-32 animate-pulse" />
+        <div className="glass-card h-32 animate-pulse" />
+      </div>
+    );
+  }
+  const evaluated = history.filter((h) => h.is_evaluated);
+  const bt = evaluated.filter((h) => !h.is_live);
+  const live = evaluated.filter((h) => h.is_live);
+
+  const stat = (rows: ComboHistoryItem[]) => {
+    const won = rows.filter((r) => r.is_correct === true).length;
+    const total = rows.length;
+    const pnl = rows.reduce((acc, r) => acc + (r.profit_loss_units ?? 0), 0);
+    const roi = total > 0 ? (pnl / total) * 100 : 0;
+    return { won, total, roi };
+  };
+  const btS = stat(bt);
+  const lvS = stat(live);
+
+  return (
+    <div className="space-y-3">
+      <div>
+        <h2 className="text-base font-semibold text-slate-100">Hoe deden we het?</h2>
+        <p className="mt-1 text-xs text-slate-500">Resultaten van alle combo&apos;s die we tot nu toe hebben gespeeld.</p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="glass-card p-5">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Historisch (alle data)</p>
+          <p className="mt-1 text-xl font-bold text-white">{btS.total} combo&apos;s gespeeld</p>
+          <p className="mt-1 text-sm text-slate-400">
+            Gewonnen: <span className="font-semibold text-slate-200">{btS.won} van {btS.total}</span>
+          </p>
+          <p className="mt-2 text-2xl font-extrabold tabular-nums">
+            <span className={btS.roi >= 0 ? "text-emerald-300" : "text-rose-400"}>
+              {btS.roi >= 0 ? "+" : ""}{btS.roi.toFixed(1)}%
+            </span>
+            <span className="ml-1 text-xs font-normal text-slate-500">rendement</span>
+          </p>
+        </div>
+
+        <div className="glass-card p-5">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Live meting sinds 16 april</p>
+          <p className="mt-1 text-xl font-bold text-white">{lvS.total} combo&apos;s gespeeld</p>
+          <p className="mt-1 text-sm text-slate-400">
+            Gewonnen: <span className="font-semibold text-slate-200">{lvS.won} van {lvS.total}</span>
+          </p>
+          <p className="mt-2 text-2xl font-extrabold tabular-nums">
+            <span className={lvS.roi >= 0 ? "text-emerald-300" : "text-rose-400"}>
+              {lvS.roi >= 0 ? "+" : ""}{lvS.roi.toFixed(1)}%
+            </span>
+            <span className="ml-1 text-xs font-normal text-slate-500">rendement</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SimpleHistory({
+  items,
+  loading,
+}: {
+  items: ComboHistoryItem[];
+  loading: boolean;
+}) {
+  if (loading || items.length === 0) return null;
+  return (
+    <div className="glass-card overflow-hidden">
+      <div className="border-b border-white/[0.06] px-5 py-3">
+        <h2 className="text-base font-semibold text-slate-100">Geschiedenis</h2>
+        <p className="mt-0.5 text-xs text-slate-500">Laatste 10 combo&apos;s</p>
+      </div>
+      <ul className="divide-y divide-white/[0.04]">
+        {items.map((c) => {
+          const date = (() => {
+            try {
+              return new Date(c.bet_date + "T00:00:00").toLocaleDateString("nl-NL", { day: "2-digit", month: "short" });
+            } catch {
+              return c.bet_date;
+            }
+          })();
+          const status = c.is_correct === true
+            ? { icon: "✅", label: "Gewonnen", color: "text-emerald-300" }
+            : c.is_correct === false
+            ? { icon: "❌", label: "Verloren", color: "text-rose-400" }
+            : { icon: "⏳", label: "In afwachting", color: "text-slate-400" };
+          return (
+            <li key={c.id} className="flex items-center gap-3 px-5 py-3 text-sm">
+              <span className="w-16 shrink-0 text-[11px] font-mono text-slate-500">{date}</span>
+              <span className="flex-1 truncate text-slate-200">{c.leg_summary}</span>
+              <span className={`shrink-0 text-xs font-semibold ${status.color}`}>
+                {status.icon} {status.label}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
