@@ -146,6 +146,12 @@ class PredictionSummary(BaseModel):
     # snapshot odds are on file. Used by /predictions "Edge-verified" filter.
     edge_pct: Optional[float] = None  # e.g. 0.12 = 12% edge over fair price
     bookmaker_odds_pick: Optional[float] = None  # the price for our pick side
+    # v8.6 — picks priced under 1.50 are heavy favorites whose payout
+    # doesn't compensate for vig + variance. Surfaced as a marker so the
+    # /predictions UI can filter / dim them by default. The pick still
+    # serialises (transparency) but the front-end hides them unless the
+    # user explicitly opts in to "show all".
+    below_odds_floor: bool = False
     implied_probabilities: Optional[Dict[str, float]] = None
     top_features: Optional[List[Dict[str, Any]]] = None
     # v8.2 — ranked top-3 human-readable drivers derived from
@@ -574,6 +580,10 @@ def _build_fixture_item(
                 edge=edge,
                 edge_pct=edge_pct,
                 bookmaker_odds_pick=bookmaker_odds_pick,
+                below_odds_floor=(
+                    bookmaker_odds_pick is not None
+                    and bookmaker_odds_pick < 1.50
+                ),
                 top_features=top_features,
                 top_drivers=top_drivers,
                 pick_tier=meta["pick_tier"],

@@ -554,6 +554,9 @@ export interface FixturePrediction {
   edge_pct?: number | null;
   /** v8.5 — bookmaker odds for the picked side at snapshot time. */
   bookmaker_odds_pick?: number | null;
+  /** v8.6 — true when bookmaker_odds_pick < 1.50 (heavy favorite that
+   *  doesn't pay enough to be worth a stake). UI hides by default. */
+  below_odds_floor?: boolean;
   implied_probabilities?: Record<string, number> | null;
   top_features?: Array<
     | { feature: string; importance: number }

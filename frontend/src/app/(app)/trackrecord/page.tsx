@@ -40,7 +40,6 @@ import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TrustFunnel } from "@/components/ui/trust-funnel";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
-import { EdgeVerifiedLiveSection } from "@/components/ui/edge-verified-live-section";
 import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
@@ -1621,11 +1620,6 @@ export default function TrackrecordPage() {
           </div>
           <LiveMeasurementSection />
         </div>
-
-        {/* v8.5 — Edge-verified live ROI (the new measurement layer that
-            rolls forward as live picks accumulate on the conf>=0.62 +
-            edge>=10% recipe). */}
-        <EdgeVerifiedLiveSection />
 
         {/* Spoor 2 — Accuracy Pro Engine v2 preview (gelockt tot 100 picks) */}
         <AccuracyPlusPreview />

@@ -25,7 +25,6 @@ import {
   ShieldCheck,
   Lock,
   Radio,
-  Target,
 } from "lucide-react";
 import { useTier } from "@/hooks/use-tier";
 import { api } from "@/lib/api";
@@ -426,19 +425,6 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
   const confLevel = confScore !== null ? getConfidenceLevel(confScore) : null;
   const confColor = confLevel ? getConfidenceColor(confLevel) : "#475569";
 
-  // v8.5 — edge over the bookmaker's vig-removed implied price (single
-  // number for the picked side). We surface it inline so users see why
-  // a pick qualifies for the Edge-verified subset without toggling the
-  // filter. Null when no closing-odds snapshot is on file.
-  const edgePct = hasPrediction && typeof pred?.edge_pct === "number"
-    ? pred.edge_pct
-    : null;
-  const edgeColor =
-    edgePct == null ? null
-    : edgePct >= 0.10 ? "#4ade80" // strong (green)
-    : edgePct >= 0.04 ? "#facc15" // moderate (yellow)
-    : edgePct >= 0    ? "#94a3b8" // neutral
-    : "#fb7185";                  // negative (rose)
 
   const homeProb = pred?.home_win_prob != null ? Math.round(pred.home_win_prob * 100) : null;
   const drawProb = pred?.draw_prob != null ? Math.round(pred.draw_prob * 100) : null;
@@ -627,15 +613,6 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
                   {confScore}%
                 </span>
               )}
-              {edgePct != null && edgeColor && (
-                <span
-                  className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold tabular-nums shrink-0"
-                  style={{ color: edgeColor, borderColor: `${edgeColor}55`, background: `${edgeColor}14` }}
-                  title={`Edge over the bookmaker's fair price for our pick`}
-                >
-                  {(edgePct * 100 >= 0 ? "+" : "") + (edgePct * 100).toFixed(1)}%
-                </span>
-              )}
             </div>
           ) : confScore != null ? (
             <>
@@ -648,15 +625,6 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
               <span className="text-[11px] font-bold tabular-nums shrink-0" style={{ color: confColor }}>
                 {confScore}%
               </span>
-              {edgePct != null && edgeColor && (
-                <span
-                  className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold tabular-nums shrink-0"
-                  style={{ color: edgeColor, borderColor: `${edgeColor}55`, background: `${edgeColor}14` }}
-                  title={`Edge over the bookmaker's fair price for our pick`}
-                >
-                  {(edgePct * 100 >= 0 ? "+" : "") + (edgePct * 100).toFixed(1)}%
-                </span>
-              )}
             </>
           ) : null}
         </div>
@@ -953,102 +921,6 @@ function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
           </span>
         </div>
       ))}
-    </div>
-  );
-}
-
-// ─── Edge-verified toggle ────────────────────────────────────────────────────
-//
-// Optional filter that narrows picks to confidence >= 62% AND real edge
-// >= 10% over the vig-removed bookmaker price. The full sample of
-// historical picks matching this stack returned +13.26% ROI on n=1,114
-// (see docs/predictions_roi_optimization.md). Default OFF so users see
-// the full prediction stream by default; toggle ON when looking for
-// the higher-conviction subset.
-
-interface EdgeVerifiedToggleProps {
-  active: boolean;
-  onToggle: () => void;
-}
-
-function EdgeVerifiedToggle({ active, onToggle }: EdgeVerifiedToggleProps) {
-  return (
-    <div
-      className="glass-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-      style={{
-        borderColor: active ? "hsl(var(--accent-green) / 0.4)" : undefined,
-        background: active
-          ? "linear-gradient(135deg, hsl(var(--accent-green) / 0.06) 0%, hsl(230 22% 9% / 0.6) 100%)"
-          : undefined,
-      }}
-    >
-      <div className="flex items-start gap-3">
-        <div
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-          style={{
-            background: active
-              ? "hsl(var(--accent-green) / 0.18)"
-              : "rgba(148,163,184,0.12)",
-            color: active ? "#4ade80" : "#94a3b8",
-          }}
-        >
-          <Target className="h-4 w-4" />
-        </div>
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-[#ededed]">
-            {active ? "Edge-verified picks only" : "Edge-verified filter"}
-          </p>
-          <p className="mt-0.5 text-xs text-slate-400">
-            {active
-              ? "Showing picks with confidence ≥ 62% and real edge ≥ 10% over the bookmaker price."
-              : "Filter to picks where the model's probability is ≥ 10% above the vig-removed bookmaker price."}
-          </p>
-          <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
-            {active ? (
-              <>
-                Historical sample: <span className="font-semibold text-emerald-300">+13% ROI on 1,114 picks</span>
-                <span className="text-slate-600"> · live tracking still building (n is small)</span>
-              </>
-            ) : (
-              <>
-                Lifetime baseline (no filter): <span className="text-slate-300">50.5% accuracy</span>
-                <span className="text-slate-600"> / </span>
-                <span className="text-rose-400">−2.3% ROI</span>
-                <span className="text-slate-600"> across all v8.1 picks.</span>
-              </>
-            )}
-          </p>
-        </div>
-      </div>
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-pressed={active}
-        className="inline-flex items-center gap-2 self-start rounded-lg border px-4 py-2 text-sm font-semibold transition-colors sm:self-center"
-        style={{
-          background: active ? "rgba(74,222,128,0.16)" : "rgba(148,163,184,0.08)",
-          borderColor: active
-            ? "hsl(var(--accent-green) / 0.45)"
-            : "rgba(148,163,184,0.2)",
-          color: active ? "#4ade80" : "#cbd5e1",
-        }}
-      >
-        <span
-          aria-hidden
-          className="inline-flex h-4 w-7 items-center rounded-full transition-colors"
-          style={{
-            background: active ? "rgba(74,222,128,0.6)" : "rgba(148,163,184,0.3)",
-          }}
-        >
-          <span
-            className="block h-3 w-3 rounded-full bg-white transition-transform"
-            style={{
-              transform: active ? "translateX(14px)" : "translateX(2px)",
-            }}
-          />
-        </span>
-        {active ? "Edge-verified ON" : "Edge-verified OFF"}
-      </button>
     </div>
   );
 }
@@ -1452,10 +1324,10 @@ export default function PredictionsPage() {
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
-  // v8.5 — Edge-verified filter: only show picks with confidence >= 0.62
-  // AND real edge >= 10% (vig-removed). Default OFF — opt-in for users
-  // who want the historical +13% ROI filtered subset.
-  const [edgeVerified, setEdgeVerified] = useState<boolean>(false);
+  // v8.6 — default ON: hide picks priced under 1.50 (heavy favorites
+  // where the payout doesn't compensate for vig). User can toggle off
+  // to see everything.
+  const [hideLowOdds, setHideLowOdds] = useState<boolean>(true);
 
   // v6.2: view mode tabs (Upcoming / Live Now / Results)
   const [viewMode, setViewMode] = useState<ViewMode>("upcoming");
@@ -1619,15 +1491,13 @@ export default function PredictionsPage() {
       });
     }
 
-    // v8.5 — Edge-verified filter: confidence >= 0.62 AND edge_pct >= 10%
-    // (i.e. real edge over the vig-removed bookmaker price). Picks without
-    // a closing-odds snapshot are excluded (their edge_pct is null).
-    if (edgeVerified) {
+    // v8.6 — odds floor: hide picks priced below 1.50. The bookmaker
+    // pays too little on heavy favorites for them to be a worthwhile
+    // wager (you'd need ~80% hit-rate to break-even at odds 1.20).
+    if (hideLowOdds) {
       items = items.filter((f) => {
-        if (!f.prediction) return false;
-        if ((f.prediction.confidence ?? 0) < 0.62) return false;
-        const ep = f.prediction.edge_pct;
-        return typeof ep === "number" && ep >= 0.10;
+        if (!f.prediction) return true; // keep locked / no-pred rows
+        return !f.prediction.below_odds_floor;
       });
     }
 
@@ -1644,7 +1514,7 @@ export default function PredictionsPage() {
     }
 
     return items;
-  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey, edgeVerified]);
+  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey, hideLowOdds]);
 
   // v6.2: group filtered fixtures by league for accordion rendering
   const groupedByLeague = useMemo(
@@ -1949,12 +1819,6 @@ export default function PredictionsPage() {
         </div>
       )}
 
-      {/* ── Edge-verified toggle ── */}
-      <EdgeVerifiedToggle
-        active={edgeVerified}
-        onToggle={() => setEdgeVerified((v) => !v)}
-      />
-
       {/* ── Filter bar ── */}
       <FilterBar
         leagueFilter={leagueFilter}
@@ -1970,6 +1834,24 @@ export default function PredictionsPage() {
         leagueCountryMap={leagueCountryMap}
         userTier={userTier}
       />
+
+      {/* v8.6 — Low-odds toggle: by default we hide picks priced under
+          1.50 (heavy favorites that don't pay enough to be worth a
+          stake). Power users can flip this to see everything. */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] px-4 py-2 text-xs text-slate-400">
+        <p>
+          {hideLowOdds
+            ? "Wedstrijden met odds onder 1.50 zijn verborgen — geen zin om op te wedden (te kleine uitbetaling)."
+            : "Alle wedstrijden zichtbaar, ook lage odds."}
+        </p>
+        <button
+          type="button"
+          onClick={() => setHideLowOdds((v) => !v)}
+          className="inline-flex items-center gap-2 rounded-md border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-semibold text-slate-200 hover:border-white/[0.15]"
+        >
+          {hideLowOdds ? "Toon ook lage odds" : "Verberg lage odds (default)"}
+        </button>
+      </div>
 
       {/* ── Content ── */}
       {isLoading ? (
