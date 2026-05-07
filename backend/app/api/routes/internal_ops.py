@@ -2507,7 +2507,7 @@ async def feature_isolation_spotcheck(db: AsyncSession = Depends(get_db)) -> dic
             # The feature service derives cutoff from the match itself, so we
             # just call build_features and trust the internal cutoff logic.
             import uuid as _uuid
-            recomputed = await fs.build_features(_uuid.UUID(r.mid), db)
+            recomputed = await fs.build_match_features(_uuid.UUID(r.mid), db)
             recomputed_dict = (
                 recomputed if isinstance(recomputed, dict) else {}
             )
