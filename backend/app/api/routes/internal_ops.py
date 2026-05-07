@@ -2230,6 +2230,132 @@ async def audit_predictions_roi_scenarios(
 
 
 @router.get(
+    "/audit/per-tier-windowed",
+    summary="Per-tier ROI on last N days (live source) — verify simulator claim",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def audit_per_tier_windowed(
+    days: int = 14,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Per-tier ROI on the last N days, live forward-feed only.
+    Replicates the /results simulator math so we can verify whether
+    Platinum>Gold>Silver>Free really holds in recent days.
+    """
+    from sqlalchemy import text as _text
+    import json as _json
+
+    rows = (await db.execute(_text(f"""
+        SELECT
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            l.name AS league,
+            l.id::text AS league_id,
+            m.scheduled_at,
+            p.prediction_source
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        JOIN leagues l ON l.id = m.league_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND m.scheduled_at >= NOW() - INTERVAL '{int(days)} days'
+          AND m.scheduled_at < NOW()
+          AND p.closing_odds_snapshot IS NOT NULL
+    """))).all()
+
+    def stats(filt):
+        n = len(filt)
+        if n == 0:
+            return {"n": 0, "hit_pct": None, "roi_pct": None, "pnl": 0.0, "avg_odds": None}
+        won = sum(1 for x in filt if x["is_correct"])
+        pnl = sum(x["pnl"] for x in filt)
+        return {
+            "n": n,
+            "hit_pct": round(100.0 * won / n, 2),
+            "roi_pct": round(100.0 * pnl / n, 2),
+            "pnl": round(pnl, 2),
+            "avg_odds": round(sum(x["odds"] for x in filt) / n, 3),
+        }
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted([("home", h), ("draw", d), ("away", a)], key=lambda x: x[1], reverse=True)
+        pick, our_p = sides[0]
+        try:
+            o = float(bm.get(pick) or 0)
+        except (TypeError, ValueError):
+            continue
+        if o <= 1.0:
+            continue
+        pnl = (o - 1.0) if r.is_correct else -1.0
+        # Tier classification by confidence (simple ladder, not league-gated)
+        c = float(r.confidence or 0)
+        tier = (
+            "platinum" if c >= 0.78
+            else "gold" if c >= 0.70
+            else "silver" if c >= 0.62
+            else "free"
+        )
+        records.append({
+            "tier": tier,
+            "is_correct": bool(r.is_correct),
+            "pnl": pnl,
+            "odds": o,
+            "source": r.prediction_source,
+        })
+
+    out = {
+        "days_window": days,
+        "total_records": len(records),
+        "by_tier_all_sources": {
+            t: stats([r for r in records if r["tier"] == t])
+            for t in ("platinum", "gold", "silver", "free")
+        },
+        "by_tier_live_only": {
+            t: stats([r for r in records if r["tier"] == t and r["source"] == "live"])
+            for t in ("platinum", "gold", "silver", "free")
+        },
+        # Same per-tier but with odds floor 1.50 (avoid heavy favorites that don't pay)
+        "by_tier_odds_ge_1_50": {
+            t: stats([r for r in records if r["tier"] == t and r["odds"] >= 1.5])
+            for t in ("platinum", "gold", "silver", "free")
+        },
+        "by_tier_odds_ge_1_80": {
+            t: stats([r for r in records if r["tier"] == t and r["odds"] >= 1.8])
+            for t in ("platinum", "gold", "silver", "free")
+        },
+        # Odds distribution per tier (so we can see if Platinum is buried in
+        # heavy-favorite low-odds plays)
+        "odds_buckets_per_tier": {
+            t: {
+                "lt_1.30": sum(1 for r in records if r["tier"] == t and r["odds"] < 1.30),
+                "1.30-1.60": sum(1 for r in records if r["tier"] == t and 1.30 <= r["odds"] < 1.60),
+                "1.60-2.00": sum(1 for r in records if r["tier"] == t and 1.60 <= r["odds"] < 2.00),
+                "2.00-2.60": sum(1 for r in records if r["tier"] == t and 2.00 <= r["odds"] < 2.60),
+                "ge_2.60": sum(1 for r in records if r["tier"] == t and r["odds"] >= 2.60),
+            }
+            for t in ("platinum", "gold", "silver", "free")
+        },
+    }
+    return out
+
+
+@router.get(
     "/audit/saudi-spot-check",
     summary="Saudi Pro League — verify the 100% hit rate spike",
     dependencies=[Depends(require_internal_ops_key)],
