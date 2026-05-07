@@ -1440,213 +1440,121 @@ export default function TrackrecordPage() {
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div className="relative space-y-6">
-      {/* Page header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <HexBadge variant="green" size="lg">
-            <TrendingUp className="h-6 w-6" />
-          </HexBadge>
-          <div>
-            <span className="section-label">Track record</span>
-            <h1 className="text-heading mt-3 gradient-text-green">
-              {t("trackrecord.title")}
-            </h1>
-            <p className="mt-2 text-sm text-slate-400">
-              {t("trackrecord.subtitle")}
-            </p>
-          </div>
-        </div>
-        <Pill tone="info" className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse-slow inline-block" />
-          {t("trackrecord.realApiData")}
-        </Pill>
+      {/* Page header — simpel */}
+      <div>
+        <h1 className="text-heading gradient-text-green">Track Record</h1>
+        <p className="mt-2 text-sm text-slate-400">
+          Hoe goed presteert onze AI per tier
+        </p>
       </div>
 
-      {/* ─── Main tab navigation ─── */}
-      <div className="glass-card overflow-hidden">
-        <div className="flex border-b border-white/[0.06] overflow-x-auto">
-          {([
-            { key: "performance", label: "Onze prestatie", icon: TrendingUp, accent: "green" },
-            { key: "live", label: "Modelvalidatie", icon: Activity, accent: "blue" },
-            { key: "backtest", label: "Walk-forward backtest", icon: BarChart3, accent: "emerald" },
-          ] as const).map(({ key, label, icon: Icon, accent }) => {
-            const active = mainTab === key;
-            const accentClass =
-              accent === "green"
-                ? "border-emerald-400 bg-emerald-500/[0.08] text-emerald-300"
-                : accent === "blue"
-                ? "border-blue-400 bg-blue-500/[0.08] text-blue-300"
-                : "border-emerald-400 bg-emerald-500/[0.08] text-emerald-300";
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setMainTab(key)}
-                className={`flex items-center gap-2 px-6 py-3.5 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap shrink-0 ${
-                  active
-                    ? accentClass
-                    : "border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20"
-                }`}
-                aria-selected={active}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </button>
-            );
-          })}
-        </div>
+      {/* ── SECTIE 1 — Voorspellingen per tier ── */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-bold text-slate-100">
+          Voorspellingen per tier
+        </h2>
+        <PerTierPerformanceSection />
       </div>
 
-      {/* ──────────────── ONZE PRESTATIE TAB (default) ──────────────── */}
-      {mainTab === "performance" && (
-        <div className="space-y-6 animate-slide-up">
-          <SectionPhaseBanner
-            accent="emerald"
-            kicker="Live tracking"
-            title="Onze prestatie per tier"
-            subtitle="ROI per tier op de exact filter die de Predictions tool nu toepast. Cijfers matchen wat je in /predictions ziet."
-          />
-          <PerTierPerformanceSection />
-        </div>
-      )}
-
-      {/* ──────────────── BACKTEST TAB CONTENT ──────────────── */}
-      {mainTab === "backtest" && (<>
-
-      <div className="space-y-6 animate-slide-up">
-
-        {/* ── Container 1: Tier stats dashboard ── */}
-        <div className="glass-card overflow-hidden">
-          <div className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.backtest.tierStatsTitle")}</h2>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                {t("trackrecord.backtest.tierStatsHelper")}
-              </p>
-            </div>
-            <a
-              href={api.getTrackrecordExportUrl(
-                undefined,
-                pickTier !== "all" ? pickTier : undefined,
-              )}
-              download
-              className="flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
-            >
-              <Download className="h-4 w-4" />
-              {t("trackrecord.csv.downloadCta")}
-            </a>
-          </div>
-
-          {/* Tier buttons */}
-          <div className="flex flex-wrap gap-2 px-5 py-4 border-b border-white/[0.05]">
-            {TIER_TABS.map((tab) => {
-              const active = tab.key === pickTier;
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => setPickTier(tab.key)}
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors ${
-                    active
-                      ? tab.activeClass
-                      : "border-white/[0.08] bg-transparent text-slate-400 hover:border-white/[0.15] hover:text-slate-200"
-                  }`}
-                  aria-pressed={active}
-                >
-                  <span aria-hidden>{tab.emoji}</span>
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Dynamic stats */}
-          {summaryLoading ? (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 p-6">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-20 rounded-xl bg-white/[0.04] animate-pulse" />
-              ))}
-            </div>
-          ) : summary ? (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 p-6">
-              <KpiCard
-                title={t("trackrecord.kpi.predictions")}
-                value={summary.total_predictions > 0 ? summary.total_predictions.toLocaleString() : "—"}
-                subtitle={t("trackrecord.kpi.predictionsSubtitle")}
-                icon={Target}
-                accent="blue"
-              />
-              <KpiCard
-                title={t("trackrecord.kpi.accuracy")}
-                value={summary.total_predictions > 0 ? formatPercent(summary.accuracy) : "—"}
-                subtitle={
-                  summary.total_predictions > 0 && summary.wilson_ci_low != null && summary.wilson_ci_high != null
-                    ? t("trackrecord.kpi.accuracyConf", {
-                        lo: (summary.wilson_ci_low * 100).toFixed(1),
-                        hi: (summary.wilson_ci_high * 100).toFixed(1),
-                        n: summary.total_predictions.toLocaleString(),
-                      })
-                    : t("trackrecord.kpi.accuracyAllOutcomes")
-                }
-                icon={TrendingUp}
-                accent="green"
-              />
-              <KpiCard
-                title={t("trackrecord.kpi.predictionQuality")}
-                value={fmt(summary.brier_score, 4)}
-                subtitle={t("trackrecord.kpi.brierSubtitle")}
-                icon={BarChart3}
-                accent="amber"
-              />
-              <KpiCard
-                title={t("trackrecord.kpi.avgConfidence")}
-                value={summary.total_predictions > 0 ? formatPercent(summary.avg_confidence) : "—"}
-                subtitle={t("trackrecord.kpi.avgConfidenceSubtitle")}
-                icon={Activity}
-                accent="blue"
-              />
-            </div>
-          ) : (
-            <p className="py-8 text-center text-sm text-slate-500">{t("trackrecord.noDataAvailable")}</p>
-          )}
-        </div>
-
+      {/* ── SECTIE 2 — Combo van de dag ── */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-bold text-slate-100">Combo van de dag</h2>
+        <SimpleComboTrackRecord />
       </div>
 
-      </>)}
-      {/* ─── End backtest tab ─── */}
+      <p className="pt-2 text-center text-[11px] text-slate-500">
+        Backtest = ons model toegepast op afgelopen wedstrijden. Live = voorspellingen die we vooraf hebben vastgelegd.
+      </p>
 
-      {/* ──────────────── LIVE METING TAB CONTENT ──────────────── */}
-      {mainTab === "live" && (<>
 
-      <SectionPhaseBanner
-        accent="blue"
-        kicker={t("trackrecord.live.kicker")}
-        title={t("trackrecord.live.title")}
-        subtitle={t("trackrecord.live.subtitle")}
-      />
+      </div>
+    </div>
+  );
+}
 
-      <div className="space-y-6 animate-slide-up">
-        {/* Per-tier live meting */}
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              {t("trackrecord.live.perTierTitle")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              {t("trackrecord.live.perTierSubtitle")}
-            </p>
-          </div>
-          <LiveMeasurementSection />
-        </div>
+// ────────────────────────────────────────────────────────────────────────────
+// SimpleComboTrackRecord — Section 2 of the simplified Trackrecord page.
+// Shows two simple cards (historisch vs live sinds 16 april) without
+// any tabs / period selectors / scope toggles.
+// ────────────────────────────────────────────────────────────────────────────
+function SimpleComboTrackRecord() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["combo-history-trackrecord"],
+    queryFn: () => api.getComboHistory(1000),
+    staleTime: 5 * 60_000,
+  });
 
-        {/* Spoor 2 — Accuracy Pro Engine v2 preview (gelockt tot 100 picks) */}
-        <AccuracyPlusPreview />
+  if (isLoading || !data) {
+    return (
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="glass-card h-32 animate-pulse" />
+        <div className="glass-card h-32 animate-pulse" />
+      </div>
+    );
+  }
+
+  const evaluated = data.filter((c) => c.is_evaluated);
+  const bt = evaluated.filter((c) => !c.is_live);
+  const live = evaluated.filter((c) => c.is_live);
+
+  const summarise = (rows: typeof data) => {
+    const won = rows.filter((r) => r.is_correct === true).length;
+    const total = rows.length;
+    const pnl = rows.reduce((acc, r) => acc + (r.profit_loss_units ?? 0), 0);
+    const roi = total > 0 ? (pnl / total) * 100 : 0;
+    return { won, total, roi };
+  };
+  const btS = summarise(bt);
+  const lvS = summarise(live);
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <div className="glass-card p-5">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          Historisch (alle data)
+        </p>
+        <p className="mt-1 text-xl font-bold text-white">
+          {btS.total} combo&apos;s gespeeld
+        </p>
+        <p className="mt-1 text-sm text-slate-400">
+          Gewonnen:{" "}
+          <span className="font-semibold text-slate-200">
+            {btS.won} van {btS.total}
+          </span>
+        </p>
+        <p className="mt-2 text-2xl font-extrabold tabular-nums">
+          <span className={btS.roi >= 0 ? "text-emerald-300" : "text-rose-400"}>
+            {btS.roi >= 0 ? "+" : ""}
+            {btS.roi.toFixed(1)}%
+          </span>
+          <span className="ml-1 text-xs font-normal text-slate-500">
+            rendement
+          </span>
+        </p>
       </div>
 
-      </>)}
-      {/* ─── End live tab ─── */}
-
+      <div className="glass-card p-5">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          Live meting sinds 16 april
+        </p>
+        <p className="mt-1 text-xl font-bold text-white">
+          {lvS.total} combo&apos;s gespeeld
+        </p>
+        <p className="mt-1 text-sm text-slate-400">
+          Gewonnen:{" "}
+          <span className="font-semibold text-slate-200">
+            {lvS.won} van {lvS.total}
+          </span>
+        </p>
+        <p className="mt-2 text-2xl font-extrabold tabular-nums">
+          <span className={lvS.roi >= 0 ? "text-emerald-300" : "text-rose-400"}>
+            {lvS.roi >= 0 ? "+" : ""}
+            {lvS.roi.toFixed(1)}%
+          </span>
+          <span className="ml-1 text-xs font-normal text-slate-500">
+            rendement
+          </span>
+        </p>
       </div>
     </div>
   );
