@@ -1932,6 +1932,36 @@ async def audit_phase6(db: AsyncSession = Depends(get_db)) -> dict:
 
 
 @router.get(
+    "/team-search",
+    summary="Diagnostic — search teams by name substring with logo URLs",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def team_search(
+    q: str,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Find teams by name substring. Returns id, name, slug, logo_url, league."""
+    from sqlalchemy import text
+    rows = (await db.execute(
+        text("""
+            SELECT t.id::text, t.name, t.slug, t.logo_url, l.name AS league
+            FROM teams t
+            LEFT JOIN leagues l ON l.id = t.league_id
+            WHERE LOWER(t.name) LIKE LOWER(:pat)
+            ORDER BY t.name
+            LIMIT 20
+        """),
+        {"pat": f"%{q}%"},
+    )).all()
+    return {
+        "matches": [
+            {"id": r[0], "name": r[1], "slug": r[2], "logo_url": r[3], "league": r[4]}
+            for r in rows
+        ]
+    }
+
+
+@router.get(
     "/audit/snapshot-coverage-per-month",
     summary="Diagnostic — snapshot + v8.1 prediction coverage per month",
     dependencies=[Depends(require_internal_ops_key)],
