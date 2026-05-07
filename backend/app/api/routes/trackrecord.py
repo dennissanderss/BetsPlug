@@ -1219,3 +1219,135 @@ async def get_edge_verified_live(
         "first_pick_at": recipe_picks[0]["scheduled_at"].isoformat(),
         "last_pick_at": recipe_picks[-1]["scheduled_at"].isoformat(),
     }
+
+
+@router.get(
+    "/per-tier-roi",
+    summary="Per-tier ROI on display-filtered picks (last 14d / 30d / lifetime)",
+)
+async def get_per_tier_roi(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Apply the Phase 4 display recipes per tier and report ROI in
+    three windows: last 14 days, last 30 days, lifetime (post-v8.1).
+
+    Drives the /trackrecord 'Onze prestatie' tab. Numbers MUST match
+    /predictions display + /results simulator (consistency requirement
+    from rebuild brief Phase 5).
+    """
+    from sqlalchemy import text as _text
+    import json as _json
+    from datetime import datetime, timedelta, timezone
+    from app.core.predictions_display_filter import DISPLAY_RECIPES
+
+    rows = (await db.execute(_text("""
+        SELECT
+            p.confidence,
+            p.home_win_prob, p.draw_prob, p.away_win_prob,
+            pe.is_correct,
+            CAST(p.closing_odds_snapshot AS TEXT) AS snap_text,
+            m.scheduled_at,
+            p.prediction_source
+        FROM predictions p
+        JOIN prediction_evaluations pe ON pe.prediction_id = p.id
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.predicted_at <= m.scheduled_at
+          AND p.closing_odds_snapshot IS NOT NULL
+          AND p.prediction_source IN ('live', 'backtest', 'batch_local_fill')
+    """))).all()
+
+    records = []
+    for r in rows:
+        try:
+            snap = _json.loads(r.snap_text) if r.snap_text else None
+        except Exception:
+            snap = None
+        if not isinstance(snap, dict):
+            continue
+        bm = snap.get("bookmaker_odds")
+        if not isinstance(bm, dict):
+            continue
+        h = float(r.home_win_prob or 0)
+        d = float(r.draw_prob or 0)
+        a = float(r.away_win_prob or 0)
+        sides = sorted(
+            [("home", h), ("draw", d), ("away", a)],
+            key=lambda x: x[1], reverse=True,
+        )
+        pick, our_p = sides[0]
+        try:
+            o = float(bm.get(pick) or 0)
+            h_o = float(bm.get("home", 0) or 0)
+            d_o = float(bm.get("draw", 0) or 0)
+            a_o = float(bm.get("away", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if o <= 1.0 or h_o <= 1.0 or a_o <= 1.0:
+            continue
+        ovr = 1.0 / h_o + 1.0 / a_o + (1.0 / d_o if d_o > 1.0 else 0.0)
+        if ovr <= 0:
+            continue
+        edge = our_p - (1.0 / o) / ovr
+        pnl = (o - 1.0) if r.is_correct else -1.0
+        records.append({
+            "conf": float(r.confidence or 0),
+            "edge": edge,
+            "odds": o,
+            "is_correct": bool(r.is_correct),
+            "scheduled_at": r.scheduled_at,
+            "pnl": pnl,
+            "source": r.prediction_source,
+        })
+
+    now = datetime.now(timezone.utc)
+
+    def stats(filt):
+        n = len(filt)
+        if n == 0:
+            return {"n": 0, "hit_pct": None, "roi_pct": None, "pnl_units": 0.0, "avg_odds": None}
+        won = sum(1 for x in filt if x["is_correct"])
+        pnl = sum(x["pnl"] for x in filt)
+        return {
+            "n": n,
+            "hit_pct": round(100.0 * won / n, 2),
+            "roi_pct": round(100.0 * pnl / n, 2),
+            "pnl_units": round(pnl, 2),
+            "avg_odds": round(sum(x["odds"] for x in filt) / n, 3),
+        }
+
+    out: dict = {"per_tier": {}}
+    for tier, recipe in DISPLAY_RECIPES.items():
+        tier_picks = [
+            x for x in records
+            if recipe.passes(x["conf"], x["edge"], x["odds"])
+        ]
+        out["per_tier"][tier] = {
+            "lifetime": stats(tier_picks),
+            "last_30d": stats([
+                x for x in tier_picks
+                if x["scheduled_at"] >= now - timedelta(days=30)
+            ]),
+            "last_14d": stats([
+                x for x in tier_picks
+                if x["scheduled_at"] >= now - timedelta(days=14)
+            ]),
+            "live_only": stats([
+                x for x in tier_picks if x["source"] == "live"
+            ]),
+            "recipe": {
+                "min_confidence": recipe.min_confidence,
+                "min_edge_pct": round(recipe.min_edge * 100, 1) if recipe.min_edge > -0.99 else None,
+                "min_odds": recipe.min_odds if recipe.min_odds > 1.0 else None,
+                "max_odds": recipe.max_odds if recipe.max_odds < 100.0 else None,
+            },
+        }
+
+    out["generated_at"] = now.isoformat()
+    out["disclaimer"] = (
+        "ROI computed on real bookmaker closing odds, post-v8.1 deploy "
+        "(2026-04-16). Display recipes per docs/parameter_optimization.md. "
+        "Recent-period numbers may differ from lifetime — see "
+        "docs/rebuild_phase3_recipe_caveat.md."
+    )
+    return out
