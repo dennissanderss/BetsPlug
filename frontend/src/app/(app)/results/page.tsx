@@ -453,12 +453,44 @@ function oddsForPick(fixture: Fixture, side: "home" | "draw" | "away"): {
 // includes everything below their floor.
 type CompareMode = "band" | "subscriber";
 
+// v8.6 — display filter mode for the simulator. "filtered" applies the
+// same per-tier recipe the Predictions tool uses (default; matches
+// Trackrecord 'Onze prestatie' tab). "all" includes every prediction
+// the model produced regardless of recipe (matches Trackrecord
+// 'Modelvalidatie' tab).
+type DisplayFilterMode = "filtered" | "all";
+
 const TIER_RANK_MAP: Record<CalcTier, number> = {
   free: 0,
   silver: 1,
   gold: 2,
   platinum: 3,
 };
+
+// Mirrors backend/app/core/predictions_display_filter.py recipes.
+// Keep these in sync when the recipes change.
+function passesDisplayRecipe(
+  tier: CalcTier,
+  pred: { confidence?: number | null; edge_pct?: number | null; bookmaker_odds_pick?: number | null } | null | undefined,
+): boolean {
+  if (!pred) return false;
+  const conf = pred.confidence ?? 0;
+  const edge = pred.edge_pct ?? null;
+  const odds = pred.bookmaker_odds_pick ?? null;
+  if (tier === "free") {
+    return conf >= 0.60;
+  }
+  if (tier === "silver") {
+    return conf >= 0.62 && edge !== null && edge >= 0.0 && odds !== null && odds >= 1.60;
+  }
+  if (tier === "gold") {
+    return conf >= 0.65 && edge !== null && edge >= 0.06 && odds !== null && odds >= 1.80;
+  }
+  if (tier === "platinum") {
+    return conf >= 0.78 && edge !== null && edge >= 0.08 && odds !== null && odds >= 1.50 && odds <= 3.00;
+  }
+  return false;
+}
 
 function aggregateFixtures(
   fixtures: Fixture[],
@@ -468,6 +500,7 @@ function aggregateFixtures(
   now: Date,
   dataSource: DataSource = "live",
   mode: CompareMode = "band",
+  displayFilter: DisplayFilterMode = "filtered",
 ): PickAggregate {
   const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
   const agg = emptyAggregate();
@@ -484,6 +517,12 @@ function aggregateFixtures(
       if (f.prediction.pick_tier !== tier) continue;
     } else {
       if (pickRank == null || pickRank > targetRank) continue;
+    }
+    // v8.6 — display filter: when "filtered" (default), only count
+    // picks meeting the per-tier display recipe used by /predictions.
+    // When "all", count every prediction the model produced.
+    if (displayFilter === "filtered" && !passesDisplayRecipe(tier, f.prediction)) {
+      continue;
     }
     // In live mode only count picks that were locked pre-kickoff
     // since LIVE_START_MS. Backtest mode drops that constraint and
@@ -583,20 +622,25 @@ function RoiCalculatorCard({
   // mean the same thing when they say "Platinum".
   const compareMode: CompareMode = "band";
 
+  // v8.6 — default ON: only count picks that meet the per-tier display
+  // recipe used by /predictions. Power users can flip to "all" to get
+  // the full model-validation picture.
+  const [displayFilter, setDisplayFilter] = useState<DisplayFilterMode>("filtered");
+
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
-    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date(), dataSource, compareMode);
-  }, [fixtures, stake, calcTier, calcPeriod, dataSource, compareMode]);
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date(), dataSource, compareMode, displayFilter);
+  }, [fixtures, stake, calcTier, calcPeriod, dataSource, compareMode, displayFilter]);
 
   // Breakdown across all four tiers at the selected period, so the user can
   // compare what each tier would have paid out.
   const perTier = useMemo(() => {
     const now = new Date();
     const result: Record<CalcTier, PickAggregate> = {
-      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now, dataSource, compareMode),
-      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now, dataSource, compareMode),
-      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now, dataSource, compareMode),
-      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now, dataSource, compareMode),
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now, dataSource, compareMode, displayFilter),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now, dataSource, compareMode, displayFilter),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now, dataSource, compareMode, displayFilter),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now, dataSource, compareMode, displayFilter),
     };
     return result;
   }, [fixtures, stake, calcPeriod, dataSource, compareMode]);
@@ -689,6 +733,25 @@ function RoiCalculatorCard({
             </button>
           );
         })}
+      </div>
+
+      {/* v8.6 — Display filter toggle. Default ON: only count picks
+          that pass the per-tier display recipe (matches /predictions
+          + /trackrecord 'Onze prestatie'). Off: full model picture
+          (matches /trackrecord 'Modelvalidatie'). */}
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2 text-xs text-slate-400">
+        <div>
+          {displayFilter === "filtered"
+            ? "Tellen alleen picks die de tier-filter halen (zoals op /predictions)."
+            : "Tellen alle predictions die het model heeft gemaakt — volledig model-beeld."}
+        </div>
+        <button
+          type="button"
+          onClick={() => setDisplayFilter(displayFilter === "filtered" ? "all" : "filtered")}
+          className="inline-flex items-center gap-2 rounded-md border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-semibold text-slate-200 hover:border-white/[0.15]"
+        >
+          {displayFilter === "filtered" ? "Toon ook ongefilterde picks" : "Terug naar gefilterd (default)"}
+        </button>
       </div>
 
       {/* ── Step 1 — Choose tier (locked to Gold in BOTD mode, upper tiers gated by user's own tier) ── */}
