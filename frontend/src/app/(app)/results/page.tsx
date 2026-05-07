@@ -1927,37 +1927,62 @@ function ResultsPageContent() {
     <div className="relative mx-auto max-w-6xl px-3 sm:px-4 py-5 md:py-7 animate-fade-in">
       <div className="space-y-5">
 
-        {/* ── Compact header with day counter + progress bar ── */}
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                Results
-              </h1>
-              <p className="mt-1 text-xs text-slate-500">
-                Live tracking — Day{" "}
-                <span className="font-bold tabular-nums text-emerald-400">{liveDays}</span>{" "}
-                of 90 (real pre-match odds, started 16 Apr 2026)
-              </p>
-            </div>
-            <div className="w-full max-w-[280px]">
-              <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-slate-500 mb-1">
-                <span>Progress to ROI claims</span>
-                <span className="tabular-nums text-slate-300">{progressPct}%</span>
-              </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.05]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-300 transition-all"
-                  style={{ width: `${progressPct}%` }}
-                />
-              </div>
-            </div>
-          </div>
+        {/* ── Header ── */}
+        <div>
+          <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            Hoe deden we het
+          </h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Resultaten van onze voorspellingen voor jouw {TIER_META[tierFilter].label} tier
+          </p>
         </div>
 
-        {/* ── Tier KPI tiles — click to filter the table below.
-            Numbers come from /trackrecord/live-measurement so they
-            match the Per-tier cards on Track Record exactly. */}
+        {/* ── 2 grote stat cards ── */}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(() => {
+            const total = computedSummary?.total_calls ?? 0;
+            const won = computedSummary?.won ?? 0;
+            const accPct = total > 0 ? (won / total) * 100 : 0;
+            const plEur = (computedSummary?.pl_units ?? 0) * 10;
+            const plColor = plEur > 0 ? "text-emerald-300" : plEur < 0 ? "text-rose-400" : "text-slate-300";
+            const plSign = plEur >= 0 ? "+" : "−";
+            return (
+              <>
+                <div className="glass-card p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                    Laatste {period} dagen
+                  </p>
+                  <p className="mt-1 text-3xl font-extrabold tabular-nums text-white sm:text-4xl">
+                    {total > 0 ? `${accPct.toFixed(1)}% correct` : "—"}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {total > 0
+                      ? `${won} van ${total} wedstrijden goed voorspeld`
+                      : "Nog geen resultaten in deze periode"}
+                  </p>
+                </div>
+                <div className="glass-card p-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                    Bij €10 inzet per wedstrijd
+                  </p>
+                  <p className={`mt-1 text-3xl font-extrabold tabular-nums sm:text-4xl ${plColor}`}>
+                    {total > 0 ? `${plSign}€${Math.abs(plEur).toFixed(2)}` : "—"}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {total > 0
+                      ? "Wat je verdiend / verloren zou hebben"
+                      : "Wacht op gespeelde wedstrijden"}
+                  </p>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+
+        {/* (4-tier KPI grid removed for UX simplification — user is
+            already on their own tier; the 2 stat cards above show what
+            matters.) */}
+        {false && (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
           {(["free", "silver", "gold", "platinum"] as const).map((tier) => {
             const kpi = tierKpis[tier];
@@ -2044,50 +2069,25 @@ function ResultsPageContent() {
             );
           })}
         </div>
+        )}
 
-        {/* ── Compact filter row ── */}
-        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2">
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-            Period
-          </span>
-          {[7, 14, 30, 90].map((p) => (
-            <button
-              key={p}
-              type="button"
-              onClick={() => setPeriod(p)}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors ${
-                period === p
-                  ? "bg-blue-600/80 text-white"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              {p}d
-            </button>
-          ))}
-          <span className="mx-2 h-4 w-px bg-white/[0.06]" />
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-            Result
-          </span>
-          {(["All", "Correct", "Incorrect"] as const).map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setResultFilter(r)}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors ${
-                resultFilter === r
-                  ? r === "Correct"
-                    ? "bg-emerald-600/80 text-white"
-                    : r === "Incorrect"
-                    ? "bg-red-600/80 text-white"
-                    : "bg-blue-600/80 text-white"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
-          <span className="ml-auto text-[10px] text-slate-500 tabular-nums">
-            {filtered.length} {filtered.length === 1 ? "pick" : "picks"} · {TIER_META[tierFilter].label} tier
+        {/* ── Periode dropdown (simpel) ── */}
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-slate-500" htmlFor="period-select">
+            Periode:
+          </label>
+          <select
+            id="period-select"
+            value={period}
+            onChange={(e) => setPeriod(Number(e.target.value) as PeriodFilter)}
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm font-medium text-slate-200 hover:border-white/[0.15]"
+          >
+            <option value={7}>Laatste 7 dagen</option>
+            <option value={30}>Laatste 30 dagen</option>
+            <option value={90}>Laatste 90 dagen</option>
+          </select>
+          <span className="ml-auto text-xs text-slate-500 tabular-nums">
+            {filtered.length} {filtered.length === 1 ? "wedstrijd" : "wedstrijden"}
           </span>
         </div>
 
@@ -2164,67 +2164,6 @@ function ResultsPageContent() {
             )}
           </div>
         )}
-
-        {/* ── Advanced simulation — collapsed by default ── */}
-        <details className="group rounded-xl border border-white/[0.06] bg-white/[0.02] open:bg-white/[0.03]">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-slate-300 hover:text-white">
-            <span className="flex items-center gap-2">
-              <Calculator className="h-4 w-4 text-emerald-400" />
-              Advanced simulation
-              <span className="text-[10px] font-normal uppercase tracking-widest text-slate-500">
-                Custom stake · period · BotD stream · per-tier €-comparison
-              </span>
-            </span>
-            <ChevronDown className="h-4 w-4 text-slate-500 transition-transform group-open:rotate-180" />
-          </summary>
-          <div className="space-y-5 border-t border-white/[0.06] p-4 sm:p-5">
-            <RoiCalculatorCard
-              fixtures={allResults}
-              isLoading={isLoading}
-              stake={stake}
-              setStake={setStake}
-              calcTier={tierFilter}
-              setCalcTier={(v) => {
-                setManualTierOverride(true);
-                setTierFilter(v);
-              }}
-              calcPeriod={calcPeriod}
-              setCalcPeriod={setCalcPeriod}
-              stream={stream}
-              setStream={setStream}
-              dataSource={dataSource}
-              setDataSource={setDataSource}
-              userTier={userTier}
-              isAdmin={adminUnlocked}
-            />
-            <WeeklySummaryCard
-              data={computedSummary ?? undefined}
-              isLoading={isLoading}
-              isError={hasError}
-              isFree={isFree}
-              scopeLabel={`${period} day${period === 1 ? "" : "s"} · ${TIER_META[tierFilter].label} tier · Live`}
-            />
-          </div>
-        </details>
-
-        {/* Related pages */}
-        <RelatedLinks
-          title={t("related.title")}
-          links={[
-            {
-              label: t("related.predictions"),
-              href: "/predictions",
-              description: t("related.predictionsDesc"),
-              icon: Sparkles,
-            },
-            {
-              label: t("related.trackRecord"),
-              href: "/trackrecord",
-              description: t("related.trackRecordDesc"),
-              icon: ClipboardList,
-            },
-          ]}
-        />
 
       </div>
     </div>
