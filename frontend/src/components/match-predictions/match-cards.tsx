@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Clock, Lock } from "lucide-react";
@@ -9,6 +8,7 @@ import type { Fixture } from "@/types/api";
 import { ProbBar } from "./prob-bar";
 import { confColor, confLevel, formatKickoff } from "./shared";
 import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 
 /* ── Free (unlocked) match card ────────────────────────────── */
 
@@ -40,14 +40,10 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
             {fixture.league_name}
           </span>
           <p className="flex flex-wrap items-center gap-x-1.5 text-sm font-black uppercase leading-tight tracking-tight text-white sm:text-base">
-            {fixture.home_team_logo && (
-              <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
-            )}
+            <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} size={22} className="inline-block" />
             <span className="break-words">{fixture.home_team_name}</span>
             <span className="font-normal text-[#6b7280]">vs</span>
-            {fixture.away_team_logo && (
-              <Image src={fixture.away_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
-            )}
+            <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} size={22} className="inline-block" />
             <span className="break-words">{fixture.away_team_name}</span>
           </p>
           <p className="flex items-center gap-1 text-xs text-[#6b7280]">
@@ -174,14 +170,10 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
               {fixture.league_name}
             </span>
             <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold leading-tight text-[#ededed]">
-              {fixture.home_team_logo && (
-                <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
-              )}
+              <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} size={22} className="inline-block" />
               <span className="break-words">{fixture.home_team_name}</span>
               <span className="font-normal text-[#6b7280]">vs</span>
-              {fixture.away_team_logo && (
-                <Image src={fixture.away_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
-              )}
+              <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} size={22} className="inline-block" />
               <span className="break-words">{fixture.away_team_name}</span>
             </p>
             <p className="flex items-center gap-1 text-xs text-[#6b7280]">

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useTier, TIER_RANK as USER_TIER_RANK, type Tier } from "@/hooks/use-tier";
 import Image from "next/image";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
@@ -1298,9 +1299,7 @@ function ResultCard({ fixture, stake, isFree }: { fixture: Fixture; stake: numbe
 
       {/* Home team */}
       <span className={`flex-1 min-w-0 flex items-center gap-1.5 text-xs sm:text-sm font-medium truncate ${isCorrect === true && pickLabel === "1" ? "text-emerald-300" : "text-slate-200"}`}>
-        {fixture.home_team_logo && (
-          <Image src={fixture.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0 sm:w-[18px] sm:h-[18px]" />
-        )}
+        <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} size={16} className="sm:w-[18px] sm:h-[18px]" />
         <span className="truncate">{fixture.home_team_name}</span>
       </span>
 
@@ -1311,9 +1310,7 @@ function ResultCard({ fixture, stake, isFree }: { fixture: Fixture; stake: numbe
 
       {/* Away team */}
       <span className={`flex-1 min-w-0 flex items-center gap-1.5 text-xs sm:text-sm font-medium truncate ${isCorrect === true && pickLabel === "2" ? "text-emerald-300" : "text-slate-200"}`}>
-        {fixture.away_team_logo && (
-          <Image src={fixture.away_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0 sm:w-[18px] sm:h-[18px]" />
-        )}
+        <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} size={16} className="sm:w-[18px] sm:h-[18px]" />
         <span className="truncate">{fixture.away_team_name}</span>
       </span>
 

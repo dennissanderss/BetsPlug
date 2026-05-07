@@ -1,12 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
 import type { PickTierSlug, PredictionDriver } from "@/types/api";
 import {
@@ -698,14 +698,10 @@ export default function BetOfTheDayPage() {
 
               {/* Match Title */}
               <h2 className="mb-8 flex flex-wrap items-center justify-center gap-3 text-xl font-black uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl">
-                {botd.home_team_logo && (
-                  <Image src={botd.home_team_logo} alt="" width={36} height={36} className="rounded-full" />
-                )}
+                <TeamLogo src={botd.home_team_logo} name={botd.home_team ?? ""} size={36} />
                 {botd.home_team}
                 <span className="text-slate-500 font-normal">vs</span>
-                {botd.away_team_logo && (
-                  <Image src={botd.away_team_logo} alt="" width={36} height={36} className="rounded-full" />
-                )}
+                <TeamLogo src={botd.away_team_logo} name={botd.away_team ?? ""} size={36} />
                 {botd.away_team}
               </h2>
 

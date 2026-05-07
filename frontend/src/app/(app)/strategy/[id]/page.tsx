@@ -4,6 +4,7 @@ import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -231,13 +232,9 @@ export default function StrategyDetailPage() {
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <p className="flex items-center gap-1.5 text-sm font-bold text-slate-100">
-                      {pick.home_team_logo && (
-                        <Image src={pick.home_team_logo} alt="" width={18} height={18} className="rounded-full" />
-                      )}
+                      <TeamLogo src={pick.home_team_logo} name={pick.home_team ?? ""} size={18} />
                       {pick.home_team} vs
-                      {pick.away_team_logo && (
-                        <Image src={pick.away_team_logo} alt="" width={18} height={18} className="rounded-full" />
-                      )}
+                      <TeamLogo src={pick.away_team_logo} name={pick.away_team ?? ""} size={18} />
                       {pick.away_team}
                     </p>
                     <p className="text-xs text-slate-500">
@@ -321,13 +318,9 @@ export default function StrategyDetailPage() {
                         <td className="px-4 py-3 text-slate-400 whitespace-nowrap">{date}</td>
                         <td className="px-4 py-3">
                           <p className="flex items-center gap-1.5 font-medium text-slate-200 whitespace-nowrap">
-                            {pick.home_team_logo && (
-                              <Image src={pick.home_team_logo} alt="" width={16} height={16} className="rounded-full" />
-                            )}
+                            <TeamLogo src={pick.home_team_logo} name={pick.home_team_name ?? ""} size={16} />
                             {pick.home_team_name ?? "?"} vs
-                            {pick.away_team_logo && (
-                              <Image src={pick.away_team_logo} alt="" width={16} height={16} className="rounded-full" />
-                            )}
+                            <TeamLogo src={pick.away_team_logo} name={pick.away_team_name ?? ""} size={16} />
                             {pick.away_team_name ?? "?"}
                           </p>
                         </td>

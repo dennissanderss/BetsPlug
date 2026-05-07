@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import Link from "next/link";
 import { useTranslations } from "@/i18n/locale-provider";
 import {
@@ -483,9 +484,7 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
               we always show a number — defaulting to 0 — so "LIVE 0–0"
               before the first goal isn't a blank row. */}
           <div className="flex items-center gap-2">
-            {fixture.home_team_logo && (
-              <Image src={fixture.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
-            )}
+            <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} size={16} />
             <span className={`text-sm font-semibold truncate ${modelPick === "home" ? "text-emerald-300" : "text-slate-100"}`}>
               {fixture.home_team_name}
             </span>
@@ -503,9 +502,7 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
           </div>
           {/* Away team */}
           <div className="flex items-center gap-2 mt-0.5">
-            {fixture.away_team_logo && (
-              <Image src={fixture.away_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
-            )}
+            <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} size={16} />
             <span className={`text-sm font-semibold truncate ${modelPick === "away" ? "text-emerald-300" : "text-slate-100"}`}>
               {fixture.away_team_name}
             </span>

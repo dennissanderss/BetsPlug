@@ -1,40 +1,48 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 
 interface TeamLogoProps {
   src?: string | null;
   name: string;
   size?: number;
+  className?: string;
 }
 
 /**
  * Team logo with initials fallback. The fallback uses a soft radial
  * gradient and a subtle hair-line border in the NOCTURNE style.
+ *
+ * Falls back to initials when src is missing OR when the image fails
+ * to load (broken URL, Vercel image-optimizer hiccup, CDN outage, etc.)
  */
-export function TeamLogo({ src, name, size = 18 }: TeamLogoProps) {
-  const initials = name
+export function TeamLogo({ src, name, size = 18, className }: TeamLogoProps) {
+  const [errored, setErrored] = useState(false);
+
+  const initials = (name || "?")
     .split(" ")
     .map((w) => w[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
 
-  if (src) {
+  if (src && !errored) {
     return (
       <Image
         src={src}
         alt=""
         width={size}
         height={size}
-        className="rounded-full shrink-0"
+        className={`rounded-full shrink-0 ${className ?? ""}`}
+        onError={() => setErrored(true)}
       />
     );
   }
 
   return (
     <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full text-[#ededed]"
+      className={`inline-flex shrink-0 items-center justify-center rounded-full text-[#ededed] ${className ?? ""}`}
       style={{
         width: size,
         height: size,
