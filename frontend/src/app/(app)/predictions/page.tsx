@@ -426,6 +426,20 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
   const confLevel = confScore !== null ? getConfidenceLevel(confScore) : null;
   const confColor = confLevel ? getConfidenceColor(confLevel) : "#475569";
 
+  // v8.5 — edge over the bookmaker's vig-removed implied price (single
+  // number for the picked side). We surface it inline so users see why
+  // a pick qualifies for the Edge-verified subset without toggling the
+  // filter. Null when no closing-odds snapshot is on file.
+  const edgePct = hasPrediction && typeof pred?.edge_pct === "number"
+    ? pred.edge_pct
+    : null;
+  const edgeColor =
+    edgePct == null ? null
+    : edgePct >= 0.10 ? "#4ade80" // strong (green)
+    : edgePct >= 0.04 ? "#facc15" // moderate (yellow)
+    : edgePct >= 0    ? "#94a3b8" // neutral
+    : "#fb7185";                  // negative (rose)
+
   const homeProb = pred?.home_win_prob != null ? Math.round(pred.home_win_prob * 100) : null;
   const drawProb = pred?.draw_prob != null ? Math.round(pred.draw_prob * 100) : null;
   const awayProb = pred?.away_win_prob != null ? Math.round(pred.away_win_prob * 100) : null;
@@ -613,6 +627,15 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
                   {confScore}%
                 </span>
               )}
+              {edgePct != null && edgeColor && (
+                <span
+                  className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold tabular-nums shrink-0"
+                  style={{ color: edgeColor, borderColor: `${edgeColor}55`, background: `${edgeColor}14` }}
+                  title={`Edge over the bookmaker's fair price for our pick`}
+                >
+                  {(edgePct * 100 >= 0 ? "+" : "") + (edgePct * 100).toFixed(1)}%
+                </span>
+              )}
             </div>
           ) : confScore != null ? (
             <>
@@ -625,6 +648,15 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
               <span className="text-[11px] font-bold tabular-nums shrink-0" style={{ color: confColor }}>
                 {confScore}%
               </span>
+              {edgePct != null && edgeColor && (
+                <span
+                  className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold tabular-nums shrink-0"
+                  style={{ color: edgeColor, borderColor: `${edgeColor}55`, background: `${edgeColor}14` }}
+                  title={`Edge over the bookmaker's fair price for our pick`}
+                >
+                  {(edgePct * 100 >= 0 ? "+" : "") + (edgePct * 100).toFixed(1)}%
+                </span>
+              )}
             </>
           ) : null}
         </div>
