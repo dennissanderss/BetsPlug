@@ -2456,6 +2456,126 @@ async def saudi_spot_check(db: AsyncSession = Depends(get_db)) -> dict:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Predictions Rebuild — Phase 1.1C: Feature-pipeline isolation spot-check
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/audit/feature-isolation-spotcheck",
+    summary="Re-run feature_service for sample predictions and diff against stored snapshot",
+    dependencies=[Depends(require_internal_ops_key)],
+)
+async def feature_isolation_spotcheck(db: AsyncSession = Depends(get_db)) -> dict:
+    """For 10 random predictions: re-run feature_service.build_features
+    NOW and diff against the stored features_snapshot. If feature_service
+    uses cutoff = match.scheduled_at consistently and the underlying
+    historical data hasn't been mutated, diffs should be near zero.
+
+    Material diffs = either feature service is non-deterministic OR
+    historical data was added/changed after the original prediction was
+    made (which would shift point-in-time features).
+    """
+    from sqlalchemy import text as _text
+    from app.features.feature_service import FeatureService
+
+    rows = (await db.execute(_text("""
+        SELECT
+            p.id::text AS pid,
+            p.match_id::text AS mid,
+            p.prediction_source,
+            p.predicted_at,
+            m.scheduled_at,
+            CAST(p.features_snapshot AS TEXT) AS snap_text
+        FROM predictions p
+        JOIN matches m ON m.id = p.match_id
+        WHERE p.created_at >= '2026-04-16 11:00:00+00'
+          AND p.features_snapshot IS NOT NULL
+        ORDER BY RANDOM()
+        LIMIT 10
+    """))).all()
+
+    import json as _json
+    fs = FeatureService()
+    out_rows = []
+    for r in rows:
+        try:
+            stored = _json.loads(r.snap_text) if r.snap_text else {}
+        except Exception:
+            stored = {}
+        try:
+            # Re-run features now with the same cutoff (= match.scheduled_at)
+            # The feature service derives cutoff from the match itself, so we
+            # just call build_features and trust the internal cutoff logic.
+            import uuid as _uuid
+            recomputed = await fs.build_features(_uuid.UUID(r.mid), db)
+            recomputed_dict = (
+                recomputed if isinstance(recomputed, dict) else {}
+            )
+        except Exception as exc:
+            out_rows.append({
+                "pid": r.pid,
+                "mid": r.mid,
+                "source": r.prediction_source,
+                "scheduled_at": r.scheduled_at.isoformat(),
+                "error": f"{type(exc).__name__}: {str(exc)[:200]}",
+            })
+            continue
+
+        # Diff every shared key
+        keys = sorted(set(stored.keys()) | set(recomputed_dict.keys()))
+        diffs = []
+        identical = 0
+        for k in keys:
+            sv = stored.get(k)
+            rv = recomputed_dict.get(k)
+            if sv == rv:
+                identical += 1
+            else:
+                # Tolerance for float drift
+                try:
+                    if abs(float(sv) - float(rv)) < 1e-4:
+                        identical += 1
+                        continue
+                except (TypeError, ValueError):
+                    pass
+                diffs.append({"key": k, "stored": sv, "recomputed": rv})
+
+        out_rows.append({
+            "pid": r.pid,
+            "mid": r.mid,
+            "source": r.prediction_source,
+            "scheduled_at": r.scheduled_at.isoformat(),
+            "predicted_at": r.predicted_at.isoformat() if r.predicted_at else None,
+            "total_keys": len(keys),
+            "identical_keys": identical,
+            "diffs_count": len(diffs),
+            "diffs_first_5": diffs[:5],
+        })
+
+    total_keys_compared = sum(r.get("total_keys", 0) for r in out_rows)
+    total_identical = sum(r.get("identical_keys", 0) for r in out_rows)
+    total_diffs = sum(r.get("diffs_count", 0) for r in out_rows)
+    return {
+        "samples": len(out_rows),
+        "total_keys_compared": total_keys_compared,
+        "identical_keys": total_identical,
+        "differing_keys": total_diffs,
+        "identical_pct": (
+            round(100.0 * total_identical / total_keys_compared, 2)
+            if total_keys_compared else None
+        ),
+        "verdict": (
+            "✅ Features reproducible — backtest source is point-in-time clean"
+            if total_keys_compared and total_identical / total_keys_compared > 0.95
+            else "⚠ Material drift — investigate per-row diffs"
+            if total_keys_compared
+            else "no data"
+        ),
+        "rows": out_rows,
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Predictions Rebuild — Phase 2B: Live-only ROI scenario sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
